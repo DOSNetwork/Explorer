@@ -1,0 +1,17 @@
+@import './media.scss';
+@import './vars.scss';
+@import './layout.scss';
+
+.main-body {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding-top: 25px;
+    @include layout-min-960();
+}
+
+.page-title {
+    display: block;
+    font-size: 24px;
+    color: $mainFontColor;
+    margin-bottom: 24px;
+}

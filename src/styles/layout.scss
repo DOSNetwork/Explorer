@@ -1,0 +1,15 @@
+@import './media.scss';
+
+
+@mixin layout-min-960 {
+    @include respond-to ('960') {
+        min-width: 960px;
+    }
+}
+
+
+@mixin layout-min-1200 {
+    @include respond-to ('1200') {
+        min-width: 1200px;
+    }
+}

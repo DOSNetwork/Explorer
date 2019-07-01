@@ -1,0 +1,79 @@
+@import '../../styles//vars.scss';
+@import '../../styles/media.scss';
+@import '../../styles/layout.scss';
+
+.header__wrapper {
+    background-color: $bgColor;
+    height: 75px;
+    @include layout-min-960
+}
+
+.header__container {
+    height: 100%;
+    font-size: 16px;
+    color: #fff;
+    display: flex;
+    align-items: center;
+    padding: 0 15px;
+    position: relative;
+
+    @include respond-to ('1920') {
+        max-width: 1560px;
+    }
+}
+
+.logo__wrapper {
+    display: flex;
+    align-items: center;
+    height: 33px;
+}
+
+.logo--name {
+    font-family: IBMPlexSans;
+    font-size: 18px;
+    font-weight: bold;
+    color: #fff;
+    padding: 0 5px;
+}
+
+.logo--img {
+    display: block;
+    height: 33px;
+    width: 33px;
+    background-color: #fff;
+    border-radius: 100%;
+}
+
+
+.navi__wrapper {
+    margin-left: 80px;
+
+    a:visited,
+    a:hover {
+        color: #fff;
+    }
+}
+
+.navi__container {
+    height: 73px;
+    position: relative;
+    display: flex;
+
+    .navi-item {
+        width: 120px;
+        height: 100%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        transition: border-color 0.1s linear;
+        border-bottom: 3px solid transparent;
+
+        &.active {
+            border-color: #fff;
+        }
+
+        &:hover {
+            border-color: #fff;
+        }
+    }
+}
