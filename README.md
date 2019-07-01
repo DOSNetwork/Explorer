@@ -77,6 +77,15 @@ mock-server directory
 - [x] Redux
 - [x] Router
 - [x] Mock-Server
-- [] EChart
+- [x] EChart
 - [] Responsive
-- [] Api mock
+- [x] Api mock
+- [] footer
+- [] metaMask
+- [] allAPis
+- pages
+    - [] Home
+    - [x] Node List
+    - [] Node Detail
+    - [x] explorer
+    - [] account
