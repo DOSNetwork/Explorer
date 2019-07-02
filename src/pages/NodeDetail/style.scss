@@ -1,0 +1,102 @@
+.node-detail--info {
+    height: 130px;
+    background-color: #fff;
+    margin-top: 15px;
+    padding: 20px;
+    display: flex;
+}
+
+.info-avatar--wrapper {
+    height: 90px;
+    width: 90px;
+    border-radius: 45px;
+    background: #eee;
+    margin-right: 40px;
+}
+
+.info-summary--wrapper {
+    display: flex;
+    flex-direction: column;
+}
+
+.info-node {
+    height: 32px;
+    font-family: IBMPlexSans;
+    font-size: 24px;
+    font-weight: 600;
+    color: #333;
+}
+
+.info-opt {
+    >.ant-btn {
+        margin-right: 20px;
+    }
+}
+
+
+.node-detail--detail {
+    margin-top: 15px;
+    background-color: #fff;
+}
+
+.detail--user-info {
+    display: flex;
+
+    &>div {
+        margin: 25px;
+        flex: 1 1 auto;
+        position: relative;
+        display: flex;
+        flex-direction: column;
+        padding: 20px 30px;
+        justify-content: space-between;
+    }
+}
+
+.user-info--title {
+    height: 30px;
+    font-family: IBMPlexSans;
+    font-size: 17px;
+    font-weight: 600;
+    color: #666666;
+}
+
+.user-info--value {
+    height: 27px;
+    font-family: IBMPlexSans;
+    font-size: 24px;
+    font-weight: bold;
+    color: #358ed7;
+}
+
+.widthdraw-button {
+    position: absolute;
+    right: 30px;
+    bottom: 20px;
+}
+
+.user-info--rewards,
+.user-info--delegation {
+    height: 120px;
+    border-radius: 5px;
+    border: solid 1px #dfdfdf;
+}
+
+.node-detail--item {
+    display: flex;
+    height: 60px;
+    font-family: IBMPlexSans;
+    font-size: 14px;
+    border-top: 1px solid #dfdfdf;
+    padding-left: 50px;
+    line-height: 60px;
+
+    &:nth-child(odd) {
+        background-color: #fbfbfb;
+    }
+}
+
+.item--title {
+    flex: 0 0 200px;
+    text-align: left;
+}

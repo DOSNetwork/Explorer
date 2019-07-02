@@ -9,4 +9,13 @@ router.get('/list', async (ctx, next) => {
     }, 2000);
 });
 
+
+router.get('/detail', async (ctx, next) => {
+    let body = Mock.mock(entities.dos.nodedetail)
+    ctx.body = body
+    setTimeout(() => {
+        next();
+    }, 2000);
+});
+
 module.exports = router

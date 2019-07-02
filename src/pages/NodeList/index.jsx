@@ -1,4 +1,5 @@
 import React, { Component } from 'react'
+import { Link } from 'react-router-dom';
 import { Table } from 'antd'
 import { PageTitle } from '../../Layout/page'
 import axios from 'axios';
@@ -6,7 +7,8 @@ import './style.scss';
 import numeral from 'numeral';
 const { Column } = Table
 const nodeColumnRender = (text, record, index) => {
-    return <><img className="nodelist-avatar" src={record.avatar} alt="avatar" /><span>{text}</span></>
+    let link = `/nodedetail/${record.node}`;
+    return <><img className="nodelist-avatar" src={record.avatar} alt="avatar" /><Link to={link}>{text}</Link></>
 }
 const numberFormatRender = (text, record, index) => {
     return numeral(text).format('0,0')
