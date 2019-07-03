@@ -34,3 +34,11 @@ exports.nodedetail = {
         uptime: '@integer(0,30)',
     }
 }
+
+exports.activities = {
+    'activities|10': [{
+        time: '@datetime()',
+        txHash: /Ox([0-9][A-Z]){10}/,
+        'action|1': ['Delegated 2,500 DOS to 0X0…FF', 'Unbond 200 DOS from 0X0…FF, withdraw…', 'Reward Withdraw 10 DOS']
+    }]
+}

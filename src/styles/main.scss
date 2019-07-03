@@ -4,12 +4,15 @@
 
 #main {
     background-color: #f8f8f8;
+
 }
 
 .main-body {
     max-width: 1200px;
     margin: 0 auto;
     padding-top: 25px;
+    min-height: 800px;
+    padding-bottom: 100px;
     @include layout-min-960();
 }
 
@@ -18,4 +21,60 @@
     font-size: 24px;
     color: $mainFontColor;
     margin-bottom: 24px;
+}
+
+
+.page-sub-title {
+    height: 30px;
+    display: block;
+    font-size: 16px;
+    color: $mainFontColor;
+    margin-top: 24px;
+}
+
+
+.row-dark {
+    background-color: #fbfbfb;
+}
+
+.footer__wrapper {
+    background-color: $mainFontColor;
+    height: 250px;
+    color: #fff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+
+    .link-group {
+        width: 100%;
+        max-width: 1200px;
+        margin: 0 auto;
+        padding-top: 25px;
+        padding-bottom: 100px;
+        display: flex;
+
+    }
+
+
+    .link-group-item {
+        padding-top: 40px;
+        margin-right: 150px;
+    }
+
+    .link-group-title {
+        height: 34px;
+        font-size: 20px;
+    }
+
+    .link-group-sub {
+        margin-top: 20px;
+    }
+
+    .link {
+        font-size: 17px;
+        color: #979ea5;
+        height: 30px;
+        line-height: 30px;
+    }
 }

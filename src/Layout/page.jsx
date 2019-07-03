@@ -5,3 +5,9 @@ export function PageTitle(props) {
         {props.title}
     </div>
 }
+
+export function SubTitle(props) {
+    return <div className="page-sub-title">
+        {props.title}
+    </div>
+}

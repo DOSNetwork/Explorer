@@ -11,6 +11,7 @@ import NotFound404 from './pages/NotFound404'
 import Explorer from './pages/Explorer'
 import NodeList from './pages/NodeList'
 import NodeDetail from './pages/NodeDetail'
+import MyAccount from './pages/MyAccount'
 import Layout from './Layout'
 class App extends Component {
   render() {
@@ -28,6 +29,7 @@ class App extends Component {
             <Route path='/explorer' component={Explorer} />
             <Route path='/nodelist' component={NodeList} />
             <Route path='/nodedetail/:nodeId' component={NodeDetail} />
+            <Route path='/myaccount' component={MyAccount} />
             <Route component={NotFound404} />
           </Switch>
         </Layout>

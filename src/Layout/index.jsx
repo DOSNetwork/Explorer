@@ -1,5 +1,5 @@
 import React, { PureComponent } from 'react'
-
+import Footer from '../components/Footer'
 export default class Layout extends PureComponent {
     render() {
         return (
@@ -10,9 +10,7 @@ export default class Layout extends PureComponent {
                 <div className="main-body">
                     {this.props.children[1]}
                 </div>
-                <div className="footer">
-                    footer
-                </div>
+                <Footer></Footer>
             </div>
         )
     }

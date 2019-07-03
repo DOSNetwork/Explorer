@@ -13,7 +13,7 @@ export default class Navigation extends Component {
                     <div className="navi__wrapper">
                         <div className="navi__container">
                             <NavLink className="navi-item" to={`/nodelist`} activeClassName="active">Node List</NavLink>
-                            <NavLink className="navi-item" to={`/echart`} activeClassName="active">History</NavLink>
+                            <NavLink className="navi-item" to={`/myaccount`} activeClassName="active">History</NavLink>
                             <NavLink className="navi-item" to={`/explorer`} activeClassName="active">Explorer</NavLink>
                         </div>
                     </div>

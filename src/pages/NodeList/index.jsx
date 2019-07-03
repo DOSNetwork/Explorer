@@ -52,7 +52,10 @@ export default class NodeList extends Component {
                 <Table rowKey={record => record.node}
                     loading={this.state.loading}
                     dataSource={this.state.dataList}
-                    pagination={false} >
+                    pagination={false}
+                    rowClassName={(row, index) => {
+                        return index % 2 === 0 ? 'row-light' : 'row-dark'
+                    }}>
                     <Column title="Node"
                         render={nodeColumnRender}
                         dataIndex="node"
