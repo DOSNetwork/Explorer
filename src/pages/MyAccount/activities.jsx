@@ -36,7 +36,7 @@ export default class Activities extends Component {
     render() {
         return (
             <>
-                <SubTitle title='Activities'></SubTitle>
+                <SubTitle title='Account Activity'></SubTitle>
                 <Table rowKey={record => record.txHash}
                     loading={this.state.loading}
                     dataSource={this.state.dataList}

@@ -1,0 +1,4 @@
+
+export default {
+    METAMASK_ADDRESS_CHANGE: 'METAMASK_ADDRESS_CHANGE'
+}

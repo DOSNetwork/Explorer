@@ -5,26 +5,37 @@ import {
 import {
     handleActions
 } from 'redux-actions'
+import type from './type'
 
 const globalState = {
-    loadingStatus: false
+    loadingStatus: false,
+    userAddress: ''
 }
 const appState = {
     count: 0
 }
-const globalReducer = handleActions({
-    'LOADING_STATUS'(prevState, action) {
-        console.log(`[reducer]LOADING_STATUS.............`)
-        console.log(prevState, action)
-        return {
-            ...appState,
-            loadingStatus: action.loading
-        }
+
+const globalActions = {}
+globalActions['LOADING_STATUS'] = (prevState, payload) => {
+    console.log(`[reducer]LOADING_STATUS.............`)
+    console.log(prevState, payload)
+    return {
+        ...globalState,
+        loadingStatus: payload.loading
     }
-}, globalState)
+}
+globalActions[type.METAMASK_ADDRESS_CHANGE] = (prevState, payload) => {
+    console.log(`[reducer]${type.METAMASK_ADDRESS_CHANGE}.............`)
+    console.log(prevState, payload)
+    return {
+        ...globalState,
+        userAddress: payload.address
+    }
+}
+const globalReducer = handleActions(globalActions, globalState)
 
 const appReducer = handleActions({
-    'COUNTING'(prevState, action) {
+    'COUNTING'(prevState, payload) {
         console.log(`[reducer]COUNTING.............`)
         return {
             ...appState,
