@@ -78,3 +78,34 @@
         line-height: 30px;
     }
 }
+
+
+.column-title {
+    display: block;
+    font-weight: bold;
+    font-size: 12px;
+    color: #6c737a;
+
+    &:after {
+        content: ':'
+    }
+}
+
+.column-text {
+    font-family: Monospace;
+    font-size: 12px;
+}
+
+.nodes-item {
+    padding-left: 10px;
+    margin: 0;
+    color: #455ec7;
+
+    // &:before {
+    //     content: '✦'
+    // }
+}
+
+.text-number {
+    color: red;
+}

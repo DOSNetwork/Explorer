@@ -1,8 +1,27 @@
 exports.events = {
     'events|100': [{
         txHash: /Ox([0-9][A-Z]){10}/,
-        "method|1": ['requsest Random(xxxx)', 'trigger Callback(xxxx)', 'delegate(xxxx)', 'xxxxxxxxx'],
-        "eventLog|1": ['log(xxxxxx)']
+        "method|1": ['signalRandom', 'signalGroupFormation', 'signalBootstrap'],
+        "eventLog|1": ['LogUpdateRandom',
+            'LogInsufficientWorkingGroup',
+            'LogRequestUserRandom',
+            'LogGroupingInitiated',
+            'LogGrouping',
+            'GuardianReward'],
+        "lastRandomness":/([0-9][A-Z]){30}/,
+        "dispatchedGroupId":/([0-9][A-Z]){30}/,
+        "numWorkingGroups":"@integer(0,10)",
+        "numPendingGroups":"@integer(0,10)",
+        "requestId":/([0-9][A-Z]){30}/,
+        "lastSystemRandomness":/([0-9][A-Z]){30}/,
+        "userSeed":"@hex()",
+        "pendingNodePool":"@integer(0,200)",
+        "groupSize":"@integer(0,200)",
+        "groupingThreshold":"@integer(0,200)",
+        "blkNum":"@integer(1000000,5000000)",
+        "guardian":/([0-9][A-Z]){30}/,
+        "groupId":/([0-9][A-Z]){30}/,
+        "nodeId|5":[/([0-9][A-Z]){30}/]
     }]
 }
 
