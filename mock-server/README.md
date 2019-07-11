@@ -41,7 +41,8 @@ Response Scheme:
                 "method": "delegate(xxxx)",
                 "eventLog": "log(xxxxxx)"
             }
-        ]
+        ],
+        "totalCount":999
     }
 }
 ```

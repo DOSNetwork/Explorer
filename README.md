@@ -13,6 +13,11 @@ npm run start
 
 view `http://localhost:3000/` in browser
 
+### change API Proxy
+
+defaut http request proxy is `http://localhost:3000`,
+change the property `proxy` in `package.json` and rebuild
+
 ## file directory
 
 ```
@@ -50,6 +55,8 @@ project tree
 │   ├── media.scss
 │   ├── reset.scss
 │   └── vars.scss
+├── util      //工具库,web3 等
+│   └── const.js // abi const here
 └── test.module.css
 ```
 
@@ -81,11 +88,11 @@ mock-server directory
 - [] Responsive
 - [x] Api mock
 - [] footer
-- [] metaMask
+- [x] metaMask
 - [] allAPis
 - pages
-    - [] Home
+    - [x] Home
     - [x] Node List
-    - [] Node Detail
+    - [x] Node Detail
     - [x] explorer
-    - [] account
+    - [x] account
