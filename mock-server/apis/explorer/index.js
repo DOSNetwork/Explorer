@@ -75,8 +75,16 @@ router.get('/search', async (ctx, next) => {
         }
         return standart
     })
+    let {
+        pageSize,
+        pageIndex,
+        text
+    } = ctx.query;
+    console.log(`参数:text:${text},pageIndex:${pageIndex},pageSize:${pageSize}`)
+
     ctx.body = {
-        events: filteredEvents
+        events: filteredEvents,
+        totalCount: pageSize * (5 + parseInt(pageIndex))
     }
     setTimeout(() => {
         next();
