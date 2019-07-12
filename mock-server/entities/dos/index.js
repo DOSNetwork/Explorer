@@ -1,6 +1,8 @@
 exports.events = {
     'events|100': [{
-        txHash: /Ox([0-9][A-Z]){10}/,
+        "ID":'@id()',
+        txHash: /Ox([0-9][A-Z]){30}/,
+
         "method|1": ['signalRandom', 'signalGroupFormation', 'signalBootstrap'],
         "eventLog|1": ['LogUpdateRandom',
             'LogInsufficientWorkingGroup',
@@ -18,7 +20,7 @@ exports.events = {
         "pendingNodePool":"@integer(0,200)",
         "groupSize":"@integer(0,200)",
         "groupingThreshold":"@integer(0,200)",
-        "blkNum":"@integer(1000000,5000000)",
+        "blockNumber":"@integer(1000000,5000000)",
         "guardian":/([0-9][A-Z]){30}/,
         "groupId":/([0-9][A-Z]){30}/,
         "nodeId|5":[/([0-9][A-Z]){30}/]

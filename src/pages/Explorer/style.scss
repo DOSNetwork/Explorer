@@ -1,8 +1,7 @@
 .search-result--title {
     height: 20px;
     font-family: IBMPlexSans;
-    font-size: 16px;
-    font-weight: 600;
+    font-size: 16px;font-weight: 600;
     font-style: normal;
     font-stretch: normal;
     line-height: normal;
@@ -10,4 +9,19 @@
     color: #333;
     margin: 10px 0;
     display: block;
+}
+
+
+.txhash--wrapper {
+    display: flex;
+    align-items: center;
+}
+
+.txhash--text {
+    width: 200px;
+    background-color: #e6e6e6;
+    width: 200px;
+    padding: 0 5px;
+    border-radius: 8px;
+    margin-right: 5px;
 }

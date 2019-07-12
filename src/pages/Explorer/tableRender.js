@@ -1,5 +1,19 @@
 import React from 'react';
 import { Icon } from 'antd'
+import { CopyToClipboard } from 'react-copy-to-clipboard';
+import Message from '../../util/message'
+export const TxHashRender = (text, record, index) => {
+    return <span className="txhash--wrapper">
+        <span className="txhash--text text--ellipsis">
+            {text}
+        </span>
+        <CopyToClipboard text={text} onCopy={() => {
+            Message.Notification.Normal({ key: 'COPY_MESSAGE', message: 'copy success!' })
+        }}>
+            <Icon style={{ fontSize: 15, color: '#455ec7' }} type="copy" />
+        </CopyToClipboard>
+    </span>
+}
 export const MoreInfoRender = (text, record, index) => {
     switch (record.eventLog) {
         case 'LogUpdateRandom':
@@ -66,11 +80,18 @@ const LogRequestUserRandomRender = record => {
     return <div className='custom-column--wrapper'>
         <div className="custom-column">
             <span className="column-title">RequestId</span>
-            <span className="column-text">{record.requestId}</span>
+            <span className="column-text">
+                <span className="text--ellipsis ellipsis--mid">
+                    {record.requestId}
+                </span>
+            </span>
         </div>
         <div className="custom-column">
             <span className="column-title">Last System Randomness</span>
-            <span className="column-text">{record.lastSystemRandomness}</span>
+            <span className="column-text">
+                <span className="text--ellipsis ellipsis--mid">                             {record.lastSystemRandomness}
+                </span>
+            </span>
         </div>
         <div className="custom-column">
             <span className="column-title">User Seed</span>
@@ -100,10 +121,6 @@ const LogGroupingInitiatedRender = record => {
 }
 const GuardianRewardRender = record => {
     return <div className='custom-column--wrapper'>
-        <div className="custom-column">
-            <span className="column-title">Block Number</span>
-            <span className="column-text text-number">{record.blkNum}</span>
-        </div>
         <div className="custom-column">
             <span className="column-title">Guardian</span>
             <span className="column-text">{record.guardian}</span>

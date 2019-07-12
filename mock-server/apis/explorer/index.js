@@ -5,6 +5,7 @@ router.get('/search', async (ctx, next) => {
     let body = Mock.mock(entities.dos.events)
     let events = body.events
     let filteredEvents = events.map(({
+        ID,
         txHash,
         method,
         eventLog,
@@ -18,15 +19,17 @@ router.get('/search', async (ctx, next) => {
         pendingNodePool,
         groupSize,
         groupingThreshold,
-        blkNum,
+        blockNumber,
         guardian,
         groupId,
         nodeId
     }) => {
         let standart = {
+            ID,
             txHash,
             method,
-            eventLog
+            eventLog,
+            blockNumber
         }
         if (eventLog === 'LogUpdateRandom') {
             return {
@@ -62,7 +65,6 @@ router.get('/search', async (ctx, next) => {
         if (eventLog === 'GuardianReward') {
             return {
                 ...standart,
-                blkNum,
                 guardian
             }
         }

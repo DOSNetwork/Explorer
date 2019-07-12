@@ -107,5 +107,24 @@
 }
 
 .text-number {
-    color: red;
+    color: rgb(100, 45, 45);
+}
+
+.text--ellipsis {
+    display: inline-block;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    overflow: hidden;
+
+    &.ellipsis--short {
+        width: 150px;
+    }
+
+    &.ellipsis--mid {
+        width: 300px;
+    }
+
+    &.ellipsis--long {
+        width: 450px;
+    }
 }
