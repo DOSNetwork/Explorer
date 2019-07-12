@@ -424,19 +424,19 @@ const LogValidationResultRender = record => {
     return <div className='custom-column--wrapper'>
         <div className="custom-column">
             <span className="column-title">Traffic Type</span>
-			 <span className="column-text ">{record.traffic_type}</span>
+			 <span className="column-text ">{record.trafficType}</span>
         </div>
         <div className="custom-column">
             <span className="column-title">Traffic ID</span>
-			 <span className="column-text ">{record.traffic_id}</span>
+			 <span className="column-text ">{record.trafficId}</span>
         </div>
         <div className="custom-column">
             <span className="column-title">Message</span>
 			 <span className="column-text ">{record.message}</span>
         </div>
         <div className="custom-column">
-            <span className="column-title">Message</span>
-			 <span className="column-text ">{record.message}</span>
+            <span className="column-title">Pass</span>
+			 <span className="column-text ">{ String(record.pass)}</span>
         </div>
         <div className="custom-column">
             <span className="column-title">Signature</span>
