@@ -2,7 +2,7 @@ import React from 'react';
 import { Icon } from 'antd'
 import { CopyToClipboard } from 'react-copy-to-clipboard';
 import Message from '../../util/message'
-export const TxHashRender = (text, record, index) => {
+export const TxHashRender = (text) => {
     return <span className="txhash--wrapper">
         <span className="txhash--text text--ellipsis">
             {text}
@@ -14,7 +14,7 @@ export const TxHashRender = (text, record, index) => {
         </CopyToClipboard>
     </span>
 }
-export const MoreInfoRender = (text, record, index) => {
+export const MoreInfoRender = (text, record) => {
     switch (record.eventLog) {
         case 'LogUpdateRandom':
             return LogUpdateRandomRender(record)
@@ -28,6 +28,8 @@ export const MoreInfoRender = (text, record, index) => {
             return LogGroupingInitiatedRender(record)
         case 'GuardianReward':
             return GuardianRewardRender(record)
+        case 'LogPublicKeyAccepted':
+            return LogPublicKeyAcceptedRender(record)
         default:
             return { text }
     }
@@ -124,6 +126,30 @@ const GuardianRewardRender = record => {
         <div className="custom-column">
             <span className="column-title">Guardian</span>
             <span className="column-text">{record.guardian}</span>
+        </div>
+    </div>
+}
+
+
+const LogPublicKeyAcceptedRender = record => {
+    return <div className='custom-column--wrapper'>
+        <div className="custom-column">
+            <span className="column-title">GroupId</span>
+            <span className="column-text ">{record.groupId}</span>
+        </div>
+        <div className="custom-column">
+            <span className="column-title">Working Groups</span>
+            <span className="column-text  text-number">{record.numWorkingGroups}</span>
+        </div>
+        <div className="custom-column">
+            <span className="column-title">PubKeys</span>
+            <span className="column-text">
+                {
+                    record.pubKey.map(key => {
+                        return <p key={key} className="nodes-item"><Icon style={{ fontSize: 13 }} type="tag" /> - {key}</p>
+                    })
+                }
+            </span>
         </div>
     </div>
 }

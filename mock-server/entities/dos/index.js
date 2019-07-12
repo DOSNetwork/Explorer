@@ -23,7 +23,8 @@ exports.events = {
         "blockNumber":"@integer(1000000,5000000)",
         "guardian":/([0-9][A-Z]){30}/,
         "groupId":/([0-9][A-Z]){30}/,
-        "nodeId|5":[/([0-9][A-Z]){30}/]
+        "nodeId|5":[/([0-9][A-Z]){30}/],
+        "pubKey|5":[/([0-9][A-Z]){30}/]
     }]
 }
 

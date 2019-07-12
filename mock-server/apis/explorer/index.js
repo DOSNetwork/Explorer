@@ -22,7 +22,8 @@ router.get('/search', async (ctx, next) => {
         blockNumber,
         guardian,
         groupId,
-        nodeId
+        nodeId,
+        pubKey
     }) => {
         let standart = {
             ID,
@@ -73,6 +74,14 @@ router.get('/search', async (ctx, next) => {
                 ...standart,
                 groupId,
                 nodeId
+            }
+        }
+        if (eventLog === 'LogPublicKeyAccepted') {
+            return {
+                ...standart,
+                groupId,
+                pubKey,
+                numWorkingGroups
             }
         }
         return standart
