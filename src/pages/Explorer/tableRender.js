@@ -217,7 +217,7 @@ const LogUrlRender = record => {
             <span className="column-text ">{record.queryId}</span>
         </div>
 	    <div className="custom-column">
-            <span className="column-title">TiemOut</span>
+            <span className="column-title">Timeout</span>
             <span className="column-text ">{record.timeOut}</span>
         </div>
 	    <div className="custom-column">
