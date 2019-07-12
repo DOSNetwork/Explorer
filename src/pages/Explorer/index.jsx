@@ -16,7 +16,7 @@ export default class Explorer extends Component {
             dataList: [],
             loading: false,
             currentSearchText: '',
-            pageSize: 100,
+            pageSize: 20,
             currentPageIndex: 0,
             totalCount: 0
         }
@@ -54,7 +54,7 @@ export default class Explorer extends Component {
                 <PageTitle title="Explorer" />
                 <SearchInput onSearch={this.handleSearch}></SearchInput>
                 <span className="search-result--title">Latest {pageSize} events</span>
-                <Table rowKey={record => record.ID} loading={this.state.loading} dataSource={this.state.dataList} pagination={{ position: 'top', defaultCurrent: 1, defaultPageSize: 100, current: currentPageIndex + 1, total: totalCount }} size="middle" bordered onChange={this.handlePaginationChange}>
+                <Table rowKey={record => record.txHash + record.eventLog + record.ID } loading={this.state.loading} dataSource={this.state.dataList} pagination={{ position: 'top', defaultCurrent: 1, defaultPageSize: 100, current: currentPageIndex + 1, total: totalCount }} size="middle" bordered onChange={this.handlePaginationChange}>
                     <Column title="Tx Hash" dataIndex="txHash" key="txHash" width={250} render={TxHashRender} />
                     <Column title="Blocks" dataIndex="blockNumber" key="blockNumber" width={70} />
                     <Column title="Event Log" dataIndex="eventLog" key="eventLog" width={250} />
