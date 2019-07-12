@@ -42,7 +42,7 @@ export default class SearchInput extends Component {
                     style={{ width: '100%' }}
                     dataSource={options}
                     onSearch={this.handleSearch}
-                    placeholder="Search by Tx Hash, Method or Event"
+                    placeholder="Search by Event, RequestId, GroupId and Address"
                     backfill={true}
                 >
                     <Input
