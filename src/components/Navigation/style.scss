@@ -17,6 +17,10 @@
     padding: 0 15px;
     position: relative;
 
+    a {
+        color: #fff !important;
+    }
+
     @include respond-to ('1920') {
         max-width: 1560px;
     }

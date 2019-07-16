@@ -9,7 +9,7 @@ exports.events = {
             'LogRequestUserRandom',
             'LogGroupingInitiated',
             'LogGrouping',
-            'GuardianReward'],
+            'GuardianReward','LogPublicKeyAccepted'],
         "lastRandomness":/([0-9][A-Z]){30}/,
         "dispatchedGroupId":/([0-9][A-Z]){30}/,
         "numWorkingGroups":"@integer(0,10)",

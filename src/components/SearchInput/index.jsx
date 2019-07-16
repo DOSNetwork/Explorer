@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import { Icon, Button, Input, AutoComplete } from 'antd';
 import './style.scss';
-const { Option } = AutoComplete;
+// const { Option } = AutoComplete;
 const dataSource = [
     'delegate', 'requsest Random', 'trigger Callback'
 ];
@@ -10,6 +10,9 @@ export default class SearchInput extends Component {
     state = {
         dataSource: dataSource,
         currentText: ''
+    }
+    componentDidMount() {
+        this.props.onSearch(this.state.currentText)
     }
     searching = () => {
         this.props.onSearch(this.state.currentText)
@@ -27,20 +30,20 @@ export default class SearchInput extends Component {
         }
     }
     render() {
-        const { dataSource } = this.state
-        const options = dataSource
-            .map(txt => (
-                <Option key={txt} value={txt}>
-                    {txt}
-                </Option>
-            ))
+        // const { dataSource } = this.state
+        // const options = dataSource
+        //     .map(txt => (
+        //         <Option key={txt} value={txt}>
+        //             {txt}
+        //         </Option>
+        //     ))
         return (
             <div className="search-input--wrapper">
                 <AutoComplete
                     className="search-input"
                     size="large"
                     style={{ width: '100%' }}
-                    dataSource={options}
+                    // dataSource={options}
                     onSearch={this.handleSearch}
                     placeholder="Search by Event, RequestId, GroupId and Address"
                     backfill={true}

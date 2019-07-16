@@ -7,14 +7,34 @@ import {
 } from 'redux-actions'
 import type from './type'
 
+// ===States 
+// =====global state
 const globalState = {
     loadingStatus: false,
     userAddress: ''
 }
+// =====app state
 const appState = {
     count: 0
 }
 
+// ===== explorer state
+const explorerState = {
+    loading: false,
+    events: [],
+    totalCount: 0,
+    currentPageIndex: 0,
+    pageSize: 20,
+    searchText: ''
+}
+export const initialState = {
+    global: globalState,
+    app: appState,
+    explorer: explorerState
+}
+
+// ===Reducers
+// =====globalReducer
 const globalActions = {}
 globalActions['LOADING_STATUS'] = (prevState, payload) => {
     console.log(`[reducer]LOADING_STATUS.............`)
@@ -34,6 +54,8 @@ globalActions[type.METAMASK_ADDRESS_CHANGE] = (prevState, payload) => {
 }
 const globalReducer = handleActions(globalActions, globalState)
 
+
+// =====appReducer
 const appReducer = handleActions({
     'COUNTING'(prevState, payload) {
         console.log(`[reducer]COUNTING.............`)
@@ -44,6 +66,27 @@ const appReducer = handleActions({
     }
 }, appState)
 
+
+const explorerActions = {}
+explorerActions[type.EXPLORER_SEARCH_RESPONSE] = (prevState, payload) => {
+    return {
+        ...prevState,
+        loading: false,
+        events: payload.response.events,
+        totalCount: payload.response.totalCount,
+    }
+}
+
+explorerActions[type.EXPLORER_SEARCH_REQUEST] = (prevState, payload) => {
+    return {
+        ...prevState,
+        loading: true,
+        currentPageIndex: payload.pageIndex,
+        pageSize: payload.pageSize,
+        searchText: payload.searchText
+    }
+}
+const explorerReducer = handleActions(explorerActions, explorerState)
 
 /**
  *  最后产生的reducer和 state的属性要保持一致
@@ -60,12 +103,10 @@ const appReducer = handleActions({
  */
 const combinedReducers = combineReducers({
     global: globalReducer,
-    app: appReducer
+    app: appReducer,
+    explorer: explorerReducer
 })
 
 
-export const initialState = {
-    global: globalState,
-    app: appState
-}
+
 export default combinedReducers

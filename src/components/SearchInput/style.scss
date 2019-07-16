@@ -1,4 +1,8 @@
-.search-input--wrapper {}
+.search-input--wrapper {
+    & .ant-select-selection {
+        border-radius: 32.5px;
+    }
+}
 
 .search-input {
     height: 65px;

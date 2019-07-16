@@ -6,6 +6,8 @@ import combinedReducers, {
     initialState
 } from './reducer';
 
+import promise from 'redux-promise';
+import thunk from 'redux-thunk';
 
 
 function middlewareLogger(store) {
@@ -24,6 +26,7 @@ function middlewareLogger(store) {
 }
 
 
-const store = createStore(combinedReducers, initialState, applyMiddleware(middlewareLogger));
+const store = createStore(combinedReducers, initialState, applyMiddleware(thunk, promise, middlewareLogger),
+);
 
 export default store;

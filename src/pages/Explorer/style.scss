@@ -1,7 +1,14 @@
+.explorer-result--wrapper {
+    & .ant-table-wrapper {
+        background-color: #fff;
+    }
+}
+
 .search-result--title {
     height: 20px;
     font-family: IBMPlexSans;
-    font-size: 16px;font-weight: 600;
+    font-size: 16px;
+    font-weight: 600;
     font-style: normal;
     font-stretch: normal;
     line-height: normal;
