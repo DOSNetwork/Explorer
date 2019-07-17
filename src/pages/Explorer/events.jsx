@@ -1,6 +1,6 @@
 import React from 'react'
 import { Table } from 'antd'
-import { MoreInfoRender, TxHashRender } from './tableRender'
+import { MoreInfoRender, TxHashRender } from './tableRender.jsx'
 const { Column } = Table
 export const EventsList = ({ pageSize, currentPageIndex, totalCount, events, loading, searchText, explorerSearch }) => {
     function handlePaginationChange({ current, pageSize }) {

@@ -22,6 +22,7 @@ const appState = {
 const explorerState = {
     loading: false,
     events: [],
+    groups: [],
     totalCount: 0,
     currentPageIndex: 0,
     pageSize: 20,
@@ -71,12 +72,14 @@ const appReducer = handleActions({
 const explorerActions = {}
 explorerActions[type.EXPLORER_SEARCH_RESPONSE] = (prevState, payload) => {
     let events = payload.response.events;
-    let requests = payload.response.requests
+    let requests = payload.response.requests;
+    let groups = payload.response.groups;
     return {
         ...prevState,
         loading: false,
         events: events,
         requests: requests,
+        groups: groups,
         totalCount: payload.response.totalCount
     }
 }

@@ -1,17 +1,17 @@
 import React from 'react';
-import { Icon } from 'antd'
-import { CopyToClipboard } from 'react-copy-to-clipboard';
-import Message from '../../util/message'
+import { Icon, Typography } from 'antd'
+// import Message from '../../util/message'
+const { Paragraph } = Typography;
 export const TxHashRender = (text) => {
     return <span className="txhash--wrapper">
-        <span className="txhash--text text--ellipsis">
-            {text}
-        </span>
-        <CopyToClipboard text={text} onCopy={() => {
+        <Paragraph copyable={{ text: text }}>
+            <span className="txhash--text text--ellipsis">{text}</span>
+        </Paragraph>
+        {/* <CopyToClipboard text={text} onCopy={() => {
             Message.Notification.Normal({ key: 'COPY_MESSAGE', message: 'copy success!' })
         }}>
             <Icon style={{ fontSize: 15, color: '#455ec7' }} type="copy" />
-        </CopyToClipboard>
+        </CopyToClipboard> */}
     </span>
 }
 export const MoreInfoRender = (text, record) => {
@@ -24,12 +24,12 @@ export const MoreInfoRender = (text, record) => {
             return LogNonSupportedTypeRender(record)
         case 'LogNonContractCall':
             return LogNonContractCallRender(record)
-	    case 'LogCallbackTriggeredFor':
+        case 'LogCallbackTriggeredFor':
             return LogCallbackTriggeredForRender(record)
         case 'LogUpdateRandom':
             return LogUpdateRandomRender(record)
         case 'LogValidationResult':
-            return LogValidationResultRender(record)	
+            return LogValidationResultRender(record)
         case 'LogInsufficientPendingNode':
             return LogInsufficientPendingNodeRender(record)
         case 'LogInsufficientWorkingGroup':
@@ -37,13 +37,13 @@ export const MoreInfoRender = (text, record) => {
         case 'LogGrouping':
             return LogGroupingRender(record)
         case 'LogPublicKeyAccepted':
-            return LogPublicKeyAcceptedRender(record)			
+            return LogPublicKeyAcceptedRender(record)
         case 'LogPublicKeySuggested':
             return LogPublicKeySuggestedRender(record)
         case 'LogGroupDissolve':
-            return LogGroupDissolveRender(record)	
+            return LogGroupDissolveRender(record)
         case 'LogRegisteredNewPendingNode':
-            return LogRegisteredNewPendingNodeRender(record)										
+            return LogRegisteredNewPendingNodeRender(record)
         case 'LogGroupingInitiated':
             return LogGroupingInitiatedRender(record)
         case 'LogNoPendingGroup':
@@ -53,15 +53,15 @@ export const MoreInfoRender = (text, record) => {
         case 'LogError':
             return LogErrorRender(record)
         case 'UpdateGroupToPick':
-            return UpdateGroupToPickRender(record)	
+            return UpdateGroupToPickRender(record)
         case 'UpdateGroupSize':
             return UpdateGroupSizeRender(record)
         case 'UpdateGroupingThreshold':
-            return UpdateGroupingThresholdRender(record)	
+            return UpdateGroupingThresholdRender(record)
         case 'UpdateGroupMaturityPeriod':
             return UpdateGroupMaturityPeriodRender(record)
         case 'UpdateBootstrapCommitDuration':
-            return UpdateBootstrapCommitDurationRender(record)	
+            return UpdateBootstrapCommitDurationRender(record)
         case 'UpdateBootstrapRevealDuration':
             return UpdateBootstrapRevealDurationRender(record)
         case 'UpdatebootstrapStartThreshold':
@@ -216,19 +216,19 @@ const LogUrlRender = record => {
             <span className="column-title">QueryId</span>
             <span className="column-text ">{record.queryId}</span>
         </div>
-	    <div className="custom-column">
+        <div className="custom-column">
             <span className="column-title">Timeout</span>
             <span className="column-text ">{record.timeOut}</span>
         </div>
-	    <div className="custom-column">
+        <div className="custom-column">
             <span className="column-title">DataSource</span>
             <span className="column-text ">{record.dataSource}</span>
         </div>
-	    <div className="custom-column">
+        <div className="custom-column">
             <span className="column-title">Selector</span>
             <span className="column-text ">{record.selector}</span>
         </div>
-	    <div className="custom-column">
+        <div className="custom-column">
             <span className="column-title">Randomness</span>
             <span className="column-text ">{record.randomness}</span>
         </div>
@@ -257,7 +257,7 @@ const LogNonContractCallRender = record => {
     return <div className='custom-column--wrapper'>
         <div className="custom-column">
             <span className="column-title">CallAddr</span>
-			 <p key={record.callAddr} className="nodes-item"><Icon style={{ fontSize: 13 }} type="tag" /> - {record.callAddr}</p>
+            <p key={record.callAddr} className="nodes-item"><Icon style={{ fontSize: 13 }} type="tag" /> - {record.callAddr}</p>
         </div>
     </div>
 }
@@ -266,7 +266,7 @@ const LogCallbackTriggeredForRender = record => {
     return <div className='custom-column--wrapper'>
         <div className="custom-column">
             <span className="column-title">CallbackAddr</span>
-			<p key={record.callbackAddr} className="nodes-item"><Icon style={{ fontSize: 13 }} type="tag" /> - {record.callbackAddr}</p>
+            <p key={record.callbackAddr} className="nodes-item"><Icon style={{ fontSize: 13 }} type="tag" /> - {record.callbackAddr}</p>
         </div>
     </div>
 }
@@ -424,19 +424,19 @@ const LogValidationResultRender = record => {
     return <div className='custom-column--wrapper'>
         <div className="custom-column">
             <span className="column-title">Traffic Type</span>
-			 <span className="column-text ">{record.trafficType}</span>
+            <span className="column-text ">{record.trafficType}</span>
         </div>
         <div className="custom-column">
             <span className="column-title">Traffic ID</span>
-			 <span className="column-text ">{record.trafficId}</span>
+            <span className="column-text ">{record.trafficId}</span>
         </div>
         <div className="custom-column">
             <span className="column-title">Message</span>
-			 <span className="column-text ">{record.message}</span>
+            <span className="column-text ">{record.message}</span>
         </div>
         <div className="custom-column">
             <span className="column-title">Pass</span>
-			 <span className="column-text ">{ String(record.pass)}</span>
+            <span className="column-text ">{String(record.pass)}</span>
         </div>
         <div className="custom-column">
             <span className="column-title">Signature</span>

@@ -6,9 +6,9 @@ class SearchInput extends Component {
     state = {
         currentText: ''
     }
-    componentDidMount() {
-        this.props.onSearch(this.state.currentText)
-    }
+    // componentDidMount() {
+    //     this.props.onSearch(this.state.currentText)
+    // }
     searching = () => {
         this.props.onSearch(this.state.currentText)
     }

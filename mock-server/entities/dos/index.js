@@ -1,7 +1,9 @@
+const HexIdMock = /0x([0-9][A-F]){20}/
+const NumberMock = "@integer(0,50000)"
 exports.events = {
     'events|100': [{
-        "ID":'@id()',
-        txHash: /Ox([0-9][A-Z]){30}/,
+        "ID": '@id()',
+        txHash: HexIdMock,
 
         "method|1": ['signalRandom', 'signalGroupFormation', 'signalBootstrap'],
         "eventLog|1": ['LogUpdateRandom',
@@ -9,28 +11,38 @@ exports.events = {
             'LogRequestUserRandom',
             'LogGroupingInitiated',
             'LogGrouping',
-            'GuardianReward','LogPublicKeyAccepted'],
-        "lastRandomness":/([0-9][A-Z]){30}/,
-        "dispatchedGroupId":/([0-9][A-Z]){30}/,
-        "numWorkingGroups":"@integer(0,10)",
-        "numPendingGroups":"@integer(0,10)",
-        "requestId":/([0-9][A-Z]){30}/,
-        "lastSystemRandomness":/([0-9][A-Z]){30}/,
-        "userSeed":"@hex()",
-        "pendingNodePool":"@integer(0,200)",
-        "groupSize":"@integer(0,200)",
-        "groupingThreshold":"@integer(0,200)",
-        "blockNumber":"@integer(1000000,5000000)",
-        "guardian":/([0-9][A-Z]){30}/,
-        "groupId":/([0-9][A-Z]){30}/,
-        "nodeId|5":[/([0-9][A-Z]){30}/],
-        "pubKey|5":[/([0-9][A-Z]){30}/]
+            'GuardianReward', 'LogPublicKeyAccepted'
+        ],
+        "lastRandomness": HexIdMock,
+        "dispatchedGroupId": HexIdMock,
+        "numWorkingGroups": "@integer(0,10)",
+        "numPendingGroups": "@integer(0,10)",
+        "requestId": HexIdMock,
+        "lastSystemRandomness": HexIdMock,
+        "userSeed": "@hex()",
+        "pendingNodePool": "@integer(0,200)",
+        "groupSize": "@integer(0,200)",
+        "groupingThreshold": "@integer(0,200)",
+        "blockNumber": "@integer(1000000,5000000)",
+        "guardian": HexIdMock,
+        "groupId": HexIdMock,
+        "nodeId|5": [HexIdMock],
+        "pubKey|5": [HexIdMock]
     }],
-    'address':{
-        address:/Ox([0-9][A-Z]){30}/,
-        balance:"@integer(1000000,5000000)",
-        "groupId|5":[/OX([0-9][A-F]){20}/]
-    }
+    'address': {
+        address: HexIdMock,
+        balance: "@integer(1000000,5000000)",
+        "groupId|5": [HexIdMock]
+    },
+    'groups|2': [{
+        "groupId": HexIdMock,
+        "groupMembers|5": [HexIdMock],
+        "groupPubKey|5": [HexIdMock],
+        "startedBlockNumber": NumberMock,
+        "suggestedBlockNumber|5": [NumberMock],
+        "acceptedBlockNumber": NumberMock,
+        "resolvedBlockNumber": NumberMock
+    }]
 }
 
 exports.nodelist = {
