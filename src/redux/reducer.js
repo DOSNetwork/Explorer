@@ -25,7 +25,8 @@ const explorerState = {
     totalCount: 0,
     currentPageIndex: 0,
     pageSize: 20,
-    searchText: ''
+    searchText: '',
+    showType: 'EVENT'
 }
 export const initialState = {
     global: globalState,
@@ -37,16 +38,16 @@ export const initialState = {
 // =====globalReducer
 const globalActions = {}
 globalActions['LOADING_STATUS'] = (prevState, payload) => {
-    console.log(`[reducer]LOADING_STATUS.............`)
-    console.log(prevState, payload)
+    // console.log(`[reducer]LOADING_STATUS.............`)
+    // console.log(prevState, payload)
     return {
         ...globalState,
         loadingStatus: payload.loading
     }
 }
 globalActions[type.METAMASK_ADDRESS_CHANGE] = (prevState, payload) => {
-    console.log(`[reducer]${type.METAMASK_ADDRESS_CHANGE}.............`)
-    console.log(prevState, payload)
+    // console.log(`[reducer]${type.METAMASK_ADDRESS_CHANGE}.............`)
+    // console.log(prevState, payload)
     return {
         ...globalState,
         userAddress: payload.address
@@ -69,11 +70,14 @@ const appReducer = handleActions({
 
 const explorerActions = {}
 explorerActions[type.EXPLORER_SEARCH_RESPONSE] = (prevState, payload) => {
+    let events = payload.response.events;
+    let requests = payload.response.requests
     return {
         ...prevState,
         loading: false,
-        events: payload.response.events,
-        totalCount: payload.response.totalCount,
+        events: events,
+        requests: requests,
+        totalCount: payload.response.totalCount
     }
 }
 

@@ -37,19 +37,24 @@ function ExplorerSearching(searchText, pageSize, pageIndex) {
     }
 }
 
-function ExplorerSearchRequest(searchText, pageSize, pageIndex) {
-    console.log(searchText, pageSize, pageIndex)
+function ExplorerSearchRequest(searchText, pageSize, pageIndex, history) {
     return (dispatch) => {
         return axios.get('/api/explorer/search', { params: { text: searchText, pageSize: pageSize, pageIndex: pageIndex } }).then(response => {
             let data = response.data.body
             dispatch(explorerSearchReceiveResponse(data))
+            let { events, requests } = data
+            let showRequest = events && events.length === 0 && requests && requests.length !== 0
+            if (showRequest) {
+                let id = requests[0].txHash
+                history.push(`/explorer/rq/${id}`)
+            }
         })
     }
 }
-export function ExplorerSearch(text = '', pageSize = 20, pageIndex = 0) {
+export function ExplorerSearch(text = '', pageSize = 20, pageIndex = 0, history) {
     return (dispatch) => {
         dispatch(ExplorerSearching(text, pageSize, pageIndex))
-        return dispatch(ExplorerSearchRequest(text, pageSize, pageIndex))
+        return dispatch(ExplorerSearchRequest(text, pageSize, pageIndex, history))
     }
 }
 

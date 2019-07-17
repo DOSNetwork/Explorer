@@ -4,17 +4,23 @@ import SearchInput from '../../components/SearchInput'
 import './style.scss';
 import { EventsList } from './events'
 
-export default function Search(props) {
-    let { currentPageIndex, pageSize } = props
-    function handleSearch(text) {
-        props.explorerSearch(text, pageSize, currentPageIndex)
+class Search extends React.Component {
+    handleSearch = (text) => {
+        let { currentPageIndex, pageSize } = this.props.searchResult
+        this.props.explorerSearch(text, pageSize, currentPageIndex, this.props.history)
     }
-    return (<>
-        <SearchInput onSearch={handleSearch}></SearchInput>
-        <Switch>
-            <Route exact path="/explorer/" component={() => (
-                <EventsList {...props}></EventsList>
-            )} />
-        </Switch>
-    </>)
+    render() {
+        return (<>
+            <SearchInput onSearch={this.handleSearch}></SearchInput>
+            <Switch>
+                <Route exact path="/explorer/" component={() => (
+                    <EventsList {...this.props.searchResult}></EventsList>
+                )} />
+                <Route exact path="/explorer/rq/:requestId" component={() => (
+                    'request'
+                )} />
+            </Switch>
+        </>)
+    }
 }
+export default Search;

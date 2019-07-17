@@ -2,7 +2,11 @@ import React, { Component } from 'react'
 import { PageTitle } from '../../Layout/page'
 import './style.scss';
 import Search from './searchContainer'
-export default class Explorer extends Component {
+import PropTypes from 'prop-types';
+class Explorer extends Component {
+    static contextTypes = {
+        router: PropTypes.object
+    }
     render() {
         return (
             <div className="explorer-result--wrapper">
@@ -12,3 +16,5 @@ export default class Explorer extends Component {
         )
     }
 }
+
+export default Explorer

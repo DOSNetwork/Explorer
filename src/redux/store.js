@@ -9,7 +9,7 @@ import combinedReducers, {
 import promise from 'redux-promise';
 import thunk from 'redux-thunk';
 
-
+// eslint-ignore
 function middlewareLogger(store) {
     return next => action => {
         console.log('[logger]will dispatch', action)
@@ -26,7 +26,7 @@ function middlewareLogger(store) {
 }
 
 
-const store = createStore(combinedReducers, initialState, applyMiddleware(thunk, promise, middlewareLogger),
+const store = createStore(combinedReducers, initialState, applyMiddleware(thunk, promise),
 );
 
 export default store;

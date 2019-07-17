@@ -91,11 +91,20 @@ router.get('/search', async (ctx, next) => {
         pageIndex,
         text
     } = ctx.query;
-    console.log(`参数:text:${text},pageIndex:${pageIndex},pageSize:${pageSize}`)
 
-    ctx.body = {
-        events: filteredEvents,
-        totalCount: pageSize * (5 + parseInt(pageIndex))
+    console.log(`参数:text:${text},pageIndex:${pageIndex},pageSize:${pageSize}`)
+    if (text === 'request') {
+        ctx.body = {
+            requests: filteredEvents,
+            events: [],
+            totalCount: pageSize * (5 + parseInt(pageIndex))
+        }
+    } else {
+        ctx.body = {
+            events: filteredEvents,
+            reuqests: [],
+            totalCount: pageSize * (5 + parseInt(pageIndex))
+        }
     }
     setTimeout(() => {
         next();

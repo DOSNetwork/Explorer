@@ -1,10 +1,10 @@
 import { connect } from 'react-redux'
 import Search from './search'
 import { ExplorerSearch } from '../../redux/action'
-
-const mapStateToProps = (state) => state.explorer
+import { withRouter } from "react-router";
+const mapStateToProps = (state) => ({ searchResult: state.explorer })
 const mapDispatchToProps = dispatch => ({
-    explorerSearch: (text, pageSize, pageIndex) => dispatch(ExplorerSearch(text, pageSize, pageIndex))
+    explorerSearch: (text, pageSize, pageIndex, history) => dispatch(ExplorerSearch(text, pageSize, pageIndex, history))
 })
 
-export default connect(mapStateToProps, mapDispatchToProps)(Search)
+export default withRouter(connect(mapStateToProps, mapDispatchToProps)(Search))

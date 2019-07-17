@@ -1,14 +1,9 @@
 import React, { Component } from 'react'
 import { Icon, Button, Input, AutoComplete } from 'antd';
 import './style.scss';
-// const { Option } = AutoComplete;
-const dataSource = [
-    'delegate', 'requsest Random', 'trigger Callback'
-];
-
-export default class SearchInput extends Component {
+import { withRouter } from "react-router";
+class SearchInput extends Component {
     state = {
-        dataSource: dataSource,
         currentText: ''
     }
     componentDidMount() {
@@ -19,7 +14,7 @@ export default class SearchInput extends Component {
     }
     handleSearch = value => {
         this.setState({
-            dataSource: dataSource.filter(txt => (txt.indexOf(value) > -1)),
+            // dataSource: dataSource.filter(txt => (txt.indexOf(value) > -1)),
             currentText: value
         })
     }
@@ -67,3 +62,6 @@ export default class SearchInput extends Component {
         )
     }
 }
+
+
+export default withRouter(SearchInput);
