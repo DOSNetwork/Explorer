@@ -47,6 +47,8 @@ function ExplorerSearchRequest(searchText, pageSize, pageIndex, history) {
             if (showRequest) {
                 let id = requests[0].txHash
                 history.push(`/explorer/rq/${id}`)
+            } else {
+                history.push(`/explorer`)
             }
         })
     }

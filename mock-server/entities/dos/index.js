@@ -25,7 +25,12 @@ exports.events = {
         "groupId":/([0-9][A-Z]){30}/,
         "nodeId|5":[/([0-9][A-Z]){30}/],
         "pubKey|5":[/([0-9][A-Z]){30}/]
-    }]
+    }],
+    'address':{
+        address:/Ox([0-9][A-Z]){30}/,
+        balance:"@integer(1000000,5000000)",
+        "groupId|5":[/OX([0-9][A-F]){20}/]
+    }
 }
 
 exports.nodelist = {
