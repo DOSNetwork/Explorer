@@ -1,42 +1,44 @@
 import React from 'react'
-import { Descriptions, Icon } from 'antd'
-export const GroupDetail = ({ groups }) => {
-    let group = (groups && groups[0]) || {
+import { Descriptions, Icon, Typography } from 'antd'
+const { Paragraph } = Typography;
+export const GroupDetail = ({ group }) => {
+    let groupDetail = (group && group[0]) || {
         groupId: 'NOT FOUND',
-        groupMembers: [],
-        groupPubKey: [],
-        suggestedBlockNumber: []
+        nodeId: [],
+        pubKey: []
     }
     return (
-        <Descriptions title="Group Info" bordered>
-            <Descriptions.Item label="Group Id" span={3}>{group.groupId}</Descriptions.Item>
-            <Descriptions.Item label="Group Members" span={3}>
+        <Descriptions title="Group Info" bordered column={3}>
+            <Descriptions.Item label="Group Id" span={3}>
+                <Paragraph copyable={{ text: groupDetail.groupId }}>
+                    {groupDetail.groupId}
+                </Paragraph>
+            </Descriptions.Item>
+            <Descriptions.Item label="Group NodeIds" span={3}>
                 {
-                    group.groupMembers.map(Id => {
+                    groupDetail.nodeId.map(Id => {
                         return <p key={Id} className='nodes-item' ><Icon style={{ fontSize: 13 }} type="tag" /> - {Id}</p>
                     })
                 }
             </Descriptions.Item>
             <Descriptions.Item label="Group Publick Key" span={3}>
                 {
-                    group.groupPubKey.map(Id => {
+                    groupDetail.pubKey.map(Id => {
                         return <p key={Id} className='nodes-item' ><Icon style={{ fontSize: 13 }} type="tag" /> - {Id}</p>
                     })
                 }
             </Descriptions.Item>
-            <Descriptions.Item label="Started Block Number">{group.startedBlockNumber}</Descriptions.Item>
             <Descriptions.Item label="Accepted Block Number">
-                {group.acceptedBlockNumber}
+                {groupDetail.acceptedBlknum}
             </Descriptions.Item>
-            <Descriptions.Item label="Resolved Block Number">
-                {group.resolvedBlockNumber}
+            <Descriptions.Item label="Disresolved Block Number">
+                {groupDetail.dissolvedBlknum}
             </Descriptions.Item>
-            <Descriptions.Item label="Suggested Block Number" span={3}>
-                {
-                    group.suggestedBlockNumber.map(Id => {
-                        return <p key={Id} ><Icon style={{ fontSize: 13 }} type="tag" /> - {Id}</p>
-                    })
-                }
+            <Descriptions.Item label="Url Requests">
+                {groupDetail.urlRequests}
+            </Descriptions.Item>
+            <Descriptions.Item label="Random Requests">
+                {groupDetail.randomRequests}
             </Descriptions.Item>
         </Descriptions>
     )

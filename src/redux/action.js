@@ -49,15 +49,19 @@ function ExplorerSearchRequest(searchText, pageSize, pageIndex, history) {
             let data = response.data.body
             dispatch(explorerSearchReceiveResponse(data))
             let {
-                requests,
-                groups
+                request,
+                group,
+                address
             } = data
-            if (requests && requests.length > 0) {
-                let id = requests[0].txHash
+            if (request && request.length > 0) {
+                let id = request[0].requestId
                 history.push(`/explorer/request/${id}`)
-            } else if (groups && groups.length > 0) {
-                let id = groups[0].groupId
+            } else if (group && group.length > 0) {
+                let id = group[0].groupId
                 history.push(`/explorer/group/${id}`)
+            } else if (address && address.length > 0) {
+                let id = address[0].addr
+                history.push(`/explorer/address/${id}`)
             } else {
                 history.push(`/explorer`)
             }

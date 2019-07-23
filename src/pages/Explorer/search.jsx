@@ -4,6 +4,8 @@ import SearchInput from '../../components/SearchInput'
 import './style.scss';
 import { EventsList } from './events'
 import { GroupDetail } from './group'
+import { RequestDetail } from './request'
+import { AddressDetail } from './address'
 class Search extends React.Component {
     handleSearch = (text) => {
         let { currentPageIndex, pageSize } = this.props.searchResult
@@ -31,6 +33,13 @@ class Search extends React.Component {
                 )} />
                 <Route exact path="/explorer/group/:groupId" component={() => (
                     <GroupDetail {...this.props.searchResult}></GroupDetail>
+                )} />
+                <Route exact path="/explorer/request/:requestId" component={() => (
+                    <RequestDetail {...this.props.searchResult}></RequestDetail>
+                )} />
+
+                <Route exact path="/explorer/address/:requestId" component={() => (
+                    <AddressDetail {...this.props.searchResult}></AddressDetail>
                 )} />
             </Switch>
         </>)

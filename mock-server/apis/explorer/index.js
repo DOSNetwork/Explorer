@@ -4,8 +4,9 @@ const Mock = require('mockjs');
 router.get('/search', async (ctx, next) => {
     let body = Mock.mock(entities.dos.events)
     let events = body.events
-    let groups = body.groups
-    let requests = body.requests
+    let group = body.group
+    let request = body.request
+    let address = body.address
     let filteredEvents = events.map(({
         ID,
         txHash,
@@ -98,23 +99,22 @@ router.get('/search', async (ctx, next) => {
 
     if (text.includes('request')) {
         ctx.body = {
-            events: [],
-            requests: requests,
-            groups: [],
+            request: request,
             totalCount: 1
         }
     } else if (text.includes('group')) {
         ctx.body = {
-            events: [],
-            requests: [],
-            groups: groups,
+            group: group,
+            totalCount: 1
+        }
+    } else if (text.includes('address')) {
+        ctx.body = {
+            address: address,
             totalCount: 1
         }
     } else {
         ctx.body = {
             events: filteredEvents,
-            reuqests: [],
-            groups: [],
             totalCount: pageSize * (5 + parseInt(pageIndex))
         }
     }

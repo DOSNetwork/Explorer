@@ -29,19 +29,36 @@ exports.events = {
         "nodeId|5": [HexIdMock],
         "pubKey|5": [HexIdMock]
     }],
-    'address': {
-        address: HexIdMock,
-        balance: "@integer(1000000,5000000)",
-        "groupId|5": [HexIdMock]
-    },
-    'groups|2': [{
+    'group|2': [{
         "groupId": HexIdMock,
-        "groupMembers|5": [HexIdMock],
-        "groupPubKey|5": [HexIdMock],
-        "startedBlockNumber": NumberMock,
-        "suggestedBlockNumber|5": [NumberMock],
-        "acceptedBlockNumber": NumberMock,
-        "resolvedBlockNumber": NumberMock
+        "nodeId|5": [HexIdMock],
+        "pubKey|5": [HexIdMock],
+        "acceptedBlknum": NumberMock,
+        "dissolvedBlknum": NumberMock,
+        "urlRequests": NumberMock,
+        "randomRequests": NumberMock
+    }],
+    'request|2': [{
+        "requestId": HexIdMock,
+        "dispatchedGroupId": HexIdMock,
+        "submitter": HexIdMock,
+        "submittedBlkNum": NumberMock,
+        "submittedTxHash": HexIdMock,
+        "message": "{\"amount\":\"269.585\",\"base\":\"ETH\",\"currency\":\"USD\"}\ufffd\u0019(\ufffdj\ufffd\u0005\ufffd\ufffdT\ufffd0\ufffd\\\u001c\ufffd\ufffd9\ufffd\u0010",
+        "signature|2": [HexIdMock],
+        "pubKey|5": [HexIdMock],
+        "pass|1": true,
+        "timeOut": NumberMock,
+        "dataSource": "https://api.coinbase.com/v2/prices/ETH-USD/spot",
+        "selector": "$.data",
+        "randomness": HexIdMock
+    }],
+    "address|2": [{
+        "addr": HexIdMock,
+        "balance|0-5.1-5": 1,
+        "registerState|1": true,
+        "activeGroups|5": [HexIdMock],
+        "expiredGroups": NumberMock,
     }]
 }
 

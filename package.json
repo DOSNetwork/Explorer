@@ -13,6 +13,7 @@
     "dateformat": "^3.0.3",
     "echarts": "^4.2.1",
     "echarts-for-react": "^2.0.15-beta.0",
+    "fundebug-javascript": "^1.9.0",
     "lodash": "^4.17.11",
     "lodash.clonedeep": "^4.5.0",
     "node-sass": "^4.12.0",
