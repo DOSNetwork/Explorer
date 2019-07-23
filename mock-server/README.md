@@ -118,7 +118,7 @@ resp  {
     "code": 0,
     "message": "success",
     "body": {
-        "request": [
+        "url": [
             {
                 "requestId": "0x5c42e9d87d2406a855081c0524a9d1fb50e915a7becf6ade793e2433a122339d",
                 "dispatchedGroupId": "0x3bd6589659082e854afc00f4f42222ebc23193c1ef42d5ed6cf3ccf00df21ecb",
@@ -141,6 +141,38 @@ resp  {
                 "dataSource": "https://api.coinbase.com/v2/prices/ETH-USD/spot",
                 "selector": "$.data",
                 "randomness": "0xcb42637fd4aa8998693a7ec871bbc4ad5ecf3d35563a1e4b6e2d3325afc7b246"
+            }
+        ],
+        "totalCount": 1
+    }
+}
+```
+```json
+resp  {
+    "code": 0,
+    "message": "success",
+    "body": {
+        "random": [
+            {
+                "requestId": "0x5c42e9d87d2406a855081c0524a9d1fb50e915a7becf6ade793e2433a122339d",
+                "dispatchedGroupId": "0x3bd6589659082e854afc00f4f42222ebc23193c1ef42d5ed6cf3ccf00df21ecb",
+                "submitter": "0xdD1928956AdE05d2da54c230f75c1Cd7ed39ea10",
+                "submittedBlkNum": 4468936,
+                "submittedTxHash": "0xb7f8696e9bdad17c8a20fcc7f3f882e9c7506c095c663870b765b4b744af94e5",
+                "message": "0xcb42637fd4aa8998693a7ec871bbc4ad5ecf3d35563a1e4b6e2d3325afc7b246",
+                "signature": [
+                    "0x2758f8d1012d749aba1ad142d4b44ab5abaf8b42891e56da5b757d2b081c805f",
+                    "0x08f7050f78b57a093bc1b779e980fe327e57a243e40cbeb193c1c7bbafc5e963"
+                ],
+                "pubKey": [
+                    "0x2d1c40d16790668ff1877b1f4f17627c554bff5a3ef6d694ee03fa3cc2804bdd",
+                    "0x1c7e60ade75491f66248061803c438caa39476c072e081fe08086ab5a3e7e767",
+                    "0x1d905cb5d4a66c2f2ac88fd1a7cb1796d4e5028dea400babcc998d2587e3a6ad",
+                    "0x0556b82a5b3e7f8934c09aba4b2bf968c3aae71a4f8ee3b11c72b02da98a110e"
+                ],
+                "pass": true,
+                "lastSystemRandomness": "0xcb42637fd4aa8998693a7ec871bbc4ad5ecf3d35563a1e4b6e2d3325afc7b246",
+                "userSeed": "0xcb42637fd4aa8998693a7ec871bbc4ad5ecf3d35563a1e4b6e2d3325afc7b246"
             }
         ],
         "totalCount": 1
