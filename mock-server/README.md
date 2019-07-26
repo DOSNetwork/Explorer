@@ -1,6 +1,27 @@
 # API
 
 ## Explorer
+### autocomplete
+
+**Request Url: ***/api/explorer/eventNames
+Response Scheme:
+
+```json
+[
+    "LogRegisteredNewPendingNode",
+    "LogGrouping",
+    "LogPublicKeySuggested",
+    "LogPublicKeyAccepted",
+    "LogGroupDissolve",
+    "LogUpdateRandom",
+    "LogUrl",
+    "LogRequestUserRandom",
+    "LogValidationResult",
+    "LogCallbackTriggeredFor",
+    "GuardianReward",
+    "LogError"
+]
+```
 
 ### search
 
