@@ -4,7 +4,8 @@ import SearchInput from '../../components/SearchInput'
 import './style.scss';
 import { EventsList } from './events'
 import { GroupDetail } from './group'
-import { RequestDetail } from './request'
+import { RandomDetail } from './random'
+import { UrlDetail } from './url'
 import { AddressDetail } from './address'
 class Search extends React.Component {
     handleSearch = (text) => {
@@ -29,17 +30,22 @@ class Search extends React.Component {
             <SearchInput onSearch={this.handleSearch}></SearchInput>
             <Switch>
                 <Route exact path="/explorer/" component={() => (
-                    <EventsList {...this.props.searchResult}></EventsList>
+                    <EventsList {...this.props.searchResult} explorerSearch={this.props.explorerSearch}
+                        history={this.props.history}></EventsList>
                 )} />
                 <Route exact path="/explorer/group/:groupId" component={() => (
                     <GroupDetail {...this.props.searchResult}></GroupDetail>
                 )} />
                 <Route exact path="/explorer/request/:requestId" component={() => (
-                    <RequestDetail {...this.props.searchResult}></RequestDetail>
+                    <RandomDetail {...this.props.searchResult}></RandomDetail>
                 )} />
 
-                <Route exact path="/explorer/address/:requestId" component={() => (
+                <Route exact path="/explorer/address/:addressId" component={() => (
                     <AddressDetail {...this.props.searchResult}></AddressDetail>
+                )} />
+
+                <Route exact path="/explorer/url/:requestId" component={() => (
+                    <UrlDetail {...this.props.searchResult}></UrlDetail>
                 )} />
             </Switch>
         </>)

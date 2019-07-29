@@ -49,13 +49,17 @@ function ExplorerSearchRequest(searchText, pageSize, pageIndex, history) {
             let data = response.data.body
             dispatch(explorerSearchReceiveResponse(data))
             let {
-                request,
+                url,
+                random,
                 group,
                 address
             } = data
-            if (request && request.length > 0) {
-                let id = request[0].requestId
-                history.push(`/explorer/request/${id}`)
+            if (url && url.length > 0) {
+                let id = url[0].requestId
+                history.push(`/explorer/url/${id}`)
+            } else if (random && random.length > 0) {
+                let id = random[0].requestId
+                history.push(`/explorer/random/${id}`)
             } else if (group && group.length > 0) {
                 let id = group[0].groupId
                 history.push(`/explorer/group/${id}`)

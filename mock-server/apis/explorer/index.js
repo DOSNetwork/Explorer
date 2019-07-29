@@ -5,8 +5,9 @@ router.get('/search', async (ctx, next) => {
     let body = Mock.mock(entities.dos.events)
     let events = body.events
     let group = body.group
-    let request = body.request
+    let url = body.url
     let address = body.address
+    let random = body.random
     let filteredEvents = events.map(({
         ID,
         txHash,
@@ -97,9 +98,14 @@ router.get('/search', async (ctx, next) => {
 
     console.log(`参数:text:${text},pageIndex:${pageIndex},pageSize:${pageSize}`)
 
-    if (text.includes('request')) {
+    if (text.includes('url')) {
         ctx.body = {
-            request: request,
+            url: url,
+            totalCount: 1
+        }
+    } else if (text.includes('random')) {
+        ctx.body = {
+            random: random,
             totalCount: 1
         }
     } else if (text.includes('group')) {

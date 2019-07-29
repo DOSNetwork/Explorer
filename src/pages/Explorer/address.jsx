@@ -17,7 +17,7 @@ export const AddressDetail = ({ address }) => {
                 {addressDetail.balance}
             </Descriptions.Item>
             <Descriptions.Item label="Register State">
-                {addressDetail.registerState}
+                {`${addressDetail.registerState}`}
             </Descriptions.Item>
             <Descriptions.Item label="expiredGroups">
                 {addressDetail.expiredGroups}

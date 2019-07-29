@@ -2,9 +2,9 @@ import React from 'react'
 import { Table } from 'antd'
 import { MoreInfoRender, TxHashRender } from './tableRender.jsx'
 const { Column } = Table
-export const EventsList = ({ pageSize, currentPageIndex, totalCount, events, loading, searchText, explorerSearch }) => {
+export const EventsList = ({ pageSize, currentPageIndex, totalCount, events, loading, searchText, explorerSearch, history }) => {
     function handlePaginationChange({ current, pageSize }) {
-        explorerSearch(searchText, pageSize, current - 1);
+        explorerSearch(searchText, pageSize, current - 1, history);
     }
     return (
         <><span className="search-result--title">Latest {pageSize} events</span>

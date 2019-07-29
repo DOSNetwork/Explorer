@@ -24,7 +24,8 @@ const explorerState = {
     events: [],
     group: [],
     address: [],
-    request: [],
+    random: [],
+    url: [],
     totalCount: 0,
     currentPageIndex: 0,
     pageSize: 20,
@@ -74,14 +75,16 @@ const appReducer = handleActions({
 const explorerActions = {}
 explorerActions[type.EXPLORER_SEARCH_RESPONSE] = (prevState, payload) => {
     let events = payload.response.events;
-    let request = payload.response.request;
+    let random = payload.response.random;
+    let url = payload.response.url;
     let group = payload.response.group;
     let address = payload.response.address;
     return {
         ...prevState,
         loading: false,
         events: events,
-        request: request,
+        random: random,
+        url: url,
         group: group,
         address: address,
         totalCount: payload.response.totalCount

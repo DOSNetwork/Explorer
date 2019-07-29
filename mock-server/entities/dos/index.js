@@ -38,7 +38,20 @@ exports.events = {
         "urlRequests": NumberMock,
         "randomRequests": NumberMock
     }],
-    'request|2': [{
+    'random|2': [{
+        "requestId": HexIdMock,
+        "dispatchedGroupId": HexIdMock,
+        "submitter": HexIdMock,
+        "submittedBlkNum": NumberMock,
+        "submittedTxHash": HexIdMock,
+        "message": "{\"amount\":\"269.585\",\"base\":\"ETH\",\"currency\":\"USD\"}\ufffd\u0019(\ufffdj\ufffd\u0005\ufffd\ufffdT\ufffd0\ufffd\\\u001c\ufffd\ufffd9\ufffd\u0010",
+        "signature|2": [HexIdMock],
+        "pubKey|5": [HexIdMock],
+        "pass|1": true,
+        "lastSystemRandomness": HexIdMock,
+        "userSeed": HexIdMock
+    }],
+    'url|2': [{
         "requestId": HexIdMock,
         "dispatchedGroupId": HexIdMock,
         "submitter": HexIdMock,
