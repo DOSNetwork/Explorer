@@ -4,7 +4,19 @@ import './style.scss';
 import { withRouter } from "react-router";
 class SearchInput extends Component {
     state = {
-        currentText: ''
+        currentText: '',
+        dataSource: ["LogRegisteredNewPendingNode",
+            "LogGrouping",
+            "LogPublicKeySuggested",
+            "LogPublicKeyAccepted",
+            "LogGroupDissolve",
+            "LogUpdateRandom",
+            "LogUrl",
+            "LogRequestUserRandom",
+            "LogValidationResult",
+            "LogCallbackTriggeredFor",
+            "GuardianReward",
+            "LogError"]
     }
     // componentDidMount() {
     //     this.props.onSearch(this.state.currentText)
@@ -25,23 +37,20 @@ class SearchInput extends Component {
         }
     }
     render() {
-        // const { dataSource } = this.state
-        // const options = dataSource
-        //     .map(txt => (
-        //         <Option key={txt} value={txt}>
-        //             {txt}
-        //         </Option>
-        //     ))
+        const { dataSource } = this.state
         return (
             <div className="search-input--wrapper">
                 <AutoComplete
                     className="search-input"
                     size="large"
                     style={{ width: '100%' }}
-                    // dataSource={options}
+                    dataSource={dataSource}
                     onSearch={this.handleSearch}
                     placeholder="Search by Event, RequestId, GroupId and Address"
                     backfill={true}
+                    filterOption={(inputValue, option) =>
+                        option.props.children.toUpperCase().indexOf(inputValue.toUpperCase()) !== -1
+                    }
                 >
                     <Input
                         suffix={

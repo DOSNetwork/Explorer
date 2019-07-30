@@ -36,7 +36,7 @@ class Search extends React.Component {
                 <Route exact path="/explorer/group/:groupId" component={() => (
                     <GroupDetail {...this.props.searchResult}></GroupDetail>
                 )} />
-                <Route exact path="/explorer/request/:requestId" component={() => (
+                <Route exact path="/explorer/random/:requestId" component={() => (
                     <RandomDetail {...this.props.searchResult}></RandomDetail>
                 )} />
 

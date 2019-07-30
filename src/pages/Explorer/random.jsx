@@ -43,20 +43,14 @@ export const RandomDetail = ({ random }) => {
                     })
                 }
             </Descriptions.Item>
+            <Descriptions.Item span={3} label="Last System Randomness">
+                {randomDetail.lastSystemRandomness}
+            </Descriptions.Item>
+            <Descriptions.Item span={3} label="User Seed">
+                {randomDetail.userSeed}
+            </Descriptions.Item>
             <Descriptions.Item label="Pass">
-                {randomDetail.pass}
-            </Descriptions.Item>
-            <Descriptions.Item label="TimeOut">
-                {randomDetail.timeOut}
-            </Descriptions.Item>
-            <Descriptions.Item label="Selector">
-                {randomDetail.selector}
-            </Descriptions.Item>
-            <Descriptions.Item label="Data Source">
-                {randomDetail.dataSource}
-            </Descriptions.Item>
-            <Descriptions.Item label="Randomness">
-                {randomDetail.randomness}
+                {`${randomDetail.pass}`}
             </Descriptions.Item>
         </Descriptions>
     )
