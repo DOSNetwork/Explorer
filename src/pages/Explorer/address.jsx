@@ -24,7 +24,7 @@ export const AddressDetail = ({ address }) => {
             </Descriptions.Item>
             <Descriptions.Item label="Active Groups" span={3}>
                 {
-                    addressDetail.activeGroups.map(Id => {
+                    addressDetail.activeGroups && addressDetail.activeGroups.map(Id => {
                         return <p key={Id} className='nodes-item' ><Icon style={{ fontSize: 13 }} type="tag" /> - {Id}</p>
                     })
                 }

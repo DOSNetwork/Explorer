@@ -16,14 +16,14 @@ export const GroupDetail = ({ group }) => {
             </Descriptions.Item>
             <Descriptions.Item label="Group NodeIds" span={3}>
                 {
-                    groupDetail.nodeId.map(Id => {
+                    groupDetail.nodeId && groupDetail.nodeId.map(Id => {
                         return <p key={Id} className='nodes-item' ><Icon style={{ fontSize: 13 }} type="tag" /> - {Id}</p>
                     })
                 }
             </Descriptions.Item>
             <Descriptions.Item label="Group Publick Key" span={3}>
                 {
-                    groupDetail.pubKey.map(Id => {
+                    groupDetail.pubKey && groupDetail.pubKey.map(Id => {
                         return <p key={Id} className='nodes-item' ><Icon style={{ fontSize: 13 }} type="tag" /> - {Id}</p>
                     })
                 }

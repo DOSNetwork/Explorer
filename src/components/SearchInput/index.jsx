@@ -46,6 +46,7 @@ class SearchInput extends Component {
                     style={{ width: '100%' }}
                     dataSource={dataSource}
                     onSearch={this.handleSearch}
+                    onSelect={this.handleSearch}
                     placeholder="Search by Event, RequestId, GroupId and Address"
                     backfill={true}
                     filterOption={(inputValue, option) =>

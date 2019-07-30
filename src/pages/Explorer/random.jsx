@@ -31,14 +31,14 @@ export const RandomDetail = ({ random }) => {
             </Descriptions.Item>
             <Descriptions.Item label="Signature" span={3}>
                 {
-                    randomDetail.signature.map(item => {
+                    randomDetail.signature && randomDetail.signature.map(item => {
                         return <p key={item} className='nodes-item' ><Icon style={{ fontSize: 13 }} type="tag" /> - {item}</p>
                     })
                 }
             </Descriptions.Item>
             <Descriptions.Item label="Publick Key" span={3}>
                 {
-                    randomDetail.pubKey.map(Id => {
+                    randomDetail.pubKey && randomDetail.pubKey.map(Id => {
                         return <p key={Id} className='nodes-item' ><Icon style={{ fontSize: 13 }} type="tag" /> - {Id}</p>
                     })
                 }

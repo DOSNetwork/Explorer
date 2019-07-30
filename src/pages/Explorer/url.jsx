@@ -31,14 +31,14 @@ export const UrlDetail = ({ url }) => {
             </Descriptions.Item>
             <Descriptions.Item label="Signature" span={3}>
                 {
-                    urlDetail.signature.map(item => {
+                    urlDetail.signature && urlDetail.signature.map(item => {
                         return <p key={item} className='nodes-item' ><Icon style={{ fontSize: 13 }} type="tag" /> - {item}</p>
                     })
                 }
             </Descriptions.Item>
             <Descriptions.Item label="Publick Key" span={3}>
                 {
-                    urlDetail.pubKey.map(Id => {
+                    urlDetail.pubKey && urlDetail.pubKey.map(Id => {
                         return <p key={Id} className='nodes-item' ><Icon style={{ fontSize: 13 }} type="tag" /> - {Id}</p>
                     })
                 }
