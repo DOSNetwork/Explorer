@@ -41,14 +41,14 @@ export const initialState = {
 // ===Reducers
 // =====globalReducer
 const globalActions = {}
-globalActions['LOADING_STATUS'] = (prevState, payload) => {
+//globalActions['LOADING_STATUS'] = (prevState, payload) => {
     // console.log(`[reducer]LOADING_STATUS.............`)
     // console.log(prevState, payload)
-    return {
-        ...globalState,
-        loadingStatus: payload.loading
-    }
-}
+//    return {
+//        ...globalState,
+//        loadingStatus: payload.loading
+//    }
+//}
 globalActions[type.METAMASK_ADDRESS_CHANGE] = (prevState, payload) => {
     // console.log(`[reducer]${type.METAMASK_ADDRESS_CHANGE}.............`)
     // console.log(prevState, payload)

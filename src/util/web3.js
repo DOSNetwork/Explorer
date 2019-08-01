@@ -32,6 +32,6 @@ if (window.ethereum) {
 } else if (window.web3) {
     web3 = new Web3(web3.currentProvider);
 } else {
-    alert('You have to install MetaMask !');
+   // alert('You have to install MetaMask !');
 }
 export default web3;
