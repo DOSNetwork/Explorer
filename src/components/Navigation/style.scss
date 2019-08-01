@@ -81,4 +81,16 @@
             border-color: #fff;
         }
     }
+    .navi-item-disabled {
+        cursor: not-allowed;
+        opacity: 0.5;
+        width: 120px;
+        height: 100%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        transition: border-color 0.1s linear;
+        border-bottom: 3px solid transparent;
+        pointer-events: none;
+    }
 }
