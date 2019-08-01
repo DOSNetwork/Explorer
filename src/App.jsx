@@ -21,12 +21,13 @@ class App extends Component {
           <Navigation>
           </Navigation>
           <Switch>
+            <Route path='/' component={Explorer} />
+            <Route path='/explorer' component={Explorer} />
             <Route path="/home" component={HomePage} />
             <Route path="/ajax" component={AjaxDemo} />
             <Route path="/redux" component={ReduxDemo} />
             <Route path="/echart" component={EchartDemo} />
             <Route path='/router' component={RouterDemo} />
-            <Route path='/explorer' component={Explorer} />
             <Route path='/nodelist' component={NodeList} />
             <Route path='/nodedetail/:nodeId' component={NodeDetail} />
             <Route path='/myaccount' component={MyAccount} />
