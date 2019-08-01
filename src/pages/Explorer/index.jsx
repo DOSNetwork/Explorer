@@ -10,7 +10,7 @@ class Explorer extends Component {
     render() {
         return (
             <div className="explorer-result--wrapper">
-                <PageTitle title="Explorer" />
+                <PageTitle title="Network Explorer" />
                 <Search></Search>
             </div>
         )

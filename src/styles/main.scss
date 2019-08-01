@@ -39,7 +39,7 @@
 
 .footer__wrapper {
     background-color: $mainFontColor;
-    height: 250px;
+    height: 220px;
     color: #fff;
     display: flex;
     align-items: center;
@@ -50,29 +50,27 @@
         width: 100%;
         max-width: 1200px;
         margin: 0 auto;
-        padding-top: 25px;
-        padding-bottom: 100px;
         display: flex;
 
     }
 
 
     .link-group-item {
-        padding-top: 40px;
         margin-right: 150px;
     }
 
     .link-group-title {
         height: 34px;
-        font-size: 20px;
+        font-size: 25px;
     }
 
     .link-group-sub {
-        margin-top: 20px;
+        margin-top: 5px;
+        margin-left: 5px;
     }
 
     .link {
-        font-size: 17px;
+        font-size: 15px;
         color: #979ea5;
         height: 30px;
         line-height: 30px;
