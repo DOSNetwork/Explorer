@@ -7,29 +7,31 @@ export const AddressDetail = ({ address }) => {
         activeGroups: []
     }
     return (
-        <Descriptions title="Address Info" bordered column={3}>
-            <Descriptions.Item label="Address" span={3}>
-                <Paragraph copyable={{ text: addressDetail.addr }}>
-                    {addressDetail.addr}
-                </Paragraph>
-            </Descriptions.Item>
-            <Descriptions.Item label="Balance">
-                {addressDetail.balance}
-            </Descriptions.Item>
-            <Descriptions.Item label="Register State">
-                {`${addressDetail.registerState}`}
-            </Descriptions.Item>
-            <Descriptions.Item label="expiredGroups">
-                {addressDetail.expiredGroups}
-            </Descriptions.Item>
-            <Descriptions.Item label="Active Groups" span={3}>
-                {
-                    addressDetail.activeGroups && addressDetail.activeGroups.map(Id => {
-                        return <p key={Id} className='nodes-item' ><Icon style={{ fontSize: 13 }} type="tag" /> - {Id}</p>
-                    })
-                }
-            </Descriptions.Item>
+        <div className="search-result--wrapper">
+            <Descriptions title="Address Info" bordered column={3}>
+                <Descriptions.Item label="Address" span={3}>
+                    <Paragraph copyable={{ text: addressDetail.addr }}>
+                        {addressDetail.addr}
+                    </Paragraph>
+                </Descriptions.Item>
+                <Descriptions.Item label="Balance">
+                    {addressDetail.balance}
+                </Descriptions.Item>
+                <Descriptions.Item label="Register State">
+                    {`${addressDetail.registerState}`}
+                </Descriptions.Item>
+                <Descriptions.Item label="expiredGroups">
+                    {addressDetail.expiredGroups}
+                </Descriptions.Item>
+                <Descriptions.Item label="Active Groups" span={3}>
+                    {
+                        addressDetail.activeGroups && addressDetail.activeGroups.map(Id => {
+                            return <p key={Id} className='nodes-item' ><Icon style={{ fontSize: 13 }} type="tag" /> - {Id}</p>
+                        })
+                    }
+                </Descriptions.Item>
 
-        </Descriptions>
+            </Descriptions>
+        </div>
     )
 }

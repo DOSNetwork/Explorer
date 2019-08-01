@@ -8,7 +8,7 @@ export default class Navigation extends Component {
                 <div className="header__container layout__container">
                     <div className="logo__wrapper">
                         <span className="logo--img"></span>
-                        <span className="logo--name">DOS NextWork</span>
+                        <span className="logo--name">DOS NetWork</span>
                     </div>
                     <div className="navi__wrapper">
                         <div className="navi__container">

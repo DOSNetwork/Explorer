@@ -7,7 +7,8 @@ export const EventsList = ({ pageSize, currentPageIndex, totalCount, events, loa
         explorerSearch(searchText, pageSize, current - 1, history);
     }
     return (
-        <><span className="search-result--title">Latest {pageSize} events</span>
+        <div className="search-result--wrapper">
+            <span className="search-result--title">Latest {pageSize} events</span>
             <Table rowKey={record => record.txHash + record.eventLog + record.ID} loading={loading} dataSource={events} pagination={{ position: 'top', defaultCurrent: 1, defaultPageSize: 20, current: currentPageIndex + 1, total: totalCount }} size="middle" bordered
                 onChange={handlePaginationChange}
             >
@@ -16,6 +17,6 @@ export const EventsList = ({ pageSize, currentPageIndex, totalCount, events, loa
                 <Column title="Event Log" dataIndex="eventLog" key="eventLog" width={250} />
                 <Column title="More Info" key="method" render={MoreInfoRender} />
             </Table>
-        </>
+        </div>
     )
 }
