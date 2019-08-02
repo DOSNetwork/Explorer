@@ -39,8 +39,13 @@ export default class Footer extends PureComponent {
         })
         return (
             <div className="footer__wrapper">
-                <div className="link-group">
-                    {renderLinks}
+                <div className="links__wrapper">
+                    <div className="link-group">
+                        {renderLinks}
+                    </div>
+                </div>
+                <div className="copy-right">
+                    © Copyright 2019 DOS Foundation Ltd. All Rights Reserved
                 </div>
             </div>
         )

@@ -1,13 +1,16 @@
 import React from 'react'
 import { Switch, Route, matchPath } from "react-router-dom";
 import SearchInput from '../../components/SearchInput'
+import ScrollTop from '../../components/ScrollTop'
 import './style.scss';
 import { EventsList } from './events'
 import { GroupDetail } from './group'
 import { RandomDetail } from './random'
 import { UrlDetail } from './url'
 import { AddressDetail } from './address'
+
 class Search extends React.Component {
+
     handleSearch = (text) => {
         let { currentPageIndex, pageSize } = this.props.searchResult
         this.props.explorerSearch(text, pageSize, currentPageIndex, this.props.history)
@@ -28,6 +31,7 @@ class Search extends React.Component {
     render() {
         return (<>
             <SearchInput onSearch={this.handleSearch}></SearchInput>
+            <ScrollTop></ScrollTop>
             <Switch>
                 <Route exact path="/explorer/" component={() => (
                     <EventsList {...this.props.searchResult} explorerSearch={this.props.explorerSearch}

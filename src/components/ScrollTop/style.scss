@@ -1,0 +1,16 @@
+.scroll-top__wrapper {
+    position: fixed;
+    right: 50px;
+    bottom: 100px;
+    height: 60px;
+    width: 60px;
+    border-radius: 100%;
+    background-color: #fff;
+    z-index: 999;
+    transition: opacity 0.5s ease;
+    opacity: 0;
+
+    &.display {
+        opacity: 1;
+    }
+}
