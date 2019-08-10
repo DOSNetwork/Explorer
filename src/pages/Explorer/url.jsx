@@ -1,6 +1,7 @@
 import React from 'react'
-import { Descriptions, Icon, Typography } from 'antd'
-const { Paragraph } = Typography;
+import { Descriptions } from 'antd'
+import EllipsisWrapper from '../../components/EllispisWrapper'
+
 export const UrlDetail = ({ url }) => {
     let urlDetail = (url && url[0]) || {
         requestId: 'NOT FOUND',
@@ -10,17 +11,15 @@ export const UrlDetail = ({ url }) => {
     return (
         <Descriptions title="Request Info" bordered column={3}>
             <Descriptions.Item label="Request Id" span={3}>
-                <Paragraph copyable={{ text: urlDetail.requestId }}>
-                    {urlDetail.requestId}
-                </Paragraph>
+                <EllipsisWrapper text={urlDetail.requestId} />
             </Descriptions.Item>
             <Descriptions.Item label="Dispatched Group Id" span={3}>
                 {urlDetail.dispatchedGroupId}
             </Descriptions.Item>
-            <Descriptions.Item label="Submitter" span={2}>
+            <Descriptions.Item label="Submitter" span={3}>
                 {urlDetail.submitter}
             </Descriptions.Item>
-            <Descriptions.Item label="Submitted Block Number">
+            <Descriptions.Item label="Submitted Block Number" span={3}>
                 {urlDetail.submittedBlkNum}
             </Descriptions.Item>
             <Descriptions.Item label="Submitted TxHash" span={3}>
@@ -31,32 +30,32 @@ export const UrlDetail = ({ url }) => {
             </Descriptions.Item>
             <Descriptions.Item label="Signature" span={3}>
                 {
-                    urlDetail.signature && urlDetail.signature.map(item => {
-                        return <p key={item} className='nodes-item' ><Icon style={{ fontSize: 13 }} type="tag" /> - {item}</p>
+                    urlDetail.signature && urlDetail.signature.map(Id => {
+                        return <EllipsisWrapper key={Id} text={Id} />
                     })
                 }
             </Descriptions.Item>
             <Descriptions.Item label="Publick Key" span={3}>
                 {
                     urlDetail.pubKey && urlDetail.pubKey.map(Id => {
-                        return <p key={Id} className='nodes-item' ><Icon style={{ fontSize: 13 }} type="tag" /> - {Id}</p>
+                        return <EllipsisWrapper key={Id} text={Id} />
                     })
                 }
             </Descriptions.Item>
-            <Descriptions.Item label="Pass">
-                {`${urlDetail.pass}`}
-            </Descriptions.Item>
-            <Descriptions.Item label="TimeOut">
-                {urlDetail.timeOut}
-            </Descriptions.Item>
-            <Descriptions.Item label="Selector">
-                {urlDetail.selector}
-            </Descriptions.Item>
-            <Descriptions.Item label="Data Source">
+            <Descriptions.Item label="Data Source" span={3}>
                 {urlDetail.dataSource}
             </Descriptions.Item>
-            <Descriptions.Item label="Randomness">
+            <Descriptions.Item label="Selector" span={3}>
+                {urlDetail.selector}
+            </Descriptions.Item>
+            <Descriptions.Item label="TimeOut" span={3}>
+                {urlDetail.timeOut}
+            </Descriptions.Item>
+            <Descriptions.Item label="Randomness" span={3}>
                 {urlDetail.randomness}
+            </Descriptions.Item>
+            <Descriptions.Item label="Pass" span={3}>
+                {`${urlDetail.pass}`}
             </Descriptions.Item>
         </Descriptions>
     )

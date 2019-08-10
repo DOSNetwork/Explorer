@@ -38,18 +38,26 @@ class Search extends React.Component {
                         history={this.props.history}></EventsList>
                 )} />
                 <Route exact path="/explorer/group/:groupId" component={() => (
-                    <GroupDetail {...this.props.searchResult}></GroupDetail>
+                    <div className="search-result--wrapper">
+                        <GroupDetail {...this.props.searchResult}></GroupDetail>
+                    </div>
                 )} />
                 <Route exact path="/explorer/random/:requestId" component={() => (
-                    <RandomDetail {...this.props.searchResult}></RandomDetail>
+                    <div className="search-result--wrapper">
+                        <RandomDetail {...this.props.searchResult}></RandomDetail>
+                    </div>
                 )} />
 
                 <Route exact path="/explorer/address/:addressId" component={() => (
-                    <AddressDetail {...this.props.searchResult}></AddressDetail>
+                    <div className="search-result--wrapper">
+                        <AddressDetail {...this.props.searchResult}></AddressDetail>
+                    </div>
                 )} />
 
                 <Route exact path="/explorer/url/:requestId" component={() => (
-                    <UrlDetail {...this.props.searchResult}></UrlDetail>
+                    <div className="search-result--wrapper">
+                        <UrlDetail {...this.props.searchResult}></UrlDetail>
+                    </div>
                 )} />
             </Switch>
         </>)
