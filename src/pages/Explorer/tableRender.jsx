@@ -44,14 +44,16 @@ export const MoreInfoRender = (text, record) => {
             return LogGroupDissolveRender(record)
         case 'LogRegisteredNewPendingNode':
             return LogRegisteredNewPendingNodeRender(record)
+        case 'LogUnRegisteredNewPendingNode':
+            return LogUnRegisteredNewPendingNodeRender(record)
         case 'LogGroupingInitiated':
             return LogGroupingInitiatedRender(record)
         case 'LogNoPendingGroup':
             return LogNoPendingGroupRender(record)
         case 'LogPendingGroupRemoved':
             return LogPendingGroupRemovedRender(record)
-        case 'LogError':
-            return LogErrorRender(record)
+        case 'LogMessage':
+            return LogMessageRender(record)
         case 'UpdateGroupToPick':
             return UpdateGroupToPickRender(record)
         case 'UpdateGroupSize':
@@ -289,6 +291,17 @@ const LogRegisteredNewPendingNodeRender = record => {
     </div>
 }
 
+const LogUnRegisteredNewPendingNodeRender = record => {
+    return <div className='custom-column--wrapper'>
+        <div className="custom-column">
+            <span className="column-title">Node</span>
+            <span className="column-text ">{record.node}</span>
+            <span className="column-title">UnregisterFrom</span>
+            <span className="column-text ">{record.unregisterFrom}</span>
+        </div>
+    </div>
+}
+
 const LogPendingGroupRemovedRender = record => {
     return <div className='custom-column--wrapper'>
         <div className="custom-column">
@@ -307,11 +320,11 @@ const LogNoPendingGroupRender = record => {
     </div>
 }
 
-const LogErrorRender = record => {
+const LogMessageRender = record => {
     return <div className='custom-column--wrapper'>
         <div className="custom-column">
-            <span className="column-title">Error Message</span>
-            <span className="column-text ">{record.err}</span>
+            <span className="column-title">Message</span>
+            <span className="column-text ">{record.info}</span>
         </div>
     </div>
 }

@@ -6,6 +6,7 @@ class SearchInput extends Component {
     state = {
         currentText: '',
         dataSource: ["LogRegisteredNewPendingNode",
+            "LogUnRegisteredNewPendingNode",
             "LogGrouping",
             "LogPublicKeySuggested",
             "LogPublicKeyAccepted",
@@ -16,7 +17,7 @@ class SearchInput extends Component {
             "LogValidationResult",
             "LogCallbackTriggeredFor",
             "GuardianReward",
-            "LogError"]
+            "LogMessage"]
     }
     // componentDidMount() {
     //     this.props.onSearch(this.state.currentText)
