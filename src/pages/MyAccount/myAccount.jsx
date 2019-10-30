@@ -2,7 +2,7 @@ import React, { Component } from 'react'
 import { SubTitle } from '../../Layout/page'
 import { Icon, Spin } from 'antd'
 
-import { metaMaskInitialize } from '../../util/web3.js'
+import { getWeb3 } from '../../util/web3.js'
 import { DOS_ABI, DOS_CONTRACT_ADDRESS } from '../../util/const'
 let web3
 export default class Account extends Component {
@@ -25,7 +25,7 @@ export default class Account extends Component {
         return this.state.showNumber ? (value ? value : <Spin />) : '***';
     }
     componentDidMount() {
-        web3 = metaMaskInitialize()
+        web3 = getWeb3()
         this.initContract()
     }
     loadUserBalance = () => {
@@ -37,6 +37,11 @@ export default class Account extends Component {
                     this.setState({
                         userBalance: showBalance
                     })
+                })
+            }
+            else {
+                this.setState({
+                    userBalance: 'No Account'
                 })
             }
         })
