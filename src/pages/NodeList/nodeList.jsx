@@ -1,14 +1,10 @@
 import React, { Component } from 'react'
 import { Link } from 'react-router-dom';
 import { Table } from 'antd'
-import { PageTitle } from '../../Layout/page'
-import store from '../../redux/store'
 import axios from 'axios';
 import './style.scss';
 import numeral from 'numeral';
-import { getWeb3 } from '../../util/web3.js'
 
-let web3;
 const { Column } = Table
 const nodeColumnRender = (text, record, index) => {
     let link = `/nodedetail/${record.node}`;
@@ -36,17 +32,7 @@ export default class NodeList extends Component {
         }
     }
     componentDidMount() {
-        web3 = getWeb3()
-        this.loadUser();
         this.search();
-    }
-    loadUser = () => {
-        this.props.globalLoading(true)
-        web3.eth.getAccounts().then((userAddress) => {
-            if (userAddress && userAddress.length > 0) {
-                this.setState({ userAddress: userAddress[0] })
-            }
-        })
     }
     search = () => {
         this.setState({
@@ -62,7 +48,7 @@ export default class NodeList extends Component {
         })
     }
     render() {
-        let isUserMetaMaskLogin = !!this.state.userAddress
+        let { isMetaMaskLogin } = this.props.contract
         return (
             <Table rowKey={record => record.node}
                 loading={this.state.loading}
@@ -106,7 +92,7 @@ export default class NodeList extends Component {
                     sorter={(a, b) => a.uptime - b.uptime}
                     sortDirections={['ascend', 'descend']} />
                 {
-                    isUserMetaMaskLogin ? <Column title="MyDelegation"
+                    isMetaMaskLogin ? <Column title="MyDelegation"
                         render={myDelegationFormatRender}
                         dataIndex="myDelegation"
                         key="myDelegation"
@@ -114,7 +100,7 @@ export default class NodeList extends Component {
                         sortDirections={['ascend', 'descend']} /> : null
                 }
                 {
-                    isUserMetaMaskLogin ? <Column title="MyRewards"
+                    isMetaMaskLogin ? <Column title="MyRewards"
                         render={myDelegationFormatRender}
                         dataIndex="myRewards"
                         key="myRewards"

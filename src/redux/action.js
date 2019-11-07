@@ -13,14 +13,6 @@ export function globalLoading(loadingStatus) {
     }
 }
 
-export function addressChange(address) {
-    return {
-        type: type.METAMASK_ADDRESS_CHANGE,
-        address: address
-    }
-}
-
-
 function explorerSearchReceiveResponse(data) {
     return {
         type: type.EXPLORER_SEARCH_RESPONSE,
@@ -79,8 +71,8 @@ export function ExplorerSearch(text = '', pageSize = 20, pageIndex = 0, history)
     }
 }
 
+
 export default {
     counting,
-    globalLoading,
-    addressChange
+    globalLoading
 }

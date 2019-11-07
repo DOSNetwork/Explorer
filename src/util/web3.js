@@ -4,26 +4,31 @@ import type from '../redux/type'
 import React from 'react'
 import { notification, Icon } from 'antd'
 
-export function getWeb3() {
-    let web3
-    let state = store.getState()
-    let userAddress = state.global.userAddress;
-    if (window.ethereum) {
-        web3 = new Web3(window.ethereum);
-    } else if (window.web3) {
-        web3 = new Web3(web3.currentProvider);
-    } else {
-        alert('You have to install MetaMask !');
-        return;
+export function connectMetaMask() {
+    let { userAddress, web3Client } = store.getState().contract
+    let web3 = web3Client || null
+    if (!web3) {
+        if (window.ethereum) {
+            web3 = new Web3(window.ethereum);
+        } else if (window.web3) {
+            web3 = new Web3(web3.currentProvider);
+        } else {
+            alert('You have to install MetaMask !');
+            return;
+        }
     }
     if (!userAddress) {
-        // let allowAccess = !!window.ethereum.selectedAddress
         try {
-            window.ethereum.enable().then(function (accountAddress) {
-                store.dispatch({ type: type.METAMASK_ADDRESS_CHANGE, address: accountAddress[0] })
-            });
+            window.ethereum.enable()
+                .then(function (accountAddress) {
+                    store.dispatch({
+                        type: type.CONTRACT_METAMASK_LOGIN,
+                        address: accountAddress[0],
+                        web3Client: web3,
+                    })
+                });
             window.ethereum.on('accountsChanged', function (accounts) {
-                store.dispatch({ type: type.METAMASK_ADDRESS_CHANGE, address: accounts[0] })
+
                 let lastAccount = accounts[0]
                 if (lastAccount) {
                     notification.open({
@@ -35,10 +40,10 @@ export function getWeb3() {
                             </>,
                         icon: <Icon type="smile" style={{ color: '#108ee9' }} />,
                     })
-
-                    setTimeout(() => {
-                        window.location.reload()
-                    }, 2000);
+                    store.dispatch({ type: type.CONTRACT_USERADDRESS_CHANGE, address: accounts[0] })
+                    // setTimeout(() => {
+                    //     window.location.reload()
+                    // }, 2000);
                 } else {
                     notification.open({
                         message: 'MetaMask Account Change',
@@ -49,9 +54,7 @@ export function getWeb3() {
                         icon: <Icon type="smile" style={{ color: '#108ee9' }} />,
                     })
 
-                    setTimeout(() => {
-                        window.location.reload()
-                    }, 2000);
+                    store.dispatch({ type: type.CONTRACT_METAMASK_LOGOUT })
                 }
             })
         } catch (e) {
@@ -59,5 +62,5 @@ export function getWeb3() {
         }
     }
 
-    return web3
+    // return web3
 }

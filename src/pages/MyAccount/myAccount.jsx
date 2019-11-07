@@ -2,9 +2,6 @@ import React, { Component } from 'react'
 import { SubTitle } from '../../Layout/page'
 import { Icon, Spin } from 'antd'
 
-import { getWeb3 } from '../../util/web3.js'
-import { DOS_ABI, DOS_CONTRACT_ADDRESS } from '../../util/const'
-let web3
 export default class Account extends Component {
     constructor(props) {
         super(props)
@@ -22,52 +19,41 @@ export default class Account extends Component {
         })
     }
     numberToggler = (value) => {
-        return this.state.showNumber ? (value ? value : <Spin />) : '***';
+        const isMetaMaskLogin = this.props.contract.isMetaMaskLogin
+        if (isMetaMaskLogin) {
+            return this.state.showNumber ? (value ? value : <Spin />) : '***';
+        } else {
+            return '-'
+        }
+    }
+    getSnapshotBeforeUpdate(prevProps) {
+        let userLogined = (prevProps.contract.userAddress === '' && this.props.contract.userAddress)
+        return { userLogined: userLogined }
+    }
+    componentDidUpdate(prevProps, preState, snapShot) {
+        if (snapShot.userLogined) {
+            this.loadUserBalance()
+        }
     }
     componentDidMount() {
-        web3 = getWeb3()
-        this.initContract()
+        this.loadUserBalance()
     }
     loadUserBalance = () => {
         this.props.globalLoading(true)
-        web3.eth.getAccounts().then((userAddress) => {
-            if (userAddress && userAddress.length > 0) {
-                this.state.userContract.methods.balanceOf(userAddress[0]).call().then((balance) => {
-                    let showBalance = web3.utils.fromWei(balance.toString('10'))
-                    this.setState({
-                        userBalance: showBalance
-                    })
-                })
-            }
-            else {
+        const { isMetaMaskLogin, web3Client, userAddress } = this.props.contract
+        if (isMetaMaskLogin) {
+            web3Client.eth.getBalance(userAddress).then((balance) => {
+                console.log(balance); // instanceof BigNumber
+                let showBalance = web3Client.utils.fromWei(balance.toString('10'))
                 this.setState({
-                    userBalance: 'No Account'
+                    userBalance: showBalance
                 })
-            }
-        })
-    }
-    initContract = async () => {
-        let contractInstance = new web3.eth.Contract(DOS_ABI, DOS_CONTRACT_ADDRESS);
-        let network = await web3.eth.net.getId()
-        let result
-        switch (network) {
-            case 1:
-                result = "mainnet";
-                break
-            case 2:
-                result = "morden";
-                break
-            case 3:
-                result = "ropsten";
-                break
-            case 4:
-                result = "rinkeby";
-                break
-            default:
-                result = "unknown network = " + network;
+            });
+        } else {
+            this.setState({
+                userBalance: 'No Account'
+            })
         }
-        this.setState({ userContract: contractInstance, netWork: result })
-        this.loadUserBalance()
     }
     render() {
         const { showNumber, userBalance } = this.state

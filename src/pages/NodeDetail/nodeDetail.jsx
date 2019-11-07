@@ -1,9 +1,7 @@
 import React, { Component } from 'react'
 import { Button } from 'antd'
 import axios from 'axios';
-import { getWeb3 } from '../../util/web3.js'
 import './style.scss'
-let web3;
 export default class NodeDetail extends Component {
     constructor(props) {
         super(props)
@@ -11,20 +9,10 @@ export default class NodeDetail extends Component {
             node: this.props.match.params.nodeId,
             nodeDetail: {},
             loading: false,
-            userAddress: ''
         }
     }
     componentDidMount() {
-        web3 = getWeb3()
         this.getNodeDetail()
-        this.loadUser()
-    }
-    loadUser = () => {
-        web3.eth.getAccounts().then((userAddress) => {
-            if (userAddress && userAddress.length > 0) {
-                this.setState({ userAddress: userAddress[0] })
-            }
-        })
     }
     getNodeDetail = () => {
         this.setState({
@@ -41,9 +29,8 @@ export default class NodeDetail extends Component {
     }
     render() {
         const { node, avatar, nodeAddress, nodeDescription, selfStaked, totalDelegated, rewardCut, totalRewards, uptime } = this.state.nodeDetail
-        let isMetaMaskLogin = !!this.state.userAddress
-        console.log(isMetaMaskLogin)
-        let isUserDelegatedThisNode = false
+        let { isMetaMaskLogin } = this.props.contract
+        let isUserDelegatedThisNode = true
         return (
             <div>
                 <div className="node-detail--info">
