@@ -13,7 +13,11 @@ import NodeDetail from './pages/NodeDetail'
 import NotFound404 from './pages/NotFound404'
 import Explorer from './pages/Explorer'
 import Layout from './Layout'
+import { connectMetaMask } from './util/web3.js'
 class App extends Component {
+  componentWillMount() {
+    connectMetaMask()
+  }
   render() {
     return (
       <Router>

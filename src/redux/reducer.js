@@ -105,7 +105,7 @@ contractActions[type.CONTRACT_USERADDRESS_CHANGE] = (prevState, payload) => {
     console.log(`[reducer]${type.CONTRACT_USERADDRESS_CHANGE}.............`)
     console.log(prevState, payload)
     return {
-        ...contractState,
+        ...prevState,
         userAddress: payload.address
     }
 }
@@ -113,18 +113,26 @@ contractActions[type.CONTRACT_METAMASK_LOGIN] = (prevState, payload) => {
     console.log(`[reducer]${type.CONTRACT_METAMASK_LOGIN}.............`)
     console.log(prevState, payload)
     return {
-        ...contractState,
+        ...prevState,
         isMetaMaskLogin: true,
-        userAddress: payload.address,
-        web3Client: payload.web3Client
+        userAddress: payload.address
     }
 }
 contractActions[type.CONTRACT_METAMASK_LOGOUT] = (prevState, payload) => {
     console.log(`[reducer]${type.CONTRACT_METAMASK_LOGOUT}.............`)
     return {
-        ...contractState,
+        ...prevState,
         isMetaMaskLogin: false,
         userAddress: ''
+    }
+}
+
+contractActions[type.CONTRACT_WEB3_CLINET_INIT] = (prevState, payload) => {
+    console.log(`[reducer]${type.CONTRACT_WEB3_CLINET_INIT}.............`)
+    console.log(prevState, payload)
+    return {
+        ...prevState,
+        web3Client: payload.web3Client
     }
 }
 

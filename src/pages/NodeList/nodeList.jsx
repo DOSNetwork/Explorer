@@ -4,7 +4,7 @@ import { Table } from 'antd'
 import axios from 'axios';
 import './style.scss';
 import numeral from 'numeral';
-
+import { DOS_ABI, DOS_CONTRACT_ADDRESS } from '../../util/const'
 const { Column } = Table
 const nodeColumnRender = (text, record, index) => {
     let link = `/nodedetail/${record.node}`;
@@ -24,27 +24,65 @@ export default class NodeList extends Component {
     constructor(props) {
         super(props)
         this.state = {
-            dataList: [],
             loading: false,
-            isLogin: false,
             listCount: 100,
-            userAddress: ''
         }
     }
     componentDidMount() {
-        this.search();
+        this.loadNodeList();
     }
-    search = () => {
+    getSnapshotBeforeUpdate(prevProps) {
+        let userLogined = (prevProps.contract.userAddress === '' && this.props.contract.userAddress)
+        return { userLogined: userLogined }
+    }
+    componentDidUpdate(prevProps, preState, snapShot) {
+        if (snapShot.userLogined) {
+            this.loadNodeList()
+        }
+    }
+    loadNodeList = async () => {
+        function fromWei(bn) {
+            if (!bn || bn === '-') {
+                return ''
+            }
+            return web3Client.utils.fromWei(bn.toString('10'))
+        }
+
         this.setState({
             loading: true
         })
-        axios.get('/api/node/list').then(response => {
-            // 鬼...结构
-            let data = response.data.body
-            this.setState({
-                dataList: data.nodelist,
-                loading: false
-            })
+
+        const { web3Client, userAddress } = this.props.contract
+        let contractInstance = new web3Client.eth.Contract(DOS_ABI, DOS_CONTRACT_ADDRESS);
+        let nodesAddrs = await contractInstance.methods.getNodeAddrs().call()
+        let nodeList = []
+        for (let i = 0; i < nodesAddrs.length; i++) {
+            let nodeAddr = nodesAddrs[i];
+            const node = await contractInstance.methods.nodes(nodeAddr).call();
+            let delegator = { myDelegator: '-', accumulatedReward: '-' }
+            if (userAddress) {
+                delegator = await contractInstance.methods
+                    .delegators(userAddress, nodeAddr)
+                    .call();
+            }
+            let {
+                selfStaked, totalDelegated, rewardCut
+            } = node
+            let { myDelegator, accumulatedReward } = delegator;
+            let nodeObject = {
+                node: nodeAddr,
+                selfStaked: fromWei(selfStaked),
+                totalDelegated: fromWei(totalDelegated),
+                rewardCut: rewardCut,
+                uptime: 999,
+                myDelegation: fromWei(myDelegator),
+                myRewards: fromWei(accumulatedReward)
+            }
+            nodeList.push(nodeObject)
+        }
+        this.setState({
+            dataList: nodeList,
+            loading: false
         })
     }
     render() {

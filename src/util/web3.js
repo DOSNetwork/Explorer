@@ -5,8 +5,9 @@ import React from 'react'
 import { notification, Icon } from 'antd'
 
 export function connectMetaMask() {
-    let { userAddress, web3Client } = store.getState().contract
+    let { web3Client } = store.getState().contract
     let web3 = web3Client || null
+
     if (!web3) {
         if (window.ethereum) {
             web3 = new Web3(window.ethereum);
@@ -17,14 +18,22 @@ export function connectMetaMask() {
             return;
         }
     }
+    store.dispatch({
+        type: type.CONTRACT_WEB3_CLINET_INIT,
+        web3Client: web3
+    })
+}
+
+
+export function metaMaskLogin() {
+    let { userAddress } = store.getState().contract
     if (!userAddress) {
         try {
             window.ethereum.enable()
                 .then(function (accountAddress) {
                     store.dispatch({
                         type: type.CONTRACT_METAMASK_LOGIN,
-                        address: accountAddress[0],
-                        web3Client: web3,
+                        address: accountAddress[0]
                     })
                 });
             window.ethereum.on('accountsChanged', function (accounts) {
@@ -61,6 +70,4 @@ export function connectMetaMask() {
             console.log(e)
         }
     }
-
-    // return web3
 }

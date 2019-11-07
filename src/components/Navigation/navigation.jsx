@@ -1,12 +1,12 @@
 import React, { Component } from 'react'
 import { NavLink } from 'react-router-dom'
 import './style.scss'
-import { connectMetaMask } from '../../util/web3.js'
+import { metaMaskLogin } from '../../util/web3.js'
 export default class Navigation extends Component {
     onMetaMaskLogin = () => {
         let { isMetaMaskLogin } = this.props.contract
         if (!isMetaMaskLogin) {
-            connectMetaMask()
+            metaMaskLogin()
         }
     }
     render() {
