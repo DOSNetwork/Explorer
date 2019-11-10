@@ -18,12 +18,7 @@ var contractABI = [
     constant: true,
     inputs: [],
     name: "inverseStakeRatio",
-    outputs: [
-      {
-        name: "",
-        type: "uint256"
-      }
-    ],
+    outputs: [{ name: "", type: "uint256" }],
     payable: false,
     stateMutability: "view",
     type: "function"
@@ -31,14 +26,8 @@ var contractABI = [
   {
     constant: false,
     inputs: [
-      {
-        name: "_tokenAmount",
-        type: "uint256"
-      },
-      {
-        name: "_nodeAddr",
-        type: "address"
-      }
+      { name: "_tokenAmount", type: "uint256" },
+      { name: "_nodeAddr", type: "address" }
     ],
     name: "delegate",
     outputs: [],
@@ -50,12 +39,7 @@ var contractABI = [
     constant: true,
     inputs: [],
     name: "DOSTOKEN",
-    outputs: [
-      {
-        name: "",
-        type: "address"
-      }
-    ],
+    outputs: [{ name: "", type: "address" }],
     payable: false,
     stateMutability: "view",
     type: "function"
@@ -64,58 +48,24 @@ var contractABI = [
     constant: true,
     inputs: [],
     name: "getNodeAddrs",
-    outputs: [
-      {
-        name: "",
-        type: "address[]"
-      }
-    ],
+    outputs: [{ name: "", type: "address[]" }],
     payable: false,
     stateMutability: "view",
     type: "function"
   },
   {
     constant: true,
-    inputs: [
-      {
-        name: "",
-        type: "address"
-      }
-    ],
+    inputs: [{ name: "", type: "address" }],
     name: "nodes",
     outputs: [
-      {
-        name: "ownerAddr",
-        type: "address"
-      },
-      {
-        name: "rewardCut",
-        type: "uint256"
-      },
-      {
-        name: "stakedDB",
-        type: "uint256"
-      },
-      {
-        name: "selfStakedAmount",
-        type: "uint256"
-      },
-      {
-        name: "totalOtherDelegatedAmount",
-        type: "uint256"
-      },
-      {
-        name: "accumulatedReward",
-        type: "uint256"
-      },
-      {
-        name: "accumulatedRewardRate",
-        type: "uint256"
-      },
-      {
-        name: "running",
-        type: "bool"
-      }
+      { name: "ownerAddr", type: "address" },
+      { name: "rewardCut", type: "uint256" },
+      { name: "stakedDB", type: "uint256" },
+      { name: "selfStakedAmount", type: "uint256" },
+      { name: "totalOtherDelegatedAmount", type: "uint256" },
+      { name: "accumulatedReward", type: "uint256" },
+      { name: "accumulatedRewardRate", type: "uint256" },
+      { name: "running", type: "bool" }
     ],
     payable: false,
     stateMutability: "view",
@@ -125,12 +75,7 @@ var contractABI = [
     constant: true,
     inputs: [],
     name: "accumulatedRewardRate",
-    outputs: [
-      {
-        name: "",
-        type: "uint256"
-      }
-    ],
+    outputs: [{ name: "", type: "uint256" }],
     payable: false,
     stateMutability: "view",
     type: "function"
@@ -139,24 +84,14 @@ var contractABI = [
     constant: true,
     inputs: [],
     name: "ONEYEAR",
-    outputs: [
-      {
-        name: "",
-        type: "uint256"
-      }
-    ],
+    outputs: [{ name: "", type: "uint256" }],
     payable: false,
     stateMutability: "view",
     type: "function"
   },
   {
     constant: false,
-    inputs: [
-      {
-        name: "_nodeAddr",
-        type: "address"
-      }
-    ],
+    inputs: [{ name: "_nodeAddr", type: "address" }],
     name: "nodeTryDelete",
     outputs: [],
     payable: false,
@@ -165,12 +100,7 @@ var contractABI = [
   },
   {
     constant: false,
-    inputs: [
-      {
-        name: "_nodeAddr",
-        type: "address"
-      }
-    ],
+    inputs: [{ name: "_nodeAddr", type: "address" }],
     name: "delegatorClaimReward",
     outputs: [],
     payable: false,
@@ -180,22 +110,10 @@ var contractABI = [
   {
     constant: false,
     inputs: [
-      {
-        name: "_nodeAddr",
-        type: "address"
-      },
-      {
-        name: "_newTokenAmount",
-        type: "uint256"
-      },
-      {
-        name: "_newDropburnAmount",
-        type: "uint256"
-      },
-      {
-        name: "_newCut",
-        type: "uint256"
-      }
+      { name: "_nodeAddr", type: "address" },
+      { name: "_newTokenAmount", type: "uint256" },
+      { name: "_newDropburnAmount", type: "uint256" },
+      { name: "_newCut", type: "uint256" }
     ],
     name: "updateNodeStaking",
     outputs: [],
@@ -207,12 +125,7 @@ var contractABI = [
     constant: true,
     inputs: [],
     name: "getCurrentAPR",
-    outputs: [
-      {
-        name: "",
-        type: "uint256"
-      }
-    ],
+    outputs: [{ name: "", type: "uint256" }],
     payable: false,
     stateMutability: "view",
     type: "function"
@@ -221,24 +134,14 @@ var contractABI = [
     constant: true,
     inputs: [],
     name: "totalStakedTokens",
-    outputs: [
-      {
-        name: "",
-        type: "uint256"
-      }
-    ],
+    outputs: [{ name: "", type: "uint256" }],
     payable: false,
     stateMutability: "view",
     type: "function"
   },
   {
     constant: false,
-    inputs: [
-      {
-        name: "_quota",
-        type: "uint256"
-      }
-    ],
+    inputs: [{ name: "_quota", type: "uint256" }],
     name: "setDropBurnMaxQuota",
     outputs: [],
     payable: false,
@@ -247,12 +150,7 @@ var contractABI = [
   },
   {
     constant: false,
-    inputs: [
-      {
-        name: "_node",
-        type: "address"
-      }
-    ],
+    inputs: [{ name: "_nodeAddr", type: "address" }],
     name: "nodeStart",
     outputs: [],
     payable: false,
@@ -261,12 +159,7 @@ var contractABI = [
   },
   {
     constant: false,
-    inputs: [
-      {
-        name: "_nodeAddr",
-        type: "address"
-      }
-    ],
+    inputs: [{ name: "_nodeAddr", type: "address" }],
     name: "nodeWithdraw",
     outputs: [],
     payable: false,
@@ -276,18 +169,9 @@ var contractABI = [
   {
     constant: false,
     inputs: [
-      {
-        name: "_tokenAmount",
-        type: "uint256"
-      },
-      {
-        name: "_dropburnAmount",
-        type: "uint256"
-      },
-      {
-        name: "_nodeAddr",
-        type: "address"
-      }
+      { name: "_tokenAmount", type: "uint256" },
+      { name: "_dropburnAmount", type: "uint256" },
+      { name: "_nodeAddr", type: "address" }
     ],
     name: "nodeUnbond",
     outputs: [],
@@ -297,31 +181,16 @@ var contractABI = [
   },
   {
     constant: true,
-    inputs: [
-      {
-        name: "nodeAddr",
-        type: "address"
-      }
-    ],
+    inputs: [{ name: "nodeAddr", type: "address" }],
     name: "getNodeRewardTokens",
-    outputs: [
-      {
-        name: "",
-        type: "uint256"
-      }
-    ],
+    outputs: [{ name: "", type: "uint256" }],
     payable: false,
     stateMutability: "view",
     type: "function"
   },
   {
     constant: false,
-    inputs: [
-      {
-        name: "_maxStake",
-        type: "uint256"
-      }
-    ],
+    inputs: [{ name: "_maxStake", type: "uint256" }],
     name: "setMaxStakePerNode",
     outputs: [],
     payable: false,
@@ -340,44 +209,33 @@ var contractABI = [
   {
     constant: true,
     inputs: [],
+    name: "addressBridge",
+    outputs: [{ name: "", type: "address" }],
+    payable: false,
+    stateMutability: "view",
+    type: "function"
+  },
+  {
+    constant: true,
+    inputs: [],
     name: "rewardRateDelta",
-    outputs: [
-      {
-        name: "",
-        type: "uint256"
-      }
-    ],
+    outputs: [{ name: "", type: "uint256" }],
     payable: false,
     stateMutability: "view",
     type: "function"
   },
   {
     constant: false,
-    inputs: [
-      {
-        name: "_nodeAddr",
-        type: "address"
-      }
-    ],
+    inputs: [{ name: "_nodeAddr", type: "address" }],
     name: "delegatorChekcReward",
-    outputs: [
-      {
-        name: "",
-        type: "uint256"
-      }
-    ],
+    outputs: [{ name: "", type: "uint256" }],
     payable: false,
     stateMutability: "nonpayable",
     type: "function"
   },
   {
     constant: false,
-    inputs: [
-      {
-        name: "_minStake",
-        type: "uint256"
-      }
-    ],
+    inputs: [{ name: "_minStake", type: "uint256" }],
     name: "setMinStakePerNode",
     outputs: [],
     payable: false,
@@ -388,12 +246,7 @@ var contractABI = [
     constant: true,
     inputs: [],
     name: "owner",
-    outputs: [
-      {
-        name: "",
-        type: "address"
-      }
-    ],
+    outputs: [{ name: "", type: "address" }],
     payable: false,
     stateMutability: "view",
     type: "function"
@@ -402,12 +255,16 @@ var contractABI = [
     constant: true,
     inputs: [],
     name: "isOwner",
-    outputs: [
-      {
-        name: "",
-        type: "bool"
-      }
-    ],
+    outputs: [{ name: "", type: "bool" }],
+    payable: false,
+    stateMutability: "view",
+    type: "function"
+  },
+  {
+    constant: true,
+    inputs: [],
+    name: "bridgeAddr",
+    outputs: [{ name: "", type: "address" }],
     payable: false,
     stateMutability: "view",
     type: "function"
@@ -416,12 +273,7 @@ var contractABI = [
     constant: true,
     inputs: [],
     name: "DBDECIMAL",
-    outputs: [
-      {
-        name: "",
-        type: "uint256"
-      }
-    ],
+    outputs: [{ name: "", type: "uint256" }],
     payable: false,
     stateMutability: "view",
     type: "function"
@@ -430,12 +282,7 @@ var contractABI = [
     constant: true,
     inputs: [],
     name: "circulatingSupply",
-    outputs: [
-      {
-        name: "",
-        type: "uint256"
-      }
-    ],
+    outputs: [{ name: "", type: "uint256" }],
     payable: false,
     stateMutability: "view",
     type: "function"
@@ -443,14 +290,8 @@ var contractABI = [
   {
     constant: false,
     inputs: [
-      {
-        name: "_tokenAmount",
-        type: "uint256"
-      },
-      {
-        name: "_nodeAddr",
-        type: "address"
-      }
+      { name: "_tokenAmount", type: "uint256" },
+      { name: "_nodeAddr", type: "address" }
     ],
     name: "delegatorUnbond",
     outputs: [],
@@ -462,50 +303,21 @@ var contractABI = [
     constant: true,
     inputs: [],
     name: "maxStakePerNode",
-    outputs: [
-      {
-        name: "",
-        type: "uint256"
-      }
-    ],
+    outputs: [{ name: "", type: "uint256" }],
     payable: false,
     stateMutability: "view",
     type: "function"
   },
   {
     constant: true,
-    inputs: [
-      {
-        name: "",
-        type: "address"
-      },
-      {
-        name: "",
-        type: "address"
-      }
-    ],
+    inputs: [{ name: "", type: "address" }, { name: "", type: "address" }],
     name: "delegators",
     outputs: [
-      {
-        name: "delegatedNode",
-        type: "address"
-      },
-      {
-        name: "delegatedAmount",
-        type: "uint256"
-      },
-      {
-        name: "accumulatedReward",
-        type: "uint256"
-      },
-      {
-        name: "accumulatedRewardRate",
-        type: "uint256"
-      },
-      {
-        name: "pendingWithdraw",
-        type: "uint256"
-      }
+      { name: "delegatedNode", type: "address" },
+      { name: "delegatedAmount", type: "uint256" },
+      { name: "accumulatedReward", type: "uint256" },
+      { name: "accumulatedRewardRate", type: "uint256" },
+      { name: "pendingWithdraw", type: "uint256" }
     ],
     payable: false,
     stateMutability: "view",
@@ -513,12 +325,7 @@ var contractABI = [
   },
   {
     constant: false,
-    inputs: [
-      {
-        name: "_nodeAddr",
-        type: "address"
-      }
-    ],
+    inputs: [{ name: "_nodeAddr", type: "address" }],
     name: "nodeUnregister",
     outputs: [],
     payable: false,
@@ -535,13 +342,17 @@ var contractABI = [
     type: "function"
   },
   {
+    constant: true,
+    inputs: [{ name: "nodeAddr", type: "address" }],
+    name: "isValidStakingNode",
+    outputs: [{ name: "", type: "bool" }],
+    payable: false,
+    stateMutability: "view",
+    type: "function"
+  },
+  {
     constant: false,
-    inputs: [
-      {
-        name: "_duration",
-        type: "uint256"
-      }
-    ],
+    inputs: [{ name: "_duration", type: "uint256" }],
     name: "setUnbondDuration",
     outputs: [],
     payable: false,
@@ -550,12 +361,7 @@ var contractABI = [
   },
   {
     constant: false,
-    inputs: [
-      {
-        name: "_newSupply",
-        type: "uint256"
-      }
-    ],
+    inputs: [{ name: "_newSupply", type: "uint256" }],
     name: "setCirculatingSupply",
     outputs: [],
     payable: false,
@@ -564,12 +370,7 @@ var contractABI = [
   },
   {
     constant: false,
-    inputs: [
-      {
-        name: "_nodeAddr",
-        type: "address"
-      }
-    ],
+    inputs: [{ name: "_nodeAddr", type: "address" }],
     name: "nodeClaimReward",
     outputs: [],
     payable: false,
@@ -578,42 +379,18 @@ var contractABI = [
   },
   {
     constant: true,
-    inputs: [
-      {
-        name: "",
-        type: "uint256"
-      }
-    ],
+    inputs: [{ name: "", type: "uint256" }],
     name: "nodeAddrs",
-    outputs: [
-      {
-        name: "",
-        type: "address"
-      }
-    ],
+    outputs: [{ name: "", type: "address" }],
     payable: false,
     stateMutability: "view",
     type: "function"
   },
   {
     constant: true,
-    inputs: [
-      {
-        name: "",
-        type: "address"
-      },
-      {
-        name: "",
-        type: "address"
-      }
-    ],
+    inputs: [{ name: "", type: "address" }, { name: "", type: "address" }],
     name: "nodeRunners",
-    outputs: [
-      {
-        name: "",
-        type: "bool"
-      }
-    ],
+    outputs: [{ name: "", type: "bool" }],
     payable: false,
     stateMutability: "view",
     type: "function"
@@ -622,24 +399,14 @@ var contractABI = [
     constant: true,
     inputs: [],
     name: "lastRateUpdatedTime",
-    outputs: [
-      {
-        name: "",
-        type: "uint256"
-      }
-    ],
+    outputs: [{ name: "", type: "uint256" }],
     payable: false,
     stateMutability: "view",
     type: "function"
   },
   {
     constant: false,
-    inputs: [
-      {
-        name: "_nodeAddr",
-        type: "address"
-      }
-    ],
+    inputs: [{ name: "_nodeAddr", type: "address" }],
     name: "delegatorWithdraw",
     outputs: [],
     payable: false,
@@ -650,12 +417,7 @@ var contractABI = [
     constant: true,
     inputs: [],
     name: "unbondDuration",
-    outputs: [
-      {
-        name: "",
-        type: "uint256"
-      }
-    ],
+    outputs: [{ name: "", type: "uint256" }],
     payable: false,
     stateMutability: "view",
     type: "function"
@@ -664,24 +426,14 @@ var contractABI = [
     constant: true,
     inputs: [],
     name: "DOSDECIMAL",
-    outputs: [
-      {
-        name: "",
-        type: "uint256"
-      }
-    ],
+    outputs: [{ name: "", type: "uint256" }],
     payable: false,
     stateMutability: "view",
     type: "function"
   },
   {
     constant: false,
-    inputs: [
-      {
-        name: "_node",
-        type: "address"
-      }
-    ],
+    inputs: [{ name: "_nodeAddr", type: "address" }],
     name: "nodeStop",
     outputs: [],
     payable: false,
@@ -692,12 +444,7 @@ var contractABI = [
     constant: true,
     inputs: [],
     name: "stakingRewardsVault",
-    outputs: [
-      {
-        name: "",
-        type: "address"
-      }
-    ],
+    outputs: [{ name: "", type: "address" }],
     payable: false,
     stateMutability: "view",
     type: "function"
@@ -705,22 +452,11 @@ var contractABI = [
   {
     constant: true,
     inputs: [
-      {
-        name: "_delegator",
-        type: "address"
-      },
-      {
-        name: "_nodeAddr",
-        type: "address"
-      }
+      { name: "_delegator", type: "address" },
+      { name: "_nodeAddr", type: "address" }
     ],
     name: "getDelegatorRewardTokens",
-    outputs: [
-      {
-        name: "",
-        type: "uint256"
-      }
-    ],
+    outputs: [{ name: "", type: "uint256" }],
     payable: false,
     stateMutability: "view",
     type: "function"
@@ -729,12 +465,7 @@ var contractABI = [
     constant: true,
     inputs: [],
     name: "DBTOKEN",
-    outputs: [
-      {
-        name: "",
-        type: "address"
-      }
-    ],
+    outputs: [{ name: "", type: "address" }],
     payable: false,
     stateMutability: "view",
     type: "function"
@@ -743,12 +474,7 @@ var contractABI = [
     constant: true,
     inputs: [],
     name: "minStakePerNode",
-    outputs: [
-      {
-        name: "",
-        type: "uint256"
-      }
-    ],
+    outputs: [{ name: "", type: "uint256" }],
     payable: false,
     stateMutability: "view",
     type: "function"
@@ -757,12 +483,7 @@ var contractABI = [
     constant: true,
     inputs: [],
     name: "dropburnMaxQuota",
-    outputs: [
-      {
-        name: "",
-        type: "uint256"
-      }
-    ],
+    outputs: [{ name: "", type: "uint256" }],
     payable: false,
     stateMutability: "view",
     type: "function"
@@ -770,22 +491,10 @@ var contractABI = [
   {
     constant: false,
     inputs: [
-      {
-        name: "_node",
-        type: "address"
-      },
-      {
-        name: "_tokenAmount",
-        type: "uint256"
-      },
-      {
-        name: "_dropburnAmount",
-        type: "uint256"
-      },
-      {
-        name: "_rewardCut",
-        type: "uint256"
-      }
+      { name: "_nodeAddr", type: "address" },
+      { name: "_tokenAmount", type: "uint256" },
+      { name: "_dropburnAmount", type: "uint256" },
+      { name: "_rewardCut", type: "uint256" }
     ],
     name: "newNode",
     outputs: [],
@@ -795,12 +504,7 @@ var contractABI = [
   },
   {
     constant: false,
-    inputs: [
-      {
-        name: "newOwner",
-        type: "address"
-      }
-    ],
+    inputs: [{ name: "newOwner", type: "address" }],
     name: "transferOwnership",
     outputs: [],
     payable: false,
@@ -809,37 +513,19 @@ var contractABI = [
   },
   {
     constant: false,
-    inputs: [
-      {
-        name: "_nodeAddr",
-        type: "address"
-      }
-    ],
+    inputs: [{ name: "_nodeAddr", type: "address" }],
     name: "nodeChekcReward",
-    outputs: [
-      {
-        name: "",
-        type: "uint256"
-      }
-    ],
+    outputs: [{ name: "", type: "uint256" }],
     payable: false,
     stateMutability: "nonpayable",
     type: "function"
   },
   {
     inputs: [
-      {
-        name: "_dostoken",
-        type: "address"
-      },
-      {
-        name: "_dbtoken",
-        type: "address"
-      },
-      {
-        name: "_vault",
-        type: "address"
-      }
+      { name: "_dostoken", type: "address" },
+      { name: "_dbtoken", type: "address" },
+      { name: "_vault", type: "address" },
+      { name: "_bridgeAddr", type: "address" }
     ],
     payable: false,
     stateMutability: "nonpayable",
@@ -848,16 +534,8 @@ var contractABI = [
   {
     anonymous: false,
     inputs: [
-      {
-        indexed: false,
-        name: "oldQuota",
-        type: "uint256"
-      },
-      {
-        indexed: false,
-        name: "newQuota",
-        type: "uint256"
-      }
+      { indexed: false, name: "oldQuota", type: "uint256" },
+      { indexed: false, name: "newQuota", type: "uint256" }
     ],
     name: "UpdateDropBurnMaxQuota",
     type: "event"
@@ -865,16 +543,8 @@ var contractABI = [
   {
     anonymous: false,
     inputs: [
-      {
-        indexed: false,
-        name: "oldDuration",
-        type: "uint256"
-      },
-      {
-        indexed: false,
-        name: "newDuration",
-        type: "uint256"
-      }
+      { indexed: false, name: "oldDuration", type: "uint256" },
+      { indexed: false, name: "newDuration", type: "uint256" }
     ],
     name: "UpdateUnbondDuration",
     type: "event"
@@ -882,16 +552,8 @@ var contractABI = [
   {
     anonymous: false,
     inputs: [
-      {
-        indexed: false,
-        name: "oldCirculatingSupply",
-        type: "uint256"
-      },
-      {
-        indexed: false,
-        name: "newCirculatingSupply",
-        type: "uint256"
-      }
+      { indexed: false, name: "oldCirculatingSupply", type: "uint256" },
+      { indexed: false, name: "newCirculatingSupply", type: "uint256" }
     ],
     name: "UpdateCirculatingSupply",
     type: "event"
@@ -899,16 +561,8 @@ var contractABI = [
   {
     anonymous: false,
     inputs: [
-      {
-        indexed: false,
-        name: "oldMinStakePerNode",
-        type: "uint256"
-      },
-      {
-        indexed: false,
-        name: "newMinStakePerNode",
-        type: "uint256"
-      }
+      { indexed: false, name: "oldMinStakePerNode", type: "uint256" },
+      { indexed: false, name: "newMinStakePerNode", type: "uint256" }
     ],
     name: "UpdateMinStakePerNode",
     type: "event"
@@ -916,16 +570,8 @@ var contractABI = [
   {
     anonymous: false,
     inputs: [
-      {
-        indexed: false,
-        name: "oldMaxStakePerNode",
-        type: "uint256"
-      },
-      {
-        indexed: false,
-        name: "newMaxStakePerNode",
-        type: "uint256"
-      }
+      { indexed: false, name: "oldMaxStakePerNode", type: "uint256" },
+      { indexed: false, name: "newMaxStakePerNode", type: "uint256" }
     ],
     name: "UpdateMaxStakePerNode",
     type: "event"
@@ -933,31 +579,11 @@ var contractABI = [
   {
     anonymous: false,
     inputs: [
-      {
-        indexed: false,
-        name: "owner",
-        type: "address"
-      },
-      {
-        indexed: false,
-        name: "nodeAddress",
-        type: "address"
-      },
-      {
-        indexed: false,
-        name: "selfStakedAmount",
-        type: "uint256"
-      },
-      {
-        indexed: false,
-        name: "stakedDB",
-        type: "uint256"
-      },
-      {
-        indexed: false,
-        name: "rewardCut",
-        type: "uint256"
-      }
+      { indexed: true, name: "owner", type: "address" },
+      { indexed: false, name: "nodeAddress", type: "address" },
+      { indexed: false, name: "selfStakedAmount", type: "uint256" },
+      { indexed: false, name: "stakedDB", type: "uint256" },
+      { indexed: false, name: "rewardCut", type: "uint256" }
     ],
     name: "LogNewNode",
     type: "event"
@@ -965,56 +591,50 @@ var contractABI = [
   {
     anonymous: false,
     inputs: [
-      {
-        indexed: false,
-        name: "ratio",
-        type: "uint256"
-      },
-      {
-        indexed: false,
-        name: "total",
-        type: "uint256"
-      },
-      {
-        indexed: false,
-        name: "staking",
-        type: "uint256"
-      }
+      { indexed: true, name: "sender", type: "address" },
+      { indexed: false, name: "total", type: "uint256" },
+      { indexed: false, name: "nodeAddr", type: "address" }
     ],
-    name: "LogTest",
+    name: "DelegateTo",
     type: "event"
   },
   {
     anonymous: false,
     inputs: [
-      {
-        indexed: true,
-        name: "previousOwner",
-        type: "address"
-      }
+      { indexed: true, name: "sender", type: "address" },
+      { indexed: false, name: "total", type: "uint256" }
     ],
+    name: "RewardWithdraw",
+    type: "event"
+  },
+  {
+    anonymous: false,
+    inputs: [
+      { indexed: true, name: "sender", type: "address" },
+      { indexed: false, name: "tokenAmount", type: "uint256" },
+      { indexed: false, name: "dropburnAmount", type: "uint256" },
+      { indexed: false, name: "nodeAddr", type: "address" }
+    ],
+    name: "Unbond",
+    type: "event"
+  },
+  {
+    anonymous: false,
+    inputs: [{ indexed: true, name: "previousOwner", type: "address" }],
     name: "OwnershipRenounced",
     type: "event"
   },
   {
     anonymous: false,
     inputs: [
-      {
-        indexed: true,
-        name: "previousOwner",
-        type: "address"
-      },
-      {
-        indexed: true,
-        name: "newOwner",
-        type: "address"
-      }
+      { indexed: true, name: "previousOwner", type: "address" },
+      { indexed: true, name: "newOwner", type: "address" }
     ],
     name: "OwnershipTransferred",
     type: "event"
   }
 ];
-var contractAddress = "0xaf939De1f73676B8ae1Cce1edcCfD4860B10359F";
+var contractAddress = "0x2Ec2e90B3f4e7DA73393b62818f9a74DB6293b25";
 //creating contract object
 var contract = new web3js.eth.Contract(contractABI, contractAddress);
 
@@ -1303,11 +923,37 @@ app.get("/balance", async function(req, res) {
     }
   ];
   var tokenAddress = "0x214e79c85744CD2eBBc64dDc0047131496871bEe";
+
   var nodeAddr = "c9100d92df91e9e6ff8065f6c098a2c05ae47f93";
   //creating contract object
   var token = new web3js.eth.Contract(tokenABI, tokenAddress);
   let balance = await token.methods.balanceOf(nodeAddr).call();
   console.log("balance", balance);
+});
+app.get("/activity", async function(req, res) {
+  //account from metamask
+  let account = "0x2a3B59AC638F90d82BdAF5E2dA5D37C1a31B29f3";
+  const options = {
+    filter: { owner: account },
+    fromBlock: 5414653,
+    toBlock: "latest"
+  };
+
+  const eventList = await contract.getPastEvents("LogNewNode", options);
+  console.log("length", eventList.length);
+  console.log(eventList[0].event);
+
+  const options2 = {
+    filter: { sender: account },
+    fromBlock: 5414653,
+    toBlock: "latest"
+  };
+  const eventList2 = await contract.getPastEvents("DelegateTo", options2);
+  console.log("length", eventList2.length);
+  const eventList3 = await contract.getPastEvents("RewardWithdraw", options2);
+  console.log("length", eventList3.length);
+  const eventList4 = await contract.getPastEvents("Unbond", options2);
+  console.log("length", eventList4.length);
 });
 app.get("/method", async function(req, res) {
   /*
