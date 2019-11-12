@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import { Link } from 'react-router-dom';
 import { Table } from 'antd'
-import NewNode from './newNode'
+import NewNode from './newNodeForm'
 import './style.scss';
 import numeral from 'numeral';
 import { DOS_ABI, DOS_CONTRACT_ADDRESS } from '../../util/const'
@@ -28,10 +28,27 @@ export default class NodeList extends Component {
         this.state = {
             loading: false,
             listCount: 100,
+            fields: {
+                nodeAddress: {
+                    value: 'testxxxxxxxxxxxxxx',
+                },
+                dosAmount: {
+                    value: 0
+                },
+                dropBurnAmount: {
+                    value: 0
+                },
+                rewardCut: {
+                    value: 0
+                },
+                nodeDescription: {
+                    value: 'test node description'
+                }
+            }
         }
     }
     componentDidMount() {
-        // this.loadNodeList();
+        this.loadNodeList();
     }
     getSnapshotBeforeUpdate(prevProps) {
         let userLogined = (prevProps.contract.userAddress === '' && this.props.contract.userAddress)
@@ -39,9 +56,16 @@ export default class NodeList extends Component {
     }
     componentDidUpdate(prevProps, preState, snapShot) {
         if (snapShot.userLogined) {
-            // this.loadNodeList()
+            this.loadNodeList()
         }
     }
+    handleFormChange = changedFields => {
+        console.log(changedFields)
+        this.setState(({ fields }) => ({
+            fields: { ...fields, ...changedFields },
+        }));
+    };
+
     loadNodeList = async () => {
         function fromWei(bn) {
             if (!bn || bn === '-') {
@@ -89,9 +113,12 @@ export default class NodeList extends Component {
     }
     render() {
         let { isMetaMaskLogin } = this.props.contract
+        let {
+            fields
+        } = this.state;
         return (
             <>
-                <NewNode></NewNode>
+                <NewNode  {...fields} onChange={this.handleFormChange}></NewNode>
                 <Table rowKey={record => record.node}
                     loading={this.state.loading}
                     dataSource={this.state.dataList}
