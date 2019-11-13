@@ -50,7 +50,12 @@ export const DOS_ABI = [
       { name: "totalOtherDelegatedAmount", type: "uint256" },
       { name: "accumulatedReward", type: "uint256" },
       { name: "accumulatedRewardRate", type: "uint256" },
-      { name: "running", type: "bool" }
+      { name: "pendingWithdrawToken", type: "uint256" },
+      { name: "pendingWithdrawDB", type: "uint256" },
+      { name: "lastStartTime", type: "uint256" },
+      { name: "lastStopTime", type: "uint256" },
+      { name: "running", type: "bool" },
+      { name: "description", type: "string" }
     ],
     payable: false,
     stateMutability: "view",
@@ -210,6 +215,30 @@ export const DOS_ABI = [
     type: "function"
   },
   {
+    constant: true,
+    inputs: [{ name: "nodeAddr", type: "address" }],
+    name: "getNodeUptime",
+    outputs: [{ name: "", type: "uint256" }],
+    payable: false,
+    stateMutability: "view",
+    type: "function"
+  },
+  {
+    constant: false,
+    inputs: [
+      { name: "_nodeAddr", type: "address" },
+      { name: "_tokenAmount", type: "uint256" },
+      { name: "_dropburnAmount", type: "uint256" },
+      { name: "_rewardCut", type: "uint256" },
+      { name: "_desc", type: "string" }
+    ],
+    name: "newNode",
+    outputs: [],
+    payable: false,
+    stateMutability: "nonpayable",
+    type: "function"
+  },
+  {
     constant: false,
     inputs: [{ name: "_nodeAddr", type: "address" }],
     name: "delegatorChekcReward",
@@ -295,7 +324,10 @@ export const DOS_ABI = [
   },
   {
     constant: true,
-    inputs: [{ name: "", type: "address" }, { name: "", type: "address" }],
+    inputs: [
+      { name: "", type: "address" },
+      { name: "", type: "address" }
+    ],
     name: "delegators",
     outputs: [
       { name: "delegatedNode", type: "address" },
@@ -373,7 +405,10 @@ export const DOS_ABI = [
   },
   {
     constant: true,
-    inputs: [{ name: "", type: "address" }, { name: "", type: "address" }],
+    inputs: [
+      { name: "", type: "address" },
+      { name: "", type: "address" }
+    ],
     name: "nodeRunners",
     outputs: [{ name: "", type: "bool" }],
     payable: false,
@@ -475,32 +510,9 @@ export const DOS_ABI = [
   },
   {
     constant: false,
-    inputs: [
-      { name: "_nodeAddr", type: "address" },
-      { name: "_tokenAmount", type: "uint256" },
-      { name: "_dropburnAmount", type: "uint256" },
-      { name: "_rewardCut", type: "uint256" }
-    ],
-    name: "newNode",
-    outputs: [],
-    payable: false,
-    stateMutability: "nonpayable",
-    type: "function"
-  },
-  {
-    constant: false,
     inputs: [{ name: "newOwner", type: "address" }],
     name: "transferOwnership",
     outputs: [],
-    payable: false,
-    stateMutability: "nonpayable",
-    type: "function"
-  },
-  {
-    constant: false,
-    inputs: [{ name: "_nodeAddr", type: "address" }],
-    name: "nodeChekcReward",
-    outputs: [{ name: "", type: "uint256" }],
     payable: false,
     stateMutability: "nonpayable",
     type: "function"
@@ -621,4 +633,4 @@ export const DOS_ABI = [
 ];
 // export const DOS_CONTRACT_ADDRESS = "0x214e79c85744CD2eBBc64dDc0047131496871bEe"
 export const DOS_CONTRACT_ADDRESS =
-  "0x2Ec2e90B3f4e7DA73393b62818f9a74DB6293b25";
+  "0x9f9a02B42F191C60c52c903a21E863F4BbC8E709";
