@@ -1,5 +1,5 @@
 import { connect } from "react-redux";
-import MyAccount from "./myAccount";
+import MyActivities from "./activities";
 
 import { globalLoading } from "../../redux/action";
 
@@ -10,4 +10,4 @@ const mapDispatchToProps = dispatch => ({
   globalLoading: loadingStatus => dispatch(globalLoading(loadingStatus))
 });
 
-export default connect(mapStateToProps, mapDispatchToProps)(MyAccount);
+export default connect(mapStateToProps, mapDispatchToProps)(MyActivities);

@@ -1,0 +1,6 @@
+2019/11/13
+TODO 1)activities
+->把資料更新到dataList
+TODO 2)nodeList
+->加分頁,只顯示10個nod
+TODO 3)MetaMask logout
