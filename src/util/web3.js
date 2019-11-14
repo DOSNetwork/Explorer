@@ -71,3 +71,28 @@ export function metaMaskLogin() {
         }
     }
 }
+
+export function metaMaskLogout() {
+    let { userAddress } = store.getState().contract
+    if (userAddress) {
+        try {
+            window.ethereum.enable()
+                .then(function (accountAddress) {
+                    store.dispatch({
+                        type: type.CONTRACT_METAMASK_LOGOUT
+                    })
+                }).then(() => {
+                    notification.open({
+                        message: 'MetaMask Account',
+                        description:
+                            <>
+                                <h3>Logged out!</h3>
+                            </>,
+                        icon: <Icon type="smile" style={{ color: '#108ee9' }} />,
+                    })
+                });
+        } catch (e) {
+            console.log(e)
+        }
+    }
+}

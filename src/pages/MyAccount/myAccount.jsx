@@ -2,8 +2,8 @@ import React, { Component } from "react";
 import { SubTitle } from "../../Layout/page";
 import { Icon, Spin } from "antd";
 import {
-  DOS_ABI,
-  DOS_CONTRACT_ADDRESS,
+  // DOS_ABI,
+  // DOS_CONTRACT_ADDRESS,
   DOSTOKEN_ABI,
   DOSTOKEN_CONTRACT_ADDRESS
 } from "../../util/const";
@@ -19,7 +19,7 @@ export default class Account extends Component {
     };
   }
   ToggleNumber = () => {
-    this.setState(function(state) {
+    this.setState(function (state) {
       return {
         showNumber: !state.showNumber
       };

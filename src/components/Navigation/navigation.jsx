@@ -1,12 +1,18 @@
 import React, { Component } from 'react'
 import { NavLink } from 'react-router-dom'
 import './style.scss'
-import { metaMaskLogin } from '../../util/web3.js'
+import { metaMaskLogin, metaMaskLogout } from '../../util/web3.js'
 export default class Navigation extends Component {
     onMetaMaskLogin = () => {
         let { isMetaMaskLogin } = this.props.contract
         if (!isMetaMaskLogin) {
             metaMaskLogin()
+        }
+    }
+    onMetaMaskLogout = () => {
+        let { isMetaMaskLogin } = this.props.contract
+        if (isMetaMaskLogin) {
+            metaMaskLogout()
         }
     }
     render() {
@@ -27,7 +33,13 @@ export default class Navigation extends Component {
                     <div className="metamask__status__panel" >
                         <img className="metamask__logo" src="/metamask.jpeg" alt="METAMASK" />
                         {
-                            isMetaMaskLogin ? <p>{`${userAddress.slice(0, 10)}...`}</p> : <p className="metamask__login-button" onClick={this.onMetaMaskLogin}>LOGIN</p>
+                            isMetaMaskLogin ?
+                                <div>
+                                    <p>{`${userAddress.slice(0, 5)}...`}</p>
+                                    <p className="metamask__login-button" onClick={this.onMetaMaskLogout}>LOGOUT</p>
+                                </div>
+                                :
+                                <p className="metamask__login-button" onClick={this.onMetaMaskLogin}>LOGIN</p>
                         }
                     </div>
                 </div>
