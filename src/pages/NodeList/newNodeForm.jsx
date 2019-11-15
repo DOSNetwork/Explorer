@@ -5,7 +5,14 @@ const newNode = Form.create({ name: "form_in_modal" })(
   // eslint-disable-next-line
   class extends React.Component {
     render() {
-      const { visible, confirmLoading, onCancel, onCreate, form } = this.props;
+      const {
+        visible,
+        confirmLoading,
+        onCancel,
+        onCreate,
+        form,
+        modalText
+      } = this.props;
       const { getFieldDecorator } = form;
       return (
         <Modal
@@ -61,6 +68,7 @@ const newNode = Form.create({ name: "form_in_modal" })(
               {getFieldDecorator("description")(<Input type="textarea" />)}
             </Form.Item>
           </Form>
+          <p>{modalText}</p>
         </Modal>
       );
     }

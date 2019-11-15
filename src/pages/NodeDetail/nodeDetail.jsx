@@ -1,6 +1,8 @@
 import React, { Component } from "react";
 import { Button } from "antd";
 import { DOS_ABI, DOS_CONTRACT_ADDRESS } from "../../util/const";
+import DelegateNode from "./delegateNodeForm";
+import UnbondNode from "./unbondNodeForm";
 import "./style.scss";
 export default class NodeDetail extends Component {
   constructor(props) {
@@ -12,7 +14,12 @@ export default class NodeDetail extends Component {
       isUserDelegatedThisNode: false,
       myTokenTotal: 0,
       myRewardTotal: 0,
-      loading: false
+      loading: false,
+      delegateFormVisible: false,
+      delegateFormLoading: false,
+      unbondFormVisible: false,
+      unbondFormLoading: false,
+      formText: ""
     };
   }
   componentDidMount() {
@@ -28,6 +35,92 @@ export default class NodeDetail extends Component {
       this.getNodeDetail();
     }
   }
+  showDelegateModal = () => {
+    this.setState({ delegateFormVisible: true });
+  };
+  handleDelegateCancel = () => {
+    console.log("handleDelegateCancel");
+    this.setState({ delegateFormVisible: false });
+  };
+  saveDelegateFormRef = formRef => {
+    console.log("saveDelegateFormRef", formRef);
+    this.delegateFormRef = formRef;
+  };
+  handleDelegateSubmit = () => {
+    console.log("handleDelegateSubmit", this.delegateFormRef.props);
+    const { form } = this.delegateFormRef.props;
+    form.validateFields((err, values) => {
+      if (err) {
+        return;
+      }
+      this.setState({
+        delegateFormLoading: true
+      });
+      const { web3Client, userAddress } = this.props.contract;
+      let contractInstance = new web3Client.eth.Contract(
+        DOS_ABI,
+        DOS_CONTRACT_ADDRESS
+      );
+      const tokenAmount = web3Client.utils.toWei(values.tokenAmount, "ether");
+
+      let stateControll = this;
+      let emitter = contractInstance.methods
+        .delegate(tokenAmount, this.state.node)
+        .send({ from: userAddress });
+      var hashHandler = function(hash) {
+        console.log("hashHandler", hash);
+        stateControll.setState({
+          formText: "tx : " + hash
+        });
+        emitter.removeListener("transactionHash", hashHandler);
+      };
+
+      var confirmationHandler = function(confirmationNumber, receipt) {
+        //TODO : Update progress to user
+        console.log("confirmation", confirmationNumber, receipt);
+        stateControll.setState({
+          formText: "Submit success in block " + receipt.blockNumber
+        });
+        emitter.removeListener("confirmation", confirmationHandler);
+        setTimeout(() => {
+          stateControll.setState({
+            delegateFormVisible: false,
+            formText: "",
+            delegateFormLoading: false
+          });
+        }, 2000);
+      };
+      var errorHandler = function(error) {
+        console.log("errorHandler", error);
+        emitter.removeListener("confirmation", confirmationHandler);
+        emitter.removeListener("error", errorHandler);
+        stateControll.setState({
+          formText: "Submit failed",
+          delegateFormLoading: false
+        });
+        setTimeout(() => {
+          stateControll.setState({
+            delegateFormVisible: false,
+            formText: ""
+          });
+        }, 2000);
+      };
+      emitter.on("transactionHash", hashHandler);
+      emitter.on("confirmation", confirmationHandler);
+      emitter.on("error", errorHandler);
+    });
+  };
+
+  showUnbondModal = () => {
+    this.setState({ delegateFormVisible: true });
+  };
+  handleUnbondCancel = () => {
+    this.setState({ delegateFormVisible: false });
+  };
+  saveUnbondFormRef = formRef => {
+    this.unbondFormformRef = formRef;
+  };
+  handleUnbondCreate = () => {};
   getNodeDetail = async () => {
     function fromWei(bn) {
       if (!bn || bn === "-") {
@@ -134,34 +227,68 @@ export default class NodeDetail extends Component {
           <div className="info-summary--wrapper">
             <p className="info-node">{node}</p>
             {isMetaMaskLogin ? (
-              <p className="info-opt">
+              <div>
                 {isUserOwnedThisNode ? (
-                  <Button type="primary" shape="round" icon="solution">
-                    updateNodeStaking
-                  </Button>
+                  <p className="info-opt">
+                    <Button type="primary" shape="round" icon="solution">
+                      updateNodeStaking
+                    </Button>
+                    <Button type="primary" shape="round" icon="solution">
+                      Unregister
+                    </Button>
+                    <Button
+                      shape="round"
+                      icon="export"
+                      disabled={!isUserDelegatedThisNode}
+                      onClick={this.showUnbondModal}
+                    >
+                      Unbond
+                    </Button>
+                    <UnbondNode
+                      wrappedComponentRef={this.saveUnbondFormRef}
+                      visible={this.state.unbondFormVisible}
+                      confirmLoading={this.state.unbondFormLoading}
+                      onCancel={this.handleUnbondCancel}
+                      onCreate={this.handleUnbondCreate}
+                    />
+                  </p>
                 ) : (
-                  <Button
-                    type="primary"
-                    shape="round"
-                    icon="solution"
-                    disabled={!isUserDelegatedThisNode}
-                  >
-                    Delegate
-                  </Button>
+                  <p className="info-opt">
+                    <Button
+                      type="primary"
+                      shape="round"
+                      icon="solution"
+                      disabled={!isUserDelegatedThisNode}
+                      onClick={this.showDelegateModal}
+                    >
+                      Delegate
+                    </Button>
+                    <DelegateNode
+                      wrappedComponentRef={this.saveDelegateFormRef}
+                      visible={this.state.delegateFormVisible}
+                      confirmLoading={this.state.delegateFormLoading}
+                      onCancel={this.handleDelegateCancel}
+                      onCreate={this.handleDelegateSubmit}
+                      modalText={this.state.formText}
+                    ></DelegateNode>
+                    <Button
+                      shape="round"
+                      icon="export"
+                      disabled={!isUserDelegatedThisNode}
+                      onClick={this.showUnbondModal}
+                    >
+                      Unbond
+                    </Button>
+                    <UnbondNode
+                      wrappedComponentRef={this.saveUnbondFormRef}
+                      visible={this.state.unbondFormVisible}
+                      confirmLoading={this.state.unbondFormLoading}
+                      onCancel={this.handleUnbondCancel}
+                      onCreate={this.handleUnbondCreate}
+                    />
+                  </p>
                 )}
-                {isUserOwnedThisNode ? (
-                  <Button type="primary" shape="round" icon="solution">
-                    Unregister
-                  </Button>
-                ) : null}
-                <Button
-                  shape="round"
-                  icon="export"
-                  disabled={!isUserDelegatedThisNode}
-                >
-                  Unbond
-                </Button>
-              </p>
+              </div>
             ) : null}
           </div>
         </div>
