@@ -458,6 +458,8 @@ export default class NodeDetail extends Component {
     const {
       selfStakedAmount,
       totalOtherDelegatedAmount,
+      pendingWithdrawToken,
+      pendingWithdrawDB,
       rewardCut,
       description
     } = nodeInstance;
@@ -491,7 +493,12 @@ export default class NodeDetail extends Component {
         .call();
       this.setState({
         isUserOwnedThisNode: true,
-        myTokenTotal: fromWei(selfStakedAmount),
+        myTokenTotal:
+          fromWei(selfStakedAmount) +
+          " (" +
+          fromWei(pendingWithdrawToken) +
+          fromWei(pendingWithdrawDB) +
+          ")",
         myRewardTotal: fromWei(rewardotal),
         nodeDetail: nodeDetail
       });
@@ -624,7 +631,9 @@ export default class NodeDetail extends Component {
                     My Delegation (Unbond amount)
                   </p>
                 ) : (
-                  <p className="user-info--title">My Staking Token</p>
+                  <p className="user-info--title">
+                    My Staking Token (Unbond amount)
+                  </p>
                 )}
                 <p className="user-info--value">{this.state.myTokenTotal}</p>
                 {isUserOwnedThisNode ? (
