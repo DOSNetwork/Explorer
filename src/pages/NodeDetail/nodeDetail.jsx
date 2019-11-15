@@ -112,15 +112,178 @@ export default class NodeDetail extends Component {
   };
 
   showUnbondModal = () => {
-    this.setState({ delegateFormVisible: true });
+    this.setState({ unbondFormVisible: true });
   };
   handleUnbondCancel = () => {
-    this.setState({ delegateFormVisible: false });
+    this.setState({ unbondFormVisible: false });
   };
   saveUnbondFormRef = formRef => {
     this.unbondFormformRef = formRef;
   };
-  handleUnbondCreate = () => {};
+  handleUnbondSubmit = () => {
+    console.log("handleUnbondSubmit", this.unbondFormformRef);
+    const { form } = this.unbondFormformRef.props;
+    form.validateFields((err, values) => {
+      if (err) {
+        return;
+      }
+      this.setState({
+        unbondFormVisible: true
+      });
+      const { web3Client, userAddress } = this.props.contract;
+      let contractInstance = new web3Client.eth.Contract(
+        DOS_ABI,
+        DOS_CONTRACT_ADDRESS
+      );
+      const tokenAmount = web3Client.utils.toWei(values.tokenAmount, "ether");
+
+      let stateControll = this;
+      let emitter = contractInstance.methods
+        .delegatorUnbond(tokenAmount, this.state.node)
+        .send({ from: userAddress });
+      var hashHandler = function(hash) {
+        console.log("hashHandler", hash);
+        stateControll.setState({
+          formText: "tx : " + hash
+        });
+        emitter.removeListener("transactionHash", hashHandler);
+      };
+
+      var confirmationHandler = function(confirmationNumber, receipt) {
+        //TODO : Update progress to user
+        console.log("confirmation", confirmationNumber, receipt);
+        stateControll.setState({
+          formText: "Submit success in block " + receipt.blockNumber
+        });
+        emitter.removeListener("confirmation", confirmationHandler);
+        setTimeout(() => {
+          stateControll.setState({
+            unbondFormVisible: false,
+            formText: "",
+            unbondFormLoading: false
+          });
+        }, 2000);
+      };
+      var errorHandler = function(error) {
+        console.log("errorHandler", error);
+        emitter.removeListener("confirmation", confirmationHandler);
+        emitter.removeListener("error", errorHandler);
+        stateControll.setState({
+          formText: "Submit failed",
+          unbondFormLoading: false
+        });
+        setTimeout(() => {
+          stateControll.setState({
+            unbondFormVisible: false,
+            formText: ""
+          });
+        }, 2000);
+      };
+      emitter.on("transactionHash", hashHandler);
+      emitter.on("confirmation", confirmationHandler);
+      emitter.on("error", errorHandler);
+    });
+  };
+  handleDelegatorWithdraw = () => {
+    //TODO : Add loading effect and pop up a small modal to show resutl
+    const { web3Client, userAddress } = this.props.contract;
+    let contractInstance = new web3Client.eth.Contract(
+      DOS_ABI,
+      DOS_CONTRACT_ADDRESS
+    );
+    let emitter = contractInstance.methods
+      .delegatorWithdraw(this.state.node)
+      .send({ from: userAddress });
+    var hashHandler = function(hash) {
+      console.log("hashHandler", hash);
+      emitter.removeListener("transactionHash", hashHandler);
+    };
+
+    var confirmationHandler = function(confirmationNumber, receipt) {
+      //TODO : Update progress to user
+      console.log("confirmation", confirmationNumber, receipt);
+      emitter.removeListener("confirmation", confirmationHandler);
+      emitter.removeListener("error", errorHandler);
+      //TODO : Should update delegatedAmount ,pendingWithdraw and update UI
+      /*
+      let delegator = await contractInstance.methods
+        .delegators(userAddress, nodeAddr)
+        .call();
+      const { delegatedAmount, pendingWithdraw } = delegator;
+      let userDelegatedRewardotal = await contractInstance.methods
+        .getDelegatorRewardTokens(userAddress, nodeAddr)
+        .call();
+      let isUserDelegatedThisNode = false;
+      if (fromWei(delegatedAmount) !== 0) {
+        isUserDelegatedThisNode = true;
+      }
+      this.setState({
+        isUserDelegatedThisNode: isUserDelegatedThisNode,
+        myTokenTotal:
+          fromWei(delegatedAmount) + " (" + fromWei(pendingWithdraw) + ")",
+        myRewardTotal: fromWei(userDelegatedRewardotal),
+        nodeDetail: nodeDetail
+      });*/
+    };
+    var errorHandler = function(error) {
+      console.log("errorHandler", error);
+      emitter.removeListener("confirmation", confirmationHandler);
+      emitter.removeListener("error", errorHandler);
+    };
+    emitter.on("transactionHash", hashHandler);
+    emitter.on("confirmation", confirmationHandler);
+    emitter.on("error", errorHandler);
+  };
+  handleDelegatorClaimReward = () => {
+    //TODO : Add loading effect and pop up a small modal to show resutl
+    const { web3Client, userAddress } = this.props.contract;
+    let contractInstance = new web3Client.eth.Contract(
+      DOS_ABI,
+      DOS_CONTRACT_ADDRESS
+    );
+    let emitter = contractInstance.methods
+      .delegatorClaimReward(this.state.node)
+      .send({ from: userAddress });
+    var hashHandler = function(hash) {
+      console.log("hashHandler", hash);
+      emitter.removeListener("transactionHash", hashHandler);
+    };
+
+    var confirmationHandler = function(confirmationNumber, receipt) {
+      //TODO : Update progress to user
+      console.log("confirmation", confirmationNumber, receipt);
+      emitter.removeListener("confirmation", confirmationHandler);
+      emitter.removeListener("error", errorHandler);
+      //TODO : Should update delegatedAmount ,pendingWithdraw and update UI
+      /*
+      let delegator = await contractInstance.methods
+        .delegators(userAddress, nodeAddr)
+        .call();
+      const { delegatedAmount, pendingWithdraw } = delegator;
+      let userDelegatedRewardotal = await contractInstance.methods
+        .getDelegatorRewardTokens(userAddress, nodeAddr)
+        .call();
+      let isUserDelegatedThisNode = false;
+      if (fromWei(delegatedAmount) !== 0) {
+        isUserDelegatedThisNode = true;
+      }
+      this.setState({
+        isUserDelegatedThisNode: isUserDelegatedThisNode,
+        myTokenTotal:
+          fromWei(delegatedAmount) + " (" + fromWei(pendingWithdraw) + ")",
+        myRewardTotal: fromWei(userDelegatedRewardotal),
+        nodeDetail: nodeDetail
+      });*/
+    };
+    var errorHandler = function(error) {
+      console.log("errorHandler", error);
+      emitter.removeListener("confirmation", confirmationHandler);
+      emitter.removeListener("error", errorHandler);
+    };
+    emitter.on("transactionHash", hashHandler);
+    emitter.on("confirmation", confirmationHandler);
+    emitter.on("error", errorHandler);
+  };
   getNodeDetail = async () => {
     function fromWei(bn) {
       if (!bn || bn === "-") {
@@ -187,18 +350,22 @@ export default class NodeDetail extends Component {
       let delegator = await contractInstance.methods
         .delegators(userAddress, nodeAddr)
         .call();
-      const { delegatedAmount } = delegator;
+      const { delegatedAmount, pendingWithdraw } = delegator;
       let userDelegatedRewardotal = await contractInstance.methods
         .getDelegatorRewardTokens(userAddress, nodeAddr)
         .call();
       console.log(" delegatedAmount ", delegatedAmount);
       let isUserDelegatedThisNode = false;
-      if (fromWei(delegatedAmount) !== 0) {
+      if (
+        fromWei(delegatedAmount) !== 0 ||
+        fromWei(userDelegatedRewardotal) !== 0
+      ) {
         isUserDelegatedThisNode = true;
       }
       this.setState({
         isUserDelegatedThisNode: isUserDelegatedThisNode,
-        myTokenTotal: fromWei(delegatedAmount),
+        myTokenTotal:
+          fromWei(delegatedAmount) + " (" + fromWei(pendingWithdraw) + ")",
         myRewardTotal: fromWei(userDelegatedRewardotal),
         nodeDetail: nodeDetail
       });
@@ -284,7 +451,8 @@ export default class NodeDetail extends Component {
                       visible={this.state.unbondFormVisible}
                       confirmLoading={this.state.unbondFormLoading}
                       onCancel={this.handleUnbondCancel}
-                      onCreate={this.handleUnbondCreate}
+                      onCreate={this.handleUnbondSubmit}
+                      modalText={this.state.formText}
                     />
                   </p>
                 )}
@@ -297,12 +465,22 @@ export default class NodeDetail extends Component {
             <div className="detail--user-info">
               <div className="user-info--delegation">
                 {isUserDelegatedThisNode ? (
-                  <p className="user-info--title">My Delegation</p>
-                ) : null}
-                {isUserOwnedThisNode ? (
+                  <p className="user-info--title">
+                    My Delegation (Unbond amount)
+                  </p>
+                ) : (
                   <p className="user-info--title">My Staking Token</p>
-                ) : null}
+                )}
                 <p className="user-info--value">{this.state.myTokenTotal}</p>
+                <Button
+                  className="widthdraw-button"
+                  shape="round"
+                  icon="dollar"
+                  onClick={this.handleDelegatorWithdraw}
+                  disabled={!isUserDelegatedThisNode}
+                >
+                  Withdraw Token
+                </Button>
               </div>
               <div className="user-info--rewards">
                 <p className="user-info--title">My Rewards</p>
@@ -311,6 +489,7 @@ export default class NodeDetail extends Component {
                   className="widthdraw-button"
                   shape="round"
                   icon="dollar"
+                  onClick={this.handleDelegatorClaimReward}
                   disabled={!isUserDelegatedThisNode}
                 >
                   Withdraw Reward

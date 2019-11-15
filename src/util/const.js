@@ -631,7 +631,6 @@ export const DOS_ABI = [
     type: "event"
   }
 ];
-// export const DOS_CONTRACT_ADDRESS = "0x214e79c85744CD2eBBc64dDc0047131496871bEe"
 export const DOS_CONTRACT_ADDRESS =
   "0x9f9a02B42F191C60c52c903a21E863F4BbC8E709";
 

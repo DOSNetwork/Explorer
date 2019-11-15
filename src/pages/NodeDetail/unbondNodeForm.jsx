@@ -5,7 +5,14 @@ const unbondNode = Form.create({ name: "form_in_modal" })(
   // eslint-disable-next-line
   class extends React.Component {
     render() {
-      const { visible, confirmLoading, onCancel, onCreate, form } = this.props;
+      const {
+        visible,
+        confirmLoading,
+        onCancel,
+        onCreate,
+        form,
+        modalText
+      } = this.props;
       const { getFieldDecorator } = form;
       return (
         <Modal
@@ -28,6 +35,7 @@ const unbondNode = Form.create({ name: "form_in_modal" })(
               })(<Input placeholder="50000.0" />)}
             </Form.Item>
           </Form>
+          <p>{modalText}</p>
         </Modal>
       );
     }
