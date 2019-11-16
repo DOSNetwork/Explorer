@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import { Link } from "react-router-dom";
-import { Button, Table } from "antd";
+import { Button, Table, message, Switch } from "antd";
 import "./style.scss";
 import numeral from "numeral";
 import NewNode from "./newNodeForm";
@@ -36,6 +36,7 @@ export default class NodeList extends Component {
       listCount: 100,
       visible: false,
       confirmLoading: false,
+      showRelatedNodes: false,
       formText: "",
       fields: {
         nodeAddress: {
@@ -97,51 +98,35 @@ export default class NodeList extends Component {
       console.log("Received values of form: ", values);
       console.log("tokenAmount ", tokenAmount);
 
-      let stateControll = this;
       let emitter = contractInstance.methods
         .newNode(values.nodeAddr, tokenAmount, 0, values.cutRate, "test")
         .send({ from: userAddress });
+      let hide;
       var hashHandler = function(hash) {
-        console.log("hashHandler", hash);
-        stateControll.setState({
-          formText: "tx : " + hash
-        });
         emitter.removeListener("transactionHash", hashHandler);
+        hide = message.loading("New node: wait for confirmatin : " + hash, 0);
       };
+
       var confirmationHandler = function(confirmationNumber, receipt) {
         //TODO : Update progress to user
-        console.log("confirmation", confirmationNumber, receipt);
-        stateControll.setState({
-          delegateFormLoading: false,
-          formText: "Submit success in block " + receipt.blockNumber
-        });
+        hide();
         emitter.removeListener("confirmation", confirmationHandler);
-        emitter.removeListener("error", errorHandler);
-        setTimeout(() => {
-          stateControll.setState({
-            delegateFormVisible: false,
-            formText: "",
-            delegateFormLoading: false
-          });
-        }, 2000);
+        message.success(
+          "New node: success (confirmed block " + receipt.blockNumber + ")"
+        );
       };
       var errorHandler = function(error) {
         emitter.removeListener("confirmation", confirmationHandler);
         emitter.removeListener("error", errorHandler);
-        stateControll.setState({
-          formText: "Submit failed",
-          delegateFormLoading: false
-        });
-        setTimeout(() => {
-          stateControll.setState({
-            delegateFormVisible: false,
-            formText: ""
-          });
-        }, 2000);
+        message.error(error.message);
       };
       emitter.on("transactionHash", hashHandler);
       emitter.on("confirmation", confirmationHandler);
       emitter.on("error", errorHandler);
+      this.setState({
+        confirmLoading: false,
+        visible: false
+      });
     });
   };
 
@@ -151,7 +136,13 @@ export default class NodeList extends Component {
       fields: { ...fields, ...changedFields }
     }));
   };
-
+  onChange = checked => {
+    console.log(`switch to ${checked}`);
+    this.setState({
+      showRelatedNodes: checked
+    });
+    this.loadNodeList();
+  };
   loadNodeList = async () => {
     function fromWei(bn) {
       if (!bn || bn === "-") {
@@ -163,19 +154,79 @@ export default class NodeList extends Component {
     this.setState({
       loading: true
     });
-    console.log(this.props);
+
     const { web3Client, userAddress } = this.props.contract;
     let contractInstance = new web3Client.eth.Contract(
       DOS_ABI,
       DOS_CONTRACT_ADDRESS
     );
-    let nodesAddrs = await contractInstance.methods.getNodeAddrs().call();
-    if (nodesAddrs == null) {
-      return;
-    }
+    let nodesAddrs = [];
     let nodeList = [];
-    for (let i = 0; i < 10; i++) {
-      const nodeAddr = nodesAddrs[i];
+    console.log("showRelatedNodes ", this.state.showRelatedNodes);
+    if (this.state.showRelatedNodes) {
+      const options = {
+        filter: { owner: userAddress },
+        fromBlock: 5414653,
+        toBlock: "latest"
+      };
+
+      const eventList = await contractInstance.getPastEvents(
+        "LogNewNode",
+        options
+      );
+      for (let i = 0; i < eventList.length; i++) {
+        nodesAddrs.push(eventList[i].returnValues.nodeAddress);
+      }
+      const options2 = {
+        filter: { sender: userAddress },
+        fromBlock: 5414653,
+        toBlock: "latest"
+      };
+      const eventList2 = await contractInstance.getPastEvents(
+        "DelegateTo",
+        options2
+      );
+      for (let i = 0; i < eventList2.length; i++) {
+        nodesAddrs.push(eventList2[i].returnValues.nodeAddr);
+      }
+    } else {
+      nodesAddrs = await contractInstance.methods.getNodeAddrs().call();
+      if (userAddress) {
+        //Let owne and delegate nodes show first
+        const options = {
+          filter: { owner: userAddress },
+          fromBlock: 5414653,
+          toBlock: "latest"
+        };
+
+        const eventList = await contractInstance.getPastEvents(
+          "LogNewNode",
+          options
+        );
+        for (let i = 0; i < eventList.length; i++) {
+          nodesAddrs.unshift(eventList[i].returnValues.nodeAddress);
+        }
+        const options2 = {
+          filter: { sender: userAddress },
+          fromBlock: 5414653,
+          toBlock: "latest"
+        };
+        const eventList2 = await contractInstance.getPastEvents(
+          "DelegateTo",
+          options2
+        );
+        for (let i = 0; i < eventList2.length; i++) {
+          nodesAddrs.unshift(eventList2[i].returnValues.nodeAddr);
+        }
+      }
+    }
+
+    const addrs = nodesAddrs.filter((item, index) => {
+      return nodesAddrs.indexOf(item) === index;
+    });
+    let listNumber = Math.min(addrs.length, 10);
+    for (let i = 0; i < listNumber; i++) {
+      const nodeAddr = addrs[i];
       const node = await contractInstance.methods.nodes(nodeAddr).call();
       let delegator = { myDelegator: "-", accumulatedReward: "-" };
       if (userAddress) {
@@ -186,6 +237,7 @@ export default class NodeList extends Component {
       let uptime = await contractInstance.methods
         .getNodeUptime(nodeAddr)
         .call();
+
       console.log(nodeAddr, " ", node.selfStakedAmount, " ", uptime);
       const { selfStakedAmount, totalOtherDelegatedAmount, rewardCut } = node;
       const { delegatedAmount, accumulatedReward } = delegator;
@@ -193,6 +245,7 @@ export default class NodeList extends Component {
         node: nodeAddr,
         selfStaked: fromWei(selfStakedAmount),
         totalDelegated: fromWei(totalOtherDelegatedAmount),
+        totalRewards: fromWei(node.accumulatedReward),
         rewardCut: rewardCut,
         uptime: Math.round(uptime.toNumber() / (60 * 60 * 24)),
         myDelegation: fromWei(delegatedAmount),
@@ -200,6 +253,7 @@ export default class NodeList extends Component {
       };
       nodeList.push(nodeObject);
     }
+
     this.setState({
       dataList: nodeList,
       loading: false
@@ -224,6 +278,7 @@ export default class NodeList extends Component {
             />
           </div>
         ) : null}
+        <Switch defaultChecked onChange={this.onChange} />
         <Table
           rowKey={record => record.node}
           loading={this.state.loading}
