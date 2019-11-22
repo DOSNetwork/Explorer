@@ -1,12 +1,13 @@
 import React from 'react';
-import { Icon, Typography } from 'antd'
-// import Message from '../../util/message'
-const { Paragraph } = Typography;
+import { Icon } from 'antd'
+import EllipsisWrapper from '../../components/EllispisWrapper'
+// const { Paragraph } = Typography;
 export const TxHashRender = (text) => {
     return <span className="txhash--wrapper">
-        <Paragraph copyable={{ text: text }}>
+        <EllipsisWrapper text={text} />
+        {/* <Paragraph copyable={{ text: text }}>
             <span className="txhash--text text--ellipsis">{text}</span>
-        </Paragraph>
+        </Paragraph> */}
         {/* <CopyToClipboard text={text} onCopy={() => {
             Message.Notification.Normal({ key: 'COPY_MESSAGE', message: 'copy success!' })
         }}>

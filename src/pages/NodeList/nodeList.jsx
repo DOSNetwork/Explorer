@@ -1,19 +1,20 @@
 import React, { Component } from "react";
 import { Link } from "react-router-dom";
-import { Button, Table, message, Switch } from "antd";
+import { Button, Table, message, Switch, Input, Tooltip, Icon } from "antd";
 import "./style.scss";
 import numeral from "numeral";
 import NewNode from "./newNodeForm";
-import { DOS_ABI, DOS_CONTRACT_ADDRESS } from "../../util/const";
+import EllipsisWrapper from '../../components/EllispisWrapper'
+import { DOS_ABI, DOS_CONTRACT_ADDRESS, BLOCK_NUMBER } from "../../util/const";
 const { Column } = Table;
-
+const { Search } = Input;
 const nodeColumnRender = (text, record, index) => {
   let link = `/nodedetail/${record.node}`;
   // <img className="nodelist-avatar" src={record.avatar} alt="avatar" />
   return (
     <>
       <Link className="node-detail" to={link}>
-        {text}
+        <EllipsisWrapper text={text} />
       </Link>
     </>
   );
@@ -28,6 +29,14 @@ const myDelegationFormatRender = (text, record, index) => {
     return numberFormatRender(text);
   }
 };
+
+const tableTitleWithTipsRender = (title, tips) => {
+  return (<div>{title}&nbsp;&nbsp;
+    <Tooltip placement="topLeft" title={tips}>
+      <Icon type="info-circle" />
+    </Tooltip>
+  </div>)
+}
 export default class NodeList extends Component {
   constructor(props) {
     super(props);
@@ -58,7 +67,7 @@ export default class NodeList extends Component {
     };
   }
   componentDidMount() {
-    this.loadNodeList();
+    // this.loadNodeList();
   }
   getSnapshotBeforeUpdate(prevProps) {
     let userLogined =
@@ -102,12 +111,12 @@ export default class NodeList extends Component {
         .newNode(values.nodeAddr, tokenAmount, 0, values.cutRate, "test")
         .send({ from: userAddress });
       let hide;
-      var hashHandler = function(hash) {
+      var hashHandler = function (hash) {
         emitter.removeListener("transactionHash", hashHandler);
         hide = message.loading("New node: wait for confirmatin : " + hash, 0);
       };
 
-      var confirmationHandler = function(confirmationNumber, receipt) {
+      var confirmationHandler = function (confirmationNumber, receipt) {
         //TODO : Update progress to user
         hide();
         emitter.removeListener("confirmation", confirmationHandler);
@@ -115,7 +124,7 @@ export default class NodeList extends Component {
           "New node: success (confirmed block " + receipt.blockNumber + ")"
         );
       };
-      var errorHandler = function(error) {
+      var errorHandler = function (error) {
         emitter.removeListener("confirmation", confirmationHandler);
         emitter.removeListener("error", errorHandler);
         message.error(error.message);
@@ -143,7 +152,7 @@ export default class NodeList extends Component {
     });
     this.loadNodeList();
   };
-  loadNodeList = async () => {
+  loadNodeList = async (searchAddress) => {
     function fromWei(bn) {
       if (!bn || bn === "-") {
         return "";
@@ -162,71 +171,54 @@ export default class NodeList extends Component {
     );
     let nodesAddrs = [];
     let nodeList = [];
-    console.log("showRelatedNodes ", this.state.showRelatedNodes);
-    if (this.state.showRelatedNodes) {
-      const options = {
-        filter: { owner: userAddress },
-        fromBlock: 5414653,
-        toBlock: "latest"
-      };
 
-      const eventList = await contractInstance.getPastEvents(
+    const getLogNewNodeEventList = async (userAddress) => {
+      return await contractInstance.getPastEvents(
         "LogNewNode",
-        options
+        {
+          filter: { owner: userAddress },
+          fromBlock: BLOCK_NUMBER,
+          toBlock: "latest"
+        }
       );
-      for (let i = 0; i < eventList.length; i++) {
-        nodesAddrs.push(eventList[i].returnValues.nodeAddress);
-      }
-      const options2 = {
-        filter: { sender: userAddress },
-        fromBlock: 5414653,
-        toBlock: "latest"
-      };
-      const eventList2 = await contractInstance.getPastEvents(
+    }
+    const getDelegateToEventList = async (senderAddress) => {
+      return await contractInstance.getPastEvents(
         "DelegateTo",
-        options2
+        {
+          filter: { sender: senderAddress },
+          fromBlock: BLOCK_NUMBER,
+          toBlock: "latest"
+        }
       );
-      for (let i = 0; i < eventList2.length; i++) {
-        nodesAddrs.push(eventList2[i].returnValues.nodeAddr);
-      }
+    }
+    // search related nodes
+    if (this.state.showRelatedNodes) {
+      const eventList = await getLogNewNodeEventList(userAddress)
+      nodesAddrs = eventList.map(event => event.returnValues.nodeAddress)
+
+      const eventList2 = await getDelegateToEventList(userAddress)
+      nodesAddrs.push(...eventList2.map(event => event.returnValues.nodeAddr))
     } else {
-      nodesAddrs = await contractInstance.methods.getNodeAddrs().call();
+      // search nodes
+      nodesAddrs = Array.from(await contractInstance.methods.getNodeAddrs().call());
       if (userAddress) {
         //Let owne and delegate nodes show first
-        const options = {
-          filter: { owner: userAddress },
-          fromBlock: 5414653,
-          toBlock: "latest"
-        };
-
-        const eventList = await contractInstance.getPastEvents(
-          "LogNewNode",
-          options
-        );
-        for (let i = 0; i < eventList.length; i++) {
-          nodesAddrs.unshift(eventList[i].returnValues.nodeAddress);
-        }
-        const options2 = {
-          filter: { sender: userAddress },
-          fromBlock: 5414653,
-          toBlock: "latest"
-        };
-        const eventList2 = await contractInstance.getPastEvents(
-          "DelegateTo",
-          options2
-        );
-        for (let i = 0; i < eventList2.length; i++) {
-          nodesAddrs.unshift(eventList2[i].returnValues.nodeAddr);
-        }
+        const eventList = await getLogNewNodeEventList(userAddress)
+        nodesAddrs.unshift(...eventList.reverse().map(event => event.returnValues.nodeAddress))
+        const eventList2 = await getDelegateToEventList(userAddress)
+        nodesAddrs.unshift(...eventList2.reverse().map(event => event.returnValues.nodeAddr))
       }
     }
-
-    const addrs = nodesAddrs.filter((item, index) => {
-      return nodesAddrs.indexOf(item) === index;
-    });
-    let listNumber = Math.min(addrs.length, 10);
+    let filtedNodes = []
+    if (searchAddress) {
+      filtedNodes = nodesAddrs.filter(nodeaddress => nodeaddress === searchAddress)
+    } else {
+      filtedNodes = nodesAddrs
+    }
+    let listNumber = Math.min(filtedNodes.length, 10);
     for (let i = 0; i < listNumber; i++) {
-      const nodeAddr = addrs[i];
+      const nodeAddr = filtedNodes[i];
       const node = await contractInstance.methods.nodes(nodeAddr).call();
       let delegator = { myDelegator: "-", accumulatedReward: "-" };
       if (userAddress) {
@@ -237,8 +229,6 @@ export default class NodeList extends Component {
       let uptime = await contractInstance.methods
         .getNodeUptime(nodeAddr)
         .call();
-
-      console.log(nodeAddr, " ", node.selfStakedAmount, " ", uptime);
       const { selfStakedAmount, totalOtherDelegatedAmount, rewardCut } = node;
       const { delegatedAmount, accumulatedReward } = delegator;
       const nodeObject = {
@@ -253,32 +243,45 @@ export default class NodeList extends Component {
       };
       nodeList.push(nodeObject);
     }
-
     this.setState({
       dataList: nodeList,
       loading: false
     });
   };
+  onSearchAddress = (address) => {
+    this.loadNodeList(address)
+  }
   render() {
     let { isMetaMaskLogin } = this.props.contract;
     return (
       <>
-        {isMetaMaskLogin ? (
-          <div>
-            <Button type="primary" onClick={this.showModal}>
-              New Node
-            </Button>
-            <NewNode
-              wrappedComponentRef={this.saveFormRef}
-              visible={this.state.visible}
-              onCancel={this.handleCancel}
-              onCreate={this.handleCreate}
-              confirmLoading={this.state.confirmLoading}
-              modalText={this.state.formText}
+        <div className='node-list--header-wrapper'>
+          {isMetaMaskLogin ? (
+            <div className='node-list--header-left'>
+              <Button type="primary" onClick={this.showModal}>
+                Create a Node
+              </Button>
+              &nbsp;&nbsp;&nbsp;&nbsp;
+              <NewNode
+                wrappedComponentRef={this.saveFormRef}
+                visible={this.state.visible}
+                onCancel={this.handleCancel}
+                onCreate={this.handleCreate}
+                confirmLoading={this.state.confirmLoading}
+                modalText={this.state.formText}
+              />
+              <Switch defaultChecked onChange={this.onChange} />&nbsp;Only Show The Nodes Related To Me
+          </div>
+          )
+            : <div className='node-list--header-left'></div>}
+          <div className="node-list--header-right">
+            <Search
+              placeholder="search node address"
+              onSearch={this.onSearchAddress}
+              style={{ width: 200 }}
             />
           </div>
-        ) : null}
-        <Switch defaultChecked onChange={this.onChange} />
+        </div>
         <Table
           rowKey={record => record.node}
           loading={this.state.loading}
@@ -295,7 +298,7 @@ export default class NodeList extends Component {
             key="node"
           />
           <Column
-            title="Self Staked"
+            title={tableTitleWithTipsRender('SelfStake', 'The Amount of DOS this node staked.')}
             render={numberFormatRender}
             dataIndex="selfStaked"
             key="selfStaked"
@@ -303,7 +306,7 @@ export default class NodeList extends Component {
             sortDirections={["ascend", "descend"]}
           />
           <Column
-            title="Total Delegated"
+            title={tableTitleWithTipsRender('Delegate', 'Total Amount of DOS delegated towards this node.')}
             render={numberFormatRender}
             dataIndex="totalDelegated"
             key="totalDelegated"
@@ -311,15 +314,7 @@ export default class NodeList extends Component {
             sortDirections={["ascend", "descend"]}
           />
           <Column
-            title="Reward Cut"
-            render={t => `${t}%`}
-            dataIndex="rewardCut"
-            key="rewardCut"
-            sorter={(a, b) => a.rewardCut - b.rewardCut}
-            sortDirections={["ascend", "descend"]}
-          />
-          <Column
-            title="Total Rewards"
+            title={tableTitleWithTipsRender('Rewards', 'Total rewards this node created, including rewards for users who delegated towards this node.')}
             render={numberFormatRender}
             dataIndex="totalRewards"
             key="totalRewards"
@@ -327,7 +322,15 @@ export default class NodeList extends Component {
             sortDirections={["ascend", "descend"]}
           />
           <Column
-            title="Uptime"
+            title={tableTitleWithTipsRender('Reward Cut', 'The percentage of DOS token this node will keep from user’s staking rewards.')}
+            render={t => `${t}%`}
+            dataIndex="rewardCut"
+            key="rewardCut"
+            sorter={(a, b) => a.rewardCut - b.rewardCut}
+            sortDirections={["ascend", "descend"]}
+          />
+          <Column
+            title={tableTitleWithTipsRender('Uptime', 'Total active time of this node.')}
             render={t => `${t} days`}
             dataIndex="uptime"
             key="uptime"
@@ -336,7 +339,7 @@ export default class NodeList extends Component {
           />
           {isMetaMaskLogin ? (
             <Column
-              title="MyDelegation"
+              title={tableTitleWithTipsRender('MyDelegation', 'The amount of DOS you delegated towards this node.')}
               render={myDelegationFormatRender}
               dataIndex="myDelegation"
               key="myDelegation"
@@ -346,7 +349,7 @@ export default class NodeList extends Component {
           ) : null}
           {isMetaMaskLogin ? (
             <Column
-              title="MyRewards"
+              title={tableTitleWithTipsRender('MyRewards', 'The amount of rewards you get from this node.')}
               render={myDelegationFormatRender}
               dataIndex="myRewards"
               key="myRewards"

@@ -5,6 +5,9 @@
 .header__wrapper {
     background-color: $bgColor;
     height: 75px;
+    position: fixed;
+    width: 100%;
+    z-index: 9999;
     @include layout-min-960
 }
 
@@ -16,6 +19,7 @@
     align-items: center;
     padding: 0 27px;
     position: relative;
+    margin: 0 auto;
 
     a {
         color: #fff !important;
@@ -95,24 +99,30 @@
 }
 
 .metamask__status__panel {
-    flex: 0 0 180px;
-    background-color: #fff;
-    height: 50px;
-    width: 180px;
-    border: 2px solid #FF9800;
-    border-radius: 50px;
+    height: 100%;
+    flex: 0 0 220px;
+    width: 220px;
     display: flex;
     align-items: center;
-    padding: 10px;
-    color: #333;
+    color: #fff;
     justify-content: space-between;
+    margin-right: -27px;
+    padding: 0 27px;
 
+    &:hover {
+        background-color: rgb(95, 95, 95);
+    }
+}
+
+.metamask__login-status--conntect {
+    color: rgb(16, 219, 43)
 }
 
 .metamask__logo {
     border-radius: 100%;
     height: 40px;
     width: 40px;
+    margin-right: 10px;
 }
 
 .metamask__login-button {

@@ -8,3 +8,20 @@
 .node-detail {
     color: #333;
 }
+
+
+.node-list--header-wrapper {
+    display: flex;
+    justify-content: space-between;
+}
+
+
+.node-list--header-left {
+    flex: 1 1 auto;
+    display: flex;
+    align-items: center;
+}
+
+.node-list--header-right {
+    flex: 0;
+}

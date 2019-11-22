@@ -29,6 +29,25 @@ export function metaMaskLogin() {
     let { userAddress } = store.getState().contract
     if (!userAddress) {
         try {
+            // let network = await web3.eth.net.getId()
+            // let result
+            // switch (network) {
+            //     case 1:
+            //         result = "mainnet";
+            //         break
+            //     case 2:
+            //         result = "morden";
+            //         break
+            //     case 3:
+            //         result = "ropsten";
+            //         break
+            //     case 4:
+            //         result = "rinkeby";
+            //         break
+            //     default:
+            //         result = "unknown network = " + network;
+            // }
+            // this.setState({ userContract: contractInstance, netWork: result })
             window.ethereum.enable()
                 .then(function (accountAddress) {
                     store.dispatch({
@@ -65,6 +84,20 @@ export function metaMaskLogin() {
 
                     store.dispatch({ type: type.CONTRACT_METAMASK_LOGOUT })
                 }
+            })
+            window.ethereum.on('networkChanged', function (network) {
+
+                let lastAccount = network
+                notification.open({
+                    message: 'MetaMask Account Change',
+                    description:
+                        <>
+                            <h3>Account change to</h3>
+                            <p>{lastAccount}</p>
+                        </>,
+                    icon: <Icon type="smile" style={{ color: '#108ee9' }} />,
+                })
+                // store.dispatch({ type: type.CONTRACT_USERADDRESS_CHANGE, address: accounts[0] })
             })
         } catch (e) {
             console.log(e)

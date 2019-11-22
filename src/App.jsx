@@ -25,14 +25,14 @@ class App extends Component {
           <Navigation>
           </Navigation>
           <Switch>
-            <Route exact path='/' component={Explorer} />
+            <Route exact path='/' component={NodeList} />
+            <Route path='/nodelist' component={NodeList} />
             <Route path='/explorer' component={Explorer} />
             {/* <Route path="/home" component={HomePage} /> */}
             {/* <Route path="/ajax" component={AjaxDemo} />
             <Route path="/redux" component={ReduxDemo} />
             <Route path="/echart" component={EchartDemo} />
             <Route path='/router' component={RouterDemo} /> */}
-            <Route path='/nodelist' component={NodeList} />
             <Route path='/nodedetail/:nodeId' component={NodeDetail} />
             <Route path='/myaccount' component={MyAccount} />
             <Route component={NotFound404} />
