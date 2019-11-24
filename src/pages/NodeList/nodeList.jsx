@@ -67,7 +67,7 @@ export default class NodeList extends Component {
     };
   }
   componentDidMount() {
-    // this.loadNodeList();
+    this.loadNodeList();
   }
   getSnapshotBeforeUpdate(prevProps) {
     let userLogined =
@@ -164,7 +164,7 @@ export default class NodeList extends Component {
       loading: true
     });
 
-    const { web3Client, userAddress } = this.props.contract;
+    const { web3Client, userAddress, isMetaMaskLogin } = this.props.contract;
     let contractInstance = new web3Client.eth.Contract(
       DOS_ABI,
       DOS_CONTRACT_ADDRESS
@@ -193,7 +193,7 @@ export default class NodeList extends Component {
       );
     }
     // search related nodes
-    if (this.state.showRelatedNodes) {
+    if (isMetaMaskLogin && this.state.showRelatedNodes) {
       const eventList = await getLogNewNodeEventList(userAddress)
       nodesAddrs = eventList.map(event => event.returnValues.nodeAddress)
 

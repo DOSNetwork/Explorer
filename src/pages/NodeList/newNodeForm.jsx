@@ -24,6 +24,16 @@ const newNode = Form.create({ name: "form_in_modal" })(
           onOk={onCreate}
         >
           <Form layout="vertical">
+            <Form.Item label="Name">
+              {getFieldDecorator("description", {
+                rules: [
+                  {
+                    required: true,
+                    message: "Please input the node name"
+                  }
+                ]
+              })(<Input type="textarea" />)}
+            </Form.Item>
             <Form.Item label="Node Address">
               {getFieldDecorator("nodeAddr", {
                 rules: [
@@ -63,9 +73,6 @@ const newNode = Form.create({ name: "form_in_modal" })(
                   }
                 ]
               })(<Input placeholder="10" />)}
-            </Form.Item>
-            <Form.Item label="Description">
-              {getFieldDecorator("description")(<Input type="textarea" />)}
             </Form.Item>
           </Form>
           <p>{modalText}</p>

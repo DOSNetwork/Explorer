@@ -6,7 +6,7 @@ const { Paragraph } = Typography;
 export default function EllipsisWrapper(props) {
     return <div className='ellipsis--wrapper' >
         <div className="ellipsis--border">
-            <Paragraph copyable={{ text: props.text }}>
+            <Paragraph style={{ color: '#1890ff' }} copyable={{ text: props.text }}>
                 {EllipsisString(props.text, 6, 6)}
             </Paragraph>
         </div>

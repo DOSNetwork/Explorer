@@ -41,3 +41,38 @@
     box-shadow: 0 1px 8px 0 rgba(0, 0, 0, .16);
     margin: 25px 0;
 }
+
+
+.custom-column--wrapper {
+    position: relative;
+    padding-bottom: 20px;
+
+    & div+div {
+        display: none;
+    }
+
+    &:visited {
+        background-color: #000;
+    }
+
+    input[type="radio"] {
+        position: absolute;
+        opacity: 0;
+    }
+
+    &>input:checked~div.custom-column {
+        display: block;
+    }
+
+    &>input:checked~label {
+        display: none;
+    }
+}
+
+.show-more-button {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    color: #384ef5;
+    cursor: pointer;
+}

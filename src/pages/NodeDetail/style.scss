@@ -12,6 +12,11 @@
     border-radius: 45px;
     background: #eee;
     margin-right: 40px;
+    overflow: hidden;
+
+    img {
+        width: 100%;
+    }
 }
 
 .info-summary--wrapper {

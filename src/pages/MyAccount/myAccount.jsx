@@ -1,11 +1,8 @@
 import React, { Component } from "react";
-import { SubTitle } from "../../Layout/page";
 import { Icon, Spin } from "antd";
 import {
   DOS_ABI,
-  DOS_CONTRACT_ADDRESS,
-  DOSTOKEN_ABI,
-  DOSTOKEN_CONTRACT_ADDRESS
+  DOS_CONTRACT_ADDRESS
 } from "../../util/const";
 
 export default class Account extends Component {
@@ -23,7 +20,7 @@ export default class Account extends Component {
     };
   }
   ToggleNumber = () => {
-    this.setState(function(state) {
+    this.setState(function (state) {
       return {
         showNumber: !state.showNumber
       };
@@ -60,18 +57,18 @@ export default class Account extends Component {
     this.props.globalLoading(true);
     const { isMetaMaskLogin, web3Client, userAddress } = this.props.contract;
     if (isMetaMaskLogin) {
-      const token = new web3Client.eth.Contract(
-        DOSTOKEN_ABI,
-        DOSTOKEN_CONTRACT_ADDRESS
-      );
-      let balance = await token.methods.balanceOf(userAddress).call();
+      // const token = new web3Client.eth.Contract(
+      //   DOSTOKEN_ABI,
+      //   DOSTOKEN_CONTRACT_ADDRESS
+      // );
+      // let balance = await token.methods.balanceOf(userAddress).call();
 
       let contractInstance = new web3Client.eth.Contract(
         DOS_ABI,
         DOS_CONTRACT_ADDRESS
       );
       //Get staking node and delegate node addresses
-      if (userAddress != "") {
+      if (userAddress !== "") {
         //Let owne and delegate nodes show first
         let nodesAddrs = [];
         const options = {
@@ -89,16 +86,16 @@ export default class Account extends Component {
         for (let i = 0; i < eventList.length; i++) {
           nodesAddrs.unshift(eventList[i].returnValues.nodeAddress);
         }
-        const addrs = nodesAddrs.filter((item, index) => {
-          return nodesAddrs.indexOf(item) === index;
-        });
+        // const addrs = nodesAddrs.filter((item, index) => {
+        //   return nodesAddrs.indexOf(item) === index;
+        // });
         // for (let i = 0; i < addrs.length; i++) {
         //   const nodeAddr = addrs[i];
         //const node = await contractInstance.methods.nodes(nodeAddr).call();
         // }
       }
       //Get delegate node addresses
-      if (userAddress != "") {
+      if (userAddress !== "") {
         let delegatedAmount = 0;
         let delegatedReward = 0;
         let unbondDelegated = 0;
@@ -161,13 +158,9 @@ export default class Account extends Component {
     const {
       showNumber,
       userBalance,
-      delegatedAmount,
-      delegatedReward,
-      unbondDelegated
     } = this.state;
     return (
       <>
-        <SubTitle title="My Account"></SubTitle>
         <div className="myaccount--wrapper">
           <div className="myaccount-balance">
             <DescLabel label="Account Balance" />

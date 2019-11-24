@@ -145,15 +145,12 @@
     display: inline-block;
     height: 33px;
     padding: 0 10px;
-    background-color: #0496ff1a;
-    border-radius: 16px;
     line-height: 33px;
     margin-bottom: 5px;
-    transition: box-shadow 0.2s linear;
-    cursor: default;
+    cursor: pointer;
 
     &:hover {
-        background-color: #fff;
-        box-shadow: 0 1px 8px 0 rgba(0, 0, 0, .16);
+        color: rgb(20, 68, 199);
+        text-decoration: underline;
     }
 }
