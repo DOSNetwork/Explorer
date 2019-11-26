@@ -142,15 +142,16 @@
 .ellipsis--wrapper {}
 
 .ellipsis--border {
-    display: inline-block;
-    height: 33px;
-    padding: 0 10px;
-    line-height: 33px;
-    margin-bottom: 5px;
+    display: flex;
     cursor: pointer;
 
     &:hover {
         color: rgb(20, 68, 199);
         text-decoration: underline;
     }
+}
+
+
+.link-column-text {
+    color: #1890ff
 }

@@ -1,5 +1,4 @@
 import React, { Component } from "react";
-import { Link } from "react-router-dom";
 import { Button, Table, message, Switch, Input, Tooltip, Icon } from "antd";
 import "./style.scss";
 import numeral from "numeral";
@@ -13,9 +12,7 @@ const nodeColumnRender = (text, record, index) => {
   // <img className="nodelist-avatar" src={record.avatar} alt="avatar" />
   return (
     <>
-      <Link className="node-detail" to={link}>
-        <EllipsisWrapper text={text} />
-      </Link>
+      <EllipsisWrapper link={link} text={text} />
     </>
   );
 };
@@ -140,16 +137,16 @@ export default class NodeList extends Component {
   };
 
   handleFormChange = changedFields => {
-    console.log(changedFields);
     this.setState(({ fields }) => ({
       fields: { ...fields, ...changedFields }
     }));
   };
   onChange = checked => {
-    console.log(`switch to ${checked}`);
-    this.setState({
-      showRelatedNodes: checked
-    });
+    this.props.setShowRelatedNodes(checked)
+    // console.log(`switch to ${checked}`);
+    // this.setState({
+    //   showRelatedNodes: checked
+    // });
     this.loadNodeList();
   };
   loadNodeList = async (searchAddress) => {
@@ -193,7 +190,7 @@ export default class NodeList extends Component {
       );
     }
     // search related nodes
-    if (isMetaMaskLogin && this.state.showRelatedNodes) {
+    if (isMetaMaskLogin && this.props.showRelatedNodes) {
       const eventList = await getLogNewNodeEventList(userAddress)
       nodesAddrs = eventList.map(event => event.returnValues.nodeAddress)
 
@@ -216,6 +213,10 @@ export default class NodeList extends Component {
     } else {
       filtedNodes = nodesAddrs
     }
+    let noSameKeyNodes = new Set(filtedNodes);
+    filtedNodes = Array.from(noSameKeyNodes)
+    //做去重
+
     let listNumber = Math.min(filtedNodes.length, 10);
     for (let i = 0; i < listNumber; i++) {
       const nodeAddr = filtedNodes[i];
@@ -253,6 +254,8 @@ export default class NodeList extends Component {
   }
   render() {
     let { isMetaMaskLogin } = this.props.contract;
+    let showRelatedNodes = this.props.showRelatedNodes;
+    console.log(`defaultCheck:${showRelatedNodes}`)
     return (
       <>
         <div className='node-list--header-wrapper'>
@@ -270,7 +273,7 @@ export default class NodeList extends Component {
                 confirmLoading={this.state.confirmLoading}
                 modalText={this.state.formText}
               />
-              <Switch defaultChecked onChange={this.onChange} />&nbsp;Only Show The Nodes Related To Me
+              <Switch defaultChecked={showRelatedNodes} onChange={this.onChange} />&nbsp;Only Show The Nodes Related To Me
           </div>
           )
             : <div className='node-list--header-left'></div>}

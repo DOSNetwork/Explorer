@@ -10,7 +10,8 @@ import type from './type'
 // ===States 
 // ===== global state
 const globalState = {
-    loadingStatus: false
+    loadingStatus: false,
+    config_onlyShowRelatedToMe: false
 }
 // =====app state
 // const appState = {
@@ -47,14 +48,13 @@ export const initialState = {
 // ===Reducers
 // ===== globalAction
 const globalActions = {}
-// globalActions[type.METAMASK_ADDRESS_CHANGE] = (prevState, payload) => {
-//     console.log(`[reducer]${type.METAMASK_ADDRESS_CHANGE}.............`)
-//     console.log(prevState, payload)
-//     return {
-//         ...globalState,
-//         userAddress: payload.address
-//     }
-// }
+globalActions[type.GLOBAL_CONFIG_CHANGE_OSLM] = (prevState, payload) => {
+    console.log(`[reducer]${type.GLOBAL_CONFIG_CHANGE_OSLM}.............`)
+    return {
+        ...globalState,
+        config_onlyShowRelatedToMe: payload.config_onlyShowRelatedToMe
+    }
+}
 // ===== globalReducerCONTRACT_USERADDRESS_CHANGE
 const globalReducer = handleActions(globalActions, globalState)
 

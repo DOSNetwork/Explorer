@@ -6,6 +6,13 @@ export function counting() {
     }
 }
 
+
+export function SetConfig_OnlyRelatedToMe(value) {
+    return {
+        type: type.GLOBAL_CONFIG_CHANGE_OSLM,
+        config_onlyShowRelatedToMe: !!value
+    }
+}
 export function globalLoading(loadingStatus) {
     return {
         type: 'LOADING_STATUS',
