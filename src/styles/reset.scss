@@ -170,3 +170,14 @@ option {
 .ant-typography {
     margin: 0 !important;
 }
+
+
+.ant-pagination-item-active {
+    background-color: #358ED7;
+    color: #fff;
+    border-color: none;
+}
+
+.ant-pagination-item-active a {
+    color: #fff;
+}

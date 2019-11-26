@@ -4,18 +4,25 @@ import "./style.scss";
 import numeral from "numeral";
 import NewNode from "./newNodeForm";
 import EllipsisWrapper from '../../components/EllispisWrapper'
+import identicon from 'identicon.js'
 import { DOS_ABI, DOS_CONTRACT_ADDRESS, BLOCK_NUMBER } from "../../util/const";
 const { Column } = Table;
 const { Search } = Input;
 const nodeColumnRender = (text, record, index) => {
   let link = `/nodedetail/${record.node}`;
-  // <img className="nodelist-avatar" src={record.avatar} alt="avatar" />
   return (
     <>
       <EllipsisWrapper link={link} text={text} />
     </>
   );
 };
+
+const nameColumnRender = (text, record) => {
+  let avatar = `data:image/png;base64,${new identicon(record.node, 100).toString()}`;
+  return (
+    <img className='nodelist-avatar' src={avatar} alt="" />
+  )
+}
 const numberFormatRender = (text, record, index) => {
   return numeral(text).format("0,0");
 };
@@ -39,14 +46,19 @@ export default class NodeList extends Component {
     super(props);
     this.state = {
       loading: false,
-      listCount: 100,
-      visible: false,
       confirmLoading: false,
+      visible: false,
       showRelatedNodes: false,
+      pagination: {
+        current: 1,
+        pageSize: 10
+      },
+      searchAddress: '',
+      cachedNodes: [],
       formText: "",
       fields: {
         nodeAddress: {
-          value: "testxxxxxxxxxxxxxx"
+          value: ""
         },
         dosAmount: {
           value: 0
@@ -58,13 +70,13 @@ export default class NodeList extends Component {
           value: 0
         },
         nodeDescription: {
-          value: "test node description"
+          value: ""
         }
       }
     };
   }
   componentDidMount() {
-    this.loadNodeList();
+    this.loadNodeList('', this.state.pagination);
   }
   getSnapshotBeforeUpdate(prevProps) {
     let userLogined =
@@ -73,7 +85,7 @@ export default class NodeList extends Component {
   }
   componentDidUpdate(prevProps, preState, snapShot) {
     if (snapShot.userLogined) {
-      this.loadNodeList();
+      this.loadNodeList('', this.state.pagination);
     }
   }
   showModal = () => {
@@ -101,8 +113,6 @@ export default class NodeList extends Component {
         DOS_CONTRACT_ADDRESS
       );
       const tokenAmount = web3Client.utils.toWei(values.tokenAmount, "ether");
-      console.log("Received values of form: ", values);
-      console.log("tokenAmount ", tokenAmount);
 
       let emitter = contractInstance.methods
         .newNode(values.nodeAddr, tokenAmount, 0, values.cutRate, "test")
@@ -110,7 +120,7 @@ export default class NodeList extends Component {
       let hide;
       var hashHandler = function (hash) {
         emitter.removeListener("transactionHash", hashHandler);
-        hide = message.loading("New node: wait for confirmatin : " + hash, 0);
+        hide = message.loading("It will take some time to confirm the transaction.", 3000);
       };
 
       var confirmationHandler = function (confirmationNumber, receipt) {
@@ -118,7 +128,7 @@ export default class NodeList extends Component {
         hide();
         emitter.removeListener("confirmation", confirmationHandler);
         message.success(
-          "New node: success (confirmed block " + receipt.blockNumber + ")"
+          "Transaction Confirmed."
         );
       };
       var errorHandler = function (error) {
@@ -143,13 +153,12 @@ export default class NodeList extends Component {
   };
   onChange = checked => {
     this.props.setShowRelatedNodes(checked)
-    // console.log(`switch to ${checked}`);
-    // this.setState({
-    //   showRelatedNodes: checked
-    // });
-    this.loadNodeList();
+    this.loadNodeList('', {});
   };
-  loadNodeList = async (searchAddress) => {
+  handleTableChange = (pagination) => {
+    this.loadNodeList(this.state.searchAddress, pagination)
+  }
+  loadNodeList = async (searchAddress = '', { current = 1, pageSize = 10 }) => {
     function fromWei(bn) {
       if (!bn || bn === "-") {
         return "";
@@ -216,9 +225,14 @@ export default class NodeList extends Component {
     let noSameKeyNodes = new Set(filtedNodes);
     filtedNodes = Array.from(noSameKeyNodes)
     //做去重
-
-    let listNumber = Math.min(filtedNodes.length, 10);
-    for (let i = 0; i < listNumber; i++) {
+    this.setState({
+      cachedNodes: filtedNodes
+    })
+    let total = filtedNodes.length
+    let startIndex = (current - 1) * pageSize
+    let endIndex = Math.min(total - startIndex, current * pageSize)
+    console.log(total, startIndex, endIndex)
+    for (let i = startIndex; i < endIndex; i++) {
       const nodeAddr = filtedNodes[i];
       const node = await contractInstance.methods.nodes(nodeAddr).call();
       let delegator = { myDelegator: "-", accumulatedReward: "-" };
@@ -233,6 +247,7 @@ export default class NodeList extends Component {
       const { selfStakedAmount, totalOtherDelegatedAmount, rewardCut } = node;
       const { delegatedAmount, accumulatedReward } = delegator;
       const nodeObject = {
+        nameKey: `name-${nodeAddr}`,
         node: nodeAddr,
         selfStaked: fromWei(selfStakedAmount),
         totalDelegated: fromWei(totalOtherDelegatedAmount),
@@ -246,10 +261,18 @@ export default class NodeList extends Component {
     }
     this.setState({
       dataList: nodeList,
-      loading: false
+      loading: false,
+      pagination: {
+        total,
+        current,
+        pageSize
+      }
     });
   };
   onSearchAddress = (address) => {
+    this.setState({
+      searchAddress: address
+    })
     this.loadNodeList(address)
   }
   render() {
@@ -289,11 +312,17 @@ export default class NodeList extends Component {
           rowKey={record => record.node}
           loading={this.state.loading}
           dataSource={this.state.dataList}
-          pagination={false}
+          pagination={{ size: 'small', ...this.state.pagination }}
           rowClassName={(row, index) => {
             return index % 2 === 0 ? "row-light" : "row-dark";
           }}
+          onChange={this.handleTableChange}
         >
+          <Column
+            title="Name"
+            render={nameColumnRender}
+            dataIndex="nameKey"
+          />
           <Column
             title="Node"
             render={nodeColumnRender}
