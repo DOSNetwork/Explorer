@@ -230,7 +230,7 @@ export default class NodeList extends Component {
     })
     let total = filtedNodes.length
     let startIndex = (current - 1) * pageSize
-    let endIndex = Math.min(total - startIndex, current * pageSize)
+    let endIndex = total > (current * pageSize) ? current * pageSize : total
     console.log(total, startIndex, endIndex)
     for (let i = startIndex; i < endIndex; i++) {
       const nodeAddr = filtedNodes[i];
@@ -278,7 +278,6 @@ export default class NodeList extends Component {
   render() {
     let { isMetaMaskLogin } = this.props.contract;
     let showRelatedNodes = this.props.showRelatedNodes;
-    console.log(`defaultCheck:${showRelatedNodes}`)
     return (
       <>
         <div className='node-list--header-wrapper'>
