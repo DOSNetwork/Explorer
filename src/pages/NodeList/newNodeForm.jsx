@@ -25,11 +25,11 @@ const newNode = Form.create({ name: "form_in_modal" })(
         >
           <Form layout="vertical">
             <Form.Item label="Name">
-              {getFieldDecorator("description", {
+              {getFieldDecorator("name", {
                 rules: [
                   {
                     required: true,
-                    message: "Please input the node name"
+                    message: "Please name your node"
                   }
                 ]
               })(<Input type="textarea" />)}
@@ -39,7 +39,7 @@ const newNode = Form.create({ name: "form_in_modal" })(
                 rules: [
                   {
                     required: true,
-                    message: "Please input the address of node!"
+                    message: "Please enter your node address"
                   }
                 ]
               })(<Input placeholder="0x" />)}
@@ -49,17 +49,17 @@ const newNode = Form.create({ name: "form_in_modal" })(
                 rules: [
                   {
                     required: true,
-                    message: "Please input the staking token amount!"
+                    message: "Please enter your staking amount"
                   }
                 ]
               })(<Input placeholder="50000.0" />)}
             </Form.Item>
-            <Form.Item label="Drop Burn Amount">
+            <Form.Item label="Drop Burn Amount(Optional)">
               {getFieldDecorator("dbAmount", {
                 rules: [
                   {
                     required: false,
-                    message: "Please input drop burn token amount"
+                    message: "Please enter your burn token amount"
                   }
                 ]
               })(<Input placeholder="0.0" />)}
@@ -69,7 +69,7 @@ const newNode = Form.create({ name: "form_in_modal" })(
                 rules: [
                   {
                     required: true,
-                    message: "Please input the reward cut rate"
+                    message: "Please enter your reward cut rate"
                   }
                 ]
               })(<Input placeholder="10" />)}

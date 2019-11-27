@@ -57,13 +57,7 @@ export default class Account extends Component {
     this.props.globalLoading(true);
     const { isMetaMaskLogin, web3Client, userAddress } = this.props.contract;
     if (isMetaMaskLogin) {
-      // const token = new web3Client.eth.Contract(
-      //   DOSTOKEN_ABI,
-      //   DOSTOKEN_CONTRACT_ADDRESS
-      // );
-      // let balance = await token.methods.balanceOf(userAddress).call();
-
-      let contractInstance = new web3Client.eth.Contract(
+      let StakingContract = new web3Client.eth.Contract(
         DOS_ABI,
         DOS_CONTRACT_ADDRESS
       );
@@ -77,7 +71,7 @@ export default class Account extends Component {
           toBlock: "latest"
         };
 
-        const eventList = await contractInstance.getPastEvents(
+        const eventList = await StakingContract.getPastEvents(
           "LogNewNode",
           options
         );
@@ -91,7 +85,7 @@ export default class Account extends Component {
         // });
         // for (let i = 0; i < addrs.length; i++) {
         //   const nodeAddr = addrs[i];
-        //const node = await contractInstance.methods.nodes(nodeAddr).call();
+        //const node = await StakingContract.methods.nodes(nodeAddr).call();
         // }
       }
       //Get delegate node addresses
@@ -105,7 +99,7 @@ export default class Account extends Component {
           fromBlock: 5414653,
           toBlock: "latest"
         };
-        const eventList = await contractInstance.getPastEvents(
+        const eventList = await StakingContract.getPastEvents(
           "DelegateTo",
           options2
         );
@@ -120,7 +114,7 @@ export default class Account extends Component {
         console.log("!!!", addrs.length);
         for (let i = 0; i < addrs.length; i++) {
           const nodeAddr = addrs[i];
-          const delegator = await contractInstance.methods
+          const delegator = await StakingContract.methods
             .delegators(userAddress, nodeAddr)
             .call();
           //delegatedAmount += fromWei(delegator.delegatedAmount);

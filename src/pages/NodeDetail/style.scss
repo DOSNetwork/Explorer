@@ -1,10 +1,29 @@
+.node-detail--wrapper {
+    display: flex;
+}
+
+.node-detail--infos {
+    flex: 1 1 auto
+}
+
+.node-detail--operations {
+    flex: 0 0 auto;
+    flex-basis: 400px;
+    background-color: #fff;
+    margin-left: 15px;
+}
+
 .node-detail--info {
     height: 130px;
     background-color: #fff;
-    margin-top: 15px;
     padding: 20px;
     display: flex;
 }
+
+.node-detail--block {
+    box-shadow: 0px 1px 8px rgba(20, 46, 110, 0.1);
+}
+
 
 .info-avatar--wrapper {
     height: 90px;
@@ -46,14 +65,15 @@
 
 .detail--user-info {
     display: flex;
+    padding: 23px;
 
     &>div {
-        margin: 25px;
+        margin: 4px;
         flex: 1 1 auto;
         position: relative;
         display: flex;
         flex-direction: column;
-        padding: 20px 30px;
+        padding: 20px 20px;
         justify-content: space-between;
     }
 }
@@ -76,8 +96,8 @@
 
 .widthdraw-button {
     position: absolute;
-    right: 30px;
-    bottom: 20px;
+    right: 8px;
+    top: 15px;
 }
 
 .user-info--rewards,

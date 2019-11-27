@@ -6,6 +6,7 @@ import NewNode from "./newNodeForm";
 import EllipsisWrapper from '../../components/EllispisWrapper'
 import identicon from 'identicon.js'
 import { DOS_ABI, DOS_CONTRACT_ADDRESS, BLOCK_NUMBER } from "../../util/const";
+import { EmitterHandlerWrapper } from '../../util/contract-helper'
 const { Column } = Table;
 const { Search } = Input;
 const nodeColumnRender = (text, record, index) => {
@@ -48,7 +49,6 @@ export default class NodeList extends Component {
       loading: false,
       confirmLoading: false,
       visible: false,
-      showRelatedNodes: false,
       pagination: {
         current: 1,
         pageSize: 10
@@ -76,7 +76,7 @@ export default class NodeList extends Component {
     };
   }
   componentDidMount() {
-    this.loadNodeList('', this.state.pagination);
+    this.loadNodeList('', this.state.pagination, this.props.showRelatedNodes);
   }
   getSnapshotBeforeUpdate(prevProps) {
     let userLogined =
@@ -85,7 +85,7 @@ export default class NodeList extends Component {
   }
   componentDidUpdate(prevProps, preState, snapShot) {
     if (snapShot.userLogined) {
-      this.loadNodeList('', this.state.pagination);
+      this.loadNodeList('', this.state.pagination, this.props.showRelatedNodes);
     }
   }
   showModal = () => {
@@ -117,28 +117,20 @@ export default class NodeList extends Component {
       let emitter = contractInstance.methods
         .newNode(values.nodeAddr, tokenAmount, 0, values.cutRate, "test")
         .send({ from: userAddress });
-      let hide;
-      var hashHandler = function (hash) {
-        emitter.removeListener("transactionHash", hashHandler);
-        hide = message.loading("It will take some time to confirm the transaction.", 3000);
-      };
 
-      var confirmationHandler = function (confirmationNumber, receipt) {
-        //TODO : Update progress to user
-        hide();
-        emitter.removeListener("confirmation", confirmationHandler);
+      EmitterHandlerWrapper(emitter, (hash) => {
+        message.loading("It will take some time to confirm the transaction.", 3000);
+        console.log(hash)
+      }, (confirmationNumber, receipt) => {
+        console.log(confirmationNumber, receipt)
         message.success(
           "Transaction Confirmed."
         );
-      };
-      var errorHandler = function (error) {
-        emitter.removeListener("confirmation", confirmationHandler);
-        emitter.removeListener("error", errorHandler);
+      }, (error) => {
         message.error(error.message);
-      };
-      emitter.on("transactionHash", hashHandler);
-      emitter.on("confirmation", confirmationHandler);
-      emitter.on("error", errorHandler);
+        this.loadNodeList('', { current: 1, pageSize: 10 }, this.props.showRelatedNodes);
+      })
+
       this.setState({
         confirmLoading: false,
         visible: false
@@ -153,12 +145,12 @@ export default class NodeList extends Component {
   };
   onChange = checked => {
     this.props.setShowRelatedNodes(checked)
-    this.loadNodeList('', {});
+    this.loadNodeList('', {}, checked);
   };
   handleTableChange = (pagination) => {
-    this.loadNodeList(this.state.searchAddress, pagination)
+    this.loadNodeList(this.state.searchAddress, pagination, this.props.showRelatedNodes)
   }
-  loadNodeList = async (searchAddress = '', { current = 1, pageSize = 10 }) => {
+  loadNodeList = async (searchAddress = '', { current = 1, pageSize = 10 }, showRelatedNodes) => {
     function fromWei(bn) {
       if (!bn || bn === "-") {
         return "";
@@ -199,7 +191,8 @@ export default class NodeList extends Component {
       );
     }
     // search related nodes
-    if (isMetaMaskLogin && this.props.showRelatedNodes) {
+    if (isMetaMaskLogin && showRelatedNodes) {
+      console.log(`only show related nodes infos`)
       const eventList = await getLogNewNodeEventList(userAddress)
       nodesAddrs = eventList.map(event => event.returnValues.nodeAddress)
 
@@ -207,6 +200,7 @@ export default class NodeList extends Component {
       nodesAddrs.push(...eventList2.map(event => event.returnValues.nodeAddr))
     } else {
       // search nodes
+      console.log(`show all nodes infos`)
       nodesAddrs = Array.from(await contractInstance.methods.getNodeAddrs().call());
       if (userAddress) {
         //Let owne and delegate nodes show first
@@ -231,7 +225,7 @@ export default class NodeList extends Component {
     let total = filtedNodes.length
     let startIndex = (current - 1) * pageSize
     let endIndex = total > (current * pageSize) ? current * pageSize : total
-    console.log(total, startIndex, endIndex)
+    console.log(`total:${total},startIndex:${startIndex}, endIndex:${endIndex}`)
     for (let i = startIndex; i < endIndex; i++) {
       const nodeAddr = filtedNodes[i];
       const node = await contractInstance.methods.nodes(nodeAddr).call();
@@ -273,7 +267,7 @@ export default class NodeList extends Component {
     this.setState({
       searchAddress: address
     })
-    this.loadNodeList(address)
+    this.loadNodeList(address, {}, this.props.showRelatedNodes)
   }
   render() {
     let { isMetaMaskLogin } = this.props.contract;

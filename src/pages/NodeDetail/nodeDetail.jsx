@@ -17,6 +17,7 @@ export default class NodeDetail extends Component {
       isUserDelegatedThisNode: false,
       myTokenTotal: 0,
       myRewardTotal: 0,
+      myUnbondTotal: 0,
       loading: false,
       delegateFormVisible: false,
       delegateFormLoading: false,
@@ -454,7 +455,7 @@ export default class NodeDetail extends Component {
     }
     var avatar = `data:image/png;base64,${new identicon(nodeAddr, 100).toString()}`;
     const nodeDetail = {
-      node: "",
+      node: nodeAddr,
       avatar: avatar,
       nodeAddr: nodeAddr,
       description: description,
@@ -479,11 +480,8 @@ export default class NodeDetail extends Component {
       this.setState({
         isUserOwnedThisNode: true,
         myTokenTotal:
-          fromWei(selfStakedAmount) +
-          " (" +
-          fromWei(pendingWithdrawToken) +
-          fromWei(pendingWithdrawDB) +
-          ")",
+          fromWei(selfStakedAmount),
+        myUnbondTotal: fromWei(pendingWithdrawToken) + fromWei(pendingWithdrawDB),
         myRewardTotal: fromWei(rewardotal),
         nodeDetail: nodeDetail
       });
@@ -506,8 +504,8 @@ export default class NodeDetail extends Component {
       }
       this.setState({
         isUserDelegatedThisNode: isUserDelegatedThisNode,
-        myTokenTotal:
-          fromWei(delegatedAmount) + " (" + fromWei(pendingWithdraw) + ")",
+        myTokenTotal: fromWei(delegatedAmount),
+        myUnbondTotal: fromWei(pendingWithdraw),
         myRewardTotal: fromWei(userDelegatedRewardotal),
         nodeDetail: nodeDetail
       });
@@ -529,181 +527,162 @@ export default class NodeDetail extends Component {
     let isUserDelegatedThisNode = this.state.isUserDelegatedThisNode;
     let isUserOwnedThisNode = this.state.isUserOwnedThisNode;
     return (
-      <div>
-        <div className="node-detail--info">
-          <div className="info-avatar--wrapper">
-            <img src={avatar} alt="" />
-          </div>
-          <div className="info-summary--wrapper">
-            <p className="info-node">{node}</p>
-            {isMetaMaskLogin ? (
-              <div>
-                {isUserOwnedThisNode ? (
-                  <p className="info-opt">
-                    <Button
-                      type="primary"
-                      shape="round"
-                      icon="solution"
-                      onClick={this.showUpdateModal}
-                    >
-                      updateNodeStaking
-                    </Button>
-                    <UpdateStakingNode
-                      wrappedComponentRef={this.saveUpdateFormRef}
-                      visible={this.state.updateFormVisible}
-                      confirmLoading={this.state.updateFormLoading}
-                      onCancel={this.handleUpdateCancel}
-                      onCreate={this.handleUpdateCreate}
-                    />
-                    <Button
-                      type="primary"
-                      shape="round"
-                      icon="solution"
-                      onClick={this.handleUnregister}
-                    >
-                      Unregister
-                    </Button>
-                    <Button
-                      shape="round"
-                      icon="export"
-                      onClick={this.showUnbondOwnedNodeModal}
-                    >
-                      Unbond
-                    </Button>
-                    <UnbondOwnedNode
-                      wrappedComponentRef={this.saveUnbondOwnedNodeRef}
-                      visible={this.state.unbondOwnedNodeVisible}
-                      confirmLoading={this.state.unbondOwnedNodeLoading}
-                      onCancel={this.handleUnbondOwnedNodeCancel}
-                      onCreate={this.handleUnbondOwnedNodeSubmit}
-                    />
-                  </p>
-                ) : (
+      <div className="node-detail--wrapper">
+        <div className="node-detail--infos">
+          <div className="node-detail--info node-detail--block">
+            <div className="info-avatar--wrapper">
+              <img src={avatar} alt="" />
+            </div>
+            <div className="info-summary--wrapper">
+              <p className="info-node">{node}</p>
+              {isMetaMaskLogin ? (
+                <div>
+                  {isUserOwnedThisNode ? (
                     <p className="info-opt">
                       <Button
                         type="primary"
                         shape="round"
                         icon="solution"
-                        disabled={!isUserDelegatedThisNode}
-                        onClick={this.showDelegateModal}
+                        onClick={this.showUpdateModal}
                       >
-                        Delegate
+                        updateNodeStaking
                     </Button>
-                      <DelegateNode
-                        wrappedComponentRef={this.saveDelegateFormRef}
-                        visible={this.state.delegateFormVisible}
-                        confirmLoading={this.state.delegateFormLoading}
-                        onCancel={this.handleDelegateCancel}
-                        onCreate={this.handleDelegateSubmit}
-                        modalText={this.state.formText}
-                      ></DelegateNode>
+                      <UpdateStakingNode
+                        wrappedComponentRef={this.saveUpdateFormRef}
+                        visible={this.state.updateFormVisible}
+                        confirmLoading={this.state.updateFormLoading}
+                        onCancel={this.handleUpdateCancel}
+                        onCreate={this.handleUpdateCreate}
+                      />
+                      <Button
+                        type="primary"
+                        shape="round"
+                        icon="solution"
+                        onClick={this.handleUnregister}
+                      >
+                        Unregister
+                    </Button>
                       <Button
                         shape="round"
                         icon="export"
-                        disabled={!isUserDelegatedThisNode}
-                        onClick={this.showUnbondModal}
+                        onClick={this.showUnbondOwnedNodeModal}
                       >
                         Unbond
                     </Button>
-                      <UnbondNode
-                        wrappedComponentRef={this.saveUnbondFormRef}
-                        visible={this.state.unbondFormVisible}
-                        confirmLoading={this.state.unbondFormLoading}
-                        onCancel={this.handleUnbondCancel}
-                        onCreate={this.handleUnbondSubmit}
-                        modalText={this.state.formText}
+                      <UnbondOwnedNode
+                        wrappedComponentRef={this.saveUnbondOwnedNodeRef}
+                        visible={this.state.unbondOwnedNodeVisible}
+                        confirmLoading={this.state.unbondOwnedNodeLoading}
+                        onCancel={this.handleUnbondOwnedNodeCancel}
+                        onCreate={this.handleUnbondOwnedNodeSubmit}
                       />
                     </p>
-                  )}
-              </div>
-            ) : null}
+                  ) : (
+                      <p className="info-opt">
+                        <Button
+                          type="primary"
+                          shape="round"
+                          icon="solution"
+                          disabled={!isUserDelegatedThisNode}
+                          onClick={this.showDelegateModal}
+                        >
+                          Delegate
+                    </Button>
+                        <DelegateNode
+                          wrappedComponentRef={this.saveDelegateFormRef}
+                          visible={this.state.delegateFormVisible}
+                          confirmLoading={this.state.delegateFormLoading}
+                          onCancel={this.handleDelegateCancel}
+                          onCreate={this.handleDelegateSubmit}
+                          modalText={this.state.formText}
+                        ></DelegateNode>
+                        <Button
+                          shape="round"
+                          icon="export"
+                          disabled={!isUserDelegatedThisNode}
+                          onClick={this.showUnbondModal}
+                        >
+                          Unbond
+                    </Button>
+                        <UnbondNode
+                          wrappedComponentRef={this.saveUnbondFormRef}
+                          visible={this.state.unbondFormVisible}
+                          confirmLoading={this.state.unbondFormLoading}
+                          onCancel={this.handleUnbondCancel}
+                          onCreate={this.handleUnbondSubmit}
+                          modalText={this.state.formText}
+                        />
+                      </p>
+                    )}
+                </div>
+              ) : null}
+            </div>
           </div>
-        </div>
-        <div className="node-detail--detail">
-          {isMetaMaskLogin ? (
-            <div className="detail--user-info">
-              <div className="user-info--delegation">
-                {isUserDelegatedThisNode ? (
+          <div className="node-detail--detail node-detail--block">
+            {isMetaMaskLogin ? (
+              <div className="detail--user-info">
+                <div className="user-info--delegation">
                   <p className="user-info--title">
-                    My Delegation (Unbond amount)
+                    My {isUserDelegatedThisNode ? 'Delegation' : 'Staking Token'}
                   </p>
-                ) : (
-                    <p className="user-info--title">
-                      My Staking Token (Unbond amount)
-                  </p>
-                  )}
-                <p className="user-info--value">{this.state.myTokenTotal}</p>
-                {isUserOwnedThisNode ? (
+                  <p className="user-info--value">{this.state.myTokenTotal}</p>
+
+                </div>
+                <div className="user-info--rewards">
+                  <p className="user-info--title">Unbond</p>
+                  <p className="user-info--value">{this.state.myUnbondTotal}</p>
                   <Button
                     className="widthdraw-button"
                     shape="round"
-                    icon="dollar"
+
                     onClick={this.handleOwnerWithdraw}
                   >
-                    Withdraw Token
+                    Withdraw
                   </Button>
-                ) : (
-                    <Button
-                      className="widthdraw-button"
-                      shape="round"
-                      icon="dollar"
-                      onClick={this.handleDelegatorWithdraw}
-                      disabled={!isUserDelegatedThisNode}
-                    >
-                      Withdraw Token
-                  </Button>
-                  )}
-              </div>
-              <div className="user-info--rewards">
-                <p className="user-info--title">My Rewards</p>
-                <p className="user-info--value">{this.state.myRewardTotal}</p>
-                {isUserOwnedThisNode ? (
+                  {/* this.handleDelegatorWithdraw */}
+                </div>
+                <div className="user-info--rewards">
+                  <p className="user-info--title">My Rewards</p>
+                  <p className="user-info--value">{this.state.myRewardTotal}</p>
                   <Button
                     className="widthdraw-button"
                     shape="round"
-                    icon="dollar"
+
                     onClick={this.handleOwnerClaimReward}
                   >
-                    Withdraw Reward
+                    Withdraw
                   </Button>
-                ) : (
-                    <Button
-                      className="widthdraw-button"
-                      shape="round"
-                      icon="dollar"
-                      onClick={this.handleDelegatorClaimReward}
-                      disabled={!isUserDelegatedThisNode}
-                    >
-                      Withdraw Reward
-                  </Button>
-                  )}
+                  {/* this.handleDelegatorClaimReward */}
+                </div>
               </div>
+            ) : null}
+            <div className="node-detail--item">
+              <div className="item--title">Node Address</div>
+              <div className="item--value">{nodeAddr}</div>
             </div>
-          ) : null}
-          <div className="node-detail--item">
-            <div className="item--title">Node Address</div>
-            <div className="item--value">{nodeAddr}</div>
+            <div className="node-detail--item">
+              <div className="item--title">Node Description</div>
+              <div className="item--value">{description}</div>
+            </div>
+            <div className="node-detail--item">
+              <div className="item--title">Node Selt-Staked</div>
+              <div className="item--value">{selfStakedAmount}</div>
+            </div>
+            <div className="node-detail--item">
+              <div className="item--title">Total Delegated</div>
+              <div className="item--value">{totalOtherDelegatedAmount}</div>
+            </div>
+            <div className="node-detail--item">
+              <div className="item--title">Reward Cut</div>
+              <div className="item--value">{rewardCut}%</div>
+            </div>
+            <div className="node-detail--item">
+              <div className="item--title">Uptime</div>
+              <div className="item--value">{nodeUptime} days</div>
+            </div>
           </div>
-          <div className="node-detail--item">
-            <div className="item--title">Node Description</div>
-            <div className="item--value">{description}</div>
-          </div>
-          <div className="node-detail--item">
-            <div className="item--title">Node Selt-Staked</div>
-            <div className="item--value">{selfStakedAmount}</div>
-          </div>
-          <div className="node-detail--item">
-            <div className="item--title">Total Delegated</div>
-            <div className="item--value">{totalOtherDelegatedAmount}</div>
-          </div>
-          <div className="node-detail--item">
-            <div className="item--title">Reward Cut</div>
-            <div className="item--value">{rewardCut}%</div>
-          </div>
-          <div className="node-detail--item">
-            <div className="item--title">Uptime</div>
-            <div className="item--value">{nodeUptime} days</div>
-          </div>
+        </div>
+        <div className="node-detail--operations node-detail--block">
         </div>
       </div>
     );

@@ -3,6 +3,7 @@ import store from '../redux/store'
 import type from '../redux/type'
 import React from 'react'
 import { notification, Icon } from 'antd'
+import { DOSTOKEN_ABI, DOSTOKEN_CONTRACT_ADDRESS, DOS_CONTRACT_ADDRESS } from '../util/const'
 
 export function connectMetaMask() {
     let { web3Client } = store.getState().contract
@@ -26,7 +27,7 @@ export function connectMetaMask() {
 
 
 export function metaMaskLogin() {
-    let { userAddress } = store.getState().contract
+    let { userAddress, web3Client } = store.getState().contract
     if (!userAddress) {
         try {
             // let network = await web3.eth.net.getId()
@@ -48,11 +49,26 @@ export function metaMaskLogin() {
             //         result = "unknown network = " + network;
             // }
             // this.setState({ userContract: contractInstance, netWork: result })
+
             window.ethereum.enable()
                 .then(function (accountAddress) {
+                    let address = accountAddress[0]
                     store.dispatch({
                         type: type.CONTRACT_METAMASK_LOGIN,
-                        address: accountAddress[0]
+                        address: address
+                    })
+                    // approve
+                    let dosTokenContract = new web3Client.eth.Contract(
+                        DOSTOKEN_ABI,
+                        DOSTOKEN_CONTRACT_ADDRESS
+                    );
+                    dosTokenContract.methods.allowance(address, DOS_CONTRACT_ADDRESS).call().then((result) => {
+                        console.log(`allowance:${result}`)
+                        if (result.toNumber() === 0) {
+                            dosTokenContract.methods.approve(DOS_CONTRACT_ADDRESS).call().then(result => {
+                                console.log(`approve:${result}`)
+                            }).catch((err) => { console.log(err) })
+                        }
                     })
                 });
             window.ethereum.on('accountsChanged', function (accounts) {
