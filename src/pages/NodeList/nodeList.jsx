@@ -1,11 +1,12 @@
 import React, { Component } from "react";
-import { Button, Table, message, Switch, Input, Tooltip, Icon } from "antd";
+import { Button, Table, message, Switch, Input, Tooltip, Icon, Tag } from "antd";
 import "./style.scss";
 import numeral from "numeral";
 import NewNode from "./newNodeForm";
 import EllipsisWrapper from '../../components/EllispisWrapper'
 import identicon from 'identicon.js'
 import { DOS_ABI, DOS_CONTRACT_ADDRESS, BLOCK_NUMBER } from "../../util/const";
+import { MESSAGE_TEXT } from '../../util/txt'
 import { EmitterHandlerWrapper } from '../../util/contract-helper'
 const { Column } = Table;
 const { Search } = Input;
@@ -18,10 +19,23 @@ const nodeColumnRender = (text, record, index) => {
   );
 };
 
+const statusColumnRender = (text, record, index) => {
+  let status = record.status;
+  return (
+    <>
+      {status ?
+        <Tag color="green">Active</Tag> :
+        <Tag>Inactive</Tag>}
+    </>
+  );
+};
+
 const nameColumnRender = (text, record) => {
   let avatar = `data:image/png;base64,${new identicon(record.node, 100).toString()}`;
   return (
-    <img className='nodelist-avatar' src={avatar} alt="" />
+    <>
+      <img className='nodelist-avatar' src={avatar} alt="" />{record.description}
+    </>
   )
 }
 const numberFormatRender = (text, record, index) => {
@@ -97,13 +111,12 @@ export default class NodeList extends Component {
   saveFormRef = formRef => {
     this.formRef = formRef;
   };
-  handleCreate = () => {
+  handleCreateNode = () => {
     const { form } = this.formRef.props;
     form.validateFields((err, values) => {
       if (err) {
         return;
       }
-
       this.setState({
         confirmLoading: true
       });
@@ -119,13 +132,12 @@ export default class NodeList extends Component {
         .send({ from: userAddress });
 
       EmitterHandlerWrapper(emitter, (hash) => {
-        message.loading("It will take some time to confirm the transaction.", 3000);
-        console.log(hash)
+        message.loading(MESSAGE_TEXT.MESSAGE_TRANSCATION_LOADING);
       }, (confirmationNumber, receipt) => {
-        console.log(confirmationNumber, receipt)
         message.success(
-          "Transaction Confirmed."
+          MESSAGE_TEXT.MESSAGE_TRANSCATION_COMFIRM
         );
+        this.loadNodeList('', { current: 1, pageSize: 10 }, this.props.showRelatedNodes);
       }, (error) => {
         message.error(error.message);
         this.loadNodeList('', { current: 1, pageSize: 10 }, this.props.showRelatedNodes);
@@ -238,10 +250,12 @@ export default class NodeList extends Component {
       let uptime = await contractInstance.methods
         .getNodeUptime(nodeAddr)
         .call();
-      const { selfStakedAmount, totalOtherDelegatedAmount, rewardCut } = node;
+      const { selfStakedAmount, totalOtherDelegatedAmount, rewardCut, description, running } = node;
       const { delegatedAmount, accumulatedReward } = delegator;
       const nodeObject = {
         nameKey: `name-${nodeAddr}`,
+        description: description,
+        status: running,
         node: nodeAddr,
         selfStaked: fromWei(selfStakedAmount),
         totalDelegated: fromWei(totalOtherDelegatedAmount),
@@ -285,7 +299,7 @@ export default class NodeList extends Component {
                 wrappedComponentRef={this.saveFormRef}
                 visible={this.state.visible}
                 onCancel={this.handleCancel}
-                onCreate={this.handleCreate}
+                onCreate={this.handleCreateNode}
                 confirmLoading={this.state.confirmLoading}
                 modalText={this.state.formText}
               />
@@ -321,6 +335,11 @@ export default class NodeList extends Component {
             render={nodeColumnRender}
             dataIndex="node"
             key="node"
+          />
+          <Column
+            title="Status"
+            render={statusColumnRender}
+            dataIndex="status"
           />
           <Column
             title={tableTitleWithTipsRender('SelfStake', 'The Amount of DOS this node staked.')}

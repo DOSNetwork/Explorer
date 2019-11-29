@@ -81,7 +81,10 @@ export const MoreInfoRender = (text, record) => {
 const LogUpdateRandomRender = (record) => {
     return <div className='custom-column--wrapper'>
         <input type='radio' id={record.txHash} name='toggle' />
-        <label className='show-more-button' for={record.txHash}>More Info</label>
+        <label className='show-more-button' htmlFor={record.txHash}>More Info</label>
+        <div className="custom-column">
+            <span className="column-text">{record.eventLog}</span>
+        </div>
         <div className="custom-column">
             <span className="column-title">Last Randomness</span>
             <span className="column-text">{record.lastRandomness}</span>
@@ -95,7 +98,10 @@ const LogUpdateRandomRender = (record) => {
 const LogInsufficientWorkingGroupRender = record => {
     return <div className='custom-column--wrapper'>
         <input type='radio' id={record.txHash} name='toggle' />
-        <label className='show-more-button' for={record.txHash}>More Info</label>
+        <label className='show-more-button' htmlFor={record.txHash}>More Info</label>
+        <div className="custom-column">
+            <span className="column-text">{record.eventLog}</span>
+        </div>
         <div className="custom-column">
             <span className="column-title">Working Groups</span>
             <span className="column-text  text-number">{record.numWorkingGroups}</span>
@@ -109,7 +115,10 @@ const LogInsufficientWorkingGroupRender = record => {
 const LogGroupingRender = record => {
     return <div className='custom-column--wrapper'>
         <input type='radio' id={record.txHash} name='toggle' />
-        <label className='show-more-button' for={record.txHash}>More Info</label>
+        <label className='show-more-button' htmlFor={record.txHash}>More Info</label>
+        <div className="custom-column">
+            <span className="column-text">{record.eventLog}</span>
+        </div>
         <div className="custom-column">
             <span className="column-title">GroupId</span>
             <span className="column-text ">{record.groupId}</span>
@@ -130,7 +139,10 @@ const LogGroupingRender = record => {
 const LogRequestUserRandomRender = record => {
     return <div className='custom-column--wrapper'>
         <input type='radio' id={record.txHash} name='toggle' />
-        <label className='show-more-button' for={record.txHash}>More Info</label>
+        <label className='show-more-button' htmlFor={record.txHash}>More Info</label>
+        <div className="custom-column">
+            <span className="column-text">{record.eventLog}</span>
+        </div>
         <div className="custom-column">
             <span className="column-title">RequestId</span>
             <span className="column-text">
@@ -159,7 +171,10 @@ const LogRequestUserRandomRender = record => {
 const LogGroupingInitiatedRender = record => {
     return <div className='custom-column--wrapper'>
         <input type='radio' id={record.txHash} name='toggle' />
-        <label className='show-more-button' for={record.txHash}>More Info</label>
+        <label className='show-more-button' htmlFor={record.txHash}>More Info</label>
+        <div className="custom-column">
+            <span className="column-text">{record.eventLog}</span>
+        </div>
         <div className="custom-column">
             <span className="column-title">Pending Node Pool</span>
             <span className="column-text  text-number">{record.pendingNodePool}</span>
@@ -178,7 +193,10 @@ const LogGroupingInitiatedRender = record => {
 const GuardianRewardRender = record => {
     return <div className='custom-column--wrapper'>
         <input type='radio' id={record.txHash} name='toggle' />
-        <label className='show-more-button' for={record.txHash}>More Info</label>
+        <label className='show-more-button' htmlFor={record.txHash}>More Info</label>
+        <div className="custom-column">
+            <span className="column-text">{record.eventLog}</span>
+        </div>
         <div className="custom-column">
             <span className="column-title">Guardian</span>
             <span className="column-text">{record.guardian}</span>
@@ -189,7 +207,10 @@ const GuardianRewardRender = record => {
 const LogPublicKeyAcceptedRender = record => {
     return <div className='custom-column--wrapper'>
         <input type='radio' id={record.txHash} name='toggle' />
-        <label className='show-more-button' for={record.txHash}>More Info</label>
+        <label className='show-more-button' htmlFor={record.txHash}>More Info</label>
+        <div className="custom-column">
+            <span className="column-text">{record.eventLog}</span>
+        </div>
         <div className="custom-column">
             <span className="column-title">GroupId</span>
             <span className="column-text ">{record.groupId}</span>
@@ -214,7 +235,10 @@ const LogPublicKeyAcceptedRender = record => {
 const LogPublicKeySuggestedRender = record => {
     return <div className='custom-column--wrapper'>
         <input type='radio' id={record.txHash} name='toggle' />
-        <label className='show-more-button' for={record.txHash}>More Info</label>
+        <label className='show-more-button' htmlFor={record.txHash}>More Info</label>
+        <div className="custom-column">
+            <span className="column-text">{record.eventLog}</span>
+        </div>
         <div className="custom-column">
             <span className="column-title">GroupId</span>
             <span className="column-text ">{record.groupId}</span>
@@ -229,7 +253,10 @@ const LogPublicKeySuggestedRender = record => {
 const LogUrlRender = record => {
     return <div className='custom-column--wrapper'>
         <input type='radio' id={record.txHash} name='toggle' />
-        <label className='show-more-button' for={record.txHash}>More Info</label>
+        <label className='show-more-button' htmlFor={record.txHash}>More Info</label>
+        <div className="custom-column">
+            <span className="column-text">{record.eventLog}</span>
+        </div>
         <div className="custom-column">
             <span className="column-title">GroupId</span>
             <span className="column-text ">{record.dispatchedGroupId}</span>
@@ -260,7 +287,10 @@ const LogUrlRender = record => {
 const LogGroupDissolveRender = record => {
     return <div className='custom-column--wrapper'>
         <input type='radio' id={record.txHash} name='toggle' />
-        <label className='show-more-button' for={record.txHash}>More Info</label>
+        <label className='show-more-button' htmlFor={record.txHash}>More Info</label>
+        <div className="custom-column">
+            <span className="column-text">{record.eventLog}</span>
+        </div>
         <div className="custom-column">
             <span className="column-title">GroupId</span>
             <span className="column-text ">{record.groupId}</span>
@@ -271,7 +301,10 @@ const LogGroupDissolveRender = record => {
 const LogNonSupportedTypeRender = record => {
     return <div className='custom-column--wrapper'>
         <input type='radio' id={record.txHash} name='toggle' />
-        <label className='show-more-button' for={record.txHash}>More Info</label>
+        <label className='show-more-button' htmlFor={record.txHash}>More Info</label>
+        <div className="custom-column">
+            <span className="column-text">{record.eventLog}</span>
+        </div>
         <div className="custom-column">
             <span className="column-title">InvalidSelector</span>
             <span className="column-text ">{record.invalidSelector}</span>
@@ -282,7 +315,10 @@ const LogNonSupportedTypeRender = record => {
 const LogNonContractCallRender = record => {
     return <div className='custom-column--wrapper'>
         <input type='radio' id={record.txHash} name='toggle' />
-        <label className='show-more-button' for={record.txHash}>More Info</label>
+        <label className='show-more-button' htmlFor={record.txHash}>More Info</label>
+        <div className="custom-column">
+            <span className="column-text">{record.eventLog}</span>
+        </div>
         <div className="custom-column">
             <span className="column-title">CallAddr</span>
             <p key={record.callAddr} className="nodes-item"><Icon style={{ fontSize: 13 }} type="tag" /> - {record.callAddr}</p>
@@ -293,7 +329,10 @@ const LogNonContractCallRender = record => {
 const LogCallbackTriggeredForRender = record => {
     return <div className='custom-column--wrapper'>
         <input type='radio' id={record.txHash} name='toggle' />
-        <label className='show-more-button' for={record.txHash}>More Info</label>
+        <label className='show-more-button' htmlFor={record.txHash}>More Info</label>
+        <div className="custom-column">
+            <span className="column-text">{record.eventLog}</span>
+        </div>
         <div className="custom-column">
             <span className="column-title">CallbackAddr</span>
             <p key={record.callbackAddr} className="nodes-item"><Icon style={{ fontSize: 13 }} type="tag" /> - {record.callbackAddr}</p>
@@ -304,7 +343,10 @@ const LogCallbackTriggeredForRender = record => {
 const LogInsufficientPendingNodeRender = record => {
     return <div className='custom-column--wrapper'>
         <input type='radio' id={record.txHash} name='toggle' />
-        <label className='show-more-button' for={record.txHash}>More Info</label>
+        <label className='show-more-button' htmlFor={record.txHash}>More Info</label>
+        <div className="custom-column">
+            <span className="column-text">{record.eventLog}</span>
+        </div>
         <div className="custom-column">
             <span className="column-title">Number Of Pending Nodes</span>
             <span className="column-text ">{record.numPendingNodes}</span>
@@ -315,7 +357,10 @@ const LogInsufficientPendingNodeRender = record => {
 const LogRegisteredNewPendingNodeRender = record => {
     return <div className='custom-column--wrapper'>
         <input type='radio' id={record.txHash} name='toggle' />
-        <label className='show-more-button' for={record.txHash}>More Info</label>
+        <label className='show-more-button' htmlFor={record.txHash}>More Info</label>
+        <div className="custom-column">
+            <span className="column-text">{record.eventLog}</span>
+        </div>
         <div className="custom-column">
             <span className="column-title">Node</span>
             <span className="column-text ">{record.node}</span>
@@ -326,7 +371,10 @@ const LogRegisteredNewPendingNodeRender = record => {
 const LogUnRegisteredNewPendingNodeRender = record => {
     return <div className='custom-column--wrapper'>
         <input type='radio' id={record.txHash} name='toggle' />
-        <label className='show-more-button' for={record.txHash}>More Info</label>
+        <label className='show-more-button' htmlFor={record.txHash}>More Info</label>
+        <div className="custom-column">
+            <span className="column-text">{record.eventLog}</span>
+        </div>
         <div className="custom-column">
             <span className="column-title">Node</span>
             <span className="column-text ">{record.node}</span>
@@ -339,7 +387,10 @@ const LogUnRegisteredNewPendingNodeRender = record => {
 const LogPendingGroupRemovedRender = record => {
     return <div className='custom-column--wrapper'>
         <input type='radio' id={record.txHash} name='toggle' />
-        <label className='show-more-button' for={record.txHash}>More Info</label>
+        <label className='show-more-button' htmlFor={record.txHash}>More Info</label>
+        <div className="custom-column">
+            <span className="column-text">{record.eventLog}</span>
+        </div>
         <div className="custom-column">
             <span className="column-title">GroupId</span>
             <span className="column-text ">{record.groupId}</span>
@@ -350,7 +401,10 @@ const LogPendingGroupRemovedRender = record => {
 const LogNoPendingGroupRender = record => {
     return <div className='custom-column--wrapper'>
         <input type='radio' id={record.txHash} name='toggle' />
-        <label className='show-more-button' for={record.txHash}>More Info</label>
+        <label className='show-more-button' htmlFor={record.txHash}>More Info</label>
+        <div className="custom-column">
+            <span className="column-text">{record.eventLog}</span>
+        </div>
         <div className="custom-column">
             <span className="column-title">GroupId</span>
             <span className="column-text ">{record.groupId}</span>
@@ -361,7 +415,10 @@ const LogNoPendingGroupRender = record => {
 const LogMessageRender = record => {
     return <div className='custom-column--wrapper'>
         <input type='radio' id={record.txHash} name='toggle' />
-        <label className='show-more-button' for={record.txHash}>More Info</label>
+        <label className='show-more-button' htmlFor={record.txHash}>More Info</label>
+        <div className="custom-column">
+            <span className="column-text">{record.eventLog}</span>
+        </div>
         <div className="custom-column">
             <span className="column-title">Message</span>
             <span className="column-text ">{record.info}</span>
@@ -372,7 +429,10 @@ const LogMessageRender = record => {
 const UpdateGroupToPickRender = record => {
     return <div className='custom-column--wrapper'>
         <input type='radio' id={record.txHash} name='toggle' />
-        <label className='show-more-button' for={record.txHash}>More Info</label>
+        <label className='show-more-button' htmlFor={record.txHash}>More Info</label>
+        <div className="custom-column">
+            <span className="column-text">{record.eventLog}</span>
+        </div>
         <div className="custom-column">
             <span className="column-title">Old Number</span>
             <span className="column-text ">{record.oldNum}</span>
@@ -387,7 +447,10 @@ const UpdateGroupToPickRender = record => {
 const UpdateGroupSizeRender = record => {
     return <div className='custom-column--wrapper'>
         <input type='radio' id={record.txHash} name='toggle' />
-        <label className='show-more-button' for={record.txHash}>More Info</label>
+        <label className='show-more-button' htmlFor={record.txHash}>More Info</label>
+        <div className="custom-column">
+            <span className="column-text">{record.eventLog}</span>
+        </div>
         <div className="custom-column">
             <span className="column-title">Old Size</span>
             <span className="column-text ">{record.oldSize}</span>
@@ -402,7 +465,10 @@ const UpdateGroupSizeRender = record => {
 const UpdateGroupingThresholdRender = record => {
     return <div className='custom-column--wrapper'>
         <input type='radio' id={record.txHash} name='toggle' />
-        <label className='show-more-button' for={record.txHash}>More Info</label>
+        <label className='show-more-button' htmlFor={record.txHash}>More Info</label>
+        <div className="custom-column">
+            <span className="column-text">{record.eventLog}</span>
+        </div>
         <div className="custom-column">
             <span className="column-title">Old Threshold</span>
             <span className="column-text ">{record.oldThreshold}</span>
@@ -417,7 +483,10 @@ const UpdateGroupingThresholdRender = record => {
 const UpdateGroupMaturityPeriodRender = record => {
     return <div className='custom-column--wrapper'>
         <input type='radio' id={record.txHash} name='toggle' />
-        <label className='show-more-button' for={record.txHash}>More Info</label>
+        <label className='show-more-button' htmlFor={record.txHash}>More Info</label>
+        <div className="custom-column">
+            <span className="column-text">{record.eventLog}</span>
+        </div>
         <div className="custom-column">
             <span className="column-title">Old Period</span>
             <span className="column-text ">{record.oldPeriod}</span>
@@ -432,7 +501,10 @@ const UpdateGroupMaturityPeriodRender = record => {
 const UpdateBootstrapCommitDurationRender = record => {
     return <div className='custom-column--wrapper'>
         <input type='radio' id={record.txHash} name='toggle' />
-        <label className='show-more-button' for={record.txHash}>More Info</label>
+        <label className='show-more-button' htmlFor={record.txHash}>More Info</label>
+        <div className="custom-column">
+            <span className="column-text">{record.eventLog}</span>
+        </div>
         <div className="custom-column">
             <span className="column-title">Old Duration</span>
             <span className="column-text ">{record.oldDuration}</span>
@@ -447,7 +519,10 @@ const UpdateBootstrapCommitDurationRender = record => {
 const UpdateBootstrapRevealDurationRender = record => {
     return <div className='custom-column--wrapper'>
         <input type='radio' id={record.txHash} name='toggle' />
-        <label className='show-more-button' for={record.txHash}>More Info</label>
+        <label className='show-more-button' htmlFor={record.txHash}>More Info</label>
+        <div className="custom-column">
+            <span className="column-text">{record.eventLog}</span>
+        </div>
         <div className="custom-column">
             <span className="column-title">Old Duration</span>
             <span className="column-text ">{record.oldDuration}</span>
@@ -462,7 +537,10 @@ const UpdateBootstrapRevealDurationRender = record => {
 const UpdatebootstrapStartThresholdRender = record => {
     return <div className='custom-column--wrapper'>
         <input type='radio' id={record.txHash} name='toggle' />
-        <label className='show-more-button' for={record.txHash}>More Info</label>
+        <label className='show-more-button' htmlFor={record.txHash}>More Info</label>
+        <div className="custom-column">
+            <span className="column-text">{record.eventLog}</span>
+        </div>
         <div className="custom-column">
             <span className="column-title">Old Threshold</span>
             <span className="column-text ">{record.oldThreshold}</span>
@@ -477,7 +555,10 @@ const UpdatebootstrapStartThresholdRender = record => {
 const UpdatePendingGroupMaxLifeRender = record => {
     return <div className='custom-column--wrapper'>
         <input type='radio' id={record.txHash} name='toggle' />
-        <label className='show-more-button' for={record.txHash}>More Info</label>
+        <label className='show-more-button' htmlFor={record.txHash}>More Info</label>
+        <div className="custom-column">
+            <span className="column-text">{record.eventLog}</span>
+        </div>
         <div className="custom-column">
             <span className="column-title">Old LifeBlocks</span>
             <span className="column-text ">{record.oldLifeBlocks}</span>
@@ -492,7 +573,10 @@ const UpdatePendingGroupMaxLifeRender = record => {
 const LogValidationResultRender = record => {
     return <div className='custom-column--wrapper'>
         <input type='radio' id={record.txHash} name='toggle' />
-        <label className='show-more-button' for={record.txHash}>More Info</label>
+        <label className='show-more-button' htmlFor={record.txHash}>More Info</label>
+        <div className="custom-column">
+            <span className="column-text">{record.eventLog}</span>
+        </div>
         <div className="custom-column">
             <span className="column-title">Traffic Type</span>
             <span className="column-text ">{record.trafficType}</span>

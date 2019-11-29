@@ -64,8 +64,8 @@ export function metaMaskLogin() {
                     );
                     dosTokenContract.methods.allowance(address, DOS_CONTRACT_ADDRESS).call().then((result) => {
                         console.log(`allowance:${result}`)
-                        if (result.toNumber() === 0) {
-                            dosTokenContract.methods.approve(DOS_CONTRACT_ADDRESS).call().then(result => {
+                        if (result.toString() !== '115792089237316195423570985008687907853269984665640564039457584007913129639935') {
+                            dosTokenContract.methods.approve(DOS_CONTRACT_ADDRESS).send({ from: address }).then(result => {
                                 console.log(`approve:${result}`)
                             }).catch((err) => { console.log(err) })
                         }

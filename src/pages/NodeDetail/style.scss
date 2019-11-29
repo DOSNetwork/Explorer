@@ -107,6 +107,11 @@
     border: solid 1px #dfdfdf;
 }
 
+.user-info--delegation {
+    width: 200px;
+    flex: 0 0 auto;
+}
+
 .node-detail--item {
     display: flex;
     height: 60px;
@@ -130,4 +135,21 @@
     font-size: 14px;
     font-weight: 600;
     color: #333333;
+}
+
+.node-detail--operation-tab {
+    // background-color: #000000;
+}
+
+.node-detail--tab-bar {
+    width: 180px;
+    text-align: center;
+}
+
+.tab-pannel--wrapper {
+    padding: 20px;
+
+    .ant-btn-primary {
+        width: 100%
+    }
 }

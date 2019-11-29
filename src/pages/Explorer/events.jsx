@@ -19,8 +19,8 @@ export const EventsList = ({ pageSize, currentPageIndex, totalCount, events, loa
             >
                 <Column title="Tx Hash" dataIndex="txHash" key="txHash" width={250} render={TxHashRender} />
                 <Column title="Blocks" dataIndex="blockNumber" key="blockNumber" width={70} />
-                <Column title="Event Log" dataIndex="eventLog" key="eventLog" width={250} />
-                <Column title="More Info" key="method" render={MoreInfoRender} />
+                {/* <Column title="Event Log" dataIndex="eventLog" key="eventLog" width={250} /> */}
+                <Column width={250} title="Event Log" key="eventLog" render={MoreInfoRender} />
             </Table>
         </div>
     )
