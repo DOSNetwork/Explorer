@@ -6,7 +6,6 @@ import {
   DOSTOKEN_ABI,
   DOSTOKEN_CONTRACT_ADDRESS
 } from "../../util/const";
-
 export default class Account extends Component {
   constructor(props) {
     super(props);
@@ -63,16 +62,21 @@ export default class Account extends Component {
         DOSTOKEN_ABI,
         DOSTOKEN_CONTRACT_ADDRESS
       );
-      let userBlaance = await tokenContract.methods
+      let userBalance = await tokenContract.methods
         .balanceOf(userAddress)
         .call();
       let StakingContract = new web3Client.eth.Contract(
         DOS_ABI,
         DOS_CONTRACT_ADDRESS
       );
-      let delegatedAmount = 0;
-      let delegatedReward = 0;
-      let unbondDelegated = 0;
+      let delegatedAmount = new web3Client.utils.toBN(0);
+      let delegatedReward = new web3Client.utils.toBN(0);
+      let unbondDelegated = new web3Client.utils.toBN(0);
+      console.log(
+        web3Client.utils.isBN(delegatedAmount),
+        " delegatedAmount ",
+        delegatedAmount.toString()
+      );
       //Get staking node and delegate node addresses
       if (userAddress !== "") {
         //Let owne and delegate nodes show first
@@ -99,11 +103,28 @@ export default class Account extends Component {
         for (let i = 0; i < addrs.length; i++) {
           const nodeAddr = addrs[i];
           const node = await StakingContract.methods.nodes(nodeAddr).call();
+          delegatedAmount = delegatedAmount.add(
+            new web3Client.utils.toBN(node.selfStakedAmount)
+          );
+          delegatedReward = delegatedReward.add(
+            new web3Client.utils.toBN(node.accumulatedReward)
+          );
+          unbondDelegated = unbondDelegated.add(
+            new web3Client.utils.toBN(node.pendingWithdrawToken)
+          );
+          unbondDelegated = unbondDelegated.add(
+            new web3Client.utils.toBN(node.pendingWithdrawDB)
+          );
           console.log(
-            "test ",
-            fromWei(node.selfStakedAmount),
-            fromWei(node.accumulatedReward),
-            fromWei(node.pendingWithdrawToken + node.pendingWithdrawDB)
+            Math.round(
+              web3Client.utils.fromWei(delegatedAmount.toString()) * 100
+            ) / 100,
+            Math.round(
+              web3Client.utils.fromWei(delegatedReward.toString()) * 100
+            ) / 100,
+            Math.round(
+              web3Client.utils.fromWei(unbondDelegated.toString()) * 100
+            ) / 100
           );
         }
       }
@@ -133,22 +154,36 @@ export default class Account extends Component {
           const delegator = await StakingContract.methods
             .delegators(userAddress, nodeAddr)
             .call();
-          delegatedAmount =
-            delegatedAmount + fromWei(delegator.delegatedAmount);
-          console.log(
-            "test ",
-            fromWei(delegator.delegatedAmount),
-            fromWei(delegator.delegatedReward),
-            fromWei(delegator.unbondDelegated)
+          //TODO : BN add
+          delegatedAmount = delegatedAmount.add(
+            new web3Client.utils.toBN(delegator.delegatedAmount)
+          );
+          delegatedReward = delegatedReward.add(
+            new web3Client.utils.toBN(delegator.delegatedReward)
+          );
+          unbondDelegated = unbondDelegated.add(
+            new web3Client.utils.toBN(delegator.unbondDelegated)
           );
         }
-        console.log(delegatedAmount, delegatedReward, unbondDelegated);
-
+        console.log(
+          Math.round(
+            web3Client.utils.fromWei(delegatedAmount.toString()) * 100
+          ) / 100
+        );
         this.setState({
-          userBalance: Math.round(fromWei(userBlaance) * 100) / 100,
-          delegatedAmount: delegatedAmount,
-          delegatedReward: delegatedReward,
-          unbondDelegated: unbondDelegated
+          userBalance: Math.round(fromWei(userBalance) * 100) / 100,
+          delegatedAmount:
+            Math.round(
+              web3Client.utils.fromWei(delegatedAmount.toString()) * 100
+            ) / 100,
+          delegatedReward:
+            Math.round(
+              web3Client.utils.fromWei(delegatedReward.toString()) * 100
+            ) / 100,
+          unbondDelegated:
+            Math.round(
+              web3Client.utils.fromWei(unbondDelegated.toString()) * 100
+            ) / 100
         });
       }
 
@@ -160,7 +195,13 @@ export default class Account extends Component {
     }
   };
   render() {
-    const { showNumber, userBalance } = this.state;
+    const {
+      showNumber,
+      userBalance,
+      delegatedAmount,
+      delegatedReward,
+      unbondDelegated
+    } = this.state;
     return (
       <>
         <div className="myaccount--wrapper">
@@ -178,15 +219,15 @@ export default class Account extends Component {
           <div className="myaccount-detail--wrapper">
             <div className="detail--container">
               <DescLabel label="Total Delegated" />
-              <p className="account-number">{this.numberToggler("0")}</p>
+              <p className="account-number">{delegatedAmount}</p>
             </div>
             <div className="detail--container">
               <DescLabel label="My Rewards" />
-              <p className="account-number">{this.numberToggler("0")}</p>
+              <p className="account-number">{delegatedReward}</p>
             </div>
             <div className="detail--container">
               <DescLabel label="Unbonded tokens" />
-              <p className="account-number">{this.numberToggler("0")}</p>
+              <p className="account-number">{unbondDelegated}</p>
             </div>
           </div>
         </div>
