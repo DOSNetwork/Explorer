@@ -15,8 +15,8 @@ export function connectMetaMask() {
         } else if (window.web3) {
             web3 = new Web3(web3.currentProvider);
         } else {
-            alert('You have to install MetaMask !');
-            return;
+            let web3Provider = new Web3.providers.WebsocketProvider('wss://rinkeby.infura.io/ws/v3/3a3e5d776961418e93a8b33fef2f6642')
+            web3 = new Web3(web3Provider);
         }
     }
     store.dispatch({
