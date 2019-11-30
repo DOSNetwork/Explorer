@@ -2,7 +2,9 @@ import React, { Component } from "react";
 import { Icon, Spin } from "antd";
 import {
   DOS_ABI,
-  DOS_CONTRACT_ADDRESS
+  DOS_CONTRACT_ADDRESS,
+  DOSTOKEN_ABI,
+  DOSTOKEN_CONTRACT_ADDRESS
 } from "../../util/const";
 
 export default class Account extends Component {
@@ -20,7 +22,7 @@ export default class Account extends Component {
     };
   }
   ToggleNumber = () => {
-    this.setState(function (state) {
+    this.setState(function(state) {
       return {
         showNumber: !state.showNumber
       };
@@ -57,10 +59,20 @@ export default class Account extends Component {
     this.props.globalLoading(true);
     const { isMetaMaskLogin, web3Client, userAddress } = this.props.contract;
     if (isMetaMaskLogin) {
+      let tokenContract = new web3Client.eth.Contract(
+        DOSTOKEN_ABI,
+        DOSTOKEN_CONTRACT_ADDRESS
+      );
+      let userBlaance = await tokenContract.methods
+        .balanceOf(userAddress)
+        .call();
       let StakingContract = new web3Client.eth.Contract(
         DOS_ABI,
         DOS_CONTRACT_ADDRESS
       );
+      let delegatedAmount = 0;
+      let delegatedReward = 0;
+      let unbondDelegated = 0;
       //Get staking node and delegate node addresses
       if (userAddress !== "") {
         //Let owne and delegate nodes show first
@@ -80,19 +92,23 @@ export default class Account extends Component {
         for (let i = 0; i < eventList.length; i++) {
           nodesAddrs.unshift(eventList[i].returnValues.nodeAddress);
         }
-        // const addrs = nodesAddrs.filter((item, index) => {
-        //   return nodesAddrs.indexOf(item) === index;
-        // });
-        // for (let i = 0; i < addrs.length; i++) {
-        //   const nodeAddr = addrs[i];
-        //const node = await StakingContract.methods.nodes(nodeAddr).call();
-        // }
+        const addrs = nodesAddrs.filter((item, index) => {
+          return nodesAddrs.indexOf(item) === index;
+        });
+        console.log("!!!", addrs.length);
+        for (let i = 0; i < addrs.length; i++) {
+          const nodeAddr = addrs[i];
+          const node = await StakingContract.methods.nodes(nodeAddr).call();
+          console.log(
+            "test ",
+            fromWei(node.selfStakedAmount),
+            fromWei(node.accumulatedReward),
+            fromWei(node.pendingWithdrawToken + node.pendingWithdrawDB)
+          );
+        }
       }
       //Get delegate node addresses
       if (userAddress !== "") {
-        let delegatedAmount = 0;
-        let delegatedReward = 0;
-        let unbondDelegated = 0;
         let nodesAddrs = [];
         const options2 = {
           filter: { sender: userAddress },
@@ -117,9 +133,8 @@ export default class Account extends Component {
           const delegator = await StakingContract.methods
             .delegators(userAddress, nodeAddr)
             .call();
-          //delegatedAmount += fromWei(delegator.delegatedAmount);
-          //delegatedReward += fromWei(delegator.delegatedReward);
-          //unbondDelegated += fromWei(delegator.unbondDelegated);
+          delegatedAmount =
+            delegatedAmount + fromWei(delegator.delegatedAmount);
           console.log(
             "test ",
             fromWei(delegator.delegatedAmount),
@@ -128,13 +143,13 @@ export default class Account extends Component {
           );
         }
         console.log(delegatedAmount, delegatedReward, unbondDelegated);
-        /*
+
         this.setState({
-          userBalance: fromWei(balance),
+          userBalance: Math.round(fromWei(userBlaance) * 100) / 100,
           delegatedAmount: delegatedAmount,
           delegatedReward: delegatedReward,
           unbondDelegated: unbondDelegated
-        });*/
+        });
       }
 
       //Total Delegated
@@ -142,17 +157,10 @@ export default class Account extends Component {
       //Unbonded tokens
 
       //TODO: Total Delegated ,My Rewards,Unbonded tokens
-    } else {
-      this.setState({
-        userBalance: "No Account"
-      });
     }
   };
   render() {
-    const {
-      showNumber,
-      userBalance,
-    } = this.state;
+    const { showNumber, userBalance } = this.state;
     return (
       <>
         <div className="myaccount--wrapper">
