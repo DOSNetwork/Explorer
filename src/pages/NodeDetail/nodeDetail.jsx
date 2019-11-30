@@ -5,21 +5,19 @@ import DelegateNode from "./delegateNodeForm";
 import UnbondNode from "./unbondNodeForm";
 import UnbondOwnedNode from "./unbondOwnedNodeForm";
 import UpdateStakingNode from "./updateStakingNodeForm";
-import identicon from 'identicon.js'
-import { EllipsisString } from '../../util/util'
+import identicon from "identicon.js";
+import { EllipsisString } from "../../util/util";
 import "./style.scss";
 const { TabPane } = Tabs;
-const TabbarRender = (tabbarName) => {
-  return (
-    <div className="node-detail--tab-bar">{tabbarName}</div>
-  )
-}
+const TabbarRender = tabbarName => {
+  return <div className="node-detail--tab-bar">{tabbarName}</div>;
+};
 export default class NodeDetail extends Component {
   constructor(props) {
     super(props);
     this.state = {
       node: this.props.match.params.nodeId,
-      nodeDetail: { node: '' },
+      nodeDetail: { node: "" },
       isUserOwnedThisNode: false,
       isUserDelegatedThisNode: false,
       myTokenTotal: 0,
@@ -55,7 +53,8 @@ export default class NodeDetail extends Component {
   saveUnbondOwnedNodeRef = formRef => {
     this.unbondOwnedNodeRef = formRef;
   };
-  handleOwnerUpgrateSubmit = () => {
+  handleOwnerUpgrateSubmit = e => {
+    e.preventDefault();
     const { form } = this.updateFormformRef.props;
     form.validateFields((err, values) => {
       if (err) {
@@ -73,12 +72,12 @@ export default class NodeDetail extends Component {
         .updateNodeStaking(this.state.node, tokenAmount, dbAmount, rewardCut)
         .send({ from: userAddress });
       let hide;
-      var hashHandler = function (hash) {
+      var hashHandler = function(hash) {
         emitter.removeListener("transactionHash", hashHandler);
         hide = message.loading("Unbond: wait for confirmatin : " + hash, 0);
       };
 
-      var confirmationHandler = function (confirmationNumber, receipt) {
+      var confirmationHandler = function(confirmationNumber, receipt) {
         hide();
         emitter.removeListener("confirmation", confirmationHandler);
         message.success(
@@ -86,7 +85,7 @@ export default class NodeDetail extends Component {
         );
         //TODO:If user still in nodetail page then page should update node detail
       };
-      var errorHandler = function (error) {
+      var errorHandler = function(error) {
         emitter.removeListener("confirmation", confirmationHandler);
         emitter.removeListener("error", errorHandler);
         message.error(error.message);
@@ -98,7 +97,8 @@ export default class NodeDetail extends Component {
       this.setState({ updateFormVisible: false });
     });
   };
-  handleOwnerUnbondSubmit = () => {
+  handleOwnerUnbondSubmit = e => {
+    e.preventDefault();
     const { form } = this.unbondOwnedNodeRef.props;
     form.validateFields((err, values) => {
       if (err) {
@@ -116,12 +116,12 @@ export default class NodeDetail extends Component {
         .nodeUnbond(tokenAmount, dbAmount, this.state.node)
         .send({ from: userAddress });
       let hide;
-      var hashHandler = function (hash) {
+      var hashHandler = function(hash) {
         emitter.removeListener("transactionHash", hashHandler);
         hide = message.loading("Unbond: wait for confirmatin : " + hash, 0);
       };
 
-      var confirmationHandler = function (confirmationNumber, receipt) {
+      var confirmationHandler = function(confirmationNumber, receipt) {
         hide();
         emitter.removeListener("confirmation", confirmationHandler);
         message.success(
@@ -129,7 +129,7 @@ export default class NodeDetail extends Component {
         );
         //TODO:If user still in nodetail page then page should update node detail
       };
-      var errorHandler = function (error) {
+      var errorHandler = function(error) {
         emitter.removeListener("confirmation", confirmationHandler);
         emitter.removeListener("error", errorHandler);
         message.error(error.message);
@@ -154,11 +154,11 @@ export default class NodeDetail extends Component {
       .nodeWithdraw(this.state.node)
       .send({ from: userAddress });
     let hide;
-    var hashHandler = function (hash) {
+    var hashHandler = function(hash) {
       emitter.removeListener("transactionHash", hashHandler);
       hide = message.loading("Withdraw: wait for confirmatin : " + hash, 0);
     };
-    var confirmationHandler = function (confirmationNumber, receipt) {
+    var confirmationHandler = function(confirmationNumber, receipt) {
       hide();
       emitter.removeListener("confirmation", confirmationHandler);
       message.success(
@@ -166,7 +166,7 @@ export default class NodeDetail extends Component {
       );
       //TODO:If user still in nodetail page then page should update node detail
     };
-    var errorHandler = function (error) {
+    var errorHandler = function(error) {
       emitter.removeListener("confirmation", confirmationHandler);
       emitter.removeListener("error", errorHandler);
       message.error(error.message);
@@ -186,11 +186,11 @@ export default class NodeDetail extends Component {
       .nodeClaimReward(this.state.node)
       .send({ from: userAddress });
     let hide;
-    var hashHandler = function (hash) {
+    var hashHandler = function(hash) {
       emitter.removeListener("transactionHash", hashHandler);
       hide = message.loading("ClaimReward: wait for confirmatin : " + hash, 0);
     };
-    var confirmationHandler = function (confirmationNumber, receipt) {
+    var confirmationHandler = function(confirmationNumber, receipt) {
       hide();
       emitter.removeListener("confirmation", confirmationHandler);
       message.success(
@@ -198,7 +198,7 @@ export default class NodeDetail extends Component {
       );
       //TODO:If user still in nodetail page then page should update node detail
     };
-    var errorHandler = function (error) {
+    var errorHandler = function(error) {
       emitter.removeListener("confirmation", confirmationHandler);
       emitter.removeListener("error", errorHandler);
       message.error(error.message);
@@ -207,8 +207,8 @@ export default class NodeDetail extends Component {
     emitter.on("confirmation", confirmationHandler);
     emitter.on("error", errorHandler);
   };
-  handleUserUnbondSubmit = (e) => {
-    e.preventDefault()
+  handleUserUnbondSubmit = e => {
+    e.preventDefault();
     const { form } = this.unbondFormformRef.props;
     form.validateFields((err, values) => {
       if (err) {
@@ -225,12 +225,12 @@ export default class NodeDetail extends Component {
         .delegatorUnbond(tokenAmount, this.state.node)
         .send({ from: userAddress });
       let hide;
-      var hashHandler = function (hash) {
+      var hashHandler = function(hash) {
         emitter.removeListener("transactionHash", hashHandler);
         hide = message.loading("Unbond: wait for confirmatin : " + hash, 0);
       };
 
-      var confirmationHandler = function (confirmationNumber, receipt) {
+      var confirmationHandler = function(confirmationNumber, receipt) {
         hide();
         emitter.removeListener("confirmation", confirmationHandler);
         message.success(
@@ -238,7 +238,7 @@ export default class NodeDetail extends Component {
         );
         //TODO:If user still in nodetail page then page should update node detail
       };
-      var errorHandler = function (error) {
+      var errorHandler = function(error) {
         emitter.removeListener("confirmation", confirmationHandler);
         emitter.removeListener("error", errorHandler);
         message.error(error.message);
@@ -253,7 +253,8 @@ export default class NodeDetail extends Component {
       });
     });
   };
-  handleUserDelegateSubmit = () => {
+  handleUserDelegateSubmit = e => {
+    e.preventDefault();
     console.log("handleUserDelegateSubmit", this.delegateFormRef.props);
     const { form } = this.delegateFormRef.props;
     form.validateFields((err, values) => {
@@ -275,12 +276,12 @@ export default class NodeDetail extends Component {
         .send({ from: userAddress });
       // let nodeDetail = this;
       let hide;
-      var hashHandler = function (hash) {
+      var hashHandler = function(hash) {
         emitter.removeListener("transactionHash", hashHandler);
         hide = message.loading("Delegate: wait for confirmatin : " + hash, 0);
       };
 
-      var confirmationHandler = function (confirmationNumber, receipt) {
+      var confirmationHandler = function(confirmationNumber, receipt) {
         hide();
         emitter.removeListener("confirmation", confirmationHandler);
         message.success(
@@ -289,7 +290,7 @@ export default class NodeDetail extends Component {
         //TODO:If user still in nodetail page then page should update node detail
         //nodeDetail.getNodeDetail();
       };
-      var errorHandler = function (error) {
+      var errorHandler = function(error) {
         emitter.removeListener("confirmation", confirmationHandler);
         emitter.removeListener("error", errorHandler);
         message.error(error.message);
@@ -312,11 +313,11 @@ export default class NodeDetail extends Component {
       .nodeUnregister(this.state.node)
       .send({ from: userAddress });
     let hide;
-    var hashHandler = function (hash) {
+    var hashHandler = function(hash) {
       emitter.removeListener("transactionHash", hashHandler);
       hide = message.loading("Unregister: wait for confirmatin : " + hash, 0);
     };
-    var confirmationHandler = function (confirmationNumber, receipt) {
+    var confirmationHandler = function(confirmationNumber, receipt) {
       hide();
       emitter.removeListener("confirmation", confirmationHandler);
       message.success(
@@ -324,7 +325,7 @@ export default class NodeDetail extends Component {
       );
       //TODO:If user still in nodetail page then page should update node detail
     };
-    var errorHandler = function (error) {
+    var errorHandler = function(error) {
       emitter.removeListener("confirmation", confirmationHandler);
       emitter.removeListener("error", errorHandler);
       message.error(error.message);
@@ -344,11 +345,11 @@ export default class NodeDetail extends Component {
       .delegatorWithdraw(this.state.node)
       .send({ from: userAddress });
     let hide;
-    var hashHandler = function (hash) {
+    var hashHandler = function(hash) {
       emitter.removeListener("transactionHash", hashHandler);
       hide = message.loading("Withdraw: wait for confirmatin : " + hash, 0);
     };
-    var confirmationHandler = function (confirmationNumber, receipt) {
+    var confirmationHandler = function(confirmationNumber, receipt) {
       hide();
       emitter.removeListener("confirmation", confirmationHandler);
       message.success(
@@ -356,7 +357,7 @@ export default class NodeDetail extends Component {
       );
       //TODO:If user still in nodetail page then page should update node detail
     };
-    var errorHandler = function (error) {
+    var errorHandler = function(error) {
       emitter.removeListener("confirmation", confirmationHandler);
       emitter.removeListener("error", errorHandler);
       message.error(error.message);
@@ -376,11 +377,11 @@ export default class NodeDetail extends Component {
       .delegatorClaimReward(this.state.node)
       .send({ from: userAddress });
     let hide;
-    var hashHandler = function (hash) {
+    var hashHandler = function(hash) {
       emitter.removeListener("transactionHash", hashHandler);
       hide = message.loading("ClaimReward: wait for confirmatin : " + hash, 0);
     };
-    var confirmationHandler = function (confirmationNumber, receipt) {
+    var confirmationHandler = function(confirmationNumber, receipt) {
       hide();
       emitter.removeListener("confirmation", confirmationHandler);
       message.success(
@@ -388,7 +389,7 @@ export default class NodeDetail extends Component {
       );
       //TODO:If user still in nodetail page then page should update node detail
     };
-    var errorHandler = function (error) {
+    var errorHandler = function(error) {
       emitter.removeListener("confirmation", confirmationHandler);
       emitter.removeListener("error", errorHandler);
       message.error(error.message);
@@ -419,7 +420,10 @@ export default class NodeDetail extends Component {
     // if (nodeDelegators != null) {
     //   console.log(nodeAddr, " nodeDelegators ", nodeDelegators.length);
     // }
-    let avatar = `data:image/png;base64,${new identicon(nodeAddr, 100).toString()}`;
+    let avatar = `data:image/png;base64,${new identicon(
+      nodeAddr,
+      100
+    ).toString()}`;
     const {
       selfStakedAmount,
       totalOtherDelegatedAmount,
@@ -453,17 +457,19 @@ export default class NodeDetail extends Component {
       userDelegatedRewardotal = 0,
       isUserDelegatedThisNode = false,
       isUserOwnedThisNode = false;
-    console.log(userAddress, nodeInstance.ownerAddr)
+    console.log(userAddress, nodeInstance.ownerAddr);
     if (userAddress) {
-      isUserOwnedThisNode = (web3Client.utils.toChecksumAddress(userAddress) ===
-        web3Client.utils.toChecksumAddress(nodeInstance.ownerAddr))
+      isUserOwnedThisNode =
+        web3Client.utils.toChecksumAddress(userAddress) ===
+        web3Client.utils.toChecksumAddress(nodeInstance.ownerAddr);
       if (isUserOwnedThisNode) {
         rewardotal = await contractInstance.methods
           .getNodeRewardTokens(nodeAddr)
           .call();
         myTokenTotal = fromWei(selfStakedAmount);
-        myUnbondTotal = fromWei(pendingWithdrawToken) + fromWei(pendingWithdrawDB);
-        myRewardTotal = fromWei(rewardotal)
+        myUnbondTotal =
+          fromWei(pendingWithdrawToken) + fromWei(pendingWithdrawDB);
+        myRewardTotal = fromWei(rewardotal);
       } else {
         let delegator = await contractInstance.methods
           .delegators(userAddress, nodeAddr)
@@ -472,8 +478,10 @@ export default class NodeDetail extends Component {
           .getDelegatorRewardTokens(userAddress, nodeAddr)
           .call();
 
-        let { delegatedAmount, pendingWithdraw } = delegator
-        isUserDelegatedThisNode = fromWei(delegatedAmount) !== 0 || fromWei(userDelegatedRewardotal) !== 0;
+        let { delegatedAmount, pendingWithdraw } = delegator;
+        isUserDelegatedThisNode =
+          fromWei(delegatedAmount) !== 0 ||
+          fromWei(userDelegatedRewardotal) !== 0;
         myTokenTotal = fromWei(delegatedAmount);
         myUnbondTotal = fromWei(pendingWithdraw);
         myRewardTotal = fromWei(userDelegatedRewardotal);
@@ -512,9 +520,9 @@ export default class NodeDetail extends Component {
               <img src={avatar} alt="" />
             </div>
             <div className="info-summary--wrapper">
-              <div className="info-node">{EllipsisString(node, 6, 6)} {status ?
-                <Tag color="green">Active</Tag> :
-                <Tag>Inactive</Tag>}
+              <div className="info-node">
+                {EllipsisString(node, 6, 6)}{" "}
+                {status ? <Tag color="green">Active</Tag> : <Tag>Inactive</Tag>}
               </div>
               {isMetaMaskLogin ? (
                 <div>
@@ -527,7 +535,7 @@ export default class NodeDetail extends Component {
                         onClick={this.handleUnregister}
                       >
                         Unregister
-                    </Button>
+                      </Button>
                     </p>
                   ) : null}
                 </div>
@@ -539,10 +547,10 @@ export default class NodeDetail extends Component {
               <div className="detail--user-info">
                 <div className="user-info--delegation">
                   <p className="user-info--title">
-                    My {isUserDelegatedThisNode ? 'Delegation' : 'Staking Token'}
+                    My{" "}
+                    {isUserDelegatedThisNode ? "Delegation" : "Staking Token"}
                   </p>
                   <p className="user-info--value">{this.state.myTokenTotal}</p>
-
                 </div>
                 <div className="user-info--rewards">
                   <p className="user-info--title">Unbond</p>
@@ -561,7 +569,6 @@ export default class NodeDetail extends Component {
                   <Button
                     className="widthdraw-button"
                     shape="round"
-
                     onClick={this.handleOwnerClaimReward}
                   >
                     Withdraw
@@ -595,41 +602,56 @@ export default class NodeDetail extends Component {
             </div>
           </div>
         </div>
-        {isMetaMaskLogin ?
-          (<div className="node-detail--operations node-detail--block">
-            <Tabs className='node-detail--operation-tab' defaultActiveKey="1" size='default'>
-              <TabPane tab={TabbarRender(isUserDelegatedThisNode ? 'Delegate' : 'Upgrate')} key="1">
+        {isMetaMaskLogin ? (
+          <div className="node-detail--operations node-detail--block">
+            <Tabs
+              className="node-detail--operation-tab"
+              defaultActiveKey="1"
+              size="default"
+            >
+              <TabPane
+                tab={TabbarRender(
+                  isUserDelegatedThisNode ? "Delegate" : "Upgrate"
+                )}
+                key="1"
+              >
                 <div className="tab-pannel--wrapper">
-                  {isUserOwnedThisNode ?
+                  {isUserOwnedThisNode ? (
                     // Owner --Staking
-                    (<UpdateStakingNode
+                    <UpdateStakingNode
                       wrappedComponentRef={this.saveUpdateFormRef}
-                      onSubmit={this.handleOwnerUpgrateSubmit} />) :
+                      onSubmit={this.handleOwnerUpgrateSubmit}
+                    />
+                  ) : (
                     // User --Delegate
-                    (<DelegateNode
+                    <DelegateNode
                       wrappedComponentRef={this.saveDelegateFormRef}
-                      onSubmit={this.handleUserDelegateSubmit} />)
-                  }
+                      onSubmit={this.handleUserDelegateSubmit}
+                    />
+                  )}
                 </div>
               </TabPane>
-              <TabPane tab={TabbarRender('UnBond')} key="2">
+              <TabPane tab={TabbarRender("UnBond")} key="2">
                 <div className="tab-pannel--wrapper">
-                  {isUserOwnedThisNode ?
+                  {isUserOwnedThisNode ? (
                     // Owner --unbond
-                    (<UnbondOwnedNode
+                    <UnbondOwnedNode
                       wrappedComponentRef={this.saveUnbondOwnedNodeRef}
-                      onSubmit={this.handleOwnerUnbondSubmit} />) :
+                      onSubmit={this.handleOwnerUnbondSubmit}
+                    />
+                  ) : (
                     // User --unbond
-                    (<UnbondNode
+                    <UnbondNode
                       wrappedComponentRef={this.saveUnbondFormRef}
-                      onSubmit={this.handleUserUnbondSubmit} />)
-                  }
+                      onSubmit={this.handleUserUnbondSubmit}
+                    />
+                  )}
                 </div>
               </TabPane>
             </Tabs>
-          </div>) : null
-        }
-      </div >
+          </div>
+        ) : null}
+      </div>
     );
   }
 }
