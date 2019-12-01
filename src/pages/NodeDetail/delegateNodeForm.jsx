@@ -20,7 +20,7 @@ const delegateNode = Form.create({ name: "form_in_modal" })(
                   message: "Please input the delegate token amount!"
                 }
               ]
-            })(<Input placeholder="60000.0" />)}
+            })(<Input placeholder="50000.0" suffix='DOS' />)}
           </Form.Item>
           <Button type="primary" htmlType="submit" className="login-form-button">
             Submit

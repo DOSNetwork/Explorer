@@ -44,11 +44,17 @@
 }
 
 .info-node {
+    display: flex;
+    align-items: center;
     height: 32px;
     font-family: IBMPlexSans;
     font-size: 24px;
     font-weight: 600;
     color: #333;
+
+    .node-address {
+        margin-right: 10px;
+    }
 }
 
 .info-opt {
@@ -68,12 +74,13 @@
     padding: 23px;
 
     &>div {
+        width: 0px;
         margin: 4px;
         flex: 1 1 auto;
         position: relative;
         display: flex;
         flex-direction: column;
-        padding: 20px 20px;
+        padding: 28px 20px;
         justify-content: space-between;
     }
 }
@@ -97,7 +104,7 @@
 .widthdraw-button {
     position: absolute;
     right: 8px;
-    top: 15px;
+    top: 8px;
 }
 
 .user-info--rewards,

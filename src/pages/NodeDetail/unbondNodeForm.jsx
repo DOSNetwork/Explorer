@@ -4,6 +4,15 @@ import { Form, Input, Button } from "antd";
 const unbondNode = Form.create({ name: "form_in_modal" })(
   // eslint-disable-next-line
   class extends React.Component {
+    validateTokenAmount = (rule, value, callback) => {
+      if (value) {
+        let result = Number(value)
+        if (Number.isNaN(result)) {
+          callback('Please enter a valid number')
+        }
+      }
+      callback()
+    };
     render() {
       const {
         form,
@@ -17,10 +26,13 @@ const unbondNode = Form.create({ name: "form_in_modal" })(
               rules: [
                 {
                   required: true,
-                  message: "Please input the unbond token amount!"
+                  message: "Please input the unbond token amount"
+                },
+                {
+                  validator: this.validateTokenAmount,
                 }
               ]
-            })(<Input placeholder="50000.0" suffix="DOS" />)}
+            })(<Input placeholder="100.0" suffix="DOS" />)}
           </Form.Item>
           <Button type="primary" htmlType="submit" className="login-form-button">
             Submit

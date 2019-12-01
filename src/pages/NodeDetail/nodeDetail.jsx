@@ -8,9 +8,13 @@ import UpdateStakingNode from "./updateStakingNodeForm";
 import identicon from "identicon.js";
 import { EllipsisString } from "../../util/util";
 import "./style.scss";
+import numeral from "numeral";
 const { TabPane } = Tabs;
 const TabbarRender = tabbarName => {
   return <div className="node-detail--tab-bar">{tabbarName}</div>;
+};
+const numberFormatRender = (text, record, index) => {
+  return numeral(text).format("0,0");
 };
 export default class NodeDetail extends Component {
   constructor(props) {
@@ -80,7 +84,7 @@ export default class NodeDetail extends Component {
     var errorHandler = function (error) {
       emitter.removeListener("confirmation", confirmationHandler);
       emitter.removeListener("error", errorHandler);
-      message.error(error.message);
+      message.error(error.message.split('\n')[0]);
     };
     emitter.on("transactionHash", hashHandler);
     emitter.on("confirmation", confirmationHandler);
@@ -112,7 +116,7 @@ export default class NodeDetail extends Component {
     var errorHandler = function (error) {
       emitter.removeListener("confirmation", confirmationHandler);
       emitter.removeListener("error", errorHandler);
-      message.error(error.message);
+      message.error(error.message.split('\n')[0]);
     };
     emitter.on("transactionHash", hashHandler);
     emitter.on("confirmation", confirmationHandler);
@@ -144,7 +148,7 @@ export default class NodeDetail extends Component {
     var errorHandler = function (error) {
       emitter.removeListener("confirmation", confirmationHandler);
       emitter.removeListener("error", errorHandler);
-      message.error(error.message);
+      message.error(error.message.split('\n')[0]);
     };
     emitter.on("transactionHash", hashHandler);
     emitter.on("confirmation", confirmationHandler);
@@ -176,7 +180,7 @@ export default class NodeDetail extends Component {
     var errorHandler = function (error) {
       emitter.removeListener("confirmation", confirmationHandler);
       emitter.removeListener("error", errorHandler);
-      message.error(error.message);
+      message.error(error.message.split('\n')[0]);
     };
     emitter.on("transactionHash", hashHandler);
     emitter.on("confirmation", confirmationHandler);
@@ -208,7 +212,7 @@ export default class NodeDetail extends Component {
     var errorHandler = function (error) {
       emitter.removeListener("confirmation", confirmationHandler);
       emitter.removeListener("error", errorHandler);
-      message.error(error.message);
+      message.error(error.message.split('\n')[0]);
     };
     emitter.on("transactionHash", hashHandler);
     emitter.on("confirmation", confirmationHandler);
@@ -250,7 +254,7 @@ export default class NodeDetail extends Component {
       var errorHandler = function (error) {
         emitter.removeListener("confirmation", confirmationHandler);
         emitter.removeListener("error", errorHandler);
-        message.error(error.message);
+        message.error(error.message.split('\n')[0]);
       };
       emitter.on("transactionHash", hashHandler);
       emitter.on("confirmation", confirmationHandler);
@@ -294,7 +298,7 @@ export default class NodeDetail extends Component {
       var errorHandler = function (error) {
         emitter.removeListener("confirmation", confirmationHandler);
         emitter.removeListener("error", errorHandler);
-        message.error(error.message);
+        message.error(error.message.split('\n')[0]);
       };
       emitter.on("transactionHash", hashHandler);
       emitter.on("confirmation", confirmationHandler);
@@ -339,7 +343,7 @@ export default class NodeDetail extends Component {
       var errorHandler = function (error) {
         emitter.removeListener("confirmation", confirmationHandler);
         emitter.removeListener("error", errorHandler);
-        message.error(error.message);
+        message.error(error.message.split('\n')[0]);
       };
       emitter.on("transactionHash", hashHandler);
       emitter.on("confirmation", confirmationHandler);
@@ -391,7 +395,7 @@ export default class NodeDetail extends Component {
       var errorHandler = function (error) {
         emitter.removeListener("confirmation", confirmationHandler);
         emitter.removeListener("error", errorHandler);
-        message.error(error.message);
+        message.error(error.message.split('\n')[0]);
       };
       emitter.on("transactionHash", hashHandler);
       emitter.on("confirmation", confirmationHandler);
@@ -419,6 +423,9 @@ export default class NodeDetail extends Component {
     const nodeAddr = this.state.node;
     const nodeInstance = await contractInstance.methods.nodes(nodeAddr).call();
     let uptime = await contractInstance.methods.getNodeUptime(nodeAddr).call();
+    let delegatorWithdrawAbletotal = await contractInstance.methods.delegatorWithdrawAble(nodeAddr).call();
+    console.log(delegatorWithdrawAbletotal)
+    let nodeWithdrawAbleTotal = await contractInstance.methods.nodeWithdrawAble(nodeAddr).call();
     // let nodeDelegators = nodeInstance.nodeDelegators;
     // if (nodeDelegators != null) {
     //   console.log(nodeAddr, " nodeDelegators ", nodeDelegators.length);
@@ -496,6 +503,7 @@ export default class NodeDetail extends Component {
       myTokenTotal: myTokenTotal,
       myUnbondTotal: myUnbondTotal,
       myRewardTotal: myRewardTotal,
+      // sevenDaysTotal: fromWei(delegatorWithdrawAbletotal) + fromWei(nodeWithdrawAbleTotal),
       nodeDetail: nodeDetail
     });
   };
@@ -524,7 +532,9 @@ export default class NodeDetail extends Component {
             </div>
             <div className="info-summary--wrapper">
               <div className="info-node">
-                {EllipsisString(node, 6, 6)}{" "}
+                <span className="node-address">
+                  {EllipsisString(node, 6, 6)}{" "}
+                </span>
                 {status ? <Tag color="green">Active</Tag> : <Tag>Inactive</Tag>}
               </div>
               {isMetaMaskLogin ? (
@@ -553,14 +563,15 @@ export default class NodeDetail extends Component {
                     My{" "}
                     {isUserDelegatedThisNode ? "Delegation" : "Staking Token"}
                   </p>
-                  <p className="user-info--value">{this.state.myTokenTotal}</p>
+                  <p className="user-info--value">{numberFormatRender(this.state.myTokenTotal)}</p>
                 </div>
                 <div className="user-info--rewards">
                   <p className="user-info--title">Unbond</p>
-                  <p className="user-info--value">{this.state.myUnbondTotal}</p>
+                  <p className="user-info--value">{numberFormatRender(this.state.myUnbondTotal)}({numberFormatRender(this.state.sevenDaysTotal)})</p>
                   <Button
                     className="widthdraw-button"
                     shape="round"
+                    size='small'
                     onClick={this.handleOwnerWithdraw}
                   >
                     Withdraw
@@ -568,10 +579,11 @@ export default class NodeDetail extends Component {
                 </div>
                 <div className="user-info--rewards">
                   <p className="user-info--title">My Rewards</p>
-                  <p className="user-info--value">{this.state.myRewardTotal}</p>
+                  <p className="user-info--value">{numberFormatRender(this.state.myRewardTotal)}</p>
                   <Button
                     className="widthdraw-button"
                     shape="round"
+                    size='small'
                     onClick={this.handleOwnerClaimReward}
                   >
                     Withdraw
@@ -589,11 +601,11 @@ export default class NodeDetail extends Component {
             </div>
             <div className="node-detail--item">
               <div className="item--title">Node Selt-Staked</div>
-              <div className="item--value">{selfStakedAmount}</div>
+              <div className="item--value">{numberFormatRender(selfStakedAmount)}</div>
             </div>
             <div className="node-detail--item">
               <div className="item--title">Total Delegated</div>
-              <div className="item--value">{totalOtherDelegatedAmount}</div>
+              <div className="item--value">{numberFormatRender(totalOtherDelegatedAmount)}</div>
             </div>
             <div className="node-detail--item">
               <div className="item--title">Reward Cut</div>

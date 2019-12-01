@@ -139,7 +139,7 @@ export default class NodeList extends Component {
         );
         this.loadNodeList('', { current: 1, pageSize: 10 }, this.props.showRelatedNodes);
       }, (error) => {
-        message.error(error.message);
+        message.error(error.message.split('\n')[0]);
         this.loadNodeList('', { current: 1, pageSize: 10 }, this.props.showRelatedNodes);
       })
 
@@ -346,7 +346,7 @@ export default class NodeList extends Component {
             render={numberFormatRender}
             dataIndex="selfStaked"
             key="selfStaked"
-            sorter={(a, b) => a.selfStaked - b.selfStaked}
+            // sorter={(a, b) => a.selfStaked - b.selfStaked}
             sortDirections={["ascend", "descend"]}
           />
           <Column
@@ -354,23 +354,23 @@ export default class NodeList extends Component {
             render={numberFormatRender}
             dataIndex="totalDelegated"
             key="totalDelegated"
-            sorter={(a, b) => a.totalDelegated - b.totalDelegated}
+            // sorter={(a, b) => a.totalDelegated - b.totalDelegated}
             sortDirections={["ascend", "descend"]}
           />
-          <Column
+          {/* <Column
             title={tableTitleWithTipsRender('Rewards', 'Total rewards this node created, including rewards for users who delegated towards this node.')}
             render={numberFormatRender}
             dataIndex="totalRewards"
             key="totalRewards"
             sorter={(a, b) => a.totalRewards - b.totalRewards}
             sortDirections={["ascend", "descend"]}
-          />
+          /> */}
           <Column
             title={tableTitleWithTipsRender('Reward Cut', 'The percentage of DOS token this node will keep from user’s staking rewards.')}
             render={t => `${t}%`}
             dataIndex="rewardCut"
             key="rewardCut"
-            sorter={(a, b) => a.rewardCut - b.rewardCut}
+            // sorter={(a, b) => a.rewardCut - b.rewardCut}
             sortDirections={["ascend", "descend"]}
           />
           <Column
@@ -378,7 +378,7 @@ export default class NodeList extends Component {
             render={t => `${t} days`}
             dataIndex="uptime"
             key="uptime"
-            sorter={(a, b) => a.uptime - b.uptime}
+            // sorter={(a, b) => a.uptime - b.uptime}
             sortDirections={["ascend", "descend"]}
           />
           {isMetaMaskLogin ? (
@@ -387,7 +387,7 @@ export default class NodeList extends Component {
               render={myDelegationFormatRender}
               dataIndex="myDelegation"
               key="myDelegation"
-              sorter={(a, b) => a.myDelegation - b.myDelegation}
+              // sorter={(a, b) => a.myDelegation - b.myDelegation}
               sortDirections={["ascend", "descend"]}
             />
           ) : null}
@@ -397,7 +397,7 @@ export default class NodeList extends Component {
               render={myDelegationFormatRender}
               dataIndex="myRewards"
               key="myRewards"
-              sorter={(a, b) => a.myRewards - b.myRewards}
+              // sorter={(a, b) => a.myRewards - b.myRewards}
               sortDirections={["ascend", "descend"]}
             />
           ) : null}
