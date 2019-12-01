@@ -53,6 +53,168 @@ export default class NodeDetail extends Component {
   saveUnbondOwnedNodeRef = formRef => {
     this.unbondOwnedNodeRef = formRef;
   };
+  //------- withDraw unregister
+  handleOwnerWithdraw = () => {
+    //TODO : Add loading effect and pop up a small modal to show resutl
+    const { web3Client, userAddress } = this.props.contract;
+    let contractInstance = new web3Client.eth.Contract(
+      DOS_ABI,
+      DOS_CONTRACT_ADDRESS
+    );
+    let emitter = contractInstance.methods
+      .nodeWithdraw(this.state.node)
+      .send({ from: userAddress });
+    let hide;
+    var hashHandler = function (hash) {
+      emitter.removeListener("transactionHash", hashHandler);
+      hide = message.loading("Withdraw: wait for confirmatin : " + hash, 0);
+    };
+    var confirmationHandler = function (confirmationNumber, receipt) {
+      hide();
+      emitter.removeListener("confirmation", confirmationHandler);
+      message.success(
+        "Withdraw: success (confirmed block " + receipt.blockNumber + ")"
+      );
+      //TODO:If user still in nodetail page then page should update node detail
+    };
+    var errorHandler = function (error) {
+      emitter.removeListener("confirmation", confirmationHandler);
+      emitter.removeListener("error", errorHandler);
+      message.error(error.message);
+    };
+    emitter.on("transactionHash", hashHandler);
+    emitter.on("confirmation", confirmationHandler);
+    emitter.on("error", errorHandler);
+  };
+  handleOwnerClaimReward = () => {
+    //TODO : Add loading effect and pop up a small modal to show resutl
+    const { web3Client, userAddress } = this.props.contract;
+    let contractInstance = new web3Client.eth.Contract(
+      DOS_ABI,
+      DOS_CONTRACT_ADDRESS
+    );
+    let emitter = contractInstance.methods
+      .nodeClaimReward(this.state.node)
+      .send({ from: userAddress });
+    let hide;
+    var hashHandler = function (hash) {
+      emitter.removeListener("transactionHash", hashHandler);
+      hide = message.loading("ClaimReward: wait for confirmatin : " + hash, 0);
+    };
+    var confirmationHandler = function (confirmationNumber, receipt) {
+      hide();
+      emitter.removeListener("confirmation", confirmationHandler);
+      message.success(
+        "ClaimReward: success (confirmed block " + receipt.blockNumber + ")"
+      );
+      //TODO:If user still in nodetail page then page should update node detail
+    };
+    var errorHandler = function (error) {
+      emitter.removeListener("confirmation", confirmationHandler);
+      emitter.removeListener("error", errorHandler);
+      message.error(error.message);
+    };
+    emitter.on("transactionHash", hashHandler);
+    emitter.on("confirmation", confirmationHandler);
+    emitter.on("error", errorHandler);
+  };
+  handleDelegatorWithdraw = () => {
+    //TODO : Add loading effect and pop up a small modal to show resutl
+    const { web3Client, userAddress } = this.props.contract;
+    let contractInstance = new web3Client.eth.Contract(
+      DOS_ABI,
+      DOS_CONTRACT_ADDRESS
+    );
+    let emitter = contractInstance.methods
+      .delegatorWithdraw(this.state.node)
+      .send({ from: userAddress });
+    let hide;
+    var hashHandler = function (hash) {
+      emitter.removeListener("transactionHash", hashHandler);
+      hide = message.loading("Withdraw: wait for confirmatin : " + hash, 0);
+    };
+    var confirmationHandler = function (confirmationNumber, receipt) {
+      hide();
+      emitter.removeListener("confirmation", confirmationHandler);
+      message.success(
+        "Withdraw: success (confirmed block " + receipt.blockNumber + ")"
+      );
+      //TODO:If user still in nodetail page then page should update node detail
+    };
+    var errorHandler = function (error) {
+      emitter.removeListener("confirmation", confirmationHandler);
+      emitter.removeListener("error", errorHandler);
+      message.error(error.message);
+    };
+    emitter.on("transactionHash", hashHandler);
+    emitter.on("confirmation", confirmationHandler);
+    emitter.on("error", errorHandler);
+  };
+  handleDelegatorClaimReward = () => {
+    //TODO : Add loading effect and pop up a small modal to show resutl
+    const { web3Client, userAddress } = this.props.contract;
+    let contractInstance = new web3Client.eth.Contract(
+      DOS_ABI,
+      DOS_CONTRACT_ADDRESS
+    );
+    let emitter = contractInstance.methods
+      .delegatorClaimReward(this.state.node)
+      .send({ from: userAddress });
+    let hide;
+    var hashHandler = function (hash) {
+      emitter.removeListener("transactionHash", hashHandler);
+      hide = message.loading("ClaimReward: wait for confirmatin : " + hash, 0);
+    };
+    var confirmationHandler = function (confirmationNumber, receipt) {
+      hide();
+      emitter.removeListener("confirmation", confirmationHandler);
+      message.success(
+        "ClaimReward: success (confirmed block " + receipt.blockNumber + ")"
+      );
+      //TODO:If user still in nodetail page then page should update node detail
+    };
+    var errorHandler = function (error) {
+      emitter.removeListener("confirmation", confirmationHandler);
+      emitter.removeListener("error", errorHandler);
+      message.error(error.message);
+    };
+    emitter.on("transactionHash", hashHandler);
+    emitter.on("confirmation", confirmationHandler);
+    emitter.on("error", errorHandler);
+  };
+  handleUnregister = () => {
+    //TODO : Add loading effect and pop up a small modal to show resutl
+    const { web3Client, userAddress } = this.props.contract;
+    let contractInstance = new web3Client.eth.Contract(
+      DOS_ABI,
+      DOS_CONTRACT_ADDRESS
+    );
+    let emitter = contractInstance.methods
+      .nodeUnregister(this.state.node)
+      .send({ from: userAddress });
+    let hide;
+    var hashHandler = function (hash) {
+      emitter.removeListener("transactionHash", hashHandler);
+      hide = message.loading("Unregister: wait for confirmatin : " + hash, 0);
+    };
+    var confirmationHandler = function (confirmationNumber, receipt) {
+      hide();
+      emitter.removeListener("confirmation", confirmationHandler);
+      message.success(
+        "Unregister: success (confirmed block " + receipt.blockNumber + ")"
+      );
+      //TODO:If user still in nodetail page then page should update node detail
+    };
+    var errorHandler = function (error) {
+      emitter.removeListener("confirmation", confirmationHandler);
+      emitter.removeListener("error", errorHandler);
+      message.error(error.message);
+    };
+    emitter.on("transactionHash", hashHandler);
+    emitter.on("confirmation", confirmationHandler);
+    emitter.on("error", errorHandler);
+  };
+  //------- delegate upgrate unbond
   handleOwnerUpgrateSubmit = e => {
     e.preventDefault();
     const { form } = this.updateFormformRef.props;
@@ -72,12 +234,12 @@ export default class NodeDetail extends Component {
         .updateNodeStaking(this.state.node, tokenAmount, dbAmount, rewardCut)
         .send({ from: userAddress });
       let hide;
-      var hashHandler = function(hash) {
+      var hashHandler = function (hash) {
         emitter.removeListener("transactionHash", hashHandler);
         hide = message.loading("Unbond: wait for confirmatin : " + hash, 0);
       };
 
-      var confirmationHandler = function(confirmationNumber, receipt) {
+      var confirmationHandler = function (confirmationNumber, receipt) {
         hide();
         emitter.removeListener("confirmation", confirmationHandler);
         message.success(
@@ -85,7 +247,7 @@ export default class NodeDetail extends Component {
         );
         //TODO:If user still in nodetail page then page should update node detail
       };
-      var errorHandler = function(error) {
+      var errorHandler = function (error) {
         emitter.removeListener("confirmation", confirmationHandler);
         emitter.removeListener("error", errorHandler);
         message.error(error.message);
@@ -116,12 +278,12 @@ export default class NodeDetail extends Component {
         .nodeUnbond(tokenAmount, dbAmount, this.state.node)
         .send({ from: userAddress });
       let hide;
-      var hashHandler = function(hash) {
+      var hashHandler = function (hash) {
         emitter.removeListener("transactionHash", hashHandler);
         hide = message.loading("Unbond: wait for confirmatin : " + hash, 0);
       };
 
-      var confirmationHandler = function(confirmationNumber, receipt) {
+      var confirmationHandler = function (confirmationNumber, receipt) {
         hide();
         emitter.removeListener("confirmation", confirmationHandler);
         message.success(
@@ -129,7 +291,7 @@ export default class NodeDetail extends Component {
         );
         //TODO:If user still in nodetail page then page should update node detail
       };
-      var errorHandler = function(error) {
+      var errorHandler = function (error) {
         emitter.removeListener("confirmation", confirmationHandler);
         emitter.removeListener("error", errorHandler);
         message.error(error.message);
@@ -142,70 +304,6 @@ export default class NodeDetail extends Component {
         unbondOwnedNodeVisible: false
       });
     });
-  };
-  handleOwnerWithdraw = () => {
-    //TODO : Add loading effect and pop up a small modal to show resutl
-    const { web3Client, userAddress } = this.props.contract;
-    let contractInstance = new web3Client.eth.Contract(
-      DOS_ABI,
-      DOS_CONTRACT_ADDRESS
-    );
-    let emitter = contractInstance.methods
-      .nodeWithdraw(this.state.node)
-      .send({ from: userAddress });
-    let hide;
-    var hashHandler = function(hash) {
-      emitter.removeListener("transactionHash", hashHandler);
-      hide = message.loading("Withdraw: wait for confirmatin : " + hash, 0);
-    };
-    var confirmationHandler = function(confirmationNumber, receipt) {
-      hide();
-      emitter.removeListener("confirmation", confirmationHandler);
-      message.success(
-        "Withdraw: success (confirmed block " + receipt.blockNumber + ")"
-      );
-      //TODO:If user still in nodetail page then page should update node detail
-    };
-    var errorHandler = function(error) {
-      emitter.removeListener("confirmation", confirmationHandler);
-      emitter.removeListener("error", errorHandler);
-      message.error(error.message);
-    };
-    emitter.on("transactionHash", hashHandler);
-    emitter.on("confirmation", confirmationHandler);
-    emitter.on("error", errorHandler);
-  };
-  handleOwnerClaimReward = () => {
-    //TODO : Add loading effect and pop up a small modal to show resutl
-    const { web3Client, userAddress } = this.props.contract;
-    let contractInstance = new web3Client.eth.Contract(
-      DOS_ABI,
-      DOS_CONTRACT_ADDRESS
-    );
-    let emitter = contractInstance.methods
-      .nodeClaimReward(this.state.node)
-      .send({ from: userAddress });
-    let hide;
-    var hashHandler = function(hash) {
-      emitter.removeListener("transactionHash", hashHandler);
-      hide = message.loading("ClaimReward: wait for confirmatin : " + hash, 0);
-    };
-    var confirmationHandler = function(confirmationNumber, receipt) {
-      hide();
-      emitter.removeListener("confirmation", confirmationHandler);
-      message.success(
-        "ClaimReward: success (confirmed block " + receipt.blockNumber + ")"
-      );
-      //TODO:If user still in nodetail page then page should update node detail
-    };
-    var errorHandler = function(error) {
-      emitter.removeListener("confirmation", confirmationHandler);
-      emitter.removeListener("error", errorHandler);
-      message.error(error.message);
-    };
-    emitter.on("transactionHash", hashHandler);
-    emitter.on("confirmation", confirmationHandler);
-    emitter.on("error", errorHandler);
   };
   handleUserUnbondSubmit = e => {
     e.preventDefault();
@@ -225,12 +323,12 @@ export default class NodeDetail extends Component {
         .delegatorUnbond(tokenAmount, this.state.node)
         .send({ from: userAddress });
       let hide;
-      var hashHandler = function(hash) {
+      var hashHandler = function (hash) {
         emitter.removeListener("transactionHash", hashHandler);
         hide = message.loading("Unbond: wait for confirmatin : " + hash, 0);
       };
 
-      var confirmationHandler = function(confirmationNumber, receipt) {
+      var confirmationHandler = function (confirmationNumber, receipt) {
         hide();
         emitter.removeListener("confirmation", confirmationHandler);
         message.success(
@@ -238,7 +336,7 @@ export default class NodeDetail extends Component {
         );
         //TODO:If user still in nodetail page then page should update node detail
       };
-      var errorHandler = function(error) {
+      var errorHandler = function (error) {
         emitter.removeListener("confirmation", confirmationHandler);
         emitter.removeListener("error", errorHandler);
         message.error(error.message);
@@ -276,12 +374,12 @@ export default class NodeDetail extends Component {
         .send({ from: userAddress });
       // let nodeDetail = this;
       let hide;
-      var hashHandler = function(hash) {
+      var hashHandler = function (hash) {
         emitter.removeListener("transactionHash", hashHandler);
         hide = message.loading("Delegate: wait for confirmatin : " + hash, 0);
       };
 
-      var confirmationHandler = function(confirmationNumber, receipt) {
+      var confirmationHandler = function (confirmationNumber, receipt) {
         hide();
         emitter.removeListener("confirmation", confirmationHandler);
         message.success(
@@ -290,7 +388,7 @@ export default class NodeDetail extends Component {
         //TODO:If user still in nodetail page then page should update node detail
         //nodeDetail.getNodeDetail();
       };
-      var errorHandler = function(error) {
+      var errorHandler = function (error) {
         emitter.removeListener("confirmation", confirmationHandler);
         emitter.removeListener("error", errorHandler);
         message.error(error.message);
@@ -302,102 +400,7 @@ export default class NodeDetail extends Component {
       this.setState({ delegateFormVisible: false, delegateFormLoading: false });
     });
   };
-  handleUnregister = () => {
-    //TODO : Add loading effect and pop up a small modal to show resutl
-    const { web3Client, userAddress } = this.props.contract;
-    let contractInstance = new web3Client.eth.Contract(
-      DOS_ABI,
-      DOS_CONTRACT_ADDRESS
-    );
-    let emitter = contractInstance.methods
-      .nodeUnregister(this.state.node)
-      .send({ from: userAddress });
-    let hide;
-    var hashHandler = function(hash) {
-      emitter.removeListener("transactionHash", hashHandler);
-      hide = message.loading("Unregister: wait for confirmatin : " + hash, 0);
-    };
-    var confirmationHandler = function(confirmationNumber, receipt) {
-      hide();
-      emitter.removeListener("confirmation", confirmationHandler);
-      message.success(
-        "Unregister: success (confirmed block " + receipt.blockNumber + ")"
-      );
-      //TODO:If user still in nodetail page then page should update node detail
-    };
-    var errorHandler = function(error) {
-      emitter.removeListener("confirmation", confirmationHandler);
-      emitter.removeListener("error", errorHandler);
-      message.error(error.message);
-    };
-    emitter.on("transactionHash", hashHandler);
-    emitter.on("confirmation", confirmationHandler);
-    emitter.on("error", errorHandler);
-  };
-  handleDelegatorWithdraw = () => {
-    //TODO : Add loading effect and pop up a small modal to show resutl
-    const { web3Client, userAddress } = this.props.contract;
-    let contractInstance = new web3Client.eth.Contract(
-      DOS_ABI,
-      DOS_CONTRACT_ADDRESS
-    );
-    let emitter = contractInstance.methods
-      .delegatorWithdraw(this.state.node)
-      .send({ from: userAddress });
-    let hide;
-    var hashHandler = function(hash) {
-      emitter.removeListener("transactionHash", hashHandler);
-      hide = message.loading("Withdraw: wait for confirmatin : " + hash, 0);
-    };
-    var confirmationHandler = function(confirmationNumber, receipt) {
-      hide();
-      emitter.removeListener("confirmation", confirmationHandler);
-      message.success(
-        "Withdraw: success (confirmed block " + receipt.blockNumber + ")"
-      );
-      //TODO:If user still in nodetail page then page should update node detail
-    };
-    var errorHandler = function(error) {
-      emitter.removeListener("confirmation", confirmationHandler);
-      emitter.removeListener("error", errorHandler);
-      message.error(error.message);
-    };
-    emitter.on("transactionHash", hashHandler);
-    emitter.on("confirmation", confirmationHandler);
-    emitter.on("error", errorHandler);
-  };
-  handleDelegatorClaimReward = () => {
-    //TODO : Add loading effect and pop up a small modal to show resutl
-    const { web3Client, userAddress } = this.props.contract;
-    let contractInstance = new web3Client.eth.Contract(
-      DOS_ABI,
-      DOS_CONTRACT_ADDRESS
-    );
-    let emitter = contractInstance.methods
-      .delegatorClaimReward(this.state.node)
-      .send({ from: userAddress });
-    let hide;
-    var hashHandler = function(hash) {
-      emitter.removeListener("transactionHash", hashHandler);
-      hide = message.loading("ClaimReward: wait for confirmatin : " + hash, 0);
-    };
-    var confirmationHandler = function(confirmationNumber, receipt) {
-      hide();
-      emitter.removeListener("confirmation", confirmationHandler);
-      message.success(
-        "ClaimReward: success (confirmed block " + receipt.blockNumber + ")"
-      );
-      //TODO:If user still in nodetail page then page should update node detail
-    };
-    var errorHandler = function(error) {
-      emitter.removeListener("confirmation", confirmationHandler);
-      emitter.removeListener("error", errorHandler);
-      message.error(error.message);
-    };
-    emitter.on("transactionHash", hashHandler);
-    emitter.on("confirmation", confirmationHandler);
-    emitter.on("error", errorHandler);
-  };
+
   getNodeDetail = async () => {
     function fromWei(bn) {
       if (!bn || bn === "-") {
@@ -623,12 +626,12 @@ export default class NodeDetail extends Component {
                       onSubmit={this.handleOwnerUpgrateSubmit}
                     />
                   ) : (
-                    // User --Delegate
-                    <DelegateNode
-                      wrappedComponentRef={this.saveDelegateFormRef}
-                      onSubmit={this.handleUserDelegateSubmit}
-                    />
-                  )}
+                      // User --Delegate
+                      <DelegateNode
+                        wrappedComponentRef={this.saveDelegateFormRef}
+                        onSubmit={this.handleUserDelegateSubmit}
+                      />
+                    )}
                 </div>
               </TabPane>
               <TabPane tab={TabbarRender("UnBond")} key="2">
@@ -640,12 +643,12 @@ export default class NodeDetail extends Component {
                       onSubmit={this.handleOwnerUnbondSubmit}
                     />
                   ) : (
-                    // User --unbond
-                    <UnbondNode
-                      wrappedComponentRef={this.saveUnbondFormRef}
-                      onSubmit={this.handleUserUnbondSubmit}
-                    />
-                  )}
+                      // User --unbond
+                      <UnbondNode
+                        wrappedComponentRef={this.saveUnbondFormRef}
+                        onSubmit={this.handleUserUnbondSubmit}
+                      />
+                    )}
                 </div>
               </TabPane>
             </Tabs>
