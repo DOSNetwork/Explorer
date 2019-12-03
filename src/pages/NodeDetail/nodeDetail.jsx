@@ -28,10 +28,11 @@ export default class NodeDetail extends Component {
       myRewardTotal: 0,
       myUnbondTotal: 0,
       loading: false,
-      formText: ""
+      formText: "",
     };
   }
   componentDidMount() {
+    this.unMountRemoveListenerCallbacks = []
     this.getNodeDetail();
   }
   getSnapshotBeforeUpdate(prevProps) {
@@ -44,6 +45,12 @@ export default class NodeDetail extends Component {
       this.getNodeDetail();
     }
   }
+  componentWillUnmount() {
+    let { unMountRemoveListenerCallbacks } = this
+    console.log(unMountRemoveListenerCallbacks)
+    unMountRemoveListenerCallbacks.forEach(fn => fn())
+    this.unMount = true
+  }
   saveUpdateFormRef = formRef => {
     this.updateFormformRef = formRef;
   };
@@ -51,7 +58,6 @@ export default class NodeDetail extends Component {
     this.unbondFormformRef = formRef;
   };
   saveDelegateFormRef = formRef => {
-    console.log("saveDelegateFormRef", formRef);
     this.delegateFormRef = formRef;
   };
   saveUnbondOwnedNodeRef = formRef => {
@@ -60,6 +66,7 @@ export default class NodeDetail extends Component {
   //------- withDraw unregister
   handleOwnerWithdraw = () => {
     //TODO : Add loading effect and pop up a small modal to show resutl
+    let pageInstance = this;
     const { web3Client, userAddress } = this.props.contract;
     let contractInstance = new web3Client.eth.Contract(
       DOS_ABI,
@@ -79,7 +86,9 @@ export default class NodeDetail extends Component {
       message.success(
         "Withdraw: success (confirmed block " + receipt.blockNumber + ")"
       );
-      //TODO:If user still in nodetail page then page should update node detail
+      if (!this.unMount) {
+        pageInstance && pageInstance.getNodeDetail()
+      }
     };
     var errorHandler = function (error) {
       emitter.removeListener("confirmation", confirmationHandler);
@@ -89,9 +98,17 @@ export default class NodeDetail extends Component {
     emitter.on("transactionHash", hashHandler);
     emitter.on("confirmation", confirmationHandler);
     emitter.on("error", errorHandler);
+
+    this.unMountRemoveListenerCallbacks.push(() => {
+      emitter.removeListener("transactionHash", hashHandler);
+      emitter.removeListener("confirmation", confirmationHandler);
+      emitter.removeListener("error", errorHandler);
+      console.log('handleOwnerWithdraw listeners removed')
+    })
   };
   handleOwnerClaimReward = () => {
     //TODO : Add loading effect and pop up a small modal to show resutl
+    let pageInstance = this;
     const { web3Client, userAddress } = this.props.contract;
     let contractInstance = new web3Client.eth.Contract(
       DOS_ABI,
@@ -111,7 +128,9 @@ export default class NodeDetail extends Component {
       message.success(
         "ClaimReward: success (confirmed block " + receipt.blockNumber + ")"
       );
-      //TODO:If user still in nodetail page then page should update node detail
+      if (!this.unMount) {
+        pageInstance && pageInstance.getNodeDetail()
+      }
     };
     var errorHandler = function (error) {
       emitter.removeListener("confirmation", confirmationHandler);
@@ -121,9 +140,17 @@ export default class NodeDetail extends Component {
     emitter.on("transactionHash", hashHandler);
     emitter.on("confirmation", confirmationHandler);
     emitter.on("error", errorHandler);
+
+    this.unMountRemoveListenerCallbacks.push(() => {
+      emitter.removeListener("transactionHash", hashHandler);
+      emitter.removeListener("confirmation", confirmationHandler);
+      emitter.removeListener("error", errorHandler);
+      console.log('handleOwnerClaimReward listeners removed')
+    })
   };
   handleDelegatorWithdraw = () => {
     //TODO : Add loading effect and pop up a small modal to show resutl
+    let pageInstance = this;
     const { web3Client, userAddress } = this.props.contract;
     let contractInstance = new web3Client.eth.Contract(
       DOS_ABI,
@@ -143,6 +170,9 @@ export default class NodeDetail extends Component {
       message.success(
         "Withdraw: success (confirmed block " + receipt.blockNumber + ")"
       );
+      if (!this.unMount) {
+        pageInstance && pageInstance.getNodeDetail()
+      }
       //TODO:If user still in nodetail page then page should update node detail
     };
     var errorHandler = function (error) {
@@ -153,9 +183,17 @@ export default class NodeDetail extends Component {
     emitter.on("transactionHash", hashHandler);
     emitter.on("confirmation", confirmationHandler);
     emitter.on("error", errorHandler);
+
+    this.unMountRemoveListenerCallbacks.push(() => {
+      emitter.removeListener("transactionHash", hashHandler);
+      emitter.removeListener("confirmation", confirmationHandler);
+      emitter.removeListener("error", errorHandler);
+      console.log('handleOwnerClaimReward listeners removed')
+    })
   };
   handleDelegatorClaimReward = () => {
     //TODO : Add loading effect and pop up a small modal to show resutl
+    let pageInstance = this;
     const { web3Client, userAddress } = this.props.contract;
     let contractInstance = new web3Client.eth.Contract(
       DOS_ABI,
@@ -175,6 +213,9 @@ export default class NodeDetail extends Component {
       message.success(
         "ClaimReward: success (confirmed block " + receipt.blockNumber + ")"
       );
+      if (!this.unMount) {
+        pageInstance && pageInstance.getNodeDetail()
+      }
       //TODO:If user still in nodetail page then page should update node detail
     };
     var errorHandler = function (error) {
@@ -185,9 +226,16 @@ export default class NodeDetail extends Component {
     emitter.on("transactionHash", hashHandler);
     emitter.on("confirmation", confirmationHandler);
     emitter.on("error", errorHandler);
+
+    this.unMountRemoveListenerCallbacks.push(() => {
+      emitter.removeListener("transactionHash", hashHandler);
+      emitter.removeListener("confirmation", confirmationHandler);
+      emitter.removeListener("error", errorHandler);
+    })
   };
   handleUnregister = () => {
     //TODO : Add loading effect and pop up a small modal to show resutl
+    let pageInstance = this;
     const { web3Client, userAddress } = this.props.contract;
     let contractInstance = new web3Client.eth.Contract(
       DOS_ABI,
@@ -207,7 +255,9 @@ export default class NodeDetail extends Component {
       message.success(
         "Unregister: success (confirmed block " + receipt.blockNumber + ")"
       );
-      //TODO:If user still in nodetail page then page should update node detail
+      if (!this.unMount) {
+        pageInstance && pageInstance.getNodeDetail()
+      }
     };
     var errorHandler = function (error) {
       emitter.removeListener("confirmation", confirmationHandler);
@@ -217,10 +267,17 @@ export default class NodeDetail extends Component {
     emitter.on("transactionHash", hashHandler);
     emitter.on("confirmation", confirmationHandler);
     emitter.on("error", errorHandler);
+
+    this.unMountRemoveListenerCallbacks.push(() => {
+      emitter.removeListener("transactionHash", hashHandler);
+      emitter.removeListener("confirmation", confirmationHandler);
+      emitter.removeListener("error", errorHandler);
+    })
   };
   //------- delegate upgrate unbond
   handleOwnerUpgrateSubmit = e => {
     e.preventDefault();
+    let pageInstance = this;
     const { form } = this.updateFormformRef.props;
     form.validateFields((err, values) => {
       if (err) {
@@ -232,24 +289,27 @@ export default class NodeDetail extends Component {
         DOS_CONTRACT_ADDRESS
       );
       const tokenAmount = web3Client.utils.toWei(values.tokenAmount, "ether");
-      const dbAmount = web3Client.utils.toWei(values.dbAmount, "ether");
+      const dbAmount = values.dbAmount ? web3Client.utils.toWei(values.dbAmount, "ether") : 0;
       const rewardCut = values.rewardCut;
       let emitter = contractInstance.methods
         .updateNodeStaking(this.state.node, tokenAmount, dbAmount, rewardCut)
         .send({ from: userAddress });
       let hide;
+      debugger;
       var hashHandler = function (hash) {
         emitter.removeListener("transactionHash", hashHandler);
-        hide = message.loading("Unbond: wait for confirmatin : " + hash, 0);
+        hide = message.loading("Upgrate: wait for confirmatin : " + hash, 0);
       };
 
       var confirmationHandler = function (confirmationNumber, receipt) {
         hide();
         emitter.removeListener("confirmation", confirmationHandler);
         message.success(
-          "Unbond: success (confirmed block " + receipt.blockNumber + ")"
+          "Upgrate: success (confirmed block " + receipt.blockNumber + ")"
         );
-        //TODO:If user still in nodetail page then page should update node detail
+        if (!this.unMount) {
+          pageInstance && pageInstance.getNodeDetail()
+        }
       };
       var errorHandler = function (error) {
         emitter.removeListener("confirmation", confirmationHandler);
@@ -259,7 +319,12 @@ export default class NodeDetail extends Component {
       emitter.on("transactionHash", hashHandler);
       emitter.on("confirmation", confirmationHandler);
       emitter.on("error", errorHandler);
-
+      this.unMountRemoveListenerCallbacks.push(() => {
+        emitter.removeListener("transactionHash", hashHandler);
+        emitter.removeListener("confirmation", confirmationHandler);
+        emitter.removeListener("error", errorHandler);
+        console.log('handleOwnerUpgrateSubmit listeners removed')
+      })
       this.setState({ updateFormVisible: false });
     });
   };
@@ -303,6 +368,19 @@ export default class NodeDetail extends Component {
       emitter.on("transactionHash", hashHandler);
       emitter.on("confirmation", confirmationHandler);
       emitter.on("error", errorHandler);
+
+      this.unMountRemoveListenerCallbacks.push(() => {
+        emitter.removeListener("transactionHash", hashHandler);
+        emitter.removeListener("confirmation", confirmationHandler);
+        emitter.removeListener("error", errorHandler);
+      })
+
+      this.unMountRemoveListenerCallbacks.push(() => {
+        emitter.removeListener("transactionHash", hashHandler);
+        emitter.removeListener("confirmation", confirmationHandler);
+        emitter.removeListener("error", errorHandler);
+      })
+
       this.setState({
         unbondOwnedNodeLoading: false,
         unbondOwnedNodeVisible: false
@@ -348,6 +426,11 @@ export default class NodeDetail extends Component {
       emitter.on("transactionHash", hashHandler);
       emitter.on("confirmation", confirmationHandler);
       emitter.on("error", errorHandler);
+      this.unMountRemoveListenerCallbacks.push(() => {
+        emitter.removeListener("transactionHash", hashHandler);
+        emitter.removeListener("confirmation", confirmationHandler);
+        emitter.removeListener("error", errorHandler);
+      })
       this.setState({
         formText: "",
         unbondFormLoading: false,
@@ -400,7 +483,11 @@ export default class NodeDetail extends Component {
       emitter.on("transactionHash", hashHandler);
       emitter.on("confirmation", confirmationHandler);
       emitter.on("error", errorHandler);
-
+      this.unMountRemoveListenerCallbacks.push(() => {
+        emitter.removeListener("transactionHash", hashHandler);
+        emitter.removeListener("confirmation", confirmationHandler);
+        emitter.removeListener("error", errorHandler);
+      })
       this.setState({ delegateFormVisible: false, delegateFormLoading: false });
     });
   };
@@ -423,9 +510,9 @@ export default class NodeDetail extends Component {
     const nodeAddr = this.state.node;
     const nodeInstance = await contractInstance.methods.nodes(nodeAddr).call();
     let uptime = await contractInstance.methods.getNodeUptime(nodeAddr).call();
-    let delegatorWithdrawAbletotal = await contractInstance.methods.delegatorWithdrawAble(nodeAddr).call();
-    console.log(delegatorWithdrawAbletotal)
-    let nodeWithdrawAbleTotal = await contractInstance.methods.nodeWithdrawAble(nodeAddr).call();
+    // let delegatorWithdrawAbletotal = await contractInstance.methods.delegatorWithdrawAble(nodeAddr).call();
+    // console.log(delegatorWithdrawAbletotal)
+    // let nodeWithdrawAbleTotal = await contractInstance.methods.nodeWithdrawAble(nodeAddr).call();
     // let nodeDelegators = nodeInstance.nodeDelegators;
     // if (nodeDelegators != null) {
     //   console.log(nodeAddr, " nodeDelegators ", nodeDelegators.length);
@@ -450,7 +537,7 @@ export default class NodeDetail extends Component {
       selfStakedAmount: fromWei(selfStakedAmount),
       totalOtherDelegatedAmount: fromWei(totalOtherDelegatedAmount),
       rewardCut: rewardCut.toString(),
-      nodeUptime: Math.round(uptime.toNumber() / (60 * 60 * 24)),
+      nodeUptime: Math.round(+uptime / (60 * 60 * 24)),
       status: nodeInstance.running
     };
     if (userAddress === "") {

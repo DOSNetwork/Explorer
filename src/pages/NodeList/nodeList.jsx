@@ -92,6 +92,10 @@ export default class NodeList extends Component {
   componentDidMount() {
     this.loadNodeList('', this.state.pagination, this.props.showRelatedNodes);
   }
+  componentWillUnmount() {
+    this.unMountRemoveListenerCallbacks()
+    this.unMount = true;
+  }
   getSnapshotBeforeUpdate(prevProps) {
     let userLogined =
       prevProps.contract.userAddress === "" && this.props.contract.userAddress;
@@ -126,23 +130,32 @@ export default class NodeList extends Component {
         DOS_CONTRACT_ADDRESS
       );
       const tokenAmount = web3Client.utils.toWei(values.tokenAmount, "ether");
-
-      let emitter = contractInstance.methods
-        .newNode(values.nodeAddr, tokenAmount, 0, values.cutRate, "test")
-        .send({ from: userAddress });
-
-      EmitterHandlerWrapper(emitter, (hash) => {
-        message.loading(MESSAGE_TEXT.MESSAGE_TRANSCATION_LOADING);
-      }, (confirmationNumber, receipt) => {
-        message.success(
-          MESSAGE_TEXT.MESSAGE_TRANSCATION_COMFIRM
-        );
-        this.loadNodeList('', { current: 1, pageSize: 10 }, this.props.showRelatedNodes);
-      }, (error) => {
-        message.error(error.message.split('\n')[0]);
-        this.loadNodeList('', { current: 1, pageSize: 10 }, this.props.showRelatedNodes);
-      })
-
+      if (web3Client.utils.isAddress(values.nodeAddr)) {
+        try {
+          let emitter = contractInstance.methods
+            .newNode(values.nodeAddr, tokenAmount, 0, values.cutRate || 0, values.name || '')
+            .send({ from: userAddress });
+          this.unMountRemoveListenerCallbacks = EmitterHandlerWrapper(emitter, (hash) => {
+            message.loading(MESSAGE_TEXT.MESSAGE_TRANSCATION_LOADING);
+          }, (confirmationNumber, receipt) => {
+            message.success(
+              MESSAGE_TEXT.MESSAGE_TRANSCATION_COMFIRM
+            );
+            this.loadNodeList('', { current: 1, pageSize: 10 }, this.props.showRelatedNodes);
+          }, (error) => {
+            message.error(error.message.split('\n')[0]);
+            this.loadNodeList('', { current: 1, pageSize: 10 }, this.props.showRelatedNodes);
+          }, { emmiterName: 'CreateNode' })
+        } catch (e) {
+          message.error(e.reason);
+          this.setState({
+            confirmLoading: false,
+            visible: true
+          });
+        }
+      } else {
+        message.error('invalid address');
+      }
       this.setState({
         confirmLoading: false,
         visible: false
@@ -252,20 +265,32 @@ export default class NodeList extends Component {
         .call();
       const { selfStakedAmount, totalOtherDelegatedAmount, rewardCut, description, running } = node;
       const { delegatedAmount, accumulatedReward } = delegator;
+      let totalOtherDelegatedAmountShow = fromWei(totalOtherDelegatedAmount)
+      let selfStakedAmountShow = fromWei(selfStakedAmount)
+      let delegatedAmountShow = fromWei(delegatedAmount)
+      let accumulatedRewardShow = fromWei(accumulatedReward)
+      let nodeAccumulatedReward = fromWei(node.accumulatedReward)
+      if (isMetaMaskLogin && showRelatedNodes && +selfStakedAmountShow === 0 && +delegatedAmountShow === 0 && +accumulatedRewardShow === 0 && +nodeAccumulatedReward === 0) {
+        continue;
+      }
       const nodeObject = {
         nameKey: `name-${nodeAddr}`,
         description: description,
         status: running,
         node: nodeAddr,
-        selfStaked: fromWei(selfStakedAmount),
-        totalDelegated: fromWei(totalOtherDelegatedAmount),
-        totalRewards: fromWei(node.accumulatedReward),
+        selfStaked: selfStakedAmountShow,
+        totalDelegated: totalOtherDelegatedAmountShow,
+        totalRewards: nodeAccumulatedReward,
         rewardCut: rewardCut,
-        uptime: Math.round(uptime.toNumber() / (60 * 60 * 24)),
-        myDelegation: fromWei(delegatedAmount),
-        myRewards: fromWei(accumulatedReward)
+        uptime: Math.round(+uptime / (60 * 60 * 24)),
+        myDelegation: delegatedAmountShow,
+        myRewards: accumulatedRewardShow
       };
       nodeList.push(nodeObject);
+    }
+    if (this.unMount) {
+      console.warn('Page[NodeList] Already Unmounted')
+      return;
     }
     this.setState({
       dataList: nodeList,

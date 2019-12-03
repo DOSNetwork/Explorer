@@ -173,7 +173,7 @@ option {
 
 
 .ant-pagination-item-active {
-    background-color: #358ED7;
+    background-color: #4837BC;
     color: #fff;
     border-color: none;
 }
@@ -182,9 +182,12 @@ option {
     color: #fff;
 }
 
-.ant-btn-primary {
-    background: #358ED7;
-    border: 1px solid #358ED7;
-    box-sizing: border-box;
+.ant-btn {
     border-radius: 20.5px;
+}
+
+.ant-btn-primary {
+    background: #4837BC;
+    border: 1px solid #4837BC;
+    box-sizing: border-box;
 }

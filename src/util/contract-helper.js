@@ -1,4 +1,7 @@
-export const EmitterHandlerWrapper = (emitter, h, s, e) => {
+export const EmitterHandlerWrapper = (emitter, h, s, e, op = {}) => {
+    let {
+        emmiterName
+    } = op
     let hashHandler = (hash) => {
         emitter.removeListener("transactionHash", hashHandler);
         h.call(this, hash)
@@ -14,4 +17,11 @@ export const EmitterHandlerWrapper = (emitter, h, s, e) => {
     emitter.on("transactionHash", hashHandler);
     emitter.on("confirmation", successHandler);
     emitter.on("error", errorHandler);
+
+    return () => {
+        console.log(`Emmiter:${emmiterName},all lisenter removed`)
+        emitter.removeListener("transactionHash", hashHandler);
+        emitter.removeListener("confirmation", successHandler);
+        emitter.removeListener("error", errorHandler);
+    }
 }

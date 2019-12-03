@@ -1,7 +1,9 @@
 import React from "react";
 import { Modal, Form, Input } from "antd";
 const ETHAddressRegex = /^(0x)?[0-9a-fA-F]{40}$/
-const newNode = Form.create({ name: "form_in_modal" })(
+const newNode = Form.create({
+  name: "form_in_modal"
+})(
   // eslint-disable-next-line
   class extends React.Component {
     validateAddress = (rule, value, callback) => {
@@ -66,7 +68,7 @@ const newNode = Form.create({ name: "form_in_modal" })(
                 ]
               })(<Input type="textarea" />)}
             </Form.Item>
-            <Form.Item label="Node Address">
+            <Form.Item label="Node Address" >
               {getFieldDecorator("nodeAddr", {
                 rules: [
                   {

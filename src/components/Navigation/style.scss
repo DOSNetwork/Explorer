@@ -3,11 +3,12 @@
 @import '../../styles/layout.scss';
 
 .header__wrapper {
-    background-color: $bgColor;
+    // background-color: $bgColor;
     height: 75px;
     position: fixed;
     width: 100%;
     z-index: 1000;
+    background: linear-gradient(180deg, #5A4BC6 0%, #211A54 100%);
     @include layout-min-960
 }
 
@@ -109,7 +110,7 @@
     padding: 0 27px;
 
     &:hover {
-        background-color: rgb(95, 95, 95);
+        background-color: rgb(61, 43, 160);
     }
 }
 
