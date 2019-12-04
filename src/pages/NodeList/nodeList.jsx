@@ -93,7 +93,8 @@ export default class NodeList extends Component {
     this.loadNodeList('', this.state.pagination, this.props.showRelatedNodes);
   }
   componentWillUnmount() {
-    this.unMountRemoveListenerCallbacks()
+    if (this.unMountRemoveListenerCallbacks && typeof this.unMountRemoveListenerCallbacks === 'function')
+      this.unMountRemoveListenerCallbacks()
     this.unMount = true;
   }
   getSnapshotBeforeUpdate(prevProps) {
@@ -348,6 +349,7 @@ export default class NodeList extends Component {
           rowClassName={(row, index) => {
             return index % 2 === 0 ? "row-light" : "row-dark";
           }}
+          bordered={false}
           onChange={this.handleTableChange}
         >
           <Column
