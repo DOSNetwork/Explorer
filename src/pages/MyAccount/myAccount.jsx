@@ -154,16 +154,22 @@ export default class Account extends Component {
           const delegator = await StakingContract.methods
             .delegators(userAddress, nodeAddr)
             .call();
-          //TODO : BN add
-          delegatedAmount = delegatedAmount.add(
-            new web3Client.utils.toBN(delegator.delegatedAmount)
-          );
-          delegatedReward = delegatedReward.add(
-            new web3Client.utils.toBN(delegator.delegatedReward)
-          );
-          unbondDelegated = unbondDelegated.add(
-            new web3Client.utils.toBN(delegator.unbondDelegated)
-          );
+
+          if (delegator.delegatedAmount) {
+            delegatedAmount = delegatedAmount.add(
+              new web3Client.utils.toBN(delegator.delegatedAmount)
+            );
+          }
+          if (delegator.delegatedReward) {
+            delegatedReward = delegatedReward.add(
+              new web3Client.utils.toBN(delegator.delegatedReward)
+            );
+          }
+          if (delegator.unbondDelegated) {
+            unbondDelegated = unbondDelegated.add(
+              new web3Client.utils.toBN(delegator.unbondDelegated)
+            );
+          }
         }
         console.log(
           Math.round(

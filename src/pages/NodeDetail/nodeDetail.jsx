@@ -410,7 +410,7 @@ export default class NodeDetail extends Component {
           .call();
         myTokenTotal = fromWei(selfStakedAmount);
         myUnbondTotal =
-          fromWei(pendingWithdrawToken) + fromWei(pendingWithdrawDB);
+          fromWei(pendingWithdrawToken);
         myRewardTotal = fromWei(rewardotal);
       } else {
         let delegator = await contractInstance.methods
