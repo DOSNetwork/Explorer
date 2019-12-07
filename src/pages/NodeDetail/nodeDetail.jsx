@@ -54,7 +54,9 @@ export default class NodeDetail extends Component {
   }
   componentWillUnmount() {
     let { unMountRemoveListenerCallbacks } = this
-    unMountRemoveListenerCallbacks.forEach(fn => fn())
+    unMountRemoveListenerCallbacks.forEach(fn => {
+      typeof fn === 'function' && fn.call(null)
+    })
     this.unMount = true
   }
   saveUpdateFormRef = formRef => {
@@ -181,7 +183,7 @@ export default class NodeDetail extends Component {
       okText: 'Sure',
       okType: 'danger',
       cancelText: 'No',
-      onOk() {
+      onOk: () => {
         let emitter = this.contractInstance.methods
           .nodeUnregister(this.state.node)
           .send({ from: userAddress });
@@ -342,7 +344,7 @@ export default class NodeDetail extends Component {
       },
       (error) => {
         message.error(error.message.split('\n')[0]);
-      }), { emmiterName: emitterName })
+      }, { emmiterName: emitterName }))
   }
   getNodeDetail = async () => {
     function fromWei(bn) {
@@ -467,7 +469,7 @@ export default class NodeDetail extends Component {
                 <span className="node-address">
                   {EllipsisString(node, 6, 6)}{" "}
                 </span>
-                {status ? <Tag color="green">Active</Tag> : <Tag>Inactive</Tag>}
+                {status ? <div className='node-status__tag tag--active'>Active</div> : <div className='node-status__tag tag--inactive'>Inactive</div>}
               </div>
               {isMetaMaskLogin ? (
                 <div>
@@ -497,8 +499,9 @@ export default class NodeDetail extends Component {
                   <p className="user-info--value">{numberFormatRender(this.state.myTokenTotal)}</p>
                 </div>
                 <div className="user-info--rewards">
-                  <p className="user-info--title">Unbond</p>
-                  <p className="user-info--value">{numberFormatRender(this.state.myUnbondTotal)}({numberFormatRender(this.state.sevenDaysTotal)})</p>
+                  <p className="user-info--title">Unbond(Frozen)</p>
+                  <p className="user-info--value">{numberFormatRender(this.state.myUnbondTotal)}<span className='value--frozen'>({numberFormatRender(this.state.sevenDaysTotal)})</span>
+                  </p>
                   {isUserDelegatedThisNode ? <Button
                     className="widthdraw-button"
                     shape="round"

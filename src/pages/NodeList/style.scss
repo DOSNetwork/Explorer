@@ -13,6 +13,7 @@
 .node-list--header-wrapper {
     display: flex;
     justify-content: space-between;
+    padding-bottom:10px;
 }
 
 
@@ -23,5 +24,12 @@
 }
 
 .node-list--header-right {
-    flex: 0;
+    flex: 0 0 auto;
+    display: flex;
+    align-items: center;
+}
+
+.nodelist-name{
+    display:flex;
+    align-items:center;
 }

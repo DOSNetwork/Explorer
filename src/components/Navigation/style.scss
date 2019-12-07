@@ -21,14 +21,14 @@
     padding: 0 27px;
     position: relative;
     margin: 0 auto;
-
+    width:1200px;
     a {
         color: #fff !important;
     }
 
-    @include respond-to ('1920') {
-        max-width: 1560px;
-    }
+    // @include respond-to ('1920') {
+    //     max-width: 1560px;
+    // }
 }
 
 .logo__wrapper {
@@ -39,7 +39,6 @@
 }
 
 .logo--name {
-    font-family: IBMPlexSans;
     font-size: 18px;
     font-weight: bold;
     color: #fff;
@@ -80,11 +79,11 @@
         border-bottom: 3px solid transparent;
 
         &.active {
-            border-color: #fff;
+            border-color: #B0A1FF;
         }
 
         &:hover {
-            border-color: #fff;
+            border-color: #B0A1FF;
         }
     }
 
@@ -95,6 +94,10 @@
 
     .navi-item-disabled:active {
         pointer-events: none;
+    }
+
+    .navi-item:hover{
+        background-color:rgba(255,255,255,0.1)
     }
 }
 
@@ -110,12 +113,12 @@
     padding: 0 27px;
 
     &:hover {
-        background-color: rgb(61, 43, 160);
+        background-color:rgba(255,255,255,0.1)
     }
 }
 
 .metamask__login-status--conntect {
-    color: rgb(16, 219, 43)
+    color: #00FFC6;
 }
 
 .metamask__logo {

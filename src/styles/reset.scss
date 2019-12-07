@@ -190,4 +190,20 @@ option {
     background: #4837BC;
     border: 1px solid #4837BC;
     box-sizing: border-box;
+
+    &:hover{
+        background:#705EEF;
+    }
+}
+
+.ant-table-tbody > tr:hover:not(.ant-table-expanded-row) > td {
+    background-color:#F3F1FC;
+}
+
+
+.ant-tabs-nav .ant-tabs-tab-active{
+    color:#6458A5;
+}
+.ant-tabs-ink-bar{
+    background-color:#6458A5;
 }

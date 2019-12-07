@@ -24,8 +24,8 @@ const statusColumnRender = (text, record, index) => {
   return (
     <>
       {status ?
-        <Tag color="green">Active</Tag> :
-        <Tag>Inactive</Tag>}
+        <div className='node-status__tag tag--active'>Active</div> :
+        <div className='node-status__tag tag--inactive'>Inactive</div>}
     </>
   );
 };
@@ -33,9 +33,7 @@ const statusColumnRender = (text, record, index) => {
 const nameColumnRender = (text, record) => {
   let avatar = `data:image/png;base64,${new identicon(record.node, 100).toString()}`;
   return (
-    <>
-      <img className='nodelist-avatar' src={avatar} alt="" />{record.description}
-    </>
+    <div className='nodelist-name'><img className='nodelist-avatar' src={avatar} alt="" />{record.description}</div>
   )
 }
 const numberFormatRender = (text, record, index) => {
@@ -320,7 +318,7 @@ export default class NodeList extends Component {
               <Button type="primary" onClick={this.showModal}>
                 Create a Node
               </Button>
-              &nbsp;&nbsp;&nbsp;&nbsp;
+            
               <NewNode
                 wrappedComponentRef={this.saveFormRef}
                 visible={this.state.visible}
@@ -329,11 +327,13 @@ export default class NodeList extends Component {
                 confirmLoading={this.state.confirmLoading}
                 modalText={this.state.formText}
               />
-              <Switch defaultChecked={showRelatedNodes} onChange={this.onChange} />&nbsp;Only Show The Nodes Related To Me
           </div>
           )
             : <div className='node-list--header-left'></div>}
           <div className="node-list--header-right">
+          {isMetaMaskLogin ? <>
+          <Switch defaultChecked={showRelatedNodes} onChange={this.onChange} />&nbsp;Only Show The Nodes Related To Me  &nbsp;&nbsp;&nbsp;&nbsp;</>:<></>
+          }
             <Search
               placeholder="search node address"
               onSearch={this.onSearchAddress}
@@ -342,6 +342,7 @@ export default class NodeList extends Component {
           </div>
         </div>
         <Table
+          size='small'
           rowKey={record => record.node}
           loading={this.state.loading}
           dataSource={this.state.dataList}

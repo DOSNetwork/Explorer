@@ -8,7 +8,7 @@ import {
     MyAccountIcon,
     ExplorerIcon,
     MetaMaskIcon
-} from './icons.jsx'
+} from '../SvgIcon/icons.jsx'
 
 export default class Navigation extends Component {
     onMetaMaskLogin = () => {
@@ -38,7 +38,7 @@ export default class Navigation extends Component {
                             <NavLink className="navi-item" to={`/myaccount`} activeClassName="active"><MyAccountIcon />&nbsp;My Account</NavLink>
                         </div>
                     </div>
-                    <div className="dos-data--wrapper">
+                    {/* <div className="dos-data--wrapper">
                         <div className="data-item">
                             <p className="data-title">Interest Rate</p>
                             <p className="data-text">0.95</p>
@@ -51,7 +51,7 @@ export default class Navigation extends Component {
                             <p className="data-title">PriceOfDOS</p>
                             <p className="data-text">1,111.004</p>
                         </div>
-                    </div>
+                    </div> */}
                     <div className="metamask__status__panel" >
                         <MetaMaskIcon />
                         {

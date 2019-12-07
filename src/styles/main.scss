@@ -8,19 +8,19 @@
 }
 
 .main-body {
-    max-width: 1200px;
+    width: 1200px;
     margin: 0 auto;
-    padding-top: 85px;
+    padding-top: 90px;
     min-height: 800px;
-    padding-bottom: 100px;
-    @include layout-min-960();
+    // padding-bottom: 100px;
+    // @include layout-min-960();
 }
 
 .page-title {
     display: block;
-    font-size: 36px;
+    font-size: 24px;
     color: $mainFontColor;
-    margin-bottom: 24px;
+    margin:28px 0 20px 0;
 }
 
 
@@ -44,33 +44,37 @@
     overflow: hidden;
     background: linear-gradient(98.21deg, #5A4BC6 -3.5%, #211A54 57.15%);
 
+    .footer__container{
+        width:1200px;
+        margin:0 auto;
+    }
     .links__wrapper {
         display: flex;
         align-items: center;
         justify-content: center;
     }
-
-    .link-group {
-        width: 100%;
-        max-width: 1200px;
-        margin: 0 auto;
-        display: flex;
-
+    .social-link--wrapper{
+        display:flex;
+        align-items: center;
+        justify-content: center;
+        margin-bottom:20px;
+        & img{
+            width:20px;
+            margin:0 20px;
+        }
     }
-
-
-    .link-group-item {
-        margin-right: 150px;
-    }
-
-    .link-group-title {
-        height: 34px;
-        font-size: 25px;
-    }
-
-    .link-group-sub {
-        margin-top: 5px;
-        margin-left: 5px;
+    .document-link--wrapper{
+        display:flex;
+        align-items: center;
+        justify-content: center;
+        margin:10px 0;
+        &>.link:not(:last-child){
+            &:after{
+                content:'|';
+                color:#fff;
+                margin:0 10px;
+            }
+        }
     }
 
     .link {
@@ -82,10 +86,10 @@
 
     .copy-right {
         font-size: 11px;
-        color: #fff;
-        height: 20px;
+        color: #979EA5;
         text-align: center;
-        margin: 20px 0;
+        padding: 20px 0;
+        border-top:1px solid #655CA1;
     }
 }
 
@@ -155,4 +159,28 @@
 
 .link-column-text {
     color: #1890ff
+}
+
+.node-status__tag{
+    display:flex;
+    height:20px;
+    width:56px;
+    align-items:center;
+    border:1px solid;
+    border-radius:12px;
+    text-align:center;
+    justify-content: center;
+    font-size:12px;
+
+    &.tag--active{
+        border-color:#38AF94;
+        color:#38AF94;
+        background-color:#D7EFEA;
+    }
+
+        &.tag--inactive{
+        border-color:#9f9f9f;
+        color:#9f9f9f;
+        background-color:#F1F1F1;
+    }
 }

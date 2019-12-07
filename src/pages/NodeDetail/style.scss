@@ -8,16 +8,17 @@
 
 .node-detail--operations {
     flex: 0 0 auto;
-    flex-basis: 400px;
+    flex-basis: 390px;
     background-color: #fff;
     margin-left: 15px;
 }
 
 .node-detail--info {
     height: 130px;
-    background-color: #fff;
     padding: 20px;
     display: flex;
+    background-image:url('./assets/nodedetail.png');
+    background-size:cover;
 }
 
 .node-detail--block {
@@ -32,6 +33,7 @@
     background: #eee;
     margin-right: 40px;
     overflow: hidden;
+    border:4px solid #fff;
 
     img {
         width: 100%;
@@ -47,10 +49,9 @@
     display: flex;
     align-items: center;
     height: 32px;
-    font-family: IBMPlexSans;
     font-size: 24px;
     font-weight: 600;
-    color: #333;
+    color: #fff;
 
     .node-address {
         margin-right: 10px;
@@ -78,33 +79,35 @@
         margin: 4px;
         flex: 1 1 auto;
         position: relative;
-        display: flex;
-        flex-direction: column;
-        padding: 28px 20px;
-        justify-content: space-between;
+        // display: flex;
+        // flex-direction: column;
+        padding: 21px 17px 40px 17px;
+        // justify-content: space-between;
     }
 }
 
 .user-info--title {
-    height: 30px;
-    font-family: IBMPlexSans;
-    font-size: 17px;
+    font-size: 16px;
     font-weight: 600;
-    color: #666666;
+    color: #666;
+    margin-bottom: 5px;
 }
 
 .user-info--value {
-    height: 27px;
-    font-family: IBMPlexSans;
-    font-size: 24px;
-    font-weight: bold;
-    color: #358ed7;
+    height: 20px;
+    font-size: 20px;
+    font-weight: 500;
+    color: #2F2769;
+    .value--frozen{
+        margin-left:3px;
+        color:#828282;
+    }
 }
 
 .widthdraw-button {
     position: absolute;
     right: 8px;
-    top: 8px;
+    bottom: 8px;
 }
 
 .user-info--rewards,
@@ -122,7 +125,6 @@
 .node-detail--item {
     display: flex;
     height: 60px;
-    font-family: IBMPlexSans;
     font-size: 14px;
     border-top: 1px solid #dfdfdf;
     padding-left: 50px;
@@ -150,6 +152,7 @@
 
 .node-detail--tab-bar {
     width: 180px;
+    font-weight:600;
     text-align: center;
 }
 

@@ -2,11 +2,11 @@
 @import './styles/layout.scss';
 @import './styles/main.scss';
 
-$font-prefix: './assets/' !default;
+$font-prefix: './assets/Fonts' !default;
 
 body {
     margin: 0;
-    font-family: 'IBM Plex Sans', 'Source Sans Pro', 'Helvetica Neue', Arial, sans-serif;
+    font-family: 'SF Pro Display','SF Pro', 'Source Sans Pro', 'Helvetica Neue', Arial, sans-serif;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
 }
@@ -24,4 +24,23 @@ code {
     local('IBMPlexSans'),
     url('#{$font-prefix}/IBM-Plex-Sans/fonts/complete/woff2/IBMPlexSans-Regular.woff2') format('woff2'),
     url('#{$font-prefix}/IBM-Plex-Sans/fonts/complete/woff/IBMPlexSans-Regular.woff') format('woff');
+}
+
+
+@font-face {
+    font-family: 'SF Pro';
+    font-style: normal;
+    font-weight: 400;
+    src: local('SF Pro'),
+    local('SFPro'),
+    url('#{$font-prefix}/SF-Pro-Text/SF-Pro-Text-Regular.otf') format('otf');
+}
+
+@font-face {
+    font-family: 'SF Pro Display';
+    font-style: normal;
+    font-weight: 400;
+    src: local('SF Pro Display'),
+    local('SFProDisplay'),
+    url('#{$font-prefix}/SF-Pro-Display/SFCompactDisplay-Regular.otf') format('otf');
 }

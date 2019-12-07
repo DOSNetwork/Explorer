@@ -1,6 +1,5 @@
 @import './media.scss';
 
-
 @mixin layout-min-960 {
     @include respond-to ('960') {
         min-width: 960px;
