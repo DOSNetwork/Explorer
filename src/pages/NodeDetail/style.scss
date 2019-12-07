@@ -14,11 +14,12 @@
 }
 
 .node-detail--info {
+    position: relative;
     height: 130px;
     padding: 20px;
     display: flex;
-    background-image:url('./assets/nodedetail.png');
-    background-size:cover;
+    background-image: url('./assets/nodedetail.png');
+    background-size: cover;
 }
 
 .node-detail--block {
@@ -33,7 +34,7 @@
     background: #eee;
     margin-right: 40px;
     overflow: hidden;
-    border:4px solid #fff;
+    border: 4px solid #fff;
 
     img {
         width: 100%;
@@ -81,28 +82,29 @@
         position: relative;
         // display: flex;
         // flex-direction: column;
-        padding: 21px 17px 40px 17px;
+        padding: 21px 0px 40px 17px;
         // justify-content: space-between;
     }
 }
 
 .user-info--title {
     font-size: 16px;
-    font-weight: 600;
     color: #666;
     margin-bottom: 5px;
 }
 
 .user-info--value {
-    height: 20px;
     font-size: 20px;
     font-weight: 500;
     color: #2F2769;
-    .value--frozen{
-        margin-left:3px;
-        color:#828282;
+    margin-bottom: 10px;
+
+    .value--frozen {
+        margin-left: 3px;
+        color: #828282;
     }
 }
+
 
 .widthdraw-button {
     position: absolute;
@@ -112,7 +114,6 @@
 
 .user-info--rewards,
 .user-info--delegation {
-    height: 120px;
     border-radius: 5px;
     border: solid 1px #dfdfdf;
 }
@@ -151,8 +152,8 @@
 }
 
 .node-detail--tab-bar {
-    width: 180px;
-    font-weight:600;
+    width: 154px;
+    font-weight: 600;
     text-align: center;
 }
 
@@ -162,4 +163,13 @@
     .ant-btn-primary {
         width: 100%
     }
+}
+
+.unregister-button {
+    position: absolute;
+    top: 26px;
+    right: 20px;
+    color: #fff;
+    text-decoration: underline;
+    cursor: pointer;
 }

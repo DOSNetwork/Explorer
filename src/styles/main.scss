@@ -8,9 +8,9 @@
 }
 
 .main-body {
-    width: 1200px;
+    width: 1240px;
     margin: 0 auto;
-    padding-top: 90px;
+    padding: 90px 0;
     min-height: 800px;
     // padding-bottom: 100px;
     // @include layout-min-960();
@@ -20,7 +20,7 @@
     display: block;
     font-size: 24px;
     color: $mainFontColor;
-    margin:28px 0 20px 0;
+    margin: 28px 0 20px 0;
 }
 
 
@@ -44,35 +44,40 @@
     overflow: hidden;
     background: linear-gradient(98.21deg, #5A4BC6 -3.5%, #211A54 57.15%);
 
-    .footer__container{
-        width:1200px;
-        margin:0 auto;
+    .footer__container {
+        width: 1240px;
+        margin: 0 auto;
     }
+
     .links__wrapper {
         display: flex;
         align-items: center;
         justify-content: center;
     }
-    .social-link--wrapper{
-        display:flex;
+
+    .social-link--wrapper {
+        display: flex;
         align-items: center;
         justify-content: center;
-        margin-bottom:20px;
-        & img{
-            width:20px;
-            margin:0 20px;
+        margin-bottom: 20px;
+
+        & img {
+            width: 20px;
+            margin: 0 20px;
         }
     }
-    .document-link--wrapper{
-        display:flex;
+
+    .document-link--wrapper {
+        display: flex;
         align-items: center;
         justify-content: center;
-        margin:10px 0;
-        &>.link:not(:last-child){
-            &:after{
-                content:'|';
-                color:#fff;
-                margin:0 10px;
+        margin: 10px 0;
+
+        &>.link:not(:last-child) {
+            &:after {
+                content: '|';
+                color: #fff;
+                margin: 0 10px;
             }
         }
     }
@@ -89,7 +94,7 @@
         color: #979EA5;
         text-align: center;
         padding: 20px 0;
-        border-top:1px solid #655CA1;
+        border-top: 1px solid #655CA1;
     }
 }
 
@@ -161,26 +166,26 @@
     color: #1890ff
 }
 
-.node-status__tag{
-    display:flex;
-    height:20px;
-    width:56px;
-    align-items:center;
-    border:1px solid;
-    border-radius:12px;
-    text-align:center;
+.node-status__tag {
+    display: flex;
+    height: 20px;
+    width: 56px;
+    align-items: center;
+    border: 1px solid;
+    border-radius: 12px;
+    text-align: center;
     justify-content: center;
-    font-size:12px;
+    font-size: 12px;
 
-    &.tag--active{
-        border-color:#38AF94;
-        color:#38AF94;
-        background-color:#D7EFEA;
+    &.tag--active {
+        border-color: #38AF94;
+        color: #38AF94;
+        background-color: #D7EFEA;
     }
 
-        &.tag--inactive{
-        border-color:#9f9f9f;
-        color:#9f9f9f;
-        background-color:#F1F1F1;
+    &.tag--inactive {
+        border-color: #9f9f9f;
+        color: #9f9f9f;
+        background-color: #F1F1F1;
     }
 }

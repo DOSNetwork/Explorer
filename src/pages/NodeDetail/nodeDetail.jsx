@@ -28,7 +28,7 @@ export default class NodeDetail extends Component {
       isUserDelegatedThisNode: false,
       myTokenTotal: 0,
       myRewardTotal: 0,
-      myUnbondTotal: 0,
+      withDrawalTotal: 0,
       loading: false,
       formText: "",
     };
@@ -76,8 +76,8 @@ export default class NodeDetail extends Component {
     let emitterName = 'Owner Claim Reward'
     const { userAddress } = this.props.contract;
 
-    let { myUnbondTotal } = this.state
-    if (+myUnbondTotal === 0) {
+    let { withDrawalTotal } = this.state
+    if (+withDrawalTotal === 0) {
       Modal.warning({
         title: emitterName,
         content: 'No enough reward to withdraw',
@@ -128,8 +128,8 @@ export default class NodeDetail extends Component {
     let emitterName = 'Delegator WithDraw'
     const { userAddress } = this.props.contract;
 
-    let { myUnbondTotal } = this.state
-    if (+myUnbondTotal === 0) {
+    let { withDrawalTotal } = this.state
+    if (+withDrawalTotal === 0) {
       Modal.warning({
         title: emitterName,
         content: 'No enough DOS to withdraw',
@@ -153,8 +153,8 @@ export default class NodeDetail extends Component {
   handleDelegatorClaimReward = () => {
     let emitterName = 'Delegator Claim Reward'
     const { userAddress } = this.props.contract;
-    let { myUnbondTotal } = this.state
-    if (+myUnbondTotal === 0) {
+    let { withDrawalTotal } = this.state
+    if (+withDrawalTotal === 0) {
       Modal.warning({
         title: emitterName,
         content: 'No enough DOS to withdraw',
@@ -364,6 +364,10 @@ export default class NodeDetail extends Component {
     const nodeAddr = this.state.node;
     const nodeInstance = await contractInstance.methods.nodes(nodeAddr).call();
     let uptime = await contractInstance.methods.getNodeUptime(nodeAddr).call();
+    let delegatorWithdrawAbletotal = await contractInstance.methods.delegatorWithdrawAble(nodeAddr).call();
+    console.log(delegatorWithdrawAbletotal)
+    let nodeWithdrawAbleTotal = await contractInstance.methods.nodeWithdrawAble(nodeAddr).call();
+    console.log(nodeWithdrawAbleTotal)
     let avatar = `data:image/png;base64,${new identicon(
       nodeAddr,
       100
@@ -374,8 +378,10 @@ export default class NodeDetail extends Component {
       pendingWithdrawToken,
       pendingWithdrawDB,
       rewardCut,
-      description
+      description,
+      stakedDB
     } = nodeInstance;
+    console.log(nodeInstance)
     const nodeDetail = {
       node: nodeAddr,
       avatar: avatar,
@@ -396,12 +402,13 @@ export default class NodeDetail extends Component {
 
     let rewardotal = 0,
       myTokenTotal = 0,
-      myUnbondTotal = 0,
+      withDrawalTotal = 0,
+      withDrawalFrozen = 111,
       myRewardTotal = 0,
       userDelegatedRewardotal = 0,
+      withDrawalDropBurn = 333,
       isUserDelegatedThisNode = false,
       isUserOwnedThisNode = false;
-    console.log(userAddress, nodeInstance.ownerAddr);
     if (userAddress) {
       isUserOwnedThisNode =
         web3Client.utils.toChecksumAddress(userAddress) ===
@@ -411,7 +418,7 @@ export default class NodeDetail extends Component {
           .getNodeRewardTokens(nodeAddr)
           .call();
         myTokenTotal = fromWei(selfStakedAmount);
-        myUnbondTotal =
+        withDrawalTotal =
           fromWei(pendingWithdrawToken);
         myRewardTotal = fromWei(rewardotal);
       } else {
@@ -427,7 +434,7 @@ export default class NodeDetail extends Component {
           fromWei(delegatedAmount) !== 0 ||
           fromWei(userDelegatedRewardotal) !== 0;
         myTokenTotal = fromWei(delegatedAmount);
-        myUnbondTotal = fromWei(pendingWithdraw);
+        withDrawalTotal = fromWei(pendingWithdraw);
         myRewardTotal = fromWei(userDelegatedRewardotal);
       }
     }
@@ -435,9 +442,12 @@ export default class NodeDetail extends Component {
       isUserDelegatedThisNode: isUserDelegatedThisNode,
       isUserOwnedThisNode: isUserOwnedThisNode,
       myTokenTotal: myTokenTotal,
-      myUnbondTotal: myUnbondTotal,
+      withDrawalTotal: withDrawalTotal,
       myRewardTotal: myRewardTotal,
-      // sevenDaysTotal: fromWei(delegatorWithdrawAbletotal) + fromWei(nodeWithdrawAbleTotal),
+      withDrawalFrozen: withDrawalFrozen,
+      dropBurnToken: stakedDB,
+      withDrawalDropBurn: withDrawalDropBurn,
+      withDrawalDropBurnFrozen: pendingWithdrawDB,
       nodeDetail: nodeDetail
     });
   };
@@ -471,22 +481,9 @@ export default class NodeDetail extends Component {
                 </span>
                 {status ? <div className='node-status__tag tag--active'>Active</div> : <div className='node-status__tag tag--inactive'>Inactive</div>}
               </div>
-              {isMetaMaskLogin ? (
-                <div>
-                  {isUserOwnedThisNode ? (
-                    <p className="info-opt">
-                      <Button
-                        type="primary"
-                        shape="round"
-                        icon="solution"
-                        onClick={this.handleUnregister}
-                      >
-                        Unregister
-                      </Button>
-                    </p>
-                  ) : null}
-                </div>
-              ) : null}
+              {isMetaMaskLogin && isUserOwnedThisNode ?
+                (<span className='unregister-button' onClick={this.handleUnregister} > Unregister</span>)
+                : null}
             </div>
           </div>
           <div className="node-detail--detail node-detail--block">
@@ -497,11 +494,27 @@ export default class NodeDetail extends Component {
                     My{isUserDelegatedThisNode ? " Delegation" : " Staking Token"}
                   </p>
                   <p className="user-info--value">{numberFormatRender(this.state.myTokenTotal)}</p>
+                  {+this.state.dropBurnToken >= '0' ?
+                    <>
+                      <p className="user-info--title">
+                        Drop Burn Token
+                      </p>
+                      <p className="user-info--value">{numberFormatRender(this.state.dropBurnToken)}</p>
+                    </> : null
+                  }
                 </div>
                 <div className="user-info--rewards">
-                  <p className="user-info--title">Unbond(Frozen)</p>
-                  <p className="user-info--value">{numberFormatRender(this.state.myUnbondTotal)}<span className='value--frozen'>({numberFormatRender(this.state.sevenDaysTotal)})</span>
+                  <p className="user-info--title">Withdrawal(Frozen)</p>
+                  <p className="user-info--value">{numberFormatRender(this.state.withDrawalTotal)}<span className='value--frozen'>({numberFormatRender(this.state.withDrawalFrozen)})</span>
                   </p>
+                  {(+this.state.withDrawalDropBurn >= '0' || +this.state.withDrawalDropBurnFrozen >= '0') ?
+                    <>
+                      <p className="user-info--title">
+                        Withdrawal Drop Burn(Frozen)
+                      </p>
+                      <p className="user-info--value">{numberFormatRender(this.state.withDrawalDropBurn)}<span className='value--frozen'>({numberFormatRender(this.state.withDrawalDropBurnFrozen)})</span></p>
+                    </> : null
+                  }
                   {isUserDelegatedThisNode ? <Button
                     className="widthdraw-button"
                     shape="round"
@@ -567,56 +580,58 @@ export default class NodeDetail extends Component {
             </div>
           </div>
         </div>
-        {isMetaMaskLogin ? (
-          <div className="node-detail--operations node-detail--block">
-            <Tabs
-              className="node-detail--operation-tab"
-              defaultActiveKey="1"
-              size="default"
-            >
-              <TabPane
-                tab={TabbarRender(
-                  isUserDelegatedThisNode ? "Delegate" : "Upgrate"
-                )}
-                key="1"
+        {
+          isMetaMaskLogin ? (
+            <div className="node-detail--operations node-detail--block">
+              <Tabs
+                className="node-detail--operation-tab"
+                defaultActiveKey="1"
+                size="default"
               >
-                <div className="tab-pannel--wrapper">
-                  {isUserOwnedThisNode ? (
-                    // Owner --Staking
-                    <UpdateStakingNode
-                      wrappedComponentRef={this.saveUpdateFormRef}
-                      onSubmit={this.handleOwnerUpgrateSubmit}
-                    />
-                  ) : (
-                      // User --Delegate
-                      <DelegateNode
-                        wrappedComponentRef={this.saveDelegateFormRef}
-                        onSubmit={this.handleUserDelegateSubmit}
+                <TabPane
+                  tab={TabbarRender(
+                    isUserDelegatedThisNode ? "Delegate" : "Upgrate"
+                  )}
+                  key="1"
+                >
+                  <div className="tab-pannel--wrapper">
+                    {isUserOwnedThisNode ? (
+                      // Owner --Staking
+                      <UpdateStakingNode
+                        wrappedComponentRef={this.saveUpdateFormRef}
+                        onSubmit={this.handleOwnerUpgrateSubmit}
                       />
-                    )}
-                </div>
-              </TabPane>
-              <TabPane tab={TabbarRender("UnBond")} key="2">
-                <div className="tab-pannel--wrapper">
-                  {isUserOwnedThisNode ? (
-                    // Owner --unbond
-                    <UnbondOwnedNode
-                      wrappedComponentRef={this.saveUnbondOwnedNodeRef}
-                      onSubmit={this.handleOwnerUnbondSubmit}
-                    />
-                  ) : (
-                      // User --unbond
-                      <UnbondNode
-                        wrappedComponentRef={this.saveUnbondFormRef}
-                        onSubmit={this.handleUserUnbondSubmit}
+                    ) : (
+                        // User --Delegate
+                        <DelegateNode
+                          wrappedComponentRef={this.saveDelegateFormRef}
+                          onSubmit={this.handleUserDelegateSubmit}
+                        />
+                      )}
+                  </div>
+                </TabPane>
+                <TabPane tab={TabbarRender("UnBond")} key="2">
+                  <div className="tab-pannel--wrapper">
+                    {isUserOwnedThisNode ? (
+                      // Owner --unbond
+                      <UnbondOwnedNode
+                        wrappedComponentRef={this.saveUnbondOwnedNodeRef}
+                        onSubmit={this.handleOwnerUnbondSubmit}
                       />
-                    )}
-                </div>
-              </TabPane>
-            </Tabs>
-          </div>
-        ) : null}
-      </div>
+                    ) : (
+                        // User --unbond
+                        <UnbondNode
+                          wrappedComponentRef={this.saveUnbondFormRef}
+                          onSubmit={this.handleUserUnbondSubmit}
+                        />
+                      )}
+                  </div>
+                </TabPane>
+              </Tabs>
+            </div>
+          ) : null
+        }
+      </div >
     );
   }
 }

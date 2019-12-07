@@ -9,6 +9,6 @@
 
 @mixin layout-min-1200 {
     @include respond-to ('1200') {
-        min-width: 1200px;
+        min-width: 1240px;
     }
 }
