@@ -214,24 +214,27 @@ export default class NodeList extends Component {
         }
       );
     }
+    nodesAddrs = Array.from(await contractInstance.methods.getNodeAddrs().call());
     // search related nodes
     if (isMetaMaskLogin && showRelatedNodes) {
       console.log(`only show related nodes infos`)
       const eventList = await getLogNewNodeEventList(userAddress)
-      nodesAddrs = eventList.map(event => event.returnValues.nodeAddress)
-
+      let eventAddrs = eventList.map(event => event.returnValues.nodeAddress)
       const eventList2 = await getDelegateToEventList(userAddress)
-      nodesAddrs.push(...eventList2.map(event => event.returnValues.nodeAddr))
+      eventAddrs.push(...eventList2.map(event => event.returnValues.nodeAddr))
+	  const result = eventAddrs.filter(addr => nodesAddrs.includes(addr));
+	  nodesAddrs = result;
     } else {
       // search nodes
-      console.log(`show all nodes infos`)
-      nodesAddrs = Array.from(await contractInstance.methods.getNodeAddrs().call());
+      console.log(`show all nodes infos`);
       if (userAddress) {
         //Let owne and delegate nodes show first
-        const eventList = await getLogNewNodeEventList(userAddress)
-        nodesAddrs.unshift(...eventList.reverse().map(event => event.returnValues.nodeAddress))
-        const eventList2 = await getDelegateToEventList(userAddress)
-        nodesAddrs.unshift(...eventList2.reverse().map(event => event.returnValues.nodeAddr))
+        const eventList = await getLogNewNodeEventList(userAddress);
+        let eventAddrs = eventList.reverse().map(event => event.returnValues.nodeAddress);
+        const eventList2 = await getDelegateToEventList(userAddress);
+        eventAddrs.push(...eventList2.reverse().map(event => event.returnValues.nodeAddr));
+        const result = eventAddrs.filter(addr => nodesAddrs.includes(addr));
+        nodesAddrs.unshift(...result);
       }
     }
     let filtedNodes = []
