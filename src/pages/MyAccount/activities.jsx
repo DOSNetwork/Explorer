@@ -2,13 +2,19 @@ import React, { Component } from "react";
 import { SubTitle } from "../../Layout/page";
 import { Table } from "antd";
 import dateformat from "dateformat";
-import { DOS_ABI, DOS_CONTRACT_ADDRESS } from "../../util/const";
+import EllipsisWrapper from '../../components/EllispisWrapper'
+import { DOS_ABI, DOS_CONTRACT_ADDRESS, BLOCK_NUMBER } from "../../util/const";
 
 const { Column } = Table;
 const dateFormatRender = (text, record, index) => {
-  let value = dateformat(record.time, "h:MM:ss TT yyyy/mm/dd");
+  let value = dateformat(record.timestamp, "h:MM:ss TT yyyy/mm/dd");
   return <span>{value}</span>;
 };
+const txHashRender = (text) => {
+  return (
+    <EllipsisWrapper text={text} />
+  )
+}
 export default class Activities extends Component {
   constructor(props) {
     super(props);
@@ -20,6 +26,9 @@ export default class Activities extends Component {
   }
   componentDidMount() {
     this.search();
+  }
+  componentWillUnmount() {
+    this.unMount = true;
   }
   getSnapshotBeforeUpdate(prevProps) {
     let userLogined =
@@ -44,48 +53,56 @@ export default class Activities extends Component {
 
       const options = {
         filter: { owner: userAddress },
-        fromBlock: 5414653,
+        fromBlock: BLOCK_NUMBER,
         toBlock: "latest"
       };
-
-      const eventList = await contract.getPastEvents("LogNewNode", options);
-      if (eventList.length !== 0) {
-        console.log("length", eventList.length);
-        console.log(eventList[0].event);
-      }
       const options2 = {
         filter: { sender: userAddress },
-        fromBlock: 5414653,
+        fromBlock: BLOCK_NUMBER,
         toBlock: "latest"
       };
+      const eventList = await contract.getPastEvents("LogNewNode", options);
       const eventList2 = await contract.getPastEvents("DelegateTo", options2);
-      if (eventList2.length !== 0) {
-        console.log("length", eventList2.length);
-      }
-      const eventList3 = await contract.getPastEvents(
-        "RewardWithdraw",
-        options2
-      );
-      if (eventList3.length !== 0) {
-        console.log("length", eventList3.length);
-      }
+      const eventList3 = await contract.getPastEvents("RewardWithdraw", options2);
       const eventList4 = await contract.getPastEvents("Unbond", options2);
-      if (eventList4.length !== 0) {
-        console.log("length", eventList4.length);
-      }
-      //TODO: Update event to dataLisr
-      this.setState({
-        //dataList: data.activities,
-        loading: false
-      });
+      let dataList = [...eventList, ...eventList2, ...eventList3, ...eventList4].sort((a, b) => b.blockNumber - a.blockNumber)
+      const CountsOfEventPerRequest = 10
+      this.renderActiviesSequence(dataList, 0, CountsOfEventPerRequest, web3Client)
     }
   };
+  renderActiviesSequence = async (dataList, index, step, web3Client) => {
+    if (dataList.length === index) {
+      return
+    }
+    let currentDataList = this.state.dataList
+    let promiseArray = []
+    let end = index + step < dataList.length ? index + step : dataList.length;
+    for (let i = index; i < end; i++) {
+      promiseArray.push(web3Client.eth.getBlock(dataList[i].blockNumber))
+    }
+    const datas = await Promise.all(promiseArray)
+    for (let ii = 0; ii < datas.length; ii++) {
+      let y = index + ii
+      let { number, timestamp } = datas[ii]
+      if (dataList[y].blockNumber === number) {
+        dataList[y].timestamp = timestamp * 1000
+        currentDataList.push(dataList[y])
+      }
+    }
+    if (!this.unMount) {
+      this.setState({
+        dataList: currentDataList,
+        loading: false
+      })
+      this.renderActiviesSequence(dataList, end, step, web3Client)
+    }
+  }
   render() {
     return (
       <>
         <SubTitle title="Account Activity"></SubTitle>
         <Table
-          rowKey={record => record.txHash}
+          rowKey={record => record.transactionHash}
           loading={this.state.loading}
           dataSource={this.state.dataList}
           pagination={false}
@@ -96,18 +113,25 @@ export default class Activities extends Component {
           <Column
             title="Time"
             render={dateFormatRender}
-            sorter={(a, b) => +new Date(a.time) - +new Date(b.time)}
+            sorter={(a, b) => a.timestamp - b.timestamp}
             sortDirections={["ascend", "descend"]}
-            dataIndex="time"
-            key="time"
+            dataIndex="timestamp"
+            key="timestamp"
           />
+          {/* <Column
+            title="Time"
+            sorter={(a, b) => a.blockNumber - b.blockNumber}
+            sortDirections={["ascend", "descend"]}
+            dataIndex="blockNumber"
+          /> */}
           <Column
             title="Action"
-            dataIndex="action"
-            key="action"
-            sortDirections={["ascend", "descend"]}
+            dataIndex="event"
           />
-          <Column title="Tx Hash" dataIndex="txHash" key="txHash" />
+          <Column title="Tx Hash"
+            render={txHashRender}
+            dataIndex="transactionHash"
+            key="transactionHash" />
         </Table>
       </>
     );

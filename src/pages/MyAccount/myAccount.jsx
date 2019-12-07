@@ -1,11 +1,16 @@
 import React, { Component } from "react";
 import { Icon, Spin } from "antd";
+import numeral from 'numeral'
 import {
   DOS_ABI,
   DOS_CONTRACT_ADDRESS,
   DOSTOKEN_ABI,
   DOSTOKEN_CONTRACT_ADDRESS
 } from "../../util/const";
+
+const numberFormatRender = (value) => {
+  return numeral(value).format("0,0");
+};
 export default class Account extends Component {
   constructor(props) {
     super(props);
@@ -14,14 +19,14 @@ export default class Account extends Component {
       showNumber: true,
       userContract: null,
       netWork: "",
-      userBalance: 0,
-      delegatedAmount: 0,
-      delegatedReward: 0,
-      unbondDelegated: 0
+      userBalance: -1,
+      delegatedAmount: -1,
+      delegatedReward: -1,
+      unbondDelegated: -1
     };
   }
   ToggleNumber = () => {
-    this.setState(function(state) {
+    this.setState(function (state) {
       return {
         showNumber: !state.showNumber
       };
@@ -30,7 +35,7 @@ export default class Account extends Component {
   numberToggler = value => {
     const isMetaMaskLogin = this.props.contract.isMetaMaskLogin;
     if (isMetaMaskLogin) {
-      return this.state.showNumber ? value ? value : <Spin /> : "***";
+      return this.state.showNumber ? (value >= 0 ? numberFormatRender(+value) : <Spin />) : "***";
     } else {
       return "-";
     }
@@ -72,11 +77,6 @@ export default class Account extends Component {
       let delegatedAmount = new web3Client.utils.toBN(0);
       let delegatedReward = new web3Client.utils.toBN(0);
       let unbondDelegated = new web3Client.utils.toBN(0);
-      console.log(
-        web3Client.utils.isBN(delegatedAmount),
-        " delegatedAmount ",
-        delegatedAmount.toString()
-      );
       //Get staking node and delegate node addresses
       if (userAddress !== "") {
         //Let owne and delegate nodes show first
@@ -91,7 +91,6 @@ export default class Account extends Component {
           "LogNewNode",
           options
         );
-        console.log("eventList", eventList.length);
 
         for (let i = 0; i < eventList.length; i++) {
           nodesAddrs.unshift(eventList[i].returnValues.nodeAddress);
@@ -99,7 +98,7 @@ export default class Account extends Component {
         const addrs = nodesAddrs.filter((item, index) => {
           return nodesAddrs.indexOf(item) === index;
         });
-        console.log("!!!", addrs.length);
+        // console.log("!!!", addrs.length);
         for (let i = 0; i < addrs.length; i++) {
           const nodeAddr = addrs[i];
           const node = await StakingContract.methods.nodes(nodeAddr).call();
@@ -115,17 +114,17 @@ export default class Account extends Component {
           unbondDelegated = unbondDelegated.add(
             new web3Client.utils.toBN(node.pendingWithdrawDB)
           );
-          console.log(
-            Math.round(
-              web3Client.utils.fromWei(delegatedAmount.toString()) * 100
-            ) / 100,
-            Math.round(
-              web3Client.utils.fromWei(delegatedReward.toString()) * 100
-            ) / 100,
-            Math.round(
-              web3Client.utils.fromWei(unbondDelegated.toString()) * 100
-            ) / 100
-          );
+          // console.log(
+          //   Math.round(
+          //     web3Client.utils.fromWei(delegatedAmount.toString()) * 100
+          //   ) / 100,
+          //   Math.round(
+          //     web3Client.utils.fromWei(delegatedReward.toString()) * 100
+          //   ) / 100,
+          //   Math.round(
+          //     web3Client.utils.fromWei(unbondDelegated.toString()) * 100
+          //   ) / 100
+          // );
         }
       }
       //Get delegate node addresses
@@ -140,7 +139,7 @@ export default class Account extends Component {
           "DelegateTo",
           options2
         );
-        console.log("eventList", eventList.length);
+        // console.log("eventList", eventList.length);
 
         for (let i = 0; i < eventList.length; i++) {
           nodesAddrs.unshift(eventList[i].returnValues.nodeAddr);
@@ -148,7 +147,7 @@ export default class Account extends Component {
         const addrs = nodesAddrs.filter((item, index) => {
           return nodesAddrs.indexOf(item) === index;
         });
-        console.log("!!!", addrs.length);
+        // console.log("!!!", addrs.length);
         for (let i = 0; i < addrs.length; i++) {
           const nodeAddr = addrs[i];
           const delegator = await StakingContract.methods
@@ -171,11 +170,11 @@ export default class Account extends Component {
             );
           }
         }
-        console.log(
-          Math.round(
-            web3Client.utils.fromWei(delegatedAmount.toString()) * 100
-          ) / 100
-        );
+        // console.log(
+        //   Math.round(
+        //     web3Client.utils.fromWei(delegatedAmount.toString()) * 100
+        //   ) / 100
+        // );
         this.setState({
           userBalance: Math.round(fromWei(userBalance) * 100) / 100,
           delegatedAmount:
@@ -225,15 +224,15 @@ export default class Account extends Component {
           <div className="myaccount-detail--wrapper">
             <div className="detail--container">
               <DescLabel label="Total Delegated" />
-              <p className="account-number">{delegatedAmount}</p>
+              <div className="account-number">{this.numberToggler(delegatedAmount)}</div>
             </div>
             <div className="detail--container">
               <DescLabel label="My Rewards" />
-              <p className="account-number">{delegatedReward}</p>
+              <div className="account-number">{this.numberToggler(delegatedReward)}</div>
             </div>
             <div className="detail--container">
               <DescLabel label="Unbonded tokens" />
-              <p className="account-number">{unbondDelegated}</p>
+              <div className="account-number">{this.numberToggler(unbondDelegated)}</div>
             </div>
           </div>
         </div>

@@ -2,6 +2,7 @@ import React from 'react'
 import { Switch, Route, matchPath } from "react-router-dom";
 import SearchInput from '../../components/SearchInput'
 import ScrollTop from '../../components/ScrollTop'
+import MarketInfo from '../../components/MarketInfo'
 import './style.scss';
 import { EventsList } from './events'
 import { GroupDetail } from './group'
@@ -30,6 +31,7 @@ class Search extends React.Component {
     }
     render() {
         return (<>
+            <MarketInfo></MarketInfo>
             <SearchInput onSearch={this.handleSearch}></SearchInput>
             <ScrollTop></ScrollTop>
             <Switch>

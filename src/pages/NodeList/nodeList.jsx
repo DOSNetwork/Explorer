@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { Button, Table, message, Switch, Input, Tooltip, Icon, Tag } from "antd";
+import { Button, Table, message, Switch, Input, Tooltip, Icon } from "antd";
 import "./style.scss";
 import numeral from "numeral";
 import NewNode from "./newNodeForm";
@@ -222,8 +222,8 @@ export default class NodeList extends Component {
       let eventAddrs = eventList.map(event => event.returnValues.nodeAddress)
       const eventList2 = await getDelegateToEventList(userAddress)
       eventAddrs.push(...eventList2.map(event => event.returnValues.nodeAddr))
-	  const result = eventAddrs.filter(addr => nodesAddrs.includes(addr));
-	  nodesAddrs = result;
+      const result = eventAddrs.filter(addr => nodesAddrs.includes(addr));
+      nodesAddrs = result;
     } else {
       // search nodes
       console.log(`show all nodes infos`);
@@ -321,7 +321,7 @@ export default class NodeList extends Component {
               <Button type="primary" onClick={this.showModal}>
                 Create a Node
               </Button>
-            
+
               <NewNode
                 wrappedComponentRef={this.saveFormRef}
                 visible={this.state.visible}
@@ -330,13 +330,13 @@ export default class NodeList extends Component {
                 confirmLoading={this.state.confirmLoading}
                 modalText={this.state.formText}
               />
-          </div>
+            </div>
           )
             : <div className='node-list--header-left'></div>}
           <div className="node-list--header-right">
-          {isMetaMaskLogin ? <>
-          <Switch defaultChecked={showRelatedNodes} onChange={this.onChange} />&nbsp;Only Show The Nodes Related To Me  &nbsp;&nbsp;&nbsp;&nbsp;</>:<></>
-          }
+            {isMetaMaskLogin ? <>
+              <Switch defaultChecked={showRelatedNodes} onChange={this.onChange} />&nbsp;Only Show The Nodes Related To Me  &nbsp;&nbsp;&nbsp;&nbsp;</> : <></>
+            }
             <Search
               placeholder="search node address"
               onSearch={this.onSearchAddress}

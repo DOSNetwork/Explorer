@@ -46,27 +46,29 @@ function ExplorerSearchRequest(searchText, pageSize, pageIndex, history) {
             }
         }).then(response => {
             let data = response.data.body
-            dispatch(explorerSearchReceiveResponse(data))
-            let {
-                url,
-                random,
-                group,
-                address
-            } = data
-            if (url && url.length > 0) {
-                let id = url[0].requestId
-                history.push(`/explorer/url/${id}`)
-            } else if (random && random.length > 0) {
-                let id = random[0].requestId
-                history.push(`/explorer/random/${id}`)
-            } else if (group && group.length > 0) {
-                let id = group[0].groupId
-                history.push(`/explorer/group/${id}`)
-            } else if (address && address.length > 0) {
-                let id = address[0].addr
-                history.push(`/explorer/address/${id}`)
-            } else {
-                history.push(`/explorer`)
+            if (data) {
+                dispatch(explorerSearchReceiveResponse(data))
+                let {
+                    url,
+                    random,
+                    group,
+                    address
+                } = data
+                if (url && url.length > 0) {
+                    let id = url[0].requestId
+                    history.push(`/explorer/url/${id}`)
+                } else if (random && random.length > 0) {
+                    let id = random[0].requestId
+                    history.push(`/explorer/random/${id}`)
+                } else if (group && group.length > 0) {
+                    let id = group[0].groupId
+                    history.push(`/explorer/group/${id}`)
+                } else if (address && address.length > 0) {
+                    let id = address[0].addr
+                    history.push(`/explorer/address/${id}`)
+                } else {
+                    history.push(`/explorer`)
+                }
             }
         })
     }

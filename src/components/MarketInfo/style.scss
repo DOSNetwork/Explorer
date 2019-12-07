@@ -1,0 +1,47 @@
+.market-info--wrapper {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.market-info--block {
+    flex: 0 0 395px;
+    width: 0;
+    height: 120px;
+    border-radius: 5px;
+    padding: 20px 30px;
+
+    &.block--rate {
+        background-image: url('./assets/interestRate.png');
+        background-size: 100% 100%;
+    }
+
+    &.block--token {
+        background-image: url('./assets/stakedToken.png');
+        background-size: 100% 100%;
+    }
+
+    &.block--price {
+        background-image: url('./assets/price.png');
+        background-size: 100% 100%;
+    }
+}
+
+.block--title {
+    font-size: 17px;
+    color: #666;
+    display: flex;
+    align-items: center;
+
+    &>img {
+        width: 20px;
+        margin-right: 5px;
+    }
+}
+
+.block--value {
+    font-weight: 500;
+    font-size: 36px;
+    margin-top: 18px;
+    color: #6458A5;
+}

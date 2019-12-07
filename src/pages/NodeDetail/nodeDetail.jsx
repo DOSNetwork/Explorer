@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { Button, message, Tabs, Tag, Modal } from "antd";
+import { Button, message, Tabs, Modal } from "antd";
 import { DOS_ABI, DOS_CONTRACT_ADDRESS } from "../../util/const";
 import DelegateNode from "./delegateNodeForm";
 import UnbondNode from "./unbondNodeForm";

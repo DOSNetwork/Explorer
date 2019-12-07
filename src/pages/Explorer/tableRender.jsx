@@ -1,18 +1,8 @@
 import React from 'react';
-import { Icon } from 'antd'
 import EllipsisWrapper from '../../components/EllispisWrapper'
-// const { Paragraph } = Typography;
 export const TxHashRender = (text) => {
     return <span className="txhash--wrapper">
         <EllipsisWrapper text={text} />
-        {/* <Paragraph copyable={{ text: text }}>
-            <span className="txhash--text text--ellipsis">{text}</span>
-        </Paragraph> */}
-        {/* <CopyToClipboard text={text} onCopy={() => {
-            Message.Notification.Normal({ key: 'COPY_MESSAGE', message: 'copy success!' })
-        }}>
-            <Icon style={{ fontSize: 15, color: '#455ec7' }} type="copy" />
-        </CopyToClipboard> */}
     </span>
 }
 export const MoreInfoRender = (text, record) => {
@@ -128,7 +118,7 @@ const LogGroupingRender = record => {
             <span className="column-text">
                 {
                     record.nodeId.map(node => {
-                        return <p key={node} className="nodes-item"><Icon style={{ fontSize: 13 }} type="tag" /> - {node}</p>
+                        return <p key={node} className="nodes-item">- {node}</p>
                     })
                 }
             </span>
@@ -146,16 +136,12 @@ const LogRequestUserRandomRender = record => {
         <div className="custom-column">
             <span className="column-title">RequestId</span>
             <span className="column-text">
-                <span className="text--ellipsis ellipsis--mid">
-                    {record.requestId}
-                </span>
+                {record.requestId}
             </span>
         </div>
         <div className="custom-column">
             <span className="column-title">Last System Randomness</span>
-            <span className="column-text">
-                <span className="text--ellipsis ellipsis--mid">                             {record.lastSystemRandomness}
-                </span>
+            <span className="column-text">                             {record.lastSystemRandomness}
             </span>
         </div>
         <div className="custom-column">
@@ -224,7 +210,7 @@ const LogPublicKeyAcceptedRender = record => {
             <span className="column-text">
                 {
                     record.pubKey.map(key => {
-                        return <p key={key} ><Icon style={{ fontSize: 13 }} type="tag" /> - {key}</p>
+                        return <p key={key} >- {key}</p>
                     })
                 }
             </span>
@@ -321,7 +307,7 @@ const LogNonContractCallRender = record => {
         </div>
         <div className="custom-column">
             <span className="column-title">CallAddr</span>
-            <p key={record.callAddr} className="nodes-item"><Icon style={{ fontSize: 13 }} type="tag" /> - {record.callAddr}</p>
+            <p key={record.callAddr} className="nodes-item">- {record.callAddr}</p>
         </div>
     </div>
 }
@@ -335,7 +321,7 @@ const LogCallbackTriggeredForRender = record => {
         </div>
         <div className="custom-column">
             <span className="column-title">CallbackAddr</span>
-            <p key={record.callbackAddr} className="nodes-item"><Icon style={{ fontSize: 13 }} type="tag" /> - {record.callbackAddr}</p>
+            <p key={record.callbackAddr} className="nodes-item">- {record.callbackAddr}</p>
         </div>
     </div>
 }
@@ -598,7 +584,7 @@ const LogValidationResultRender = record => {
             <span className="column-text">
                 {
                     record.signature.map(sign => {
-                        return <p key={sign} ><Icon style={{ fontSize: 13 }} type="tag" /> - {sign}</p>
+                        return <p key={sign} >- {sign}</p>
                     })
                 }
             </span>
@@ -608,7 +594,7 @@ const LogValidationResultRender = record => {
             <span className="column-text">
                 {
                     record.pubKey.map(key => {
-                        return <p key={key} ><Icon style={{ fontSize: 13 }} type="tag" /> - {key}</p>
+                        return <p key={key} >- {key}</p>
                     })
                 }
             </span>
