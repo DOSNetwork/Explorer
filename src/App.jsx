@@ -2,11 +2,6 @@ import React, { Component } from 'react';
 import './App.scss';
 import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
 import Navigation from './components/Navigation/navigationContainer'
-// import AjaxDemo from './pages/AjaxDemo'
-// import ReduxDemo from './pages/ReduxDemo'
-// import HomePage from './pages/HomePage'
-// import EchartDemo from './pages/EchartDemo'
-// import RouterDemo from './pages/RouterDemo'
 import MyAccount from './pages/MyAccount'
 import NodeList from './pages/NodeList'
 import NodeDetail from './pages/NodeDetail'
@@ -14,6 +9,11 @@ import NotFound404 from './pages/NotFound404'
 import Explorer from './pages/Explorer'
 import Layout from './Layout'
 import { connectMetaMask } from './util/web3.js'
+import { message } from 'antd'
+message.config({
+  top: 100,
+  maxCount: 3,
+});
 class App extends Component {
   componentWillMount() {
     connectMetaMask()
