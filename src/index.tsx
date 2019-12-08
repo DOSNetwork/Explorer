@@ -8,10 +8,14 @@ import './index.scss';
 import App from './App';
 import * as serviceWorker from './serviceWorker';
 import store from './redux/store'
-
+import { IntlProvider } from 'react-intl'; /* react-intl imports */
+import zh from './i18n/zh-CN'
+import en from './i18n/en-US'
 ReactDOM.render(
     <Provider store={store}>
-        <App />
+        <IntlProvider locale='en' messages={zh}>
+            <App />
+        </IntlProvider>
     </Provider>
     , document.getElementById('root'));
 

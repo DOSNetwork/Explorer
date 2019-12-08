@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 import { NavLink } from 'react-router-dom'
-
+import { injectIntl } from 'react-intl'
 import './style.scss'
 import { metaMaskLogin, metaMaskLogout } from '../../util/web3.js'
 import {
@@ -9,8 +9,10 @@ import {
     ExplorerIcon,
     MetaMaskIcon
 } from '../SvgIcon/icons.jsx'
-
-export default class Navigation extends Component {
+const Navigation = class Navigation extends Component {
+    componentWillMount() {
+        console.log(this.props.intl)
+    }
     onMetaMaskLogin = () => {
         let { isMetaMaskLogin } = this.props.contract
         if (!isMetaMaskLogin) {
@@ -24,7 +26,8 @@ export default class Navigation extends Component {
         }
     }
     render() {
-        let { userAddress = '', isMetaMaskLogin } = this.props.contract
+        let { userAddress = '', isMetaMaskLogin } = this.props.contract;
+        let { formatMessage: f } = this.props.intl;
         return (
             <div className="header__wrapper">
                 <div className="header__container layout__container">
@@ -33,35 +36,21 @@ export default class Navigation extends Component {
                     </div>
                     <div className="navi__wrapper">
                         <div className="navi__container">
-                            <NavLink className="navi-item" to={`/nodelist`} activeClassName="active"><NodeListIcon />&nbsp;Node List</NavLink>
-                            <NavLink className="navi-item" to={`/explorer`} activeClassName="active"><ExplorerIcon />&nbsp;Explorer</NavLink>
-                            <NavLink className="navi-item" to={`/myaccount`} activeClassName="active"><MyAccountIcon />&nbsp;My Account</NavLink>
+                            <NavLink className="navi-item" to={`/nodelist`} activeClassName="active"><NodeListIcon />&nbsp;{f({ id: 'Title.nodelist' })}</NavLink>
+                            <NavLink className="navi-item" to={`/explorer`} activeClassName="active"><ExplorerIcon />&nbsp;{f({ id: 'Title.explorer' })}</NavLink>
+                            <NavLink className="navi-item" to={`/myaccount`} activeClassName="active"><MyAccountIcon />&nbsp;{f({ id: 'Title.myaccount' })}</NavLink>
                         </div>
                     </div>
-                    {/* <div className="dos-data--wrapper">
-                        <div className="data-item">
-                            <p className="data-title">Interest Rate</p>
-                            <p className="data-text">0.95</p>
-                        </div>
-                        <div className="data-item">
-                            <p className="data-title">NumberOfStakedToken</p>
-                            <p className="data-text">12,345.67</p>
-                        </div>
-                        <div className="data-item">
-                            <p className="data-title">PriceOfDOS</p>
-                            <p className="data-text">1,111.004</p>
-                        </div>
-                    </div> */}
                     <div className="metamask__status__panel" >
                         <MetaMaskIcon />
                         {
                             isMetaMaskLogin ?
                                 <div>
                                     <p>{`${userAddress.slice(0, 6)}...${userAddress.slice(-6)}`}</p>
-                                    <p className="metamask__login-status--conntect" onClick={this.onMetaMaskLogout}>Connected</p>
+                                    <p className="metamask__login-status--conntect" onClick={this.onMetaMaskLogout}>{f({ id: 'MetaMask.connected' })}</p>
                                 </div>
                                 :
-                                <p className="metamask__login-button" onClick={this.onMetaMaskLogin}>Connect Wallet</p>
+                                <p className="metamask__login-button" onClick={this.onMetaMaskLogin}>{f({ id: 'MetaMask.connectwallet' })}</p>
                         }
                     </div>
                 </div>
@@ -69,3 +58,5 @@ export default class Navigation extends Component {
         )
     }
 }
+
+export default injectIntl(Navigation)

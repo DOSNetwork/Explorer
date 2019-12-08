@@ -20,6 +20,11 @@ export default class Activities extends Component {
     super(props);
     this.state = {
       dataList: [],
+      dataListSource: [],
+      pagination: {
+        current: 1,
+        pageSize: 10
+      },
       loading: false,
       listCount: 100
     };
@@ -66,35 +71,45 @@ export default class Activities extends Component {
       const eventList3 = await contract.getPastEvents("RewardWithdraw", options2);
       const eventList4 = await contract.getPastEvents("Unbond", options2);
       let dataList = [...eventList, ...eventList2, ...eventList3, ...eventList4].sort((a, b) => b.blockNumber - a.blockNumber)
-      const CountsOfEventPerRequest = 10
-      this.renderActiviesSequence(dataList, 0, CountsOfEventPerRequest, web3Client)
+      this.setState({
+        dataListSource: dataList
+      })
+      this.renderActiviesSequence(this.state.pagination, dataList)
     }
   };
-  renderActiviesSequence = async (dataList, index, step, web3Client) => {
-    if (dataList.length === index) {
-      return
-    }
-    let currentDataList = this.state.dataList
+  handleTableChange = (pagination) => {
+    this.renderActiviesSequence(pagination)
+  }
+  renderActiviesSequence = async ({ current = 1, pageSize = 10 }, dataListSource) => {
+    let { web3Client } = this.props.contract
+    let currentDataList = []
+    let source = this.state.dataListSource || dataListSource
     let promiseArray = []
-    let end = index + step < dataList.length ? index + step : dataList.length;
-    for (let i = index; i < end; i++) {
-      promiseArray.push(web3Client.eth.getBlock(dataList[i].blockNumber))
+    let total = source.length
+    let startIndex = (current - 1) * pageSize
+    let endIndex = total > (current * pageSize) ? current * pageSize : total
+    for (let i = startIndex; i < endIndex; i++) {
+      promiseArray.push(web3Client.eth.getBlock(source[i].blockNumber))
     }
     const datas = await Promise.all(promiseArray)
     for (let ii = 0; ii < datas.length; ii++) {
-      let y = index + ii
+      let y = startIndex + ii
       let { number, timestamp } = datas[ii]
-      if (dataList[y].blockNumber === number) {
-        dataList[y].timestamp = timestamp * 1000
-        currentDataList.push(dataList[y])
+      if (source[y].blockNumber === number) {
+        source[y].timestamp = timestamp * 1000
+        currentDataList.push(source[y])
       }
     }
     if (!this.unMount) {
       this.setState({
         dataList: currentDataList,
-        loading: false
+        loading: false,
+        pagination: {
+          total,
+          current,
+          pageSize
+        }
       })
-      this.renderActiviesSequence(dataList, end, step, web3Client)
     }
   }
   render() {
@@ -105,10 +120,11 @@ export default class Activities extends Component {
           rowKey={record => record.transactionHash}
           loading={this.state.loading}
           dataSource={this.state.dataList}
-          pagination={false}
+          pagination={{ size: 'small', ...this.state.pagination }}
           rowClassName={(row, index) => {
             return index % 2 === 0 ? "row-light" : "row-dark";
           }}
+          onChange={this.handleTableChange}
         >
           <Column
             title="Time"

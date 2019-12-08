@@ -1,4 +1,5 @@
 import React from "react";
+import { injectIntl } from 'react-intl'
 import { Modal, Form, Input } from "antd";
 const ETHAddressRegex = /^(0x)?[0-9a-fA-F]{40}$/
 const newNode = Form.create({
@@ -9,7 +10,7 @@ const newNode = Form.create({
     validateAddress = (rule, value, callback) => {
       if (value) {
         if (!ETHAddressRegex.test(value)) {
-          callback('Please enter a valid address')
+          callback(this.props.intl.formatMessage({ id: 'Form.Error.address' }))
         }
       }
       callback();
@@ -18,10 +19,10 @@ const newNode = Form.create({
       if (value) {
         let result = Number(value)
         if (Number.isNaN(result)) {
-          callback('Please enter a valid number')
+          callback(this.props.intl.formatMessage({ id: 'Form.Error.tokenAmount' }))
         }
         else if (result < 100000) {
-          callback('Please enter a amount bigger than 100,000')
+          callback(this.props.intl.formatMessage({ id: 'Form.Error.tokenAmount2' }))
         }
       }
       callback()
@@ -30,10 +31,10 @@ const newNode = Form.create({
       if (value) {
         let result = Number(value)
         if (Number.isNaN(result)) {
-          callback('Please enter a valid number')
+          callback(this.props.intl.formatMessage({ id: 'Form.Error.cutRate' }))
         }
         else if (result > 100 || result < 0) {
-          callback('Please enter a valid percentage')
+          callback(this.props.intl.formatMessage({ id: 'Form.Error.cutRate2' }))
         }
       }
       callback()
@@ -48,32 +49,34 @@ const newNode = Form.create({
         modalText
       } = this.props;
       const { getFieldDecorator } = form;
+      let { formatMessage: f } = this.props.intl;
       return (
         <Modal
           visible={visible}
           confirmLoading={confirmLoading}
-          title="Staking a new node"
-          okText="Create"
-          onCancel={onCancel}
+          title={f({ id: 'Form.Title.CreateNode' })}
+          okText={f({ id: 'Form.Ok.Create' })}
+          cancelText={f({ id: 'Form.Cancel.Create' })}
           onOk={onCreate}
+          onCancel={onCancel}
         >
           <Form layout="vertical">
-            <Form.Item label="Name">
+            <Form.Item label={f({ id: 'Form.Lable.Name' })}>
               {getFieldDecorator("name", {
                 rules: [
                   {
                     required: true,
-                    message: "Please name your node"
+                    message: f({ id: 'Form.Message.InputName' })
                   }
                 ]
               })(<Input type="textarea" />)}
             </Form.Item>
-            <Form.Item label="Node Address" >
+            <Form.Item label={f({ id: 'Form.Lable.Node' })}>
               {getFieldDecorator("nodeAddr", {
                 rules: [
                   {
                     required: true,
-                    message: "Please enter your node address"
+                    message: f({ id: 'Form.Message.InputNodeAddress' })
                   },
                   {
                     validator: this.validateAddress,
@@ -81,35 +84,35 @@ const newNode = Form.create({
                 ]
               })(<Input placeholder="0x" />)}
             </Form.Item>
-            <Form.Item label="Staking Amount">
+            <Form.Item label={f({ id: 'Form.Lable.StakeingAmount' })}>
               {getFieldDecorator("tokenAmount", {
                 rules: [
                   {
                     required: true,
-                    message: "Please enter your staking amount"
+                    message: f({ id: 'Form.Message.InputStakeingAmount' })
                   },
                   {
                     validator: this.validateTokenAmount,
                   }
                 ]
-              })(<Input placeholder="minimum 10,0000.0" suffix='DOS' />)}
+              })(<Input placeholder={f({ id: 'Form.Placeholder.InputStakeingAmount' })} suffix='DOS' />)}
             </Form.Item>
-            <Form.Item label="Drop Burn Amount(Optional)">
+            <Form.Item label={f({ id: 'Form.Lable.dbAmount' })}>
               {getFieldDecorator("dbAmount", {
                 rules: [
                   {
                     required: false,
-                    message: "Please enter your burn token amount"
+                    message: f({ id: 'Form.Message.InputdbAmount' })
                   }
                 ]
               })(<Input placeholder="0.0" suffix='DOS' />)}
             </Form.Item>
-            <Form.Item label="Reward Cut Rate">
+            <Form.Item label={f({ id: 'Form.Lable.cutRate' })}>
               {getFieldDecorator("cutRate", {
                 rules: [
                   {
                     required: true,
-                    message: "Please enter your reward cut rate"
+                    message: f({ id: 'Form.Message.InputcutRate' })
                   }, {
                     validator: this.validatCutRate
                   }
@@ -123,4 +126,4 @@ const newNode = Form.create({
     }
   }
 );
-export default newNode;
+export default injectIntl(newNode);

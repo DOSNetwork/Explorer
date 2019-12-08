@@ -1,5 +1,6 @@
 import React, { Component } from "react";
 import { Button, Table, message, Switch, Input, Tooltip, Icon } from "antd";
+import { injectIntl, FormattedMessage } from 'react-intl'
 import "./style.scss";
 import numeral from "numeral";
 import NewNode from "./newNodeForm";
@@ -24,8 +25,9 @@ const statusColumnRender = (text, record, index) => {
   return (
     <>
       {status ?
-        <div className='node-status__tag tag--active'>Active</div> :
-        <div className='node-status__tag tag--inactive'>Inactive</div>}
+        <div className='node-status__tag tag--active'>
+          <FormattedMessage id='Node.active' /></div> :
+        <div className='node-status__tag tag--inactive'><FormattedMessage id='Node.inactive' /></div>}
     </>
   );
 };
@@ -54,7 +56,7 @@ const tableTitleWithTipsRender = (title, tips) => {
     </Tooltip>
   </div>)
 }
-export default class NodeList extends Component {
+class NodeList extends Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -313,13 +315,14 @@ export default class NodeList extends Component {
   render() {
     let { isMetaMaskLogin } = this.props.contract;
     let showRelatedNodes = this.props.showRelatedNodes;
+    let { formatMessage: f } = this.props.intl;
     return (
       <>
         <div className='node-list--header-wrapper'>
           {isMetaMaskLogin ? (
             <div className='node-list--header-left'>
               <Button type="primary" onClick={this.showModal}>
-                Create a Node
+                {f({ id: 'Tooltip.CreateANode' })}
               </Button>
 
               <NewNode
@@ -335,10 +338,10 @@ export default class NodeList extends Component {
             : <div className='node-list--header-left'></div>}
           <div className="node-list--header-right">
             {isMetaMaskLogin ? <>
-              <Switch defaultChecked={showRelatedNodes} onChange={this.onChange} />&nbsp;Only Show The Nodes Related To Me  &nbsp;&nbsp;&nbsp;&nbsp;</> : <></>
+              <Switch defaultChecked={showRelatedNodes} onChange={this.onChange} />&nbsp;{f({ id: 'Tooltip.OnlyShowTheNodesRelatedToMe' })}&nbsp;&nbsp;&nbsp;&nbsp;</> : <></>
             }
             <Search
-              placeholder="search node address"
+              placeholder={f({ id: 'Tooltip.searchnodeaddress' })}
               onSearch={this.onSearchAddress}
               style={{ width: 200 }}
             />
@@ -357,78 +360,64 @@ export default class NodeList extends Component {
           onChange={this.handleTableChange}
         >
           <Column
-            title="Name"
+            title={f({ id: 'Table.Column.NodeList.Name' })}
             render={nameColumnRender}
             dataIndex="nameKey"
           />
           <Column
-            title="Node"
+            title={f({ id: 'Table.Column.NodeList.Node' })}
             render={nodeColumnRender}
             dataIndex="node"
             key="node"
           />
           <Column
-            title="Status"
+            title={f({ id: 'Table.Column.NodeList.Status' })}
             render={statusColumnRender}
             dataIndex="status"
           />
           <Column
-            title={tableTitleWithTipsRender('SelfStake', 'The Amount of DOS this node staked.')}
+            title={tableTitleWithTipsRender(f({ id: 'Table.Column.NodeList.SelfStaked' }), f({ id: 'Tooltip.selfStaked' }))}
             render={numberFormatRender}
             dataIndex="selfStaked"
             key="selfStaked"
-            // sorter={(a, b) => a.selfStaked - b.selfStaked}
             sortDirections={["ascend", "descend"]}
           />
           <Column
-            title={tableTitleWithTipsRender('Delegate', 'Total Amount of DOS delegated towards this node.')}
+            title={tableTitleWithTipsRender(f({ id: 'Table.Column.NodeList.Delegated' }), f({ id: 'Tooltip.delegate' }))}
             render={numberFormatRender}
             dataIndex="totalDelegated"
             key="totalDelegated"
-            // sorter={(a, b) => a.totalDelegated - b.totalDelegated}
             sortDirections={["ascend", "descend"]}
           />
-          {/* <Column
-            title={tableTitleWithTipsRender('Rewards', 'Total rewards this node created, including rewards for users who delegated towards this node.')}
-            render={numberFormatRender}
-            dataIndex="totalRewards"
-            key="totalRewards"
-            sorter={(a, b) => a.totalRewards - b.totalRewards}
-            sortDirections={["ascend", "descend"]}
-          /> */}
           <Column
-            title={tableTitleWithTipsRender('Reward Cut', 'The percentage of DOS token this node will keep from user’s staking rewards.')}
+            title={tableTitleWithTipsRender(f({ id: 'Table.Column.NodeList.RewardCut' }), f({ id: 'Tooltip.rewartcut' }))}
             render={t => `${t}%`}
             dataIndex="rewardCut"
             key="rewardCut"
-            // sorter={(a, b) => a.rewardCut - b.rewardCut}
             sortDirections={["ascend", "descend"]}
           />
           <Column
-            title={tableTitleWithTipsRender('Uptime', 'Total active time of this node.')}
+            title={tableTitleWithTipsRender(f({ id: 'Table.Column.NodeList.Uptime' }), f({ id: 'Tooltip.uptime' }))}
             render={t => `${t} days`}
             dataIndex="uptime"
             key="uptime"
-            // sorter={(a, b) => a.uptime - b.uptime}
             sortDirections={["ascend", "descend"]}
           />
           {isMetaMaskLogin ? (
             <Column
-              title={tableTitleWithTipsRender('MyDelegation', 'The amount of DOS you delegated towards this node.')}
+              title={tableTitleWithTipsRender(f({ id: 'Table.Column.NodeList.MyDelegation' }), f({ id: 'Tooltip.myDelegation' }))}
               render={myDelegationFormatRender}
               dataIndex="myDelegation"
               key="myDelegation"
-              // sorter={(a, b) => a.myDelegation - b.myDelegation}
               sortDirections={["ascend", "descend"]}
             />
           ) : null}
           {isMetaMaskLogin ? (
             <Column
-              title={tableTitleWithTipsRender('MyRewards', 'The amount of rewards you get from this node.')}
+              title={tableTitleWithTipsRender(f({ id: 'Table.Column.NodeList.MyRewards' }), f({ id: 'Tooltip.myRewards' }))}
               render={myDelegationFormatRender}
               dataIndex="myRewards"
               key="myRewards"
-              // sorter={(a, b) => a.myRewards - b.myRewards}
               sortDirections={["ascend", "descend"]}
             />
           ) : null}
@@ -437,3 +426,7 @@ export default class NodeList extends Component {
     );
   }
 }
+
+
+
+export default injectIntl(NodeList)
