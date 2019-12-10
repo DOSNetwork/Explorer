@@ -20,6 +20,13 @@ export function globalLoading(loadingStatus) {
     }
 }
 
+export function changeLang(lang) {
+    return {
+        type: type.GLOBAL_CONFIG_CHANGE_LANG,
+        lang: lang
+    }
+}
+
 function explorerSearchReceiveResponse(data) {
     return {
         type: type.EXPLORER_SEARCH_RESPONSE,
@@ -83,5 +90,6 @@ export function ExplorerSearch(text = '', pageSize = 20, pageIndex = 0, history)
 
 export default {
     counting,
-    globalLoading
+    globalLoading,
+    changeLang
 }

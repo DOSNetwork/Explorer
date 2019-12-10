@@ -1,4 +1,5 @@
 import React from 'react'
+import { injectIntl } from 'react-intl'
 import { Switch, Route, matchPath } from "react-router-dom";
 import SearchInput from '../../components/SearchInput'
 import ScrollTop from '../../components/ScrollTop'
@@ -30,6 +31,7 @@ class Search extends React.Component {
         this.handleSearch(searchText)
     }
     render() {
+        let { formatMessage } = this.props.intl;
         return (<>
             <MarketInfo></MarketInfo>
             <SearchInput onSearch={this.handleSearch}></SearchInput>
@@ -37,32 +39,41 @@ class Search extends React.Component {
             <Switch>
                 <Route exact path="/explorer/" component={() => (
                     <EventsList {...this.props.searchResult} explorerSearch={this.props.explorerSearch}
+                        f={formatMessage}
                         history={this.props.history}></EventsList>
                 )} />
                 <Route exact path="/explorer/group/:groupId" component={() => (
                     <div className="search-result--wrapper">
-                        <GroupDetail {...this.props.searchResult}></GroupDetail>
+                        <GroupDetail {...this.props.searchResult}
+                            f={formatMessage}>
+                        </GroupDetail>
                     </div>
                 )} />
                 <Route exact path="/explorer/random/:requestId" component={() => (
                     <div className="search-result--wrapper">
-                        <RandomDetail {...this.props.searchResult}></RandomDetail>
+                        <RandomDetail {...this.props.searchResult}
+                            f={formatMessage}>
+                        </RandomDetail>
                     </div>
                 )} />
 
                 <Route exact path="/explorer/address/:addressId" component={() => (
                     <div className="search-result--wrapper">
-                        <AddressDetail {...this.props.searchResult}></AddressDetail>
+                        <AddressDetail {...this.props.searchResult}
+                            f={formatMessage}
+                        ></AddressDetail>
                     </div>
                 )} />
 
                 <Route exact path="/explorer/url/:requestId" component={() => (
                     <div className="search-result--wrapper">
-                        <UrlDetail {...this.props.searchResult}></UrlDetail>
+                        <UrlDetail {...this.props.searchResult}
+                            f={formatMessage}>
+                        </UrlDetail>
                     </div>
                 )} />
             </Switch>
         </>)
     }
 }
-export default Search;
+export default injectIntl(Search);

@@ -1,32 +1,33 @@
 import React, { PureComponent } from 'react'
+import { injectIntl } from 'react-intl'
 import reddit from './soical-icons/reddit.png'
 import wechat from './soical-icons/wechat.png'
 import twitter from './soical-icons/twitter.png'
 import medium from './soical-icons/medium.png'
 import github from './soical-icons/github.png'
 import telegram from './soical-icons/telegram.png'
-const socialLinks =[
-    { 
-        icon:telegram,
-        url:'https://t.me/dosnetwork_en'
-    }, { 
-        icon:wechat,
-        url:'https://dos.network/#qrcodeModal'
-    }, { 
-        icon:medium,
-        url:'https://medium.com/dos-network'
-    }, { 
-        icon:github,
-        url:'https://github.com/DOSNetwork'
-    }, { 
-        icon:twitter,
-        url:'https://twitter.com/DosNetwork'
-    }, { 
-        icon:reddit,
-        url:'https://www.reddit.com/r/DOSNetwork'
-    }   
+const socialLinks = [
+    {
+        icon: telegram,
+        url: 'https://t.me/dosnetwork_en'
+    }, {
+        icon: wechat,
+        url: 'https://dos.network/#qrcodeModal'
+    }, {
+        icon: medium,
+        url: 'https://medium.com/dos-network'
+    }, {
+        icon: github,
+        url: 'https://github.com/DOSNetwork'
+    }, {
+        icon: twitter,
+        url: 'https://twitter.com/DosNetwork'
+    }, {
+        icon: reddit,
+        url: 'https://www.reddit.com/r/DOSNetwork'
+    }
 ]
-const links = [    
+const links = [
     {
         text: 'Main Website',
         url: 'https://dos.network'
@@ -42,13 +43,16 @@ const links = [
     }
 ]
 
-export default class Footer extends PureComponent {
+class Footer extends PureComponent {
     render() {
-
-        let renderSoicalLinks = ()=> {
-            let linkItem = socialLinks.map(link=>{
+        let { changeLang } = this.props;
+        let { formatMessage: f } = this.props.intl;
+        let { lang } = this.props.global
+        let targetLang = lang === 'zh-CN' ? 'en-US' : 'zh-CN'
+        let renderSoicalLinks = () => {
+            let linkItem = socialLinks.map(link => {
                 return (
-                    <div className="link" key={link.url}><a href={link.url}><img src={link.icon} alt={link.url}/></a></div>
+                    <div className="link" key={link.url}><a href={link.url}><img src={link.icon} alt={link.url} /></a></div>
                 )
             })
             return (
@@ -66,7 +70,8 @@ export default class Footer extends PureComponent {
             return (
                 <div className="document-link--wrapper">
                     {linkItem}
-                </div> 
+                    <div className="link change-lang" onClick={() => { changeLang(targetLang) }}>{f({ id: 'ChangeLang' })}</div>
+                </div>
             )
         }
         return (
@@ -82,3 +87,5 @@ export default class Footer extends PureComponent {
         )
     }
 }
+
+export default injectIntl(Footer)

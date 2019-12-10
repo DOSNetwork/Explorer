@@ -1,12 +1,12 @@
-import messages from './translation'
+import zh from './zh-CN';
+import en from './en-US'
 
-function ExtractLocale(locale) {
-    let lang = locale === 'en' ? 'en-US' : 'zh-CN'
-    let targetMessages = {}
-    for (let id in messages) {
-        targetMessages[id] = messages[id][lang]
-    }
-    return targetMessages
+const Message = {
+    zh,
+    en
 }
 
-export default ExtractLocale;
+export function Locale(locale = 'en-US') {
+    let lang = locale === 'zh-CN' ? 'zh' : 'en'
+    return Message[lang]
+}

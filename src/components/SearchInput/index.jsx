@@ -1,5 +1,6 @@
 import React, { Component } from 'react'
 import { Icon, Button, Input, AutoComplete } from 'antd';
+import { injectIntl } from 'react-intl'
 import './style.scss';
 import { withRouter } from "react-router";
 class SearchInput extends Component {
@@ -39,6 +40,7 @@ class SearchInput extends Component {
     }
     render() {
         const { dataSource } = this.state
+        let { formatMessage: f } = this.props.intl;
         return (
             <div className="search-input--wrapper">
                 <AutoComplete
@@ -48,7 +50,7 @@ class SearchInput extends Component {
                     dataSource={dataSource}
                     onSearch={this.handleSearch}
                     onSelect={this.handleSearch}
-                    placeholder="Search by Event, RequestId, GroupId and Address"
+                    placeholder={f({ id: 'Tooltip.Search.placeholder' })}
                     backfill={true}
                     filterOption={(inputValue, option) =>
                         option.props.children.toUpperCase().indexOf(inputValue.toUpperCase()) !== -1
@@ -63,7 +65,7 @@ class SearchInput extends Component {
                                 type="primary"
                                 onClick={this.searching}
                             >
-                                <Icon style={{ fontSize: 27 }} type="search" />Search
+                                <Icon style={{ fontSize: 27 }} type="search" />{f({ id: 'Form.Button.Search' })}
                             </Button>
                         }
                         onKeyPress={this.handleKeyPress}
@@ -75,4 +77,4 @@ class SearchInput extends Component {
 }
 
 
-export default withRouter(SearchInput);
+export default withRouter(injectIntl(SearchInput));

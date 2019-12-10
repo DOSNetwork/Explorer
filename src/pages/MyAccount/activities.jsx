@@ -1,4 +1,5 @@
 import React, { Component } from "react";
+import { injectIntl } from 'react-intl'
 import { SubTitle } from "../../Layout/page";
 import { Table } from "antd";
 import dateformat from "dateformat";
@@ -15,7 +16,7 @@ const txHashRender = (text) => {
     <EllipsisWrapper text={text} />
   )
 }
-export default class Activities extends Component {
+class Activities extends Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -113,9 +114,10 @@ export default class Activities extends Component {
     }
   }
   render() {
+    let { formatMessage: f } = this.props.intl;
     return (
       <>
-        <SubTitle title="Account Activity"></SubTitle>
+        <SubTitle title={f({ id: 'Table.Column.Activites.AccountActivity' })}></SubTitle>
         <Table
           rowKey={record => record.transactionHash}
           loading={this.state.loading}
@@ -127,7 +129,7 @@ export default class Activities extends Component {
           onChange={this.handleTableChange}
         >
           <Column
-            title="Time"
+            title={f({ id: 'Table.Column.Activites.Time' })}
             render={dateFormatRender}
             sorter={(a, b) => a.timestamp - b.timestamp}
             sortDirections={["ascend", "descend"]}
@@ -141,10 +143,10 @@ export default class Activities extends Component {
             dataIndex="blockNumber"
           /> */}
           <Column
-            title="Action"
+            title={f({ id: 'Table.Column.Activites.Action' })}
             dataIndex="event"
           />
-          <Column title="Tx Hash"
+          <Column title={f({ id: 'Table.Column.Activites.TxHash' })}
             render={txHashRender}
             dataIndex="transactionHash"
             key="transactionHash" />
@@ -153,3 +155,4 @@ export default class Activities extends Component {
     );
   }
 }
+export default injectIntl(Activities)

@@ -1,4 +1,5 @@
 import React, { Component } from "react";
+import { injectIntl } from 'react-intl'
 import { Icon, Spin } from "antd";
 import numeral from 'numeral'
 import {
@@ -11,7 +12,7 @@ import {
 const numberFormatRender = (value) => {
   return numeral(value).format("0,0");
 };
-export default class Account extends Component {
+class Account extends Component {
   constructor(props) {
     super(props);
     console.log("prop", props);
@@ -207,11 +208,13 @@ export default class Account extends Component {
       delegatedReward,
       unbondDelegated
     } = this.state;
+    let { formatMessage: f } = this.props.intl;
     return (
+
       <>
         <div className="myaccount--wrapper">
           <div className="myaccount-balance">
-            <DescLabel label="Account Balance" />
+            <DescLabel label={f({ id: 'Tooltip.MyAccount.AccountBalance' })} />
             <Icon
               style={{ fontSize: 27, marginLeft: 30, cursor: "pointer" }}
               type={showNumber ? "eye" : "eye-invisible"}
@@ -223,15 +226,15 @@ export default class Account extends Component {
           </div>
           <div className="myaccount-detail--wrapper">
             <div className="detail--container">
-              <DescLabel label="Total Delegated" />
+              <DescLabel label={f({ id: 'Tooltip.MyAccount.TotalDelegated' })} />
               <div className="account-number">{this.numberToggler(delegatedAmount)}</div>
             </div>
             <div className="detail--container">
-              <DescLabel label="My Rewards" />
+              <DescLabel label={f({ id: 'Tooltip.MyAccount.MyRewards' })} />
               <div className="account-number">{this.numberToggler(delegatedReward)}</div>
             </div>
             <div className="detail--container">
-              <DescLabel label="Unbonded tokens" />
+              <DescLabel label={f({ id: 'Tooltip.MyAccount.Unbondedtokens' })} />
               <div className="account-number">{this.numberToggler(unbondDelegated)}</div>
             </div>
           </div>
@@ -240,6 +243,9 @@ export default class Account extends Component {
     );
   }
 }
+
+export default injectIntl(Account)
+
 
 const DescLabel = ({ label, market = "DOS" }) => {
   return (

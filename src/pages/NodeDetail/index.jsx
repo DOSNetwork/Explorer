@@ -1,4 +1,5 @@
 import React, { Component } from 'react'
+import { FormattedMessage } from 'react-intl'
 import { PageTitle } from '../../Layout/page'
 import NodeDetailContainer from './nodeDetailContainer'
 import {
@@ -9,7 +10,9 @@ export default class NodeDetail extends Component {
     render() {
         return (
             <div>
-                <PageTitle title={()=>(<><NodeListIcon/>&nbsp;Node Detail</>)}></PageTitle>
+                <PageTitle title={() => (<><NodeListIcon />&nbsp;
+                    <FormattedMessage id='Title.nodedetail' />
+                </>)}></PageTitle>
                 <NodeDetailContainer {...this.props}></NodeDetailContainer>
             </div>
         )

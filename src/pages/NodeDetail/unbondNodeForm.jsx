@@ -1,14 +1,16 @@
 import React from "react";
 import { Form, Input, Button } from "antd";
+import { injectIntl } from 'react-intl'
 
 const unbondNode = Form.create({ name: "form_in_modal" })(
   // eslint-disable-next-line
   class extends React.Component {
     validateTokenAmount = (rule, value, callback) => {
+      let { formatMessage } = this.props.intl;
       if (value) {
         let result = Number(value)
         if (Number.isNaN(result)) {
-          callback('Please enter a valid number')
+          callback(formatMessage({ id: 'Form.Error.tokenAmount' }))
         }
       }
       callback()
@@ -18,15 +20,16 @@ const unbondNode = Form.create({ name: "form_in_modal" })(
         form,
         onSubmit
       } = this.props;
+      let { formatMessage: f } = this.props.intl;
       const { getFieldDecorator } = form;
       return (
         <Form onSubmit={onSubmit} layout="vertical">
-          <Form.Item label="Unbond Amount">
+          <Form.Item label={f({ id: 'Form.Lable.UnbondAmount' })}>
             {getFieldDecorator("tokenAmount", {
               rules: [
                 {
                   required: true,
-                  message: "Please input the unbond token amount"
+                  message: f({ id: 'Form.Message.InputUnbondAmount' })
                 },
                 {
                   validator: this.validateTokenAmount,
@@ -35,11 +38,11 @@ const unbondNode = Form.create({ name: "form_in_modal" })(
             })(<Input placeholder="100.0" suffix="DOS" />)}
           </Form.Item>
           <Button type="primary" htmlType="submit" className="login-form-button">
-            Submit
+            {f({ id: 'Form.Button.Submit' })}
           </Button>
         </Form>
       );
     }
   }
 );
-export default unbondNode;
+export default injectIntl(unbondNode);

@@ -1,6 +1,6 @@
 import React from "react";
 import { Form, Input, Button } from "antd";
-
+import { injectIntl } from 'react-intl'
 const stakingNode = Form.create({ name: "form_in_modal" })(
   // eslint-disable-next-line
   class extends React.Component {
@@ -9,46 +9,47 @@ const stakingNode = Form.create({ name: "form_in_modal" })(
         onSubmit,
         form,
       } = this.props;
+      let { formatMessage: f } = this.props.intl;
       const { getFieldDecorator } = form;
       return (
         <Form onSubmit={onSubmit} layout="vertical">
-          <Form.Item label="Add Delegate Amount">
+          <Form.Item label={f({ id: 'Form.Lable.AddDelegateAmount' })}>
             {getFieldDecorator("tokenAmount", {
               rules: [
                 {
                   required: false,
-                  message: "Please input the delegate token amount!"
+                  message: f({ id: 'Form.Message.InputDelegateAmount' })
                 }
               ]
             })(<Input placeholder="0.0" suffix='DOS' />)}
           </Form.Item>
-          <Form.Item label="Add Drop Burn Amount">
+          <Form.Item label={f({ id: 'Form.Lable.AddDropBurnAmount' })}>
             {getFieldDecorator("dbAmount", {
               rules: [
                 {
                   required: false,
                   value: "60",
-                  message: "Please input the drop burn amount!"
+                  message: f({ id: "Form.Message.InputDropBurnAmount" })
                 }
               ]
             })(<Input placeholder="0.0" suffix='DOS' />)}
           </Form.Item>
-          <Form.Item label="Update Reward Cut">
+          <Form.Item label={f({ id: 'Form.Lable.UpdateRewardCut' })}>
             {getFieldDecorator("rewardCut", {
               rules: [
                 {
                   required: true,
-                  message: "Please input the new reward cut"
+                  message: f({ id: 'Form.Message.InputRewardCut' })
                 }
               ]
             })(<Input placeholder="10.0" suffix='%' />)}
           </Form.Item>
           <Button type="primary" htmlType="submit" className="login-form-button">
-            Submit
+            {f({ id: 'Form.Button.Submit' })}
           </Button>
         </Form>
       );
     }
   }
 );
-export default stakingNode;
+export default injectIntl(stakingNode);

@@ -88,6 +88,11 @@
         color: #979ea5;
         height: 30px;
         line-height: 30px;
+
+        &.change-lang {
+            color: #fff;
+            cursor: pointer;
+        }
     }
 
     .copy-right {

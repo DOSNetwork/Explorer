@@ -11,7 +11,8 @@ import type from './type'
 // ===== global state
 const globalState = {
     loadingStatus: false,
-    config_onlyShowRelatedToMe: false
+    config_onlyShowRelatedToMe: false,
+    lang: ''
 }
 // =====app state
 // const appState = {
@@ -55,6 +56,32 @@ globalActions[type.GLOBAL_CONFIG_CHANGE_OSLM] = (prevState, payload) => {
         config_onlyShowRelatedToMe: payload.config_onlyShowRelatedToMe
     }
 }
+globalActions[type.GLOBAL_CONFIG_SET_LANG] = (prevState, payload) => {
+    console.log(`[reducer]${type.GLOBAL_CONFIG_SET_LANG}.............`)
+    let {
+        lang
+    } = payload
+    localStorage.setItem('DOSNETWORK_LANG', lang)
+    return {
+        ...globalState,
+        lang
+    }
+}
+globalActions[type.GLOBAL_CONFIG_CHANGE_LANG] = (prevState, payload) => {
+    console.log(`[reducer]${type.GLOBAL_CONFIG_CHANGE_LANG}.............`)
+    let {
+        lang
+    } = payload
+    localStorage.setItem('DOSNETWORK_LANG', lang)
+    setTimeout(() => {
+        window.location.reload()
+    }, 1000);
+    return {
+        ...globalState,
+        lang
+    }
+}
+
 // ===== globalReducerCONTRACT_USERADDRESS_CHANGE
 const globalReducer = handleActions(globalActions, globalState)
 

@@ -1,4 +1,5 @@
 import React, { Component } from 'react'
+import { injectIntl } from 'react-intl'
 import axios from 'axios'
 import './style.scss';
 import { DOS_ABI, DOS_CONTRACT_ADDRESS } from "../../util/const";
@@ -6,7 +7,7 @@ import interestRateIcon from './assets/interestRate-icon.png'
 import priceIcon from './assets/price-icon.png'
 import stakedTokenIcon from './assets/stakedToken-icon.png'
 
-export default class Navigation extends Component {
+const Navigation = class Navigation extends Component {
     constructor(props) {
         super(props);
         this.state = {
@@ -64,11 +65,12 @@ export default class Navigation extends Component {
             numberOfStaked,
             interestRate, currency
         } = this.state;
+        let { formatMessage: f } = this.props.intl;
         return (
             <div className="market-info--wrapper">
                 <div className="market-info--block block--rate">
                     <p className='block--title'>
-                        <img width='20' src={interestRateIcon} alt="icon" /><span>Interest Rate</span>
+                        <img width='20' src={interestRateIcon} alt="icon" /><span>{f({ id: 'Tooltip.MarketInfo.InterestRate' })}</span>
                     </p>
                     <p className="block--value">
                         {interestRate}
@@ -76,7 +78,7 @@ export default class Navigation extends Component {
                 </div>
                 <div className="market-info--block block--token">
                     <p className='block--title'>
-                        <img width='20' src={stakedTokenIcon} alt="icon" /><span>Number of Staked Token</span>
+                        <img width='20' src={stakedTokenIcon} alt="icon" /><span>{f({ id: 'Tooltip.MarketInfo.NumberOfStakedToken' })}</span>
                     </p>
                     <p className="block--value">
                         {numberOfStaked}
@@ -84,7 +86,7 @@ export default class Navigation extends Component {
                 </div>
                 <div className="market-info--block block--price">
                     <p className='block--title'>
-                        <img width='20' src={priceIcon} alt="icon" /><span>Price of DOS({currency})</span>
+                        <img width='20' src={priceIcon} alt="icon" /><span>{f({ id: 'Tooltip.MarketInfo.PriceOfDOS' })}({currency})</span>
                     </p>
                     <p className="block--value">
                         {dosPrice}
@@ -94,3 +96,6 @@ export default class Navigation extends Component {
         )
     }
 }
+
+
+export default injectIntl(Navigation)
