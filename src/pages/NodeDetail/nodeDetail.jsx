@@ -9,7 +9,7 @@ import identicon from "identicon.js";
 import { EllipsisString } from "../../util/util";
 import "./style.scss";
 import numeral from "numeral";
-import { EmitterHandlerWrapper } from '../../util/contract-helper'
+import { EmitterHandlerWrapper } from "../../util/contract-helper";
 const { TabPane } = Tabs;
 const { confirm } = Modal;
 const TabbarRender = tabbarName => {
@@ -30,7 +30,7 @@ export default class NodeDetail extends Component {
       myRewardTotal: 0,
       withDrawalTotal: 0,
       loading: false,
-      formText: "",
+      formText: ""
     };
   }
   componentDidMount() {
@@ -39,7 +39,7 @@ export default class NodeDetail extends Component {
       DOS_ABI,
       DOS_CONTRACT_ADDRESS
     );
-    this.unMountRemoveListenerCallbacks = []
+    this.unMountRemoveListenerCallbacks = [];
     this.getNodeDetail();
   }
   getSnapshotBeforeUpdate(prevProps) {
@@ -53,11 +53,11 @@ export default class NodeDetail extends Component {
     }
   }
   componentWillUnmount() {
-    let { unMountRemoveListenerCallbacks } = this
+    let { unMountRemoveListenerCallbacks } = this;
     unMountRemoveListenerCallbacks.forEach(fn => {
-      typeof fn === 'function' && fn.call(null)
-    })
-    this.unMount = true
+      typeof fn === "function" && fn.call(null);
+    });
+    this.unMount = true;
   }
   saveUpdateFormRef = formRef => {
     this.updateFormformRef = formRef;
@@ -73,134 +73,149 @@ export default class NodeDetail extends Component {
   };
   //------- withDraw unregister
   handleOwnerWithdraw = () => {
-    let emitterName = 'Owner Claim Reward'
+    let emitterName = "Owner Claim Reward";
     const { userAddress } = this.props.contract;
 
-    let { withDrawalTotal } = this.state
+    let { withDrawalTotal } = this.state;
     if (+withDrawalTotal === 0) {
       Modal.warning({
         title: emitterName,
-        content: 'No enough reward to withdraw',
+        content: "No enough reward to withdraw"
       });
       return;
     }
     let emitter = this.contractInstance.methods
       .nodeWithdraw(this.state.node)
       .send({ from: userAddress });
-    // 监听并且在unmount的时候处理事件解绑 
-    this.handleEmmiterEvents(emitter, emitterName,
-      (hash) => {
+    // 监听并且在unmount的时候处理事件解绑
+    this.handleEmmiterEvents(
+      emitter,
+      emitterName,
+      hash => {
         message.loading("Withdraw: wait for confirmatin : " + hash);
       },
       (confirmationNumber, receipt) => {
         message.success(
           "Withdraw: success (confirmed block " + receipt.blockNumber + ")"
         );
-      })
+      }
+    );
   };
   handleOwnerClaimReward = () => {
-    let emitterName = 'Owner Claim Reward'
+    let emitterName = "Owner Claim Reward";
     const { userAddress } = this.props.contract;
 
-    let { myRewardTotal } = this.state
+    let { myRewardTotal } = this.state;
     if (+myRewardTotal === 0) {
       Modal.warning({
         title: emitterName,
-        content: 'No enough reward to withdraw',
+        content: "No enough reward to withdraw"
       });
       return;
     }
     let emitter = this.contractInstance.methods
       .nodeClaimReward(this.state.node)
       .send({ from: userAddress });
-    // 监听并且在unmount的时候处理事件解绑 
-    this.handleEmmiterEvents(emitter, emitterName,
-      (hash) => {
+    // 监听并且在unmount的时候处理事件解绑
+    this.handleEmmiterEvents(
+      emitter,
+      emitterName,
+      hash => {
         message.loading("ClaimReward: wait for confirmatin : " + hash);
       },
       (confirmationNumber, receipt) => {
         message.success(
           "ClaimReward: success (confirmed block " + receipt.blockNumber + ")"
         );
-      })
+      }
+    );
   };
   handleDelegatorWithdraw = () => {
-    let emitterName = 'Delegator WithDraw'
+    let emitterName = "Delegator WithDraw";
     const { userAddress } = this.props.contract;
 
-    let { withDrawalTotal } = this.state
+    let { withDrawalTotal } = this.state;
     if (+withDrawalTotal === 0) {
       Modal.warning({
         title: emitterName,
-        content: 'No enough DOS to withdraw',
+        content: "No enough DOS to withdraw"
       });
       return;
     }
     let emitter = this.contractInstance.methods
       .delegatorWithdraw(this.state.node)
       .send({ from: userAddress });
-    // 监听并且在unmount的时候处理事件解绑 
-    this.handleEmmiterEvents(emitter, emitterName,
-      (hash) => {
+    // 监听并且在unmount的时候处理事件解绑
+    this.handleEmmiterEvents(
+      emitter,
+      emitterName,
+      hash => {
         message.loading("Withdraw: wait for confirmatin : " + hash);
       },
       (confirmationNumber, receipt) => {
         message.success(
           "Withdraw: success (confirmed block " + receipt.blockNumber + ")"
         );
-      })
+      }
+    );
   };
   handleDelegatorClaimReward = () => {
-    let emitterName = 'Delegator Claim Reward'
+    let emitterName = "Delegator Claim Reward";
     const { userAddress } = this.props.contract;
-    let { withDrawalTotal } = this.state
+    let { withDrawalTotal } = this.state;
     if (+withDrawalTotal === 0) {
       Modal.warning({
         title: emitterName,
-        content: 'No enough DOS to withdraw',
+        content: "No enough DOS to withdraw"
       });
       return;
     }
     let emitter = this.contractInstance.methods
       .delegatorClaimReward(this.state.node)
       .send({ from: userAddress });
-    // 监听并且在unmount的时候处理事件解绑 
-    this.handleEmmiterEvents(emitter, emitterName,
-      (hash) => {
+    // 监听并且在unmount的时候处理事件解绑
+    this.handleEmmiterEvents(
+      emitter,
+      emitterName,
+      hash => {
         message.loading("ClaimReward: wait for confirmatin : " + hash);
       },
       (confirmationNumber, receipt) => {
         message.success(
           "ClaimReward: success (confirmed block " + receipt.blockNumber + ")"
         );
-      })
+      }
+    );
   };
   handleUnregister = () => {
     const { userAddress } = this.props.contract;
     confirm({
-      title: 'Are you sure unregister this node?',
-      content: 'Some descriptions here to .....',
-      okText: 'Sure',
-      okType: 'danger',
-      cancelText: 'No',
+      title: "Are you sure unregister this node?",
+      content: "Some descriptions here to .....",
+      okText: "Sure",
+      okType: "danger",
+      cancelText: "No",
       onOk: () => {
         let emitter = this.contractInstance.methods
           .nodeUnregister(this.state.node)
           .send({ from: userAddress });
-        // 监听并且在unmount的时候处理事件解绑 
-        this.handleEmmiterEvents(emitter, 'User UnRegister',
-          (hash) => {
+        // 监听并且在unmount的时候处理事件解绑
+        this.handleEmmiterEvents(
+          emitter,
+          "User UnRegister",
+          hash => {
             message.loading("Unregister: wait for confirmatin : " + hash);
           },
           (confirmationNumber, receipt) => {
             message.success(
-              "Unregister: success (confirmed block " + receipt.blockNumber + ")"
+              "Unregister: success (confirmed block " +
+                receipt.blockNumber +
+                ")"
             );
-          })
+          }
+        );
       },
-      onCancel() {
-
-      },
+      onCancel() {}
     });
   };
   //------- delegate upgrate unbond
@@ -213,22 +228,25 @@ export default class NodeDetail extends Component {
       }
       const { web3Client, userAddress } = this.props.contract;
       const tokenAmount = web3Client.utils.toWei(values.tokenAmount, "ether");
-      const dbAmount = values.dbAmount ? web3Client.utils.toWei(values.dbAmount, "ether") : 0;
+      const dbAmount = values.dbAmount ? values.dbAmount : 0;
       const rewardCut = values.rewardCut;
       let emitter = this.contractInstance.methods
         .updateNodeStaking(this.state.node, tokenAmount, dbAmount, rewardCut)
         .send({ from: userAddress });
-      // 监听并且在unmount的时候处理事件解绑 
-      this.handleEmmiterEvents(emitter, 'Upgrate Node',
-        (hash) => {
+      // 监听并且在unmount的时候处理事件解绑
+      this.handleEmmiterEvents(
+        emitter,
+        "Upgrate Node",
+        hash => {
           message.loading("Upgrate: wait for confirmatin : " + hash);
         },
         (confirmationNumber, receipt) => {
           message.success(
             "Upgrate: success (confirmed block " + receipt.blockNumber + ")"
           );
-          form.resetFields()
-        })
+          form.resetFields();
+        }
+      );
       this.setState({ updateFormVisible: false });
     });
   };
@@ -241,22 +259,25 @@ export default class NodeDetail extends Component {
       }
       const { web3Client, userAddress } = this.props.contract;
       const tokenAmount = web3Client.utils.toWei(values.tokenAmount, "ether");
-      const dbAmount = web3Client.utils.toWei(values.dbAmount, "ether");
+      const dbAmount = values.dbAmount;
       let emitter = this.contractInstance.methods
         .nodeUnbond(tokenAmount, dbAmount, this.state.node)
         .send({ from: userAddress });
 
-      // 监听并且在unmount的时候处理事件解绑 
-      this.handleEmmiterEvents(emitter, 'Owner UnBond',
-        (hash) => {
+      // 监听并且在unmount的时候处理事件解绑
+      this.handleEmmiterEvents(
+        emitter,
+        "Owner UnBond",
+        hash => {
           message.loading("Unbond: wait for confirmatin : " + hash);
         },
         (confirmationNumber, receipt) => {
           message.success(
             "Unbond: success (confirmed block " + receipt.blockNumber + ")"
           );
-          form.resetFields()
-        })
+          form.resetFields();
+        }
+      );
 
       this.setState({
         unbondOwnedNodeLoading: false,
@@ -278,17 +299,20 @@ export default class NodeDetail extends Component {
         .delegatorUnbond(tokenAmount, this.state.node)
         .send({ from: userAddress });
 
-      // 监听并且在unmount的时候处理事件解绑 
-      this.handleEmmiterEvents(emitter, 'User UnBond',
-        (hash) => {
+      // 监听并且在unmount的时候处理事件解绑
+      this.handleEmmiterEvents(
+        emitter,
+        "User UnBond",
+        hash => {
           message.loading("Unbond: wait for confirmatin : " + hash);
         },
         (confirmationNumber, receipt) => {
           message.success(
             "Unbond: success (confirmed block " + receipt.blockNumber + ")"
           );
-          form.resetFields()
-        })
+          form.resetFields();
+        }
+      );
       this.setState({
         formText: "",
         unbondFormLoading: false,
@@ -316,36 +340,49 @@ export default class NodeDetail extends Component {
       let emitter = contractInstance.methods
         .delegate(tokenAmount, this.state.node)
         .send({ from: userAddress });
-      // 监听并且在unmount的时候处理事件解绑 
-      this.handleEmmiterEvents(emitter, 'User Delegate',
-        (hash) => {
+      // 监听并且在unmount的时候处理事件解绑
+      this.handleEmmiterEvents(
+        emitter,
+        "User Delegate",
+        hash => {
           message.loading("Delegate: wait for confirmatin : " + hash);
         },
         (confirmationNumber, receipt) => {
           message.success(
             "Delegate: success (confirmed block " + receipt.blockNumber + ")"
           );
-          form.resetFields()
-        })
+          form.resetFields();
+        }
+      );
       this.setState({ delegateFormVisible: false, delegateFormLoading: false });
     });
   };
-  handleEmmiterEvents = (emitter, emitterName, hashCallback, successCallback, ) => {
+  handleEmmiterEvents = (
+    emitter,
+    emitterName,
+    hashCallback,
+    successCallback
+  ) => {
     let pageInstance = this;
-    this.unMountRemoveListenerCallbacks.push(EmitterHandlerWrapper(emitter,
-      (hash) => {
-        hashCallback.call(this, hash)
-      },
-      (confirmationNumber, receipt) => {
-        successCallback.call(this, confirmationNumber, receipt)
-        if (!this.unMount) {
-          pageInstance && pageInstance.getNodeDetail()
-        }
-      },
-      (error) => {
-        message.error(error.message.split('\n')[0]);
-      }, { emmiterName: emitterName }))
-  }
+    this.unMountRemoveListenerCallbacks.push(
+      EmitterHandlerWrapper(
+        emitter,
+        hash => {
+          hashCallback.call(this, hash);
+        },
+        (confirmationNumber, receipt) => {
+          successCallback.call(this, confirmationNumber, receipt);
+          if (!this.unMount) {
+            pageInstance && pageInstance.getNodeDetail();
+          }
+        },
+        error => {
+          message.error(error.message.split("\n")[0]);
+        },
+        { emmiterName: emitterName }
+      )
+    );
+  };
   getNodeDetail = async () => {
     function fromWei(bn) {
       if (!bn || bn === "-") {
@@ -364,10 +401,11 @@ export default class NodeDetail extends Component {
     const nodeAddr = this.state.node;
     const nodeInstance = await contractInstance.methods.nodes(nodeAddr).call();
     let uptime = await contractInstance.methods.getNodeUptime(nodeAddr).call();
-    let delegatorWithdrawAbletotal = await contractInstance.methods.delegatorWithdrawAble(nodeAddr).call();
-    console.log(delegatorWithdrawAbletotal)
-    let nodeWithdrawAbleTotal = await contractInstance.methods.nodeWithdrawAble(nodeAddr).call();
-    console.log(nodeWithdrawAbleTotal)
+    //let delegatorWithdrawAbletotal = await contractInstance.methods
+    //.delegatorWithdrawAble(nodeInstance.ownerAddr, nodeAddr)
+    // .call();
+    //console.log(delegatorWithdrawAbletotal);
+
     let avatar = `data:image/png;base64,${new identicon(
       nodeAddr,
       100
@@ -381,7 +419,7 @@ export default class NodeDetail extends Component {
       description,
       stakedDB
     } = nodeInstance;
-    console.log(nodeInstance)
+    console.log(nodeInstance);
     const nodeDetail = {
       node: nodeAddr,
       avatar: avatar,
@@ -403,10 +441,11 @@ export default class NodeDetail extends Component {
     let rewardotal = 0,
       myTokenTotal = 0,
       withDrawalTotal = 0,
-      withDrawalFrozen = 111,
+      withDrawalFrozen = 0,
       myRewardTotal = 0,
       userDelegatedRewardotal = 0,
-      withDrawalDropBurn = 333,
+      withDrawalDropBurn = 0,
+      withDrawalDropBurnFrozen = 0,
       isUserDelegatedThisNode = false,
       isUserOwnedThisNode = false;
     if (userAddress) {
@@ -414,12 +453,32 @@ export default class NodeDetail extends Component {
         web3Client.utils.toChecksumAddress(userAddress) ===
         web3Client.utils.toChecksumAddress(nodeInstance.ownerAddr);
       if (isUserOwnedThisNode) {
+        const nodeWithdrawAbleTotal = await contractInstance.methods
+          .nodeWithdrawAble(nodeInstance.ownerAddr, nodeAddr)
+          .call();
+        console.log(nodeWithdrawAbleTotal);
         rewardotal = await contractInstance.methods
           .getNodeRewardTokens(nodeAddr)
           .call();
         myTokenTotal = fromWei(selfStakedAmount);
+        let tempBn = new web3Client.utils.toBN(0);
+        tempBn = tempBn.add(
+          new web3Client.utils.toBN(nodeWithdrawAbleTotal[0])
+        );
         withDrawalTotal =
-          fromWei(pendingWithdrawToken);
+          Math.round(web3Client.utils.fromWei(tempBn.toString()) * 100) / 100;
+        tempBn = new web3Client.utils.toBN(0);
+        tempBn = tempBn.add(
+          new web3Client.utils.toBN(nodeInstance.pendingWithdrawToken)
+        );
+        tempBn = tempBn.sub(
+          new web3Client.utils.toBN(nodeWithdrawAbleTotal[0])
+        );
+        withDrawalFrozen =
+          Math.round(web3Client.utils.fromWei(tempBn.toString()) * 100) / 100;
+        withDrawalDropBurn = nodeWithdrawAbleTotal[1];
+        withDrawalDropBurnFrozen = pendingWithdrawDB - withDrawalDropBurn;
+
         myRewardTotal = fromWei(rewardotal);
       } else {
         let delegator = await contractInstance.methods
@@ -447,7 +506,7 @@ export default class NodeDetail extends Component {
       withDrawalFrozen: withDrawalFrozen,
       dropBurnToken: stakedDB,
       withDrawalDropBurn: withDrawalDropBurn,
-      withDrawalDropBurnFrozen: pendingWithdrawDB,
+      withDrawalDropBurnFrozen: withDrawalDropBurnFrozen,
       nodeDetail: nodeDetail
     });
   };
@@ -479,11 +538,21 @@ export default class NodeDetail extends Component {
                 <span className="node-address">
                   {EllipsisString(node, 6, 6)}{" "}
                 </span>
-                {status ? <div className='node-status__tag tag--active'>Active</div> : <div className='node-status__tag tag--inactive'>Inactive</div>}
+                {status ? (
+                  <div className="node-status__tag tag--active">Active</div>
+                ) : (
+                  <div className="node-status__tag tag--inactive">Inactive</div>
+                )}
               </div>
-              {isMetaMaskLogin && isUserOwnedThisNode ?
-                (<span className='unregister-button' onClick={this.handleUnregister} > Unregister</span>)
-                : null}
+              {isMetaMaskLogin && isUserOwnedThisNode ? (
+                <span
+                  className="unregister-button"
+                  onClick={this.handleUnregister}
+                >
+                  {" "}
+                  Unregister
+                </span>
+              ) : null}
             </div>
           </div>
           <div className="node-detail--detail node-detail--block">
@@ -491,66 +560,91 @@ export default class NodeDetail extends Component {
               <div className="detail--user-info">
                 <div className="user-info--delegation">
                   <p className="user-info--title">
-                    My{isUserDelegatedThisNode ? " Delegation" : " Staking Token"}
+                    My
+                    {isUserDelegatedThisNode ? " Delegation" : " Staking Token"}
                   </p>
-                  <p className="user-info--value">{numberFormatRender(this.state.myTokenTotal)}</p>
-                  {+this.state.dropBurnToken >= '0' ?
+                  <p className="user-info--value">
+                    {numberFormatRender(this.state.myTokenTotal)}
+                  </p>
+                  {+this.state.dropBurnToken >= "0" ? (
                     <>
-                      <p className="user-info--title">
-                        Drop Burn Token
+                      <p className="user-info--title">Drop Burn Token</p>
+                      <p className="user-info--value">
+                        {numberFormatRender(this.state.dropBurnToken)}
                       </p>
-                      <p className="user-info--value">{numberFormatRender(this.state.dropBurnToken)}</p>
-                    </> : null
-                  }
+                    </>
+                  ) : null}
                 </div>
                 <div className="user-info--rewards">
                   <p className="user-info--title">Withdrawal(Frozen)</p>
-                  <p className="user-info--value">{numberFormatRender(this.state.withDrawalTotal)}<span className='value--frozen'>({numberFormatRender(this.state.withDrawalFrozen)})</span>
+                  <p className="user-info--value">
+                    {numberFormatRender(this.state.withDrawalTotal)}
+                    <span className="value--frozen">
+                      ({numberFormatRender(this.state.withDrawalFrozen)})
+                    </span>
                   </p>
-                  {(+this.state.withDrawalDropBurn >= '0' || +this.state.withDrawalDropBurnFrozen >= '0') ?
+                  {+this.state.withDrawalDropBurn >= "0" ||
+                  +this.state.withDrawalDropBurnFrozen >= "0" ? (
                     <>
                       <p className="user-info--title">
                         Withdrawal Drop Burn(Frozen)
                       </p>
-                      <p className="user-info--value">{numberFormatRender(this.state.withDrawalDropBurn)}<span className='value--frozen'>({numberFormatRender(this.state.withDrawalDropBurnFrozen)})</span></p>
-                    </> : null
-                  }
-                  {isUserDelegatedThisNode ? <Button
-                    className="widthdraw-button"
-                    shape="round"
-                    size='small'
-                    onClick={this.handleDelegatorWithdraw}
-                  >
-                    Withdraw
-                  </Button> : <Button
+                      <p className="user-info--value">
+                        {numberFormatRender(this.state.withDrawalDropBurn)}
+                        <span className="value--frozen">
+                          (
+                          {numberFormatRender(
+                            this.state.withDrawalDropBurnFrozen
+                          )}
+                          )
+                        </span>
+                      </p>
+                    </>
+                  ) : null}
+                  {isUserDelegatedThisNode ? (
+                    <Button
                       className="widthdraw-button"
                       shape="round"
-                      size='small'
+                      size="small"
+                      onClick={this.handleDelegatorWithdraw}
+                    >
+                      Withdraw
+                    </Button>
+                  ) : (
+                    <Button
+                      className="widthdraw-button"
+                      shape="round"
+                      size="small"
                       onClick={this.handleOwnerWithdraw}
                     >
                       Withdraw
-                  </Button>
-                  }
+                    </Button>
+                  )}
                 </div>
                 <div className="user-info--rewards">
                   <p className="user-info--title">My Rewards</p>
-                  <p className="user-info--value">{numberFormatRender(this.state.myRewardTotal)}</p>
-                  {isUserDelegatedThisNode ? <Button
-                    className="widthdraw-button"
-                    shape="round"
-                    size='small'
-                    onClick={this.handleDelegatorClaimReward}
-                  >
-                    Withdraw
-                  </Button> : <Button
+                  <p className="user-info--value">
+                    {numberFormatRender(this.state.myRewardTotal)}
+                  </p>
+                  {isUserDelegatedThisNode ? (
+                    <Button
                       className="widthdraw-button"
                       shape="round"
-                      size='small'
+                      size="small"
+                      onClick={this.handleDelegatorClaimReward}
+                    >
+                      Withdraw
+                    </Button>
+                  ) : (
+                    <Button
+                      className="widthdraw-button"
+                      shape="round"
+                      size="small"
                       onClick={this.handleOwnerClaimReward}
                     >
                       Withdraw
-                  </Button>
-                  }
+                    </Button>
+                  )}
                 </div>
               </div>
             ) : null}
@@ -564,11 +658,15 @@ export default class NodeDetail extends Component {
             </div>
             <div className="node-detail--item">
               <div className="item--title">Node Selt-Staked</div>
-              <div className="item--value">{numberFormatRender(selfStakedAmount)}</div>
+              <div className="item--value">
+                {numberFormatRender(selfStakedAmount)}
+              </div>
             </div>
             <div className="node-detail--item">
               <div className="item--title">Total Delegated</div>
-              <div className="item--value">{numberFormatRender(totalOtherDelegatedAmount)}</div>
+              <div className="item--value">
+                {numberFormatRender(totalOtherDelegatedAmount)}
+              </div>
             </div>
             <div className="node-detail--item">
               <div className="item--title">Reward Cut</div>
@@ -580,58 +678,56 @@ export default class NodeDetail extends Component {
             </div>
           </div>
         </div>
-        {
-          isMetaMaskLogin ? (
-            <div className="node-detail--operations node-detail--block">
-              <Tabs
-                className="node-detail--operation-tab"
-                defaultActiveKey="1"
-                size="default"
+        {isMetaMaskLogin ? (
+          <div className="node-detail--operations node-detail--block">
+            <Tabs
+              className="node-detail--operation-tab"
+              defaultActiveKey="1"
+              size="default"
+            >
+              <TabPane
+                tab={TabbarRender(
+                  isUserDelegatedThisNode ? "Delegate" : "Upgrate"
+                )}
+                key="1"
               >
-                <TabPane
-                  tab={TabbarRender(
-                    isUserDelegatedThisNode ? "Delegate" : "Upgrate"
+                <div className="tab-pannel--wrapper">
+                  {isUserOwnedThisNode ? (
+                    // Owner --Staking
+                    <UpdateStakingNode
+                      wrappedComponentRef={this.saveUpdateFormRef}
+                      onSubmit={this.handleOwnerUpgrateSubmit}
+                    />
+                  ) : (
+                    // User --Delegate
+                    <DelegateNode
+                      wrappedComponentRef={this.saveDelegateFormRef}
+                      onSubmit={this.handleUserDelegateSubmit}
+                    />
                   )}
-                  key="1"
-                >
-                  <div className="tab-pannel--wrapper">
-                    {isUserOwnedThisNode ? (
-                      // Owner --Staking
-                      <UpdateStakingNode
-                        wrappedComponentRef={this.saveUpdateFormRef}
-                        onSubmit={this.handleOwnerUpgrateSubmit}
-                      />
-                    ) : (
-                        // User --Delegate
-                        <DelegateNode
-                          wrappedComponentRef={this.saveDelegateFormRef}
-                          onSubmit={this.handleUserDelegateSubmit}
-                        />
-                      )}
-                  </div>
-                </TabPane>
-                <TabPane tab={TabbarRender("UnBond")} key="2">
-                  <div className="tab-pannel--wrapper">
-                    {isUserOwnedThisNode ? (
-                      // Owner --unbond
-                      <UnbondOwnedNode
-                        wrappedComponentRef={this.saveUnbondOwnedNodeRef}
-                        onSubmit={this.handleOwnerUnbondSubmit}
-                      />
-                    ) : (
-                        // User --unbond
-                        <UnbondNode
-                          wrappedComponentRef={this.saveUnbondFormRef}
-                          onSubmit={this.handleUserUnbondSubmit}
-                        />
-                      )}
-                  </div>
-                </TabPane>
-              </Tabs>
-            </div>
-          ) : null
-        }
-      </div >
+                </div>
+              </TabPane>
+              <TabPane tab={TabbarRender("UnBond")} key="2">
+                <div className="tab-pannel--wrapper">
+                  {isUserOwnedThisNode ? (
+                    // Owner --unbond
+                    <UnbondOwnedNode
+                      wrappedComponentRef={this.saveUnbondOwnedNodeRef}
+                      onSubmit={this.handleOwnerUnbondSubmit}
+                    />
+                  ) : (
+                    // User --unbond
+                    <UnbondNode
+                      wrappedComponentRef={this.saveUnbondFormRef}
+                      onSubmit={this.handleUserUnbondSubmit}
+                    />
+                  )}
+                </div>
+              </TabPane>
+            </Tabs>
+          </div>
+        ) : null}
+      </div>
     );
   }
 }
