@@ -29,7 +29,7 @@ class App extends Component {
       for (let i = 0; i < nodesAddrs.length; i++) {
         let node = await contractInstance.methods.nodes(nodesAddrs[i]).call();
         localStorage.setItem(nodesAddrs[i], JSON.stringify(node));
-        if (USERADDRESS != "") {
+        if (USERADDRESS !== "") {
           let delegator = await contractInstance.methods
             .delegators(USERADDRESS, nodesAddrs[i])
             .call();

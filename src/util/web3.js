@@ -56,7 +56,7 @@ async function approve(accountAddress) {
   const result = await dosTokenContract.methods
     .allowance(address, DOS_CONTRACT_ADDRESS)
     .call();
-  const dbResult = await dosTokenContract.methods
+  const dbResult = await dbTokenContract.methods
     .allowance(address, DOS_CONTRACT_ADDRESS)
     .call();
   console.log(`allowance:${result}`);
