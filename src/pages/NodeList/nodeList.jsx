@@ -303,18 +303,38 @@ class NodeList extends Component {
     console.log(
       `total:${total},startIndex:${startIndex}, endIndex:${endIndex}`
     );
+    let now = await web3Client.eth.getBlockNumber();
+    let block = await web3Client.eth.getBlock(now);
+
+    console.log("now", block.timestamp);
     for (let i = startIndex; i < endIndex; i++) {
       const nodeAddr = filtedNodes[i];
-      const node = await contractInstance.methods.nodes(nodeAddr).call();
+      let node;
+      const cachedHits = localStorage.getItem(nodeAddr);
+      if (cachedHits) {
+        node = JSON.parse(cachedHits);
+      } else {
+        node = await contractInstance.methods.nodes(nodeAddr).call();
+      }
+
       let delegator = { myDelegator: "-", accumulatedReward: "-" };
       if (userAddress) {
-        delegator = await contractInstance.methods
-          .delegators(userAddress, nodeAddr)
-          .call();
+        const cachedHits = localStorage.getItem(nodeAddr + userAddress);
+        if (cachedHits) {
+          delegator = JSON.parse(cachedHits);
+        } else {
+          delegator = await contractInstance.methods
+            .delegators(userAddress, nodeAddr)
+            .call();
+        }
       }
-      let uptime = await contractInstance.methods
-        .getNodeUptime(nodeAddr)
-        .call();
+      let uptime;
+      if (node.running) {
+        uptime = block.timestamp - node.lastStartTime;
+      } else {
+        uptime = node.lastStopTime - node.lastStartTime;
+      }
+
       const {
         selfStakedAmount,
         totalOtherDelegatedAmount,
