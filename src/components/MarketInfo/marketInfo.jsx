@@ -40,11 +40,10 @@ export default class Navigation extends Component {
     const totalStakedTokens = await contractInstance.methods
       .totalStakedTokens()
       .call();
-    console.log("rate ", rate.toString(), "token ", fromWei(totalStakedTokens));
     if (!this.unMount) {
       this.setState({
         interestRate: Math.round(rate.toString()) / 10000,
-        numberOfStaked: totalStakedTokens.toString()
+        numberOfStaked: fromWei(totalStakedTokens)
       });
     }
   };
