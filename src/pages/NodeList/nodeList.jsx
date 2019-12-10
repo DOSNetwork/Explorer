@@ -1,14 +1,14 @@
 import React, { Component } from "react";
 import { Button, Table, message, Switch, Input, Tooltip, Icon } from "antd";
-import { injectIntl, FormattedMessage } from 'react-intl'
+import { injectIntl, FormattedMessage } from "react-intl";
 import "./style.scss";
 import numeral from "numeral";
 import NewNode from "./newNodeForm";
-import EllipsisWrapper from '../../components/EllispisWrapper'
-import identicon from 'identicon.js'
+import EllipsisWrapper from "../../components/EllispisWrapper";
+import identicon from "identicon.js";
 import { DOS_ABI, DOS_CONTRACT_ADDRESS, BLOCK_NUMBER } from "../../util/const";
-import { MESSAGE_TEXT } from '../../util/txt'
-import { EmitterHandlerWrapper } from '../../util/contract-helper'
+import { MESSAGE_TEXT } from "../../util/txt";
+import { EmitterHandlerWrapper } from "../../util/contract-helper";
 const { Column } = Table;
 const { Search } = Input;
 const nodeColumnRender = (text, record, index) => {
@@ -24,20 +24,31 @@ const statusColumnRender = (text, record, index) => {
   let status = record.status;
   return (
     <>
-      {status ?
-        <div className='node-status__tag tag--active'>
-          <FormattedMessage id='Node.active' /></div> :
-        <div className='node-status__tag tag--inactive'><FormattedMessage id='Node.inactive' /></div>}
+      {status ? (
+        <div className="node-status__tag tag--active">
+          <FormattedMessage id="Node.active" />
+        </div>
+      ) : (
+        <div className="node-status__tag tag--inactive">
+          <FormattedMessage id="Node.inactive" />
+        </div>
+      )}
     </>
   );
 };
 
 const nameColumnRender = (text, record) => {
-  let avatar = `data:image/png;base64,${new identicon(record.node, 100).toString()}`;
+  let avatar = `data:image/png;base64,${new identicon(
+    record.node,
+    100
+  ).toString()}`;
   return (
-    <div className='nodelist-name'><img className='nodelist-avatar' src={avatar} alt="" />{record.description}</div>
-  )
-}
+    <div className="nodelist-name">
+      <img className="nodelist-avatar" src={avatar} alt="" />
+      {record.description}
+    </div>
+  );
+};
 const numberFormatRender = (text, record, index) => {
   return numeral(text).format("0,0");
 };
@@ -50,12 +61,15 @@ const myDelegationFormatRender = (text, record, index) => {
 };
 
 const tableTitleWithTipsRender = (title, tips) => {
-  return (<div>{title}&nbsp;&nbsp;
-    <Tooltip placement="topLeft" title={tips}>
-      <Icon type="info-circle" />
-    </Tooltip>
-  </div>)
-}
+  return (
+    <div>
+      {title}&nbsp;&nbsp;
+      <Tooltip placement="topLeft" title={tips}>
+        <Icon type="info-circle" />
+      </Tooltip>
+    </div>
+  );
+};
 class NodeList extends Component {
   constructor(props) {
     super(props);
@@ -67,7 +81,7 @@ class NodeList extends Component {
         current: 1,
         pageSize: 10
       },
-      searchAddress: '',
+      searchAddress: "",
       cachedNodes: [],
       formText: "",
       fields: {
@@ -90,11 +104,14 @@ class NodeList extends Component {
     };
   }
   componentDidMount() {
-    this.loadNodeList('', this.state.pagination, this.props.showRelatedNodes);
+    this.loadNodeList("", this.state.pagination, this.props.showRelatedNodes);
   }
   componentWillUnmount() {
-    if (this.unMountRemoveListenerCallbacks && typeof this.unMountRemoveListenerCallbacks === 'function')
-      this.unMountRemoveListenerCallbacks()
+    if (
+      this.unMountRemoveListenerCallbacks &&
+      typeof this.unMountRemoveListenerCallbacks === "function"
+    )
+      this.unMountRemoveListenerCallbacks();
     this.unMount = true;
   }
   getSnapshotBeforeUpdate(prevProps) {
@@ -104,7 +121,7 @@ class NodeList extends Component {
   }
   componentDidUpdate(prevProps, preState, snapShot) {
     if (snapShot.userLogined) {
-      this.loadNodeList('', this.state.pagination, this.props.showRelatedNodes);
+      this.loadNodeList("", this.state.pagination, this.props.showRelatedNodes);
     }
   }
   showModal = () => {
@@ -131,22 +148,41 @@ class NodeList extends Component {
         DOS_CONTRACT_ADDRESS
       );
       const tokenAmount = web3Client.utils.toWei(values.tokenAmount, "ether");
+      const dbAmount = values.dbAmount;
       if (web3Client.utils.isAddress(values.nodeAddr)) {
         try {
           let emitter = contractInstance.methods
-            .newNode(values.nodeAddr, tokenAmount, 0, values.cutRate || 0, values.name || '')
+            .newNode(
+              values.nodeAddr,
+              tokenAmount,
+              dbAmount,
+              values.cutRate || 0,
+              values.name || ""
+            )
             .send({ from: userAddress });
-          this.unMountRemoveListenerCallbacks = EmitterHandlerWrapper(emitter, (hash) => {
-            message.loading(MESSAGE_TEXT.MESSAGE_TRANSCATION_LOADING);
-          }, (confirmationNumber, receipt) => {
-            message.success(
-              MESSAGE_TEXT.MESSAGE_TRANSCATION_COMFIRM
-            );
-            this.loadNodeList('', { current: 1, pageSize: 10 }, this.props.showRelatedNodes);
-          }, (error) => {
-            message.error(error.message.split('\n')[0]);
-            this.loadNodeList('', { current: 1, pageSize: 10 }, this.props.showRelatedNodes);
-          }, { emmiterName: 'CreateNode' })
+          this.unMountRemoveListenerCallbacks = EmitterHandlerWrapper(
+            emitter,
+            hash => {
+              message.loading(MESSAGE_TEXT.MESSAGE_TRANSCATION_LOADING);
+            },
+            (confirmationNumber, receipt) => {
+              message.success(MESSAGE_TEXT.MESSAGE_TRANSCATION_COMFIRM);
+              this.loadNodeList(
+                "",
+                { current: 1, pageSize: 10 },
+                this.props.showRelatedNodes
+              );
+            },
+            error => {
+              message.error(error.message.split("\n")[0]);
+              this.loadNodeList(
+                "",
+                { current: 1, pageSize: 10 },
+                this.props.showRelatedNodes
+              );
+            },
+            { emmiterName: "CreateNode" }
+          );
         } catch (e) {
           message.error(e.reason);
           this.setState({
@@ -155,7 +191,7 @@ class NodeList extends Component {
           });
         }
       } else {
-        message.error('invalid address');
+        message.error("invalid address");
       }
       this.setState({
         confirmLoading: false,
@@ -170,13 +206,21 @@ class NodeList extends Component {
     }));
   };
   onChange = checked => {
-    this.props.setShowRelatedNodes(checked)
-    this.loadNodeList('', {}, checked);
+    this.props.setShowRelatedNodes(checked);
+    this.loadNodeList("", {}, checked);
   };
-  handleTableChange = (pagination) => {
-    this.loadNodeList(this.state.searchAddress, pagination, this.props.showRelatedNodes)
-  }
-  loadNodeList = async (searchAddress = '', { current = 1, pageSize = 10 }, showRelatedNodes) => {
+  handleTableChange = pagination => {
+    this.loadNodeList(
+      this.state.searchAddress,
+      pagination,
+      this.props.showRelatedNodes
+    );
+  };
+  loadNodeList = async (
+    searchAddress = "",
+    { current = 1, pageSize = 10 },
+    showRelatedNodes
+  ) => {
     function fromWei(bn) {
       if (!bn || bn === "-") {
         return "";
@@ -196,34 +240,30 @@ class NodeList extends Component {
     let nodesAddrs = [];
     let nodeList = [];
 
-    const getLogNewNodeEventList = async (userAddress) => {
-      return await contractInstance.getPastEvents(
-        "LogNewNode",
-        {
-          filter: { owner: userAddress },
-          fromBlock: BLOCK_NUMBER,
-          toBlock: "latest"
-        }
-      );
-    }
-    const getDelegateToEventList = async (senderAddress) => {
-      return await contractInstance.getPastEvents(
-        "DelegateTo",
-        {
-          filter: { sender: senderAddress },
-          fromBlock: BLOCK_NUMBER,
-          toBlock: "latest"
-        }
-      );
-    }
-    nodesAddrs = Array.from(await contractInstance.methods.getNodeAddrs().call());
+    const getLogNewNodeEventList = async userAddress => {
+      return await contractInstance.getPastEvents("LogNewNode", {
+        filter: { owner: userAddress },
+        fromBlock: BLOCK_NUMBER,
+        toBlock: "latest"
+      });
+    };
+    const getDelegateToEventList = async senderAddress => {
+      return await contractInstance.getPastEvents("DelegateTo", {
+        filter: { sender: senderAddress },
+        fromBlock: BLOCK_NUMBER,
+        toBlock: "latest"
+      });
+    };
+    nodesAddrs = Array.from(
+      await contractInstance.methods.getNodeAddrs().call()
+    );
     // search related nodes
     if (isMetaMaskLogin && showRelatedNodes) {
-      console.log(`only show related nodes infos`)
-      const eventList = await getLogNewNodeEventList(userAddress)
-      let eventAddrs = eventList.map(event => event.returnValues.nodeAddress)
-      const eventList2 = await getDelegateToEventList(userAddress)
-      eventAddrs.push(...eventList2.map(event => event.returnValues.nodeAddr))
+      console.log(`only show related nodes infos`);
+      const eventList = await getLogNewNodeEventList(userAddress);
+      let eventAddrs = eventList.map(event => event.returnValues.nodeAddress);
+      const eventList2 = await getDelegateToEventList(userAddress);
+      eventAddrs.push(...eventList2.map(event => event.returnValues.nodeAddr));
       const result = eventAddrs.filter(addr => nodesAddrs.includes(addr));
       nodesAddrs = result;
     } else {
@@ -232,49 +272,90 @@ class NodeList extends Component {
       if (userAddress) {
         //Let owne and delegate nodes show first
         const eventList = await getLogNewNodeEventList(userAddress);
-        let eventAddrs = eventList.reverse().map(event => event.returnValues.nodeAddress);
+        let eventAddrs = eventList
+          .reverse()
+          .map(event => event.returnValues.nodeAddress);
         const eventList2 = await getDelegateToEventList(userAddress);
-        eventAddrs.push(...eventList2.reverse().map(event => event.returnValues.nodeAddr));
+        eventAddrs.push(
+          ...eventList2.reverse().map(event => event.returnValues.nodeAddr)
+        );
         const result = eventAddrs.filter(addr => nodesAddrs.includes(addr));
         nodesAddrs.unshift(...result);
       }
     }
-    let filtedNodes = []
+    let filtedNodes = [];
     if (searchAddress) {
-      filtedNodes = nodesAddrs.filter(nodeaddress => nodeaddress === searchAddress)
+      filtedNodes = nodesAddrs.filter(
+        nodeaddress => nodeaddress === searchAddress
+      );
     } else {
-      filtedNodes = nodesAddrs
+      filtedNodes = nodesAddrs;
     }
     let noSameKeyNodes = new Set(filtedNodes);
-    filtedNodes = Array.from(noSameKeyNodes)
+    filtedNodes = Array.from(noSameKeyNodes);
     //做去重
     this.setState({
       cachedNodes: filtedNodes
-    })
-    let total = filtedNodes.length
-    let startIndex = (current - 1) * pageSize
-    let endIndex = total > (current * pageSize) ? current * pageSize : total
-    console.log(`total:${total},startIndex:${startIndex}, endIndex:${endIndex}`)
+    });
+    let total = filtedNodes.length;
+    let startIndex = (current - 1) * pageSize;
+    let endIndex = total > current * pageSize ? current * pageSize : total;
+    console.log(
+      `total:${total},startIndex:${startIndex}, endIndex:${endIndex}`
+    );
+    let now = await web3Client.eth.getBlockNumber();
+    let block = await web3Client.eth.getBlock(now);
+
+    console.log("now", block.timestamp);
     for (let i = startIndex; i < endIndex; i++) {
       const nodeAddr = filtedNodes[i];
-      const node = await contractInstance.methods.nodes(nodeAddr).call();
+      let node;
+      const cachedHits = localStorage.getItem(nodeAddr);
+      if (cachedHits) {
+        node = JSON.parse(cachedHits);
+      } else {
+        node = await contractInstance.methods.nodes(nodeAddr).call();
+      }
+
       let delegator = { myDelegator: "-", accumulatedReward: "-" };
       if (userAddress) {
-        delegator = await contractInstance.methods
-          .delegators(userAddress, nodeAddr)
-          .call();
+        const cachedHits = localStorage.getItem(nodeAddr + userAddress);
+        if (cachedHits) {
+          delegator = JSON.parse(cachedHits);
+        } else {
+          delegator = await contractInstance.methods
+            .delegators(userAddress, nodeAddr)
+            .call();
+        }
       }
-      let uptime = await contractInstance.methods
-        .getNodeUptime(nodeAddr)
-        .call();
-      const { selfStakedAmount, totalOtherDelegatedAmount, rewardCut, description, running } = node;
+      let uptime;
+      if (node.running) {
+        uptime = block.timestamp - node.lastStartTime;
+      } else {
+        uptime = node.lastStopTime - node.lastStartTime;
+      }
+
+      const {
+        selfStakedAmount,
+        totalOtherDelegatedAmount,
+        rewardCut,
+        description,
+        running
+      } = node;
       const { delegatedAmount, accumulatedReward } = delegator;
-      let totalOtherDelegatedAmountShow = fromWei(totalOtherDelegatedAmount)
-      let selfStakedAmountShow = fromWei(selfStakedAmount)
-      let delegatedAmountShow = fromWei(delegatedAmount)
-      let accumulatedRewardShow = fromWei(accumulatedReward)
-      let nodeAccumulatedReward = fromWei(node.accumulatedReward)
-      if (isMetaMaskLogin && showRelatedNodes && +selfStakedAmountShow === 0 && +delegatedAmountShow === 0 && +accumulatedRewardShow === 0 && +nodeAccumulatedReward === 0) {
+      let totalOtherDelegatedAmountShow = fromWei(totalOtherDelegatedAmount);
+      let selfStakedAmountShow = fromWei(selfStakedAmount);
+      let delegatedAmountShow = fromWei(delegatedAmount);
+      let accumulatedRewardShow = fromWei(accumulatedReward);
+      let nodeAccumulatedReward = fromWei(node.accumulatedReward);
+      if (
+        isMetaMaskLogin &&
+        showRelatedNodes &&
+        +selfStakedAmountShow === 0 &&
+        +delegatedAmountShow === 0 &&
+        +accumulatedRewardShow === 0 &&
+        +nodeAccumulatedReward === 0
+      ) {
         continue;
       }
       const nodeObject = {
@@ -293,7 +374,7 @@ class NodeList extends Component {
       nodeList.push(nodeObject);
     }
     if (this.unMount) {
-      console.warn('Page[NodeList] Already Unmounted')
+      console.warn("Page[NodeList] Already Unmounted");
       return;
     }
     this.setState({
@@ -306,23 +387,23 @@ class NodeList extends Component {
       }
     });
   };
-  onSearchAddress = (address) => {
+  onSearchAddress = address => {
     this.setState({
       searchAddress: address
-    })
-    this.loadNodeList(address, {}, this.props.showRelatedNodes)
-  }
+    });
+    this.loadNodeList(address, {}, this.props.showRelatedNodes);
+  };
   render() {
     let { isMetaMaskLogin } = this.props.contract;
     let showRelatedNodes = this.props.showRelatedNodes;
     let { formatMessage: f } = this.props.intl;
     return (
       <>
-        <div className='node-list--header-wrapper'>
+        <div className="node-list--header-wrapper">
           {isMetaMaskLogin ? (
-            <div className='node-list--header-left'>
+            <div className="node-list--header-left">
               <Button type="primary" onClick={this.showModal}>
-                {f({ id: 'Tooltip.CreateANode' })}
+                {f({ id: "Tooltip.CreateANode" })}
               </Button>
 
               <NewNode
@@ -334,25 +415,35 @@ class NodeList extends Component {
                 modalText={this.state.formText}
               />
             </div>
-          )
-            : <div className='node-list--header-left'></div>}
+          ) : (
+            <div className="node-list--header-left"></div>
+          )}
           <div className="node-list--header-right">
-            {isMetaMaskLogin ? <>
-              <Switch defaultChecked={showRelatedNodes} onChange={this.onChange} />&nbsp;{f({ id: 'Tooltip.OnlyShowTheNodesRelatedToMe' })}&nbsp;&nbsp;&nbsp;&nbsp;</> : <></>
-            }
+            {isMetaMaskLogin ? (
+              <>
+                <Switch
+                  defaultChecked={showRelatedNodes}
+                  onChange={this.onChange}
+                />
+                &nbsp;{f({ id: "Tooltip.OnlyShowTheNodesRelatedToMe" })}
+                &nbsp;&nbsp;&nbsp;&nbsp;
+              </>
+            ) : (
+              <></>
+            )}
             <Search
-              placeholder={f({ id: 'Tooltip.searchnodeaddress' })}
+              placeholder={f({ id: "Tooltip.searchnodeaddress" })}
               onSearch={this.onSearchAddress}
               style={{ width: 200 }}
             />
           </div>
         </div>
         <Table
-          size='small'
+          size="small"
           rowKey={record => record.node}
           loading={this.state.loading}
           dataSource={this.state.dataList}
-          pagination={{ size: 'small', ...this.state.pagination }}
+          pagination={{ size: "small", ...this.state.pagination }}
           rowClassName={(row, index) => {
             return index % 2 === 0 ? "row-light" : "row-dark";
           }}
@@ -360,44 +451,56 @@ class NodeList extends Component {
           onChange={this.handleTableChange}
         >
           <Column
-            title={f({ id: 'Table.Column.NodeList.Name' })}
+            title={f({ id: "Table.Column.NodeList.Name" })}
             render={nameColumnRender}
             dataIndex="nameKey"
           />
           <Column
-            title={f({ id: 'Table.Column.NodeList.Node' })}
+            title={f({ id: "Table.Column.NodeList.Node" })}
             render={nodeColumnRender}
             dataIndex="node"
             key="node"
           />
           <Column
-            title={f({ id: 'Table.Column.NodeList.Status' })}
+            title={f({ id: "Table.Column.NodeList.Status" })}
             render={statusColumnRender}
             dataIndex="status"
           />
           <Column
-            title={tableTitleWithTipsRender(f({ id: 'Table.Column.NodeList.SelfStaked' }), f({ id: 'Tooltip.selfStaked' }))}
+            title={tableTitleWithTipsRender(
+              f({ id: "Table.Column.NodeList.SelfStaked" }),
+              f({ id: "Tooltip.selfStaked" })
+            )}
             render={numberFormatRender}
             dataIndex="selfStaked"
             key="selfStaked"
             sortDirections={["ascend", "descend"]}
           />
           <Column
-            title={tableTitleWithTipsRender(f({ id: 'Table.Column.NodeList.Delegated' }), f({ id: 'Tooltip.delegate' }))}
+            title={tableTitleWithTipsRender(
+              f({ id: "Table.Column.NodeList.Delegated" }),
+              f({ id: "Tooltip.delegate" })
+            )}
             render={numberFormatRender}
             dataIndex="totalDelegated"
             key="totalDelegated"
             sortDirections={["ascend", "descend"]}
           />
           <Column
-            title={tableTitleWithTipsRender(f({ id: 'Table.Column.NodeList.RewardCut' }), f({ id: 'Tooltip.rewartcut' }))}
+            title={tableTitleWithTipsRender(
+              f({ id: "Table.Column.NodeList.RewardCut" }),
+              f({ id: "Tooltip.rewartcut" })
+            )}
             render={t => `${t}%`}
             dataIndex="rewardCut"
             key="rewardCut"
             sortDirections={["ascend", "descend"]}
           />
           <Column
-            title={tableTitleWithTipsRender(f({ id: 'Table.Column.NodeList.Uptime' }), f({ id: 'Tooltip.uptime' }))}
+            title={tableTitleWithTipsRender(
+              f({ id: "Table.Column.NodeList.Uptime" }),
+              f({ id: "Tooltip.uptime" })
+            )}
             render={t => `${t} days`}
             dataIndex="uptime"
             key="uptime"
@@ -405,19 +508,13 @@ class NodeList extends Component {
           />
           {isMetaMaskLogin ? (
             <Column
-              title={tableTitleWithTipsRender(f({ id: 'Table.Column.NodeList.MyDelegation' }), f({ id: 'Tooltip.myDelegation' }))}
+              title={tableTitleWithTipsRender(
+                f({ id: "Table.Column.NodeList.MyDelegation" }),
+                f({ id: "Tooltip.myDelegation" })
+              )}
               render={myDelegationFormatRender}
               dataIndex="myDelegation"
               key="myDelegation"
-              sortDirections={["ascend", "descend"]}
-            />
-          ) : null}
-          {isMetaMaskLogin ? (
-            <Column
-              title={tableTitleWithTipsRender(f({ id: 'Table.Column.NodeList.MyRewards' }), f({ id: 'Tooltip.myRewards' }))}
-              render={myDelegationFormatRender}
-              dataIndex="myRewards"
-              key="myRewards"
               sortDirections={["ascend", "descend"]}
             />
           ) : null}
@@ -427,6 +524,4 @@ class NodeList extends Component {
   }
 }
 
-
-
-export default injectIntl(NodeList)
+export default injectIntl(NodeList);
