@@ -566,7 +566,7 @@ export default class NodeDetail extends Component {
                   <p className="user-info--value">
                     {numberFormatRender(this.state.myTokenTotal)}
                   </p>
-                  {+this.state.dropBurnToken >= "0" ? (
+                  {+this.state.dropBurnToken >= "0" && isUserOwnedThisNode ? (
                     <>
                       <p className="user-info--title">Drop Burn Token</p>
                       <p className="user-info--value">
@@ -583,8 +583,9 @@ export default class NodeDetail extends Component {
                       ({numberFormatRender(this.state.withDrawalFrozen)})
                     </span>
                   </p>
-                  {+this.state.withDrawalDropBurn >= "0" ||
-                  +this.state.withDrawalDropBurnFrozen >= "0" ? (
+                  {(+this.state.withDrawalDropBurn >= "0" ||
+                    +this.state.withDrawalDropBurnFrozen >= "0") &&
+                  isUserOwnedThisNode ? (
                     <>
                       <p className="user-info--title">
                         Withdrawal Drop Burn(Frozen)
