@@ -556,6 +556,9 @@ const NodeDetail = class NodeDetail extends Component {
                       <p className="user-info--title">
                         {f({ id: 'Tooltip.NodeDetail.DropBurnToken' })}
                       </p>
+                      <p className="user-info--value">
+                        {numberFormatRender(this.state.dropBurnToken)}
+                      </p>
                     </>
                   ) : null}
                 </div>
