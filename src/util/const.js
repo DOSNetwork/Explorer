@@ -641,7 +641,7 @@ export const DOS_ABI = [
   }
 ];
 export const DOS_CONTRACT_ADDRESS =
-  "0xb92B6aD1A293eBc9D96132D7a9D5c25fFB604570";
+  "0xb29FA8FC352fB8dCEFB7632AF524975ff251cabD";
 
 export const DB_ABI = [
   {
