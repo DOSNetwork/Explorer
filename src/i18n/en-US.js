@@ -137,7 +137,6 @@ const messages = {
     'Table.Column.Activites.Time': 'Time',
     'Table.Column.Activites.Action': 'Action',
     'Table.Column.Activites.TxHash': 'Tx Hash',
-
-    'Tooltip.Activites.Pagnation': 'Latest {pageSize} events'
+    'Tooltip.Explorer.Pagnation': 'Latest {pageSize} events'
 }
 export default messages
