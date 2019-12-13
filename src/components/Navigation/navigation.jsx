@@ -8,7 +8,7 @@ import {
     NodeListIcon,
     MyAccountIcon,
     ExplorerIcon,
-    MetaMaskIcon
+    WalletIcon
 } from '../SvgIcon/icons.jsx'
 const Navigation = class Navigation extends Component {
     onMetaMaskLogin = () => {
@@ -42,21 +42,21 @@ const Navigation = class Navigation extends Component {
                     </div>
                     <div className="navi__wrapper">
                         <div className="navi__container">
-                            <NavLink className="navi-item" to={`/nodelist`} activeClassName="active"><NodeListIcon />&nbsp;{f({ id: 'Title.nodelist' })}</NavLink>
                             <NavLink className="navi-item" to={`/explorer`} activeClassName="active"><ExplorerIcon />&nbsp;{f({ id: 'Title.explorer' })}</NavLink>
+                            <NavLink className="navi-item" to={`/nodelist`} activeClassName="active"><NodeListIcon />&nbsp;{f({ id: 'Title.nodelist' })}</NavLink>
                             <NavLink className="navi-item" to={`/myaccount`} activeClassName="active"><MyAccountIcon />&nbsp;{f({ id: 'Title.myaccount' })}</NavLink>
                         </div>
                     </div>
-                    <div className="metamask__status__panel" >
-                        <MetaMaskIcon />
+                    <div className="wallet__status__panel" >
+                        <WalletIcon />
                         {
                             isWalletLogin ?
                                 <div>
                                     <p>{`${userAddress.slice(0, 6)}...${userAddress.slice(-6)}`}</p>
-                                    <p className="metamask__login-status--conntect" onClick={this.onMetaMaskLogout}>{f({ id: 'Wallet.connected' })}</p>
+                                    <p className="wallet__login-status--conntect" onClick={this.onMetaMaskLogout}>{f({ id: 'Wallet.connected' })}</p>
                                 </div>
                                 :
-                                <p className="metamask__login-button" onClick={this.onMetaMaskLogin}>{f({ id: 'Wallet.connectwallet' })}</p>
+                                <p className="wallet__login-button" onClick={this.onMetaMaskLogin}>{f({ id: 'Wallet.connectwallet' })}</p>
                         }
                     </div>
                 </div>

@@ -383,7 +383,7 @@ const NodeDetail = class NodeDetail extends Component {
     //let delegatorWithdrawAbletotal = await dosContract.methods
     //.delegatorWithdrawAble(nodeInstance.ownerAddr, nodeAddr)
     // .call();
-    //console.log(delegatorWithdrawAbletotal);
+    //// console.log(delegatorWithdrawAbletotal);
 
     let avatar = `data:image/png;base64,${new identicon(
       nodeAddr,
@@ -398,7 +398,6 @@ const NodeDetail = class NodeDetail extends Component {
       description,
       stakedDB
     } = nodeInstance;
-    console.log(nodeInstance);
     const nodeDetail = {
       node: nodeAddr,
       avatar: avatar,
@@ -435,7 +434,6 @@ const NodeDetail = class NodeDetail extends Component {
         const nodeWithdrawAbleTotal = await dosContract.methods
           .nodeWithdrawAble(nodeInstance.ownerAddr, nodeAddr)
           .call();
-        console.log(nodeWithdrawAbleTotal);
         rewardotal = await dosContract.methods
           .getNodeRewardTokens(nodeAddr)
           .call();

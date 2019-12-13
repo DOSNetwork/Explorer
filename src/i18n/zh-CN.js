@@ -4,7 +4,7 @@ const messages = {
     'Title.explorer': '浏览器',
     'Title.nodedetail': '节点详情',
     'Title.myaccount': '我的账户',
-    'Wallet.connected': '...已连接[zh-CN.js中修改]',
+    'Wallet.connected': '断开链接',
     'Wallet.connectwallet': '链接钱包',
     'Wallet.Title.NoWalletInstalled': '钱包未安装[zh-CN.js中修改]',
     'Wallet.Tips.InstallWallet': '请安装钱包[zh-CN.js中修改]',

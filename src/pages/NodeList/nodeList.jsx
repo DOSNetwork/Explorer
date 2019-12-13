@@ -216,6 +216,7 @@ class NodeList extends Component {
     { current = 1, pageSize = 10 },
     showRelatedNodes
   ) => {
+    // console.log(window.ethereum.networkVersion)
     function fromWei(bn) {
       if (!bn || bn === "-") {
         return "";
@@ -248,7 +249,7 @@ class NodeList extends Component {
     );
     // search related nodes
     if (isWalletLogin && showRelatedNodes) {
-      console.log(`only show related nodes infos`);
+      // console.log(`only show related nodes infos`);
       const eventList = await getLogNewNodeEventList(userAddress);
       let eventAddrs = eventList.map(event => event.returnValues.nodeAddress);
       const eventList2 = await getDelegateToEventList(userAddress);
@@ -257,7 +258,7 @@ class NodeList extends Component {
       nodesAddrs = result;
     } else {
       // search nodes
-      console.log(`show all nodes infos`);
+      // console.log(`show all nodes infos`);
       if (userAddress) {
         //Let owne and delegate nodes show first
         const eventList = await getLogNewNodeEventList(userAddress);
@@ -289,13 +290,11 @@ class NodeList extends Component {
     let total = filtedNodes.length;
     let startIndex = (current - 1) * pageSize;
     let endIndex = total > current * pageSize ? current * pageSize : total;
-    console.log(
-      `total:${total},startIndex:${startIndex}, endIndex:${endIndex}`
-    );
+    // console.log( `total:${total},startIndex:${startIndex}, endIndex:${endIndex}`);
     let now = await web3Client.eth.getBlockNumber();
     let block = await web3Client.eth.getBlock(now);
 
-    console.log("now", block.timestamp);
+    // console.log("now", block.timestamp);
     for (let i = startIndex; i < endIndex; i++) {
       const nodeAddr = filtedNodes[i];
       let node;

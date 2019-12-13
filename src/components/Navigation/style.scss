@@ -21,7 +21,8 @@
     padding: 0 27px;
     position: relative;
     margin: 0 auto;
-    width:1240px;
+    width: 1240px;
+
     a {
         color: #fff !important;
     }
@@ -96,12 +97,12 @@
         pointer-events: none;
     }
 
-    .navi-item:hover{
-        background-color:rgba(255,255,255,0.1)
+    .navi-item:hover {
+        background-color: rgba(255, 255, 255, 0.1)
     }
 }
 
-.metamask__status__panel {
+.wallet__status__panel {
     height: 100%;
     flex: 0 0 220px;
     width: 220px;
@@ -113,25 +114,23 @@
     padding: 0 27px;
 
     &:hover {
-        background-color:rgba(255,255,255,0.1)
+        background-color: rgba(255, 255, 255, 0.1)
     }
 }
 
-.metamask__login-status--conntect {
+.wallet__login-status--conntect {
     color: #00FFC6;
 }
 
-.metamask__logo {
+.wallet__logo {
     border-radius: 100%;
     height: 40px;
     width: 40px;
     margin-right: 10px;
 }
 
-.metamask__login-button {
-    font-weight: 600;
+.wallet__login-button {
     cursor: pointer;
-
 }
 
 .dos-data--wrapper {

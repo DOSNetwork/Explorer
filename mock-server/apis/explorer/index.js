@@ -96,7 +96,7 @@ router.get('/search', async (ctx, next) => {
         text
     } = ctx.query;
 
-    console.log(`参数:text:${text},pageIndex:${pageIndex},pageSize:${pageSize}`)
+    // console.log(`参数:text:${text},pageIndex:${pageIndex},pageSize:${pageSize}`)
 
     if (text.includes('url')) {
         ctx.body = {

@@ -12,7 +12,7 @@ export const EventsList = ({ pageSize, currentPageIndex, totalCount, events, loa
             <Table rowKey={record => record.txHash + record.eventLog + record.ID} loading={loading} dataSource={events} size="small"
                 onChange={handlePaginationChange}
             >
-                <Column title={f({ id: 'Table.Column.Explorer.TxHash' })} dataIndex="txHash" key="txHash" width={250} render={TxHashRender} />
+                <Column title={f({ id: 'Table.Column.Explorer.TxHash' })} dataIndex="txHash" key="txHash" width={100} render={TxHashRender} />
                 <Column title={f({ id: 'Table.Column.Explorer.Blocks' })} dataIndex="blockNumber" key="blockNumber" width={70} />
                 <Column width={250} title={f({ id: 'Table.Column.Explorer.EventLog' })} key="eventLog" render={MoreInfoRender} />
             </Table>

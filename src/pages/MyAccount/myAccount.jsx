@@ -8,7 +8,6 @@ const numberFormatRender = (value) => {
 class Account extends Component {
   constructor(props) {
     super(props);
-    console.log("prop", props);
     this.state = {
       showNumber: true,
       userContract: null,
@@ -85,7 +84,7 @@ class Account extends Component {
         const addrs = nodesAddrs.filter((item, index) => {
           return nodesAddrs.indexOf(item) === index;
         });
-        // console.log("!!!", addrs.length);
+        // // console.log("!!!", addrs.length);
         for (let i = 0; i < addrs.length; i++) {
           const nodeAddr = addrs[i];
           const node = await dosContract.methods.nodes(nodeAddr).call();
@@ -144,7 +143,7 @@ class Account extends Component {
             );
           }
         }
-        // console.log(
+        // // console.log(
         //   Math.round(
         //     web3Client.utils.fromWei(delegatedAmount.toString()) * 100
         //   ) / 100

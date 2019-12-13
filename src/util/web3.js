@@ -35,69 +35,63 @@ function GetNetwork(networkId) {
         default:
             result = "unknown";
     }
-    console.log(networkId)
     return result
 }
 export function connectToEthereum() {
     let web3 = null;
-    return new Promise((resolve, reject) => {
-        console.log(DEFAULT_NETWORK)
-        let isWalletInstalled = !!window.ethereum
-        let networkVersion = isWalletInstalled ? window.ethereum.networkVersion : DEFAULT_NETWORK
-        console.log(isWalletInstalled, networkVersion)
-        let network = GetNetwork(networkVersion)
-        const {
+    let isWalletInstalled = !!window.ethereum
+    let networkVersion = isWalletInstalled && window.ethereum.networkVersion ? window.ethereum.networkVersion : DEFAULT_NETWORK
+    let network = GetNetwork(networkVersion)
+    const {
+        DB_CONTRACT_ADDRESS,
+        DOSTOKEN_CONTRACT_ADDRESS,
+        DOS_CONTRACT_ADDRESS,
+        CURRENT_NETWORK,
+        SUPPORTED,
+        BLOCK_NUMBER,
+        PROVIDER
+    } = GetConstantByNetWork(network)
+
+    if (isWalletInstalled) {
+        web3 = new Web3(window.ethereum);
+    } else {
+        web3 = new Web3(new Web3.providers.WebsocketProvider(PROVIDER));
+    }
+
+    let dosTokenContract = new web3.eth.Contract(
+        DOSTOKEN_ABI,
+        DOSTOKEN_CONTRACT_ADDRESS
+    );
+    let dbTokenContract = new web3.eth.Contract(
+        DB_ABI,
+        DB_CONTRACT_ADDRESS
+    );
+    let dosContract = new web3.eth.Contract(
+        DOS_ABI,
+        DOS_CONTRACT_ADDRESS
+    );
+
+    if (!SUPPORTED) {
+        Modal.warning({
+            title: 'some title?',
+            content: `Your wallet Network [${CURRENT_NETWORK}] does not yet support`,
+        });
+    }
+    store.dispatch({
+        type: type.CONTRACT_WEB3_CLINET_INIT,
+        web3Client: web3,
+        dosTokenContract,
+        dbTokenContract,
+        dosContract,
+        network: CURRENT_NETWORK,
+        networkSupported: SUPPORTED,
+        constant: {
             DB_CONTRACT_ADDRESS,
             DOSTOKEN_CONTRACT_ADDRESS,
-            DOS_CONTRACT_ADDRESS,
-            CURRENT_NETWORK,
-            SUPPORTED,
-            BLOCK_NUMBER,
-            PROVIDER
-        } = GetConstantByNetWork(network)
-
-        if (isWalletInstalled) {
-            web3 = new Web3(window.ethereum);
-        } else {
-            web3 = new Web3(new Web3.providers.WebsocketProvider(PROVIDER));
-        }
-
-        let dosTokenContract = new web3.eth.Contract(
-            DOSTOKEN_ABI,
-            DOSTOKEN_CONTRACT_ADDRESS
-        );
-        let dbTokenContract = new web3.eth.Contract(
-            DB_ABI,
-            DB_CONTRACT_ADDRESS
-        );
-        let dosContract = new web3.eth.Contract(
-            DOS_ABI,
             DOS_CONTRACT_ADDRESS
-        );
-
-        if (!SUPPORTED) {
-            Modal.warning({
-                title: 'some title?',
-                content: `Your wallet Network [${CURRENT_NETWORK}] does not yet support`,
-            });
-        }
-        store.dispatch({
-            type: type.CONTRACT_WEB3_CLINET_INIT,
-            web3Client: web3,
-            dosTokenContract,
-            dbTokenContract,
-            dosContract,
-            network: CURRENT_NETWORK,
-            networkSupported: SUPPORTED,
-            constant: {
-                DB_CONTRACT_ADDRESS,
-                DOSTOKEN_CONTRACT_ADDRESS,
-                DOS_CONTRACT_ADDRESS
-            },
-            initialBlock: BLOCK_NUMBER
-        });
-        resolve({ web3, network: network })
-    })
+        },
+        initialBlock: BLOCK_NUMBER
+    });
 }
 
 
@@ -131,10 +125,10 @@ async function approve(accountAddress) {
                                 .approve(DOS_CONTRACT_ADDRESS)
                                 .send({ from: address })
                                 .then(result => {
-                                    console.log(`approve:${result}`);
+                                    // console.log(`approve:${result}`);
                                 })
                                 .catch(err => {
-                                    console.log(err);
+                                    // console.log(err);
                                 });
                         }
                         if (dbResult.toString() !== approveString) {
@@ -142,10 +136,10 @@ async function approve(accountAddress) {
                                 .approve(DOS_CONTRACT_ADDRESS)
                                 .send({ from: address })
                                 .then(result => {
-                                    console.log(`approve:${result}`);
+                                    // console.log(`approve:${result}`);
                                 })
                                 .catch(err => {
-                                    console.log(err);
+                                    // console.log(err);
                                 });
                         }
                         notification.close(key);
@@ -224,7 +218,7 @@ export function walletLogout() {
                     });
                 })
         } catch (e) {
-            console.log(e);
+            // console.log(e);
         }
     }
 }

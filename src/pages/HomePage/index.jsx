@@ -9,16 +9,16 @@ class HomePage extends Component {
     }
     handleClick(e) {
         let target = e.target
-        console.log(`first event loop`, e, `the target `, target)
+        // console.log(`first event loop`, e, `the target `, target)
 
         let p = new Promise(function (rs) {
             rs('a')
         })
         p.then(() => {
             // 合成事件只对当前event loop 有效
-            console.log(`next event loop`, e, `the target from first loop `, target)
+            // console.log(`next event loop`, e, `the target from first loop `, target)
         })
-        console.log(`find Dom El by refs= `, this.refs.refDemoEl)
+        // console.log(`find Dom El by refs= `, this.refs.refDemoEl)
     }
     render() {
         return (

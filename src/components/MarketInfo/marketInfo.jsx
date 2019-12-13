@@ -5,15 +5,15 @@ import "./style.scss";
 import interestRateIcon from "./assets/interestRate-icon.png";
 import priceIcon from "./assets/price-icon.png";
 import stakedTokenIcon from "./assets/stakedToken-icon.png";
-
+import numeral from 'numeral'
 const Navigation = class Navigation extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      dosPrice: "-",
+      dosPrice: 0,
       currency: "",
-      numberOfStaked: "-",
-      interestRate: "-"
+      numberOfStaked: 0,
+      interestRate: 0
     };
   }
   componentDidMount() {
@@ -60,7 +60,7 @@ const Navigation = class Navigation extends Component {
       });
   };
   render() {
-    let { dosPrice, numberOfStaked, interestRate, currency } = this.state;
+    let { dosPrice, numberOfStaked, interestRate } = this.state;
     let { formatMessage: f } = this.props.intl;
     return (
       <div className="market-info--wrapper">
@@ -69,23 +69,23 @@ const Navigation = class Navigation extends Component {
             <img width="20" src={interestRateIcon} alt="icon" />
             <span>{f({ id: "Tooltip.MarketInfo.InterestRate" })}</span>
           </p>
-          <p className="block--value">{interestRate}</p>
+          <p className="block--value">{(interestRate * 100).toFixed(2) + '%'}</p>
         </div>
         <div className="market-info--block block--token">
           <p className="block--title">
             <img width="20" src={stakedTokenIcon} alt="icon" />
             <span>{f({ id: "Tooltip.MarketInfo.NumberOfStakedToken" })}</span>
           </p>
-          <p className="block--value">{numberOfStaked}</p>
+          <p className="block--value">{numeral(numberOfStaked).format("0,0")}</p>
         </div>
         <div className="market-info--block block--price">
           <p className="block--title">
             <img width="20" src={priceIcon} alt="icon" />
             <span>
-              {f({ id: "Tooltip.MarketInfo.PriceOfDOS" })}({currency})
+              {f({ id: "Tooltip.MarketInfo.PriceOfDOS" })}(DOS /USDT)
             </span>
           </p>
-          <p className="block--value">{dosPrice}</p>
+          <p className="block--value">{dosPrice.toFixed(6)}</p>
         </div>
       </div>
     );

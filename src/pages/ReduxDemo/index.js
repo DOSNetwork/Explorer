@@ -12,15 +12,15 @@ class ReduxDemo extends Component {
         store.dispatch({ type: 'LOADING_STATUS', loading: true })
     }
     componentWillUnmount() {
-        console.log(store)
+        // console.log(store)
     }
     countClick() {
         store.dispatch({ type: 'COUNTING' })
     }
     countRerender() {
-        console.log(`store.subscribe function called`)
+        // console.log(`store.subscribe function called`)
         let state = store.getState()
-        console.log(state)
+        // console.log(state)
         this.setState(state)
     }
     render() {

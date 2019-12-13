@@ -18,4 +18,4 @@ app.use(router.routes()).use(router.allowedMethods());
 // start
 app.listen(config.port);
 
-console.log('mock server start....');
+// console.log('mock server start....');

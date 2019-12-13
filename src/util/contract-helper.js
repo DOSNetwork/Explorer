@@ -20,7 +20,7 @@ export const EmitterHandlerWrapper = (emitter, h, s, e, op = {}) => {
     emitter.on("error", errorHandler);
 
     return () => {
-        console.log(`Emmiter:${emmiterName},all lisenter removed`)
+        // console.log(`Emmiter:${emmiterName},all lisenter removed`)
         emitter.removeListener("transactionHash", hashHandler);
         emitter.removeListener("confirmation", successHandler);
         emitter.removeListener("error", errorHandler);
@@ -28,7 +28,7 @@ export const EmitterHandlerWrapper = (emitter, h, s, e, op = {}) => {
 }
 
 export function GetConstantByNetWork(netWork) {
-    console.log(netWork)
+    // console.log(netWork)
     let result = ConstantVars[netWork]
     if (result) {
         return {
