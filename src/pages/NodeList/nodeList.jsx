@@ -6,7 +6,6 @@ import numeral from "numeral";
 import NewNode from "./newNodeForm";
 import EllipsisWrapper from "../../components/EllispisWrapper";
 import identicon from "identicon.js";
-import { DOS_ABI, DOS_CONTRACT_ADDRESS, BLOCK_NUMBER } from "../../util/const";
 import { MESSAGE_TEXT } from "../../util/txt";
 import { EmitterHandlerWrapper } from "../../util/contract-helper";
 const { Column } = Table;
@@ -29,10 +28,10 @@ const statusColumnRender = (text, record, index) => {
           <FormattedMessage id="Node.active" />
         </div>
       ) : (
-        <div className="node-status__tag tag--inactive">
-          <FormattedMessage id="Node.inactive" />
-        </div>
-      )}
+          <div className="node-status__tag tag--inactive">
+            <FormattedMessage id="Node.inactive" />
+          </div>
+        )}
     </>
   );
 };
@@ -142,16 +141,12 @@ class NodeList extends Component {
       this.setState({
         confirmLoading: true
       });
-      const { web3Client, userAddress } = this.props.contract;
-      let contractInstance = new web3Client.eth.Contract(
-        DOS_ABI,
-        DOS_CONTRACT_ADDRESS
-      );
+      const { web3Client, userAddress, dosContract } = this.props.contract;
       const tokenAmount = web3Client.utils.toWei(values.tokenAmount, "ether");
       const dbAmount = values.dbAmount;
       if (web3Client.utils.isAddress(values.nodeAddr)) {
         try {
-          let emitter = contractInstance.methods
+          let emitter = dosContract.methods
             .newNode(
               values.nodeAddr,
               tokenAmount,
@@ -227,38 +222,32 @@ class NodeList extends Component {
       }
       return web3Client.utils.fromWei(bn.toString("10"));
     }
-
+    const { web3Client, userAddress, isWalletLogin, dosContract, initialBlock } = this.props.contract;
     this.setState({
       loading: true
     });
-
-    const { web3Client, userAddress, isMetaMaskLogin } = this.props.contract;
-    let contractInstance = new web3Client.eth.Contract(
-      DOS_ABI,
-      DOS_CONTRACT_ADDRESS
-    );
     let nodesAddrs = [];
     let nodeList = [];
 
     const getLogNewNodeEventList = async userAddress => {
-      return await contractInstance.getPastEvents("LogNewNode", {
+      return await dosContract.getPastEvents("LogNewNode", {
         filter: { owner: userAddress },
-        fromBlock: BLOCK_NUMBER,
+        fromBlock: initialBlock,
         toBlock: "latest"
       });
     };
     const getDelegateToEventList = async senderAddress => {
-      return await contractInstance.getPastEvents("DelegateTo", {
+      return await dosContract.getPastEvents("DelegateTo", {
         filter: { sender: senderAddress },
-        fromBlock: BLOCK_NUMBER,
+        fromBlock: initialBlock,
         toBlock: "latest"
       });
     };
     nodesAddrs = Array.from(
-      await contractInstance.methods.getNodeAddrs().call()
+      await dosContract.methods.getNodeAddrs().call()
     );
     // search related nodes
-    if (isMetaMaskLogin && showRelatedNodes) {
+    if (isWalletLogin && showRelatedNodes) {
       console.log(`only show related nodes infos`);
       const eventList = await getLogNewNodeEventList(userAddress);
       let eventAddrs = eventList.map(event => event.returnValues.nodeAddress);
@@ -314,7 +303,7 @@ class NodeList extends Component {
       if (cachedHits) {
         node = JSON.parse(cachedHits);
       } else {
-        node = await contractInstance.methods.nodes(nodeAddr).call();
+        node = await dosContract.methods.nodes(nodeAddr).call();
       }
 
       let delegator = { myDelegator: "-", accumulatedReward: "-" };
@@ -323,7 +312,7 @@ class NodeList extends Component {
         if (cachedHits) {
           delegator = JSON.parse(cachedHits);
         } else {
-          delegator = await contractInstance.methods
+          delegator = await dosContract.methods
             .delegators(userAddress, nodeAddr)
             .call();
         }
@@ -349,7 +338,7 @@ class NodeList extends Component {
       let accumulatedRewardShow = fromWei(accumulatedReward);
       let nodeAccumulatedReward = fromWei(node.accumulatedReward);
       if (
-        isMetaMaskLogin &&
+        isWalletLogin &&
         showRelatedNodes &&
         +selfStakedAmountShow === 0 &&
         +delegatedAmountShow === 0 &&
@@ -394,13 +383,13 @@ class NodeList extends Component {
     this.loadNodeList(address, {}, this.props.showRelatedNodes);
   };
   render() {
-    let { isMetaMaskLogin } = this.props.contract;
+    let { isWalletLogin } = this.props.contract;
     let showRelatedNodes = this.props.showRelatedNodes;
     let { formatMessage: f } = this.props.intl;
     return (
       <>
         <div className="node-list--header-wrapper">
-          {isMetaMaskLogin ? (
+          {isWalletLogin ? (
             <div className="node-list--header-left">
               <Button type="primary" onClick={this.showModal}>
                 {f({ id: "Tooltip.CreateANode" })}
@@ -416,10 +405,10 @@ class NodeList extends Component {
               />
             </div>
           ) : (
-            <div className="node-list--header-left"></div>
-          )}
+              <div className="node-list--header-left"></div>
+            )}
           <div className="node-list--header-right">
-            {isMetaMaskLogin ? (
+            {isWalletLogin ? (
               <>
                 <Switch
                   defaultChecked={showRelatedNodes}
@@ -429,8 +418,8 @@ class NodeList extends Component {
                 &nbsp;&nbsp;&nbsp;&nbsp;
               </>
             ) : (
-              <></>
-            )}
+                <></>
+              )}
             <Search
               placeholder={f({ id: "Tooltip.searchnodeaddress" })}
               onSearch={this.onSearchAddress}
@@ -506,7 +495,7 @@ class NodeList extends Component {
             key="uptime"
             sortDirections={["ascend", "descend"]}
           />
-          {isMetaMaskLogin ? (
+          {isWalletLogin ? (
             <Column
               title={tableTitleWithTipsRender(
                 f({ id: "Table.Column.NodeList.MyDelegation" }),

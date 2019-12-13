@@ -1,7 +1,6 @@
 import React, { Component } from "react";
 import { Button, message, Tabs, Modal } from "antd";
 import { injectIntl } from 'react-intl'
-import { DOS_ABI, DOS_CONTRACT_ADDRESS } from "../../util/const";
 import DelegateNode from "./delegateNodeForm";
 import UnbondNode from "./unbondNodeForm";
 import UnbondOwnedNode from "./unbondOwnedNodeForm";
@@ -35,11 +34,8 @@ const NodeDetail = class NodeDetail extends Component {
     };
   }
   componentDidMount() {
-    const { web3Client } = this.props.contract;
-    this.contractInstance = new web3Client.eth.Contract(
-      DOS_ABI,
-      DOS_CONTRACT_ADDRESS
-    );
+    const { dosContract } = this.props.contract;
+    this.dosContract = dosContract
     this.unMountRemoveListenerCallbacks = [];
     this.getNodeDetail();
   }
@@ -86,7 +82,7 @@ const NodeDetail = class NodeDetail extends Component {
       });
       return;
     }
-    let emitter = this.contractInstance.methods
+    let emitter = this.dosContract.methods
       .nodeWithdraw(this.state.node)
       .send({ from: userAddress });
     // 监听并且在unmount的时候处理事件解绑 
@@ -114,7 +110,7 @@ const NodeDetail = class NodeDetail extends Component {
       });
       return;
     }
-    let emitter = this.contractInstance.methods
+    let emitter = this.dosContract.methods
       .nodeClaimReward(this.state.node)
       .send({ from: userAddress });
     // 监听并且在unmount的时候处理事件解绑 
@@ -142,7 +138,7 @@ const NodeDetail = class NodeDetail extends Component {
       });
       return;
     }
-    let emitter = this.contractInstance.methods
+    let emitter = this.dosContract.methods
       .delegatorWithdraw(this.state.node)
       .send({ from: userAddress });
     // 监听并且在unmount的时候处理事件解绑 
@@ -169,7 +165,7 @@ const NodeDetail = class NodeDetail extends Component {
       });
       return;
     }
-    let emitter = this.contractInstance.methods
+    let emitter = this.dosContract.methods
       .delegatorClaimReward(this.state.node)
       .send({ from: userAddress });
     // 监听并且在unmount的时候处理事件解绑 
@@ -194,7 +190,7 @@ const NodeDetail = class NodeDetail extends Component {
       okType: "danger",
       cancelText: "No",
       onOk: () => {
-        let emitter = this.contractInstance.methods
+        let emitter = this.dosContract.methods
           .nodeUnregister(this.state.node)
           .send({ from: userAddress });
         // 监听并且在unmount的时候处理事件解绑 
@@ -225,7 +221,7 @@ const NodeDetail = class NodeDetail extends Component {
       const tokenAmount = web3Client.utils.toWei(values.tokenAmount, "ether");
       const dbAmount = values.dbAmount ? values.dbAmount : 0;
       const rewardCut = values.rewardCut;
-      let emitter = this.contractInstance.methods
+      let emitter = this.dosContract.methods
         .updateNodeStaking(this.state.node, tokenAmount, dbAmount, rewardCut)
         .send({ from: userAddress });
       // 监听并且在unmount的时候处理事件解绑 
@@ -254,7 +250,7 @@ const NodeDetail = class NodeDetail extends Component {
       const { web3Client, userAddress } = this.props.contract;
       const tokenAmount = web3Client.utils.toWei(values.tokenAmount, "ether");
       const dbAmount = values.dbAmount;
-      let emitter = this.contractInstance.methods
+      let emitter = this.dosContract.methods
         .nodeUnbond(tokenAmount, dbAmount, this.state.node)
         .send({ from: userAddress });
 
@@ -288,7 +284,7 @@ const NodeDetail = class NodeDetail extends Component {
       const { web3Client, userAddress } = this.props.contract;
       const tokenAmount = web3Client.utils.toWei(values.tokenAmount, "ether");
 
-      let emitter = this.contractInstance.methods
+      let emitter = this.dosContract.methods
         .delegatorUnbond(tokenAmount, this.state.node)
         .send({ from: userAddress });
 
@@ -322,14 +318,10 @@ const NodeDetail = class NodeDetail extends Component {
       this.setState({
         delegateFormLoading: true
       });
-      const { web3Client, userAddress } = this.props.contract;
-      let contractInstance = new web3Client.eth.Contract(
-        DOS_ABI,
-        DOS_CONTRACT_ADDRESS
-      );
+      const { web3Client, userAddress, dosContract } = this.props.contract;
       const tokenAmount = web3Client.utils.toWei(values.tokenAmount, "ether");
 
-      let emitter = contractInstance.methods
+      let emitter = dosContract.methods
         .delegate(tokenAmount, this.state.node)
         .send({ from: userAddress });
       // 监听并且在unmount的时候处理事件解绑 
@@ -383,15 +375,12 @@ const NodeDetail = class NodeDetail extends Component {
     this.setState({
       loading: true
     });
-    const { web3Client, userAddress } = this.props.contract;
-    let contractInstance = new web3Client.eth.Contract(
-      DOS_ABI,
-      DOS_CONTRACT_ADDRESS
-    );
+    const { web3Client, userAddress, dosContract } = this.props.contract;
+
     const nodeAddr = this.state.node;
-    const nodeInstance = await contractInstance.methods.nodes(nodeAddr).call();
-    let uptime = await contractInstance.methods.getNodeUptime(nodeAddr).call();
-    //let delegatorWithdrawAbletotal = await contractInstance.methods
+    const nodeInstance = await dosContract.methods.nodes(nodeAddr).call();
+    let uptime = await dosContract.methods.getNodeUptime(nodeAddr).call();
+    //let delegatorWithdrawAbletotal = await dosContract.methods
     //.delegatorWithdrawAble(nodeInstance.ownerAddr, nodeAddr)
     // .call();
     //console.log(delegatorWithdrawAbletotal);
@@ -443,11 +432,11 @@ const NodeDetail = class NodeDetail extends Component {
         web3Client.utils.toChecksumAddress(userAddress) ===
         web3Client.utils.toChecksumAddress(nodeInstance.ownerAddr);
       if (isUserOwnedThisNode) {
-        const nodeWithdrawAbleTotal = await contractInstance.methods
+        const nodeWithdrawAbleTotal = await dosContract.methods
           .nodeWithdrawAble(nodeInstance.ownerAddr, nodeAddr)
           .call();
         console.log(nodeWithdrawAbleTotal);
-        rewardotal = await contractInstance.methods
+        rewardotal = await dosContract.methods
           .getNodeRewardTokens(nodeAddr)
           .call();
         myTokenTotal = fromWei(selfStakedAmount);
@@ -471,10 +460,10 @@ const NodeDetail = class NodeDetail extends Component {
 
         myRewardTotal = fromWei(rewardotal);
       } else {
-        let delegator = await contractInstance.methods
+        let delegator = await dosContract.methods
           .delegators(userAddress, nodeAddr)
           .call();
-        userDelegatedRewardotal = await contractInstance.methods
+        userDelegatedRewardotal = await dosContract.methods
           .getDelegatorRewardTokens(userAddress, nodeAddr)
           .call();
 
@@ -513,7 +502,7 @@ const NodeDetail = class NodeDetail extends Component {
       status
     } = this.state.nodeDetail;
     let { formatMessage: f } = this.props.intl;
-    let { isMetaMaskLogin } = this.props.contract;
+    let { isWalletLogin } = this.props.contract;
     let isUserDelegatedThisNode = this.state.isUserDelegatedThisNode;
     let isUserOwnedThisNode = this.state.isUserOwnedThisNode;
     return (
@@ -530,7 +519,7 @@ const NodeDetail = class NodeDetail extends Component {
                 </span>
                 {status ? <div className='node-status__tag tag--active'>{f({ id: 'Node.active' })}</div> : <div className='node-status__tag tag--inactive'>{f({ id: 'Node.inactive' })}</div>}
               </div>
-              {isMetaMaskLogin && isUserOwnedThisNode ? (
+              {isWalletLogin && isUserOwnedThisNode ? (
                 <span
                   className="unregister-button"
                   onClick={this.handleUnregister}
@@ -542,7 +531,7 @@ const NodeDetail = class NodeDetail extends Component {
             </div>
           </div>
           <div className="node-detail--detail node-detail--block">
-            {isMetaMaskLogin ? (
+            {isWalletLogin ? (
               <div className="detail--user-info">
                 <div className="user-info--delegation">
                   <p className="user-info--title">
@@ -640,7 +629,7 @@ const NodeDetail = class NodeDetail extends Component {
             </div>
           </div>
         </div>
-        {isMetaMaskLogin ? (
+        {isWalletLogin ? (
           <div className="node-detail--operations node-detail--block">
             <Tabs className="node-detail--operation-tab" defaultActiveKey="1" size="default" >
               <TabPane

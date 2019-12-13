@@ -2,62 +2,119 @@ import Web3 from "web3";
 import store from "../redux/store";
 import type from "../redux/type";
 import React from "react";
-import { Button, notification, Icon } from "antd";
+import { Button, notification, Icon, Modal } from "antd";
 import {
-    DOSTOKEN_ABI,
-    DOSTOKEN_CONTRACT_ADDRESS,
     DB_ABI,
-    DB_CONTRACT_ADDRESS,
-    DOS_CONTRACT_ADDRESS
+    DOSTOKEN_ABI,
+    DOS_ABI,
+    DEFAULT_NETWORK,
+    approveString
 } from "../util/const";
-const approveString =
-    "115792089237316195423570985008687907853269984665640564039457584007913129639935";
-export function connectMetaMask() {
-    let { web3Client } = store.getState().contract;
-    let web3 = web3Client || null;
+import {
+    GetConstantByNetWork
+} from '../util/contract-helper'
 
-    if (!web3) {
-        if (window.ethereum) {
-            web3 = new Web3(window.ethereum);
-        } else if (window.web3) {
-            web3 = new Web3(web3.currentProvider);
-        } else {
-            let web3Provider = new Web3.providers.WebsocketProvider(
-                "wss://rinkeby.infura.io/ws/v3/3a3e5d776961418e93a8b33fef2f6642"
-            );
-            web3 = new Web3(web3Provider);
-        }
+function GetNetwork(networkId) {
+    let result;
+    switch (networkId) {
+        case '1':
+            result = "mainnet";
+            break
+        case '2':
+            result = "morden";
+            break
+        case '3':
+            result = "ropsten";
+            break
+        case '4':
+            result = "rinkeby";
+            break
+        case '42':
+            result = 'kovan';
+            break;
+        default:
+            result = "unknown";
     }
-    store.dispatch({
-        type: type.CONTRACT_WEB3_CLINET_INIT,
-        web3Client: web3
-    });
-    return web3;
+    console.log(networkId)
+    return result
+}
+export function connectToEthereum() {
+    let web3 = null;
+    return new Promise((resolve, reject) => {
+        console.log(DEFAULT_NETWORK)
+        let isWalletInstalled = !!window.ethereum
+        let networkVersion = isWalletInstalled ? window.ethereum.networkVersion : DEFAULT_NETWORK
+        console.log(isWalletInstalled, networkVersion)
+        let network = GetNetwork(networkVersion)
+        const {
+            DB_CONTRACT_ADDRESS,
+            DOSTOKEN_CONTRACT_ADDRESS,
+            DOS_CONTRACT_ADDRESS,
+            CURRENT_NETWORK,
+            SUPPORTED,
+            BLOCK_NUMBER,
+            PROVIDER
+        } = GetConstantByNetWork(network)
+
+        if (isWalletInstalled) {
+            web3 = new Web3(window.ethereum);
+        } else {
+            web3 = new Web3(new Web3.providers.WebsocketProvider(PROVIDER));
+        }
+
+        let dosTokenContract = new web3.eth.Contract(
+            DOSTOKEN_ABI,
+            DOSTOKEN_CONTRACT_ADDRESS
+        );
+        let dbTokenContract = new web3.eth.Contract(
+            DB_ABI,
+            DB_CONTRACT_ADDRESS
+        );
+        let dosContract = new web3.eth.Contract(
+            DOS_ABI,
+            DOS_CONTRACT_ADDRESS
+        );
+
+        if (!SUPPORTED) {
+            Modal.warning({
+                title: 'some title?',
+                content: `Your wallet Network [${CURRENT_NETWORK}] does not yet support`,
+            });
+        }
+        store.dispatch({
+            type: type.CONTRACT_WEB3_CLINET_INIT,
+            web3Client: web3,
+            dosTokenContract,
+            dbTokenContract,
+            dosContract,
+            network: CURRENT_NETWORK,
+            networkSupported: SUPPORTED,
+            constant: {
+                DB_CONTRACT_ADDRESS,
+                DOSTOKEN_CONTRACT_ADDRESS,
+                DOS_CONTRACT_ADDRESS
+            },
+            initialBlock: BLOCK_NUMBER
+        });
+        resolve({ web3, network: network })
+    })
 }
 
+
 async function approve(accountAddress) {
-    let { web3Client } = store.getState().contract;
+    let { dosTokenContract, dbTokenContract, constant } = store.getState().contract;
+    let { DOS_CONTRACT_ADDRESS } = constant
     let address = accountAddress[0];
     store.dispatch({
         type: type.CONTRACT_METAMASK_LOGIN,
         address: address
     });
-    // approve
-    let dosTokenContract = new web3Client.eth.Contract(
-        DOSTOKEN_ABI,
-        DOSTOKEN_CONTRACT_ADDRESS
-    );
-    let dbTokenContract = new web3Client.eth.Contract(
-        DB_ABI,
-        DB_CONTRACT_ADDRESS
-    );
     const result = await dosTokenContract.methods
         .allowance(address, DOS_CONTRACT_ADDRESS)
         .call();
     const dbResult = await dbTokenContract.methods
         .allowance(address, DOS_CONTRACT_ADDRESS)
         .call();
-    console.log(`allowance:${result}`);
     if (
         result.toString() !== approveString ||
         dbResult.toString() !== approveString
@@ -96,6 +153,7 @@ async function approve(accountAddress) {
                 >
                     Confirm
         </Button>
+                &nbsp;
                 <Button
                     type="primary"
                     size="small"
@@ -114,86 +172,47 @@ async function approve(accountAddress) {
         });
     }
 }
-export function metaMaskLogin() {
-    // let { userAddress, web3Client } = store.getState().contract;
-    //if (!userAddress) {
-    try {
-        // let network = await web3.eth.net.getId()
-        // let result
-        // switch (network) {
-        //     case 1:
-        //         result = "mainnet";
-        //         break
-        //     case 2:
-        //         result = "morden";
-        //         break
-        //     case 3:
-        //         result = "ropsten";
-        //         break
-        //     case 4:
-        //         result = "rinkeby";
-        //         break
-        //     default:
-        //         result = "unknown network = " + network;
-        // }
-        // this.setState({ userContract: contractInstance, netWork: result })
-
-        window.ethereum.enable().then(approve);
-        window.ethereum.on("accountsChanged", function (accounts) {
-            let lastAccount = accounts[0];
-            if (lastAccount) {
-                notification.open({
-                    message: "MetaMask Account Change",
-                    description: (
-                        <>
-                            <h3>Account change to</h3>
-                            <p>{lastAccount}</p>
-                        </>
-                    ),
-                    icon: <Icon type="smile" style={{ color: "#108ee9" }} />
+export function walletLogin() {
+    return new Promise((resolve, reject) => {
+        try {
+            if (window.ethereum) {
+                window.ethereum.enable().then(approve);
+                window.ethereum.on("accountsChanged", function (accounts) {
+                    let lastAccount = accounts[0];
+                    if (lastAccount) {
+                        store.dispatch({
+                            type: type.CONTRACT_USERADDRESS_CHANGE,
+                            address: accounts[0]
+                        });
+                    } else {
+                        store.dispatch({ type: type.CONTRACT_METAMASK_LOGOUT });
+                    }
                 });
-                store.dispatch({
-                    type: type.CONTRACT_USERADDRESS_CHANGE,
-                    address: accounts[0]
+                window.ethereum.on("networkChanged", function (network) {
+                    let lastAccount = network;
+                    notification.open({
+                        message: "MetaMask Account Change",
+                        description: (
+                            <>
+                                <h3>Account change to</h3>
+                                <p>{lastAccount}</p>
+                            </>
+                        ),
+                        icon: <Icon type="smile" style={{ color: "#108ee9" }} />
+                    });
                 });
-                // setTimeout(() => {
-                //     window.location.reload()
-                // }, 2000);
-            } else {
-                notification.open({
-                    message: "MetaMask Account Change",
-                    description: (
-                        <>
-                            <h3>Lost Connection or Logged out!</h3>
-                        </>
-                    ),
-                    icon: <Icon type="smile" style={{ color: "#108ee9" }} />
-                });
-
-                store.dispatch({ type: type.CONTRACT_METAMASK_LOGOUT });
+                resolve(true)
             }
-        });
-        window.ethereum.on("networkChanged", function (network) {
-            let lastAccount = network;
-            notification.open({
-                message: "MetaMask Account Change",
-                description: (
-                    <>
-                        <h3>Account change to</h3>
-                        <p>{lastAccount}</p>
-                    </>
-                ),
-                icon: <Icon type="smile" style={{ color: "#108ee9" }} />
-            });
-            // store.dispatch({ type: type.CONTRACT_USERADDRESS_CHANGE, address: accounts[0] })
-        });
-    } catch (e) {
-        console.log(e);
-    }
-    // }
-}
+            else {
+                resolve(false)
+            }
+        } catch (e) {
+            reject(e)
+        }
+    })
 
-export function metaMaskLogout() {
+}
+export function walletLogout() {
     let { userAddress } = store.getState().contract;
     if (userAddress) {
         try {
@@ -204,17 +223,6 @@ export function metaMaskLogout() {
                         type: type.CONTRACT_METAMASK_LOGOUT
                     });
                 })
-                .then(() => {
-                    notification.open({
-                        message: "MetaMask Account",
-                        description: (
-                            <>
-                                <h3>Logged out!</h3>
-                            </>
-                        ),
-                        icon: <Icon type="smile" style={{ color: "#108ee9" }} />
-                    });
-                });
         } catch (e) {
             console.log(e);
         }

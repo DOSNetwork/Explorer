@@ -2,13 +2,6 @@ import React, { Component } from "react";
 import { injectIntl } from 'react-intl'
 import { Icon, Spin } from "antd";
 import numeral from 'numeral'
-import {
-  DOS_ABI,
-  DOS_CONTRACT_ADDRESS,
-  DOSTOKEN_ABI,
-  DOSTOKEN_CONTRACT_ADDRESS
-} from "../../util/const";
-console.log(DOS_CONTRACT_ADDRESS)
 const numberFormatRender = (value) => {
   return numeral(value).format("0,0");
 };
@@ -34,8 +27,8 @@ class Account extends Component {
     });
   };
   numberToggler = value => {
-    const isMetaMaskLogin = this.props.contract.isMetaMaskLogin;
-    if (isMetaMaskLogin) {
+    const isWalletLogin = this.props.contract.isWalletLogin;
+    if (isWalletLogin) {
       return this.state.showNumber ? (value >= 0 ? numberFormatRender(+value) : <Spin />) : "***";
     } else {
       return "-";
@@ -62,19 +55,12 @@ class Account extends Component {
       return web3Client.utils.fromWei(bn.toString("10"));
     }
     this.props.globalLoading(true);
-    const { isMetaMaskLogin, web3Client, userAddress } = this.props.contract;
-    if (isMetaMaskLogin) {
-      let tokenContract = new web3Client.eth.Contract(
-        DOSTOKEN_ABI,
-        DOSTOKEN_CONTRACT_ADDRESS
-      );
-      let userBalance = await tokenContract.methods
+    const { isWalletLogin, web3Client, userAddress, dosTokenContract, dosContract } = this.props.contract;
+    if (isWalletLogin) {
+      let userBalance = await dosTokenContract.methods
         .balanceOf(userAddress)
         .call();
-      let StakingContract = new web3Client.eth.Contract(
-        DOS_ABI,
-        DOS_CONTRACT_ADDRESS
-      );
+
       let delegatedAmount = new web3Client.utils.toBN(0);
       let delegatedReward = new web3Client.utils.toBN(0);
       let unbondDelegated = new web3Client.utils.toBN(0);
@@ -88,7 +74,7 @@ class Account extends Component {
           toBlock: "latest"
         };
 
-        const eventList = await StakingContract.getPastEvents(
+        const eventList = await dosContract.getPastEvents(
           "LogNewNode",
           options
         );
@@ -102,7 +88,7 @@ class Account extends Component {
         // console.log("!!!", addrs.length);
         for (let i = 0; i < addrs.length; i++) {
           const nodeAddr = addrs[i];
-          const node = await StakingContract.methods.nodes(nodeAddr).call();
+          const node = await dosContract.methods.nodes(nodeAddr).call();
           delegatedAmount = delegatedAmount.add(
             new web3Client.utils.toBN(node.selfStakedAmount)
           );
@@ -115,17 +101,6 @@ class Account extends Component {
           unbondDelegated = unbondDelegated.add(
             new web3Client.utils.toBN(node.pendingWithdrawDB)
           );
-          // console.log(
-          //   Math.round(
-          //     web3Client.utils.fromWei(delegatedAmount.toString()) * 100
-          //   ) / 100,
-          //   Math.round(
-          //     web3Client.utils.fromWei(delegatedReward.toString()) * 100
-          //   ) / 100,
-          //   Math.round(
-          //     web3Client.utils.fromWei(unbondDelegated.toString()) * 100
-          //   ) / 100
-          // );
         }
       }
       //Get delegate node addresses
@@ -136,11 +111,10 @@ class Account extends Component {
           fromBlock: 5414653,
           toBlock: "latest"
         };
-        const eventList = await StakingContract.getPastEvents(
+        const eventList = await dosContract.getPastEvents(
           "DelegateTo",
           options2
         );
-        // console.log("eventList", eventList.length);
 
         for (let i = 0; i < eventList.length; i++) {
           nodesAddrs.unshift(eventList[i].returnValues.nodeAddr);
@@ -148,10 +122,9 @@ class Account extends Component {
         const addrs = nodesAddrs.filter((item, index) => {
           return nodesAddrs.indexOf(item) === index;
         });
-        // console.log("!!!", addrs.length);
         for (let i = 0; i < addrs.length; i++) {
           const nodeAddr = addrs[i];
-          const delegator = await StakingContract.methods
+          const delegator = await dosContract.methods
             .delegators(userAddress, nodeAddr)
             .call();
 

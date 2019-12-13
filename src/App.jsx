@@ -8,8 +8,8 @@ import NodeDetail from "./pages/NodeDetail";
 import NotFound404 from "./pages/NotFound404";
 import Explorer from "./pages/Explorer";
 import Layout from "./Layout";
-import { connectMetaMask } from "./util/web3.js";
-import { DOS_ABI, DOS_CONTRACT_ADDRESS } from "./util/const";
+import { connectToEthereum } from "./util/web3.js";
+// import { DOS_ABI, DOS_CONTRACT_ADDRESS } from "./util/const";
 import { message } from "antd";
 import store from './redux/store'
 message.config({
@@ -18,43 +18,39 @@ message.config({
 });
 class App extends Component {
   componentWillMount() {
-    const web3Client = connectMetaMask();
-    let contractInstance = new web3Client.eth.Contract(
-      DOS_ABI,
-      DOS_CONTRACT_ADDRESS
-    );
-    async function loadNodes() {
+    connectToEthereum().then(({ web3: web3Client, network }) => {
       // export的userAddress会一直是空的
-      let { userAddress } = store.getState().contract;
-      let nodesAddrs = Array.from(
-        await contractInstance.methods.getNodeAddrs().call()
-      );
-
-      for (let i = 0; i < nodesAddrs.length; i++) {
-        // 已经保存过的不重复保存
-        let nodeAddr = nodesAddrs[i]
-        // if (!localStorage.getItem(nodeAddr)) {
-        let node = await contractInstance.methods.nodes(nodeAddr).call();
-        localStorage.setItem(nodeAddr, JSON.stringify(node));
-        // }
-        let delegatorKey = nodeAddr + userAddress
-        if (userAddress !== "") {
-          // if (!localStorage.getItem(delegatorKey)) {
-          let delegator = await contractInstance.methods
-            .delegators(userAddress, nodeAddr)
-            .call();
-          localStorage.setItem(
-            delegatorKey,
-            JSON.stringify(delegator)
+      let { dosContract: contractInstance, networkSupported } = store.getState().contract;
+      if (networkSupported) {
+        async function loadNodes() {
+          // export的userAddress会一直是空的
+          let { userAddress, } = store.getState().contract;
+          let nodesAddrs = Array.from(
+            await contractInstance.methods.getNodeAddrs().call()
           );
-          // }
+          for (let i = 0; i < nodesAddrs.length; i++) {
+            // 已经保存过的不重复保存
+            let nodeAddr = nodesAddrs[i]
+            let node = await contractInstance.methods.nodes(nodeAddr).call();
+            localStorage.setItem(nodeAddr, JSON.stringify(node));
+            let delegatorKey = nodeAddr + userAddress
+            if (userAddress !== "") {
+              let delegator = await contractInstance.methods
+                .delegators(userAddress, nodeAddr)
+                .call();
+              localStorage.setItem(
+                delegatorKey,
+                JSON.stringify(delegator)
+              );
+            }
+          }
         }
+        loadNodes();
+        setInterval(() => {
+          loadNodes();
+        }, 15000);
       }
-    }
-    loadNodes();
-    setInterval(() => {
-      loadNodes();
-    }, 15000);
+    })
   }
   render() {
     return (
@@ -62,7 +58,7 @@ class App extends Component {
         <Layout>
           <Navigation></Navigation>
           <Switch>
-            <Route exact path="/" component={NodeList} />
+            <Route exact path="/" component={Explorer} />
             <Route path="/nodelist" component={NodeList} />
             <Route path="/explorer" component={Explorer} />
             {/* <Route path="/home" component={HomePage} /> */}

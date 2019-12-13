@@ -1,8 +1,16 @@
 import type from './type'
 import axios from 'axios'
-export function counting() {
+import {
+    GetConstantByNetWork
+} from '../util/contract-helper'
+
+
+export function changeNetWork(network) {
+    let CONST = GetConstantByNetWork(network)
     return {
-        type: 'COUNTING'
+        type: type.WALLET_NETWORK_CHANGE,
+        network: network,
+        CONST: CONST
     }
 }
 
@@ -89,7 +97,6 @@ export function ExplorerSearch(text = '', pageSize = 20, pageIndex = 0, history)
 
 
 export default {
-    counting,
     globalLoading,
     changeLang
 }

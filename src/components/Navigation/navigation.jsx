@@ -2,7 +2,8 @@ import React, { Component } from 'react'
 import { NavLink } from 'react-router-dom'
 import { injectIntl } from 'react-intl'
 import './style.scss'
-import { metaMaskLogin, metaMaskLogout } from '../../util/web3.js'
+import { walletLogin, walletLogout } from '../../util/web3.js'
+import { Modal } from 'antd'
 import {
     NodeListIcon,
     MyAccountIcon,
@@ -10,23 +11,28 @@ import {
     MetaMaskIcon
 } from '../SvgIcon/icons.jsx'
 const Navigation = class Navigation extends Component {
-    componentWillMount() {
-        console.log(this.props.intl)
-    }
     onMetaMaskLogin = () => {
-        let { isMetaMaskLogin } = this.props.contract
-        if (!isMetaMaskLogin) {
-            metaMaskLogin()
+        let { formatMessage: f } = this.props.intl
+        let { isWalletLogin } = this.props.contract
+        if (!isWalletLogin) {
+            walletLogin().then((isWalletInstalled) => {
+                if (!isWalletInstalled) {
+                    Modal.info({
+                        title: f({ id: 'Wallet.Title.NoWalletInstalled' }),
+                        content: f({ id: 'Wallet.Tips.InstallWallet' }),
+                    })
+                }
+            })
         }
     }
     onMetaMaskLogout = () => {
-        let { isMetaMaskLogin } = this.props.contract
-        if (isMetaMaskLogin) {
-            metaMaskLogout()
+        let { isWalletLogin } = this.props.contract
+        if (isWalletLogin) {
+            walletLogout()
         }
     }
     render() {
-        let { userAddress = '', isMetaMaskLogin } = this.props.contract;
+        let { userAddress = '', isWalletLogin } = this.props.contract;
         let { formatMessage: f } = this.props.intl;
         return (
             <div className="header__wrapper">
@@ -44,13 +50,13 @@ const Navigation = class Navigation extends Component {
                     <div className="metamask__status__panel" >
                         <MetaMaskIcon />
                         {
-                            isMetaMaskLogin ?
+                            isWalletLogin ?
                                 <div>
                                     <p>{`${userAddress.slice(0, 6)}...${userAddress.slice(-6)}`}</p>
-                                    <p className="metamask__login-status--conntect" onClick={this.onMetaMaskLogout}>{f({ id: 'MetaMask.connected' })}</p>
+                                    <p className="metamask__login-status--conntect" onClick={this.onMetaMaskLogout}>{f({ id: 'Wallet.connected' })}</p>
                                 </div>
                                 :
-                                <p className="metamask__login-button" onClick={this.onMetaMaskLogin}>{f({ id: 'MetaMask.connectwallet' })}</p>
+                                <p className="metamask__login-button" onClick={this.onMetaMaskLogin}>{f({ id: 'Wallet.connectwallet' })}</p>
                         }
                     </div>
                 </div>

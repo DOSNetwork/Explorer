@@ -4,9 +4,10 @@ const messages = {
     'Title.explorer': '浏览器',
     'Title.nodedetail': '节点详情',
     'Title.myaccount': '我的账户',
-    'MetaMask.connected': '...已连接',
-    'MetaMask.connectwallet': '链接钱包',
-
+    'Wallet.connected': '...已连接[zh-CN.js中修改]',
+    'Wallet.connectwallet': '链接钱包',
+    'Wallet.Title.NoWalletInstalled': '钱包未安装[zh-CN.js中修改]',
+    'Wallet.Tips.InstallWallet': '请安装钱包[zh-CN.js中修改]',
     'Node.active': '在线',
     'Node.inactive': '离线',
     'Events.Loading': '{type, select, withdraw {提现} claimreward {奖励提现} unregister {注销} upgrade {更新} unbond{解冻} delegate{委托}}:等待确认:{hash}',

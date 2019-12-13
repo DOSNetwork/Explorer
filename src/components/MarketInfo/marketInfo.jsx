@@ -2,7 +2,6 @@ import React, { Component } from "react";
 import { injectIntl } from "react-intl";
 import axios from "axios";
 import "./style.scss";
-import { DOS_ABI, DOS_CONTRACT_ADDRESS } from "../../util/const";
 import interestRateIcon from "./assets/interestRate-icon.png";
 import priceIcon from "./assets/price-icon.png";
 import stakedTokenIcon from "./assets/stakedToken-icon.png";
@@ -25,6 +24,7 @@ const Navigation = class Navigation extends Component {
     this.unMount = true;
   }
   loadRateAndStaked = async () => {
+    const { web3Client, dosContract } = this.props.contract;
     function fromWei(bn) {
       if (!bn || bn === "-") {
         return "";
@@ -32,13 +32,8 @@ const Navigation = class Navigation extends Component {
       return web3Client.utils.fromWei(bn.toString("10"));
     }
 
-    const { web3Client } = this.props.contract;
-    let contractInstance = new web3Client.eth.Contract(
-      DOS_ABI,
-      DOS_CONTRACT_ADDRESS
-    );
-    const rate = await contractInstance.methods.getCurrentAPR().call();
-    const totalStakedTokens = await contractInstance.methods
+    const rate = await dosContract.methods.getCurrentAPR().call();
+    const totalStakedTokens = await dosContract.methods
       .totalStakedTokens()
       .call();
     if (!this.unMount) {

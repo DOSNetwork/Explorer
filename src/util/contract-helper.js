@@ -1,3 +1,4 @@
+import ConstantVars from './const'
 export const EmitterHandlerWrapper = (emitter, h, s, e, op = {}) => {
     let {
         emmiterName
@@ -23,5 +24,22 @@ export const EmitterHandlerWrapper = (emitter, h, s, e, op = {}) => {
         emitter.removeListener("transactionHash", hashHandler);
         emitter.removeListener("confirmation", successHandler);
         emitter.removeListener("error", errorHandler);
+    }
+}
+
+export function GetConstantByNetWork(netWork) {
+    console.log(netWork)
+    let result = ConstantVars[netWork]
+    if (result) {
+        return {
+            ...result,
+            CURRENT_NETWORK: netWork,
+            SUPPORTED: !!result.DOS_CONTRACT_ADDRESS
+        }
+    } else {
+        return {
+            CURRENT_NETWORK: netWork,
+            SUPPORTED: false
+        }
     }
 }

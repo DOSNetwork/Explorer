@@ -4,7 +4,6 @@ import { SubTitle } from "../../Layout/page";
 import { Table } from "antd";
 import dateformat from "dateformat";
 import EllipsisWrapper from '../../components/EllispisWrapper'
-import { DOS_ABI, DOS_CONTRACT_ADDRESS, BLOCK_NUMBER } from "../../util/const";
 
 const { Column } = Table;
 const dateFormatRender = (text, record, index) => {
@@ -47,30 +46,26 @@ class Activities extends Component {
     }
   }
   search = async () => {
-    const { isMetaMaskLogin, web3Client, userAddress } = this.props.contract;
-    if (isMetaMaskLogin) {
+    const { isWalletLogin, userAddress, dosContract, initialBlock } = this.props.contract;
+    if (isWalletLogin) {
       this.setState({
         loading: true
       });
-      const contract = new web3Client.eth.Contract(
-        DOS_ABI,
-        DOS_CONTRACT_ADDRESS
-      );
 
       const options = {
         filter: { owner: userAddress },
-        fromBlock: BLOCK_NUMBER,
+        fromBlock: initialBlock,
         toBlock: "latest"
       };
       const options2 = {
         filter: { sender: userAddress },
-        fromBlock: BLOCK_NUMBER,
+        fromBlock: initialBlock,
         toBlock: "latest"
       };
-      const eventList = await contract.getPastEvents("LogNewNode", options);
-      const eventList2 = await contract.getPastEvents("DelegateTo", options2);
-      const eventList3 = await contract.getPastEvents("RewardWithdraw", options2);
-      const eventList4 = await contract.getPastEvents("Unbond", options2);
+      const eventList = await dosContract.getPastEvents("LogNewNode", options);
+      const eventList2 = await dosContract.getPastEvents("DelegateTo", options2);
+      const eventList3 = await dosContract.getPastEvents("RewardWithdraw", options2);
+      const eventList4 = await dosContract.getPastEvents("Unbond", options2);
       let dataList = [...eventList, ...eventList2, ...eventList3, ...eventList4].sort((a, b) => b.blockNumber - a.blockNumber)
       this.setState({
         dataListSource: dataList

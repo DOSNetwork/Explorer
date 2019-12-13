@@ -6,8 +6,10 @@ const messages = {
     'Title.nodedetail': 'Node Detail',
     'Title.myaccount': 'My Account',
     /*metamask*/
-    'MetaMask.connected': 'Connected',
-    'MetaMask.connectwallet': 'Connect Wallet',
+    'Wallet.connected': 'Connected[[zh-CN.js中修改]]',
+    'Wallet.connectwallet': 'Connect Wallet',
+    'Wallet.Title.NoWalletInstalled': 'No Wallet Installed[zh-CN.js中修改]',
+    'Wallet.Tips.InstallWallet': 'Please install wallet[zh-CN.js中修改]',
     /*common */
     'Node.active': 'Active',
     'Node.inactive': 'Inactive',

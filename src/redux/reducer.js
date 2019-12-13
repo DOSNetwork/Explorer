@@ -33,11 +33,20 @@ const explorerState = {
     searchText: '',
     showType: 'EVENT'
 }
+
+
 // ===== contract state
 const contractState = {
     web3Client: null,
+    dosTokenContract: null,
+    dbTokenContract: null,
+    dosContract: null,
+    isWalletLogin: false,
     userAddress: '',
-    isMetaMaskLogin: false
+    network: '',
+    constant: {},
+    networkSupported: false,
+    initialBlock: 0
 }
 export const initialState = {
     global: globalState,
@@ -50,14 +59,12 @@ export const initialState = {
 // ===== globalAction
 const globalActions = {}
 globalActions[type.GLOBAL_CONFIG_CHANGE_OSLM] = (prevState, payload) => {
-    console.log(`[reducer]${type.GLOBAL_CONFIG_CHANGE_OSLM}.............`)
     return {
         ...globalState,
         config_onlyShowRelatedToMe: payload.config_onlyShowRelatedToMe
     }
 }
 globalActions[type.GLOBAL_CONFIG_SET_LANG] = (prevState, payload) => {
-    console.log(`[reducer]${type.GLOBAL_CONFIG_SET_LANG}.............`)
     let {
         lang
     } = payload
@@ -68,7 +75,6 @@ globalActions[type.GLOBAL_CONFIG_SET_LANG] = (prevState, payload) => {
     }
 }
 globalActions[type.GLOBAL_CONFIG_CHANGE_LANG] = (prevState, payload) => {
-    console.log(`[reducer]${type.GLOBAL_CONFIG_CHANGE_LANG}.............`)
     let {
         lang
     } = payload
@@ -129,39 +135,57 @@ const contractActions = {}
 // CONTRACT_USERADDRESS_CHANGE
 // ===== contractReducer
 contractActions[type.CONTRACT_USERADDRESS_CHANGE] = (prevState, payload) => {
-    console.log(`[reducer]${type.CONTRACT_USERADDRESS_CHANGE}.............`)
-    console.log(prevState, payload)
     return {
         ...prevState,
         userAddress: payload.address
     }
 }
 contractActions[type.CONTRACT_METAMASK_LOGIN] = (prevState, payload) => {
-    console.log(`[reducer]${type.CONTRACT_METAMASK_LOGIN}.............`)
-    console.log(prevState, payload)
     return {
         ...prevState,
-        isMetaMaskLogin: true,
+        isWalletLogin: true,
         userAddress: payload.address
     }
 }
 contractActions[type.CONTRACT_METAMASK_LOGOUT] = (prevState, payload) => {
-    console.log(`[reducer]${type.CONTRACT_METAMASK_LOGOUT}.............`)
     return {
         ...prevState,
-        isMetaMaskLogin: false,
+        isWalletLogin: false,
         userAddress: ''
     }
 }
 
 contractActions[type.CONTRACT_WEB3_CLINET_INIT] = (prevState, payload) => {
-    console.log(`[reducer]${type.CONTRACT_WEB3_CLINET_INIT}.............`)
-    console.log(prevState, payload)
+    let {
+        web3Client,
+        dosTokenContract,
+        dbTokenContract,
+        dosContract,
+        network,
+        constant,
+        networkSupported,
+        initialBlock
+    } = payload
     return {
         ...prevState,
-        web3Client: payload.web3Client
+        web3Client,
+        dosTokenContract,
+        dbTokenContract,
+        dosContract,
+        network,
+        constant,
+        networkSupported,
+        initialBlock
     }
 }
+
+// contractActions[type.WALLET_NETWORK_CHANGE] = (prevState, payload) => {
+//     return {
+//         ...prevState,
+//         network: payload.network,
+//         ...payload.CONST
+//     }
+// }
 
 const contractReducer = handleActions(contractActions, contractState)
 /**
