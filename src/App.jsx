@@ -8,9 +8,10 @@ import NodeDetail from "./pages/NodeDetail";
 import NotFound404 from "./pages/NotFound404";
 import Explorer from "./pages/Explorer";
 import Layout from "./Layout";
-import { connectMetaMask, USERADDRESS } from "./util/web3.js";
+import { connectMetaMask } from "./util/web3.js";
 import { DOS_ABI, DOS_CONTRACT_ADDRESS } from "./util/const";
 import { message } from "antd";
+import store from './redux/store'
 message.config({
   top: 100,
   maxCount: 3
@@ -23,27 +24,36 @@ class App extends Component {
       DOS_CONTRACT_ADDRESS
     );
     async function loadNodes() {
+      // export的userAddress会一直是空的
+      let { userAddress } = store.getState().contract;
       let nodesAddrs = Array.from(
         await contractInstance.methods.getNodeAddrs().call()
       );
+
       for (let i = 0; i < nodesAddrs.length; i++) {
-        let node = await contractInstance.methods.nodes(nodesAddrs[i]).call();
-        localStorage.setItem(nodesAddrs[i], JSON.stringify(node));
-        if (USERADDRESS !== "") {
+        // 已经保存过的不重复保存
+        let nodeAddr = nodesAddrs[i]
+        // if (!localStorage.getItem(nodeAddr)) {
+        let node = await contractInstance.methods.nodes(nodeAddr).call();
+        localStorage.setItem(nodeAddr, JSON.stringify(node));
+        // }
+        let delegatorKey = nodeAddr + userAddress
+        if (userAddress !== "") {
+          // if (!localStorage.getItem(delegatorKey)) {
           let delegator = await contractInstance.methods
-            .delegators(USERADDRESS, nodesAddrs[i])
+            .delegators(userAddress, nodeAddr)
             .call();
           localStorage.setItem(
-            nodesAddrs[i] + USERADDRESS,
+            delegatorKey,
             JSON.stringify(delegator)
           );
+          // }
         }
       }
     }
     loadNodes();
     setInterval(() => {
       loadNodes();
-      console.log("app timeout");
     }, 15000);
   }
   render() {

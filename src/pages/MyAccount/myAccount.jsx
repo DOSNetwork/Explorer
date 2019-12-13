@@ -8,7 +8,7 @@ import {
   DOSTOKEN_ABI,
   DOSTOKEN_CONTRACT_ADDRESS
 } from "../../util/const";
-
+console.log(DOS_CONTRACT_ADDRESS)
 const numberFormatRender = (value) => {
   return numeral(value).format("0,0");
 };
