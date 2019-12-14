@@ -14,45 +14,22 @@ import {
     GetConstantByNetWork
 } from '../util/contract-helper'
 
-function GetNetwork(networkId) {
-    let result;
-    switch (networkId) {
-        case '1':
-            result = "mainnet";
-            break
-        case '2':
-            result = "morden";
-            break
-        case '3':
-            result = "ropsten";
-            break
-        case '4':
-            result = "rinkeby";
-            break
-        case '42':
-            result = 'kovan';
-            break;
-        default:
-            result = "unknown";
-    }
-    return result
-}
 export function connectToEthereum() {
     let web3 = null;
     let isWalletInstalled = !!window.ethereum
+    // 如果没有安装钱包.使用默认
     let networkVersion = isWalletInstalled && window.ethereum.networkVersion ? window.ethereum.networkVersion : DEFAULT_NETWORK
-    let network = GetNetwork(networkVersion)
     const {
         DB_CONTRACT_ADDRESS,
         DOSTOKEN_CONTRACT_ADDRESS,
         DOS_CONTRACT_ADDRESS,
         CURRENT_NETWORK,
-        SUPPORTED,
+        WALLET_NETWORK_SUPPORTED,
         BLOCK_NUMBER,
-        PROVIDER
-    } = GetConstantByNetWork(network)
-
-    if (isWalletInstalled) {
+        PROVIDER,
+        USER_WALLET_NETWORK
+    } = GetConstantByNetWork(networkVersion)
+    if (isWalletInstalled && WALLET_NETWORK_SUPPORTED) {
         web3 = new Web3(window.ethereum);
     } else {
         web3 = new Web3(new Web3.providers.WebsocketProvider(PROVIDER));
@@ -71,10 +48,10 @@ export function connectToEthereum() {
         DOS_CONTRACT_ADDRESS
     );
 
-    if (!SUPPORTED) {
+    if (!WALLET_NETWORK_SUPPORTED) {
         Modal.warning({
             title: 'some title?',
-            content: `Your wallet Network [${CURRENT_NETWORK}] does not yet support`,
+            content: `Your wallet Network [${USER_WALLET_NETWORK}] does not yet support,explorer switch to network [${CURRENT_NETWORK}]`,
         });
     }
     store.dispatch({
@@ -84,7 +61,7 @@ export function connectToEthereum() {
         dbTokenContract,
         dosContract,
         network: CURRENT_NETWORK,
-        networkSupported: SUPPORTED,
+        networkSupported: WALLET_NETWORK_SUPPORTED,
         constant: {
             DB_CONTRACT_ADDRESS,
             DOSTOKEN_CONTRACT_ADDRESS,

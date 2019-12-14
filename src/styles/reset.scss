@@ -199,7 +199,8 @@ option {
     box-sizing: border-box;
 
     &:hover,
-    &:active {
+    &:active,
+    &:focus {
         background: #705EEF;
         color: #fff;
     }
