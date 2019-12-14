@@ -47,7 +47,6 @@ export default class ScrollTop extends Component {
     }
     render() {
         let { scrollTopShow } = this.state
-        // console.log('scroll render', this.state.scrollTopShow)
         return (
             <>
                 <div onClick={this.scrollTop} className={[`scroll-top__wrapper ${scrollTopShow ? "display" : ''}`]}>

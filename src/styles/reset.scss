@@ -198,7 +198,8 @@ option {
     border: 1px solid #4837BC;
     box-sizing: border-box;
 
-    &:hover {
+    &:hover,
+    &:active {
         background: #705EEF;
         color: #fff;
     }
