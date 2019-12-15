@@ -1,5 +1,5 @@
 const messages = {
-    'ChangeLang': 'Change To English Site',
+    'ChangeLang': 'English',
     'Title.nodelist': '节点列表',
     'Title.explorer': '浏览器',
     'Title.nodedetail': '节点详情',

@@ -45,10 +45,7 @@ const links = [
 
 class Footer extends PureComponent {
     render() {
-        let { changeLang } = this.props;
-        let { formatMessage: f } = this.props.intl;
-        let { lang } = this.props.global
-        let targetLang = lang === 'zh-CN' ? 'en-US' : 'zh-CN'
+        // let { formatMessage: f } = this.props.intl;     
         let renderSoicalLinks = () => {
             let linkItem = socialLinks.map(link => {
                 return (
@@ -70,7 +67,7 @@ class Footer extends PureComponent {
             return (
                 <div className="document-link--wrapper">
                     {linkItem}
-                    <div className="link change-lang" onClick={() => { changeLang(targetLang) }}>{f({ id: 'ChangeLang' })}</div>
+
                 </div>
             )
         }

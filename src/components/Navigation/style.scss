@@ -131,6 +131,8 @@
 
 .wallet__login-button {
     cursor: pointer;
+    flex: 1;
+    padding-left: 20px;
 }
 
 .dos-data--wrapper {
@@ -152,4 +154,23 @@
     font-size: 16px;
     font-weight: 500;
     text-align: right;
+}
+
+
+.change-lang-button {
+    display: flex;
+    border: 1px solid #fff;
+    width: 66px;
+    height: 28px;
+    text-align: center;
+    border-radius: 20px;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    margin: 0 20px;
+    font-size: 14px;
+
+    &:hover {
+        background-color: rgba(255, 255, 255, 0.1)
+    }
 }

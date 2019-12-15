@@ -32,8 +32,11 @@ const Navigation = class Navigation extends Component {
         }
     }
     render() {
+        let { changeLang } = this.props;
         let { userAddress = '', isWalletLogin } = this.props.contract;
         let { formatMessage: f } = this.props.intl;
+        let { lang } = this.props.global
+        let targetLang = lang === 'zh-CN' ? 'en-US' : 'zh-CN'
         return (
             <div className="header__wrapper">
                 <div className="header__container layout__container">
@@ -49,6 +52,7 @@ const Navigation = class Navigation extends Component {
                             <NavLink className="navi-item" to={`/myaccount`} activeClassName="active"><MyAccountIcon />&nbsp;{f({ id: 'Title.myaccount' })}</NavLink>
                         </div>
                     </div>
+                    <div className="change-lang-button" onClick={() => { changeLang(targetLang) }}>{f({ id: 'ChangeLang' })}</div>
                     <div className="wallet__status__panel" >
                         <WalletIcon />
                         {
