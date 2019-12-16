@@ -157,7 +157,7 @@ class NodeList extends Component {
             .newNode(
               values.nodeAddr,
               tokenAmount,
-              dbAmount,
+              dbAmount || 0,
               values.cutRate || 0,
               values.name || ""
             )
