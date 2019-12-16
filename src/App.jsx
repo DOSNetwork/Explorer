@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import "./App.scss";
-import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
+import { BrowserRouter as Router, Switch, Route, Redirect } from "react-router-dom";
 import Navigation from "./components/Navigation/navigationContainer";
 import MyAccount from "./pages/MyAccount";
 import NodeList from "./pages/NodeList";
@@ -57,7 +57,9 @@ class App extends Component {
         <Layout>
           <Navigation></Navigation>
           <Switch>
-            <Route exact path="/" component={Explorer} />
+            <Route exact path="/" render={() => (
+              < Redirect to="/explorer" />
+            )} />
             <Route path="/nodelist" component={NodeList} />
             <Route path="/explorer" component={Explorer} />
             <Route path="/nodedetail/:nodeId" component={NodeDetail} />

@@ -46,6 +46,9 @@ class Account extends Component {
   componentDidMount() {
     this.loadUserBalance();
   }
+  componentWillUnmount() {
+    this.unMount = true;
+  }
   loadUserBalance = async () => {
     function fromWei(bn) {
       if (!bn || bn === "-") {
@@ -143,11 +146,9 @@ class Account extends Component {
             );
           }
         }
-        // // console.log(
-        //   Math.round(
-        //     web3Client.utils.fromWei(delegatedAmount.toString()) * 100
-        //   ) / 100
-        // );
+        if (this.unMount) {
+          return;
+        }
         this.setState({
           userBalance: Math.round(fromWei(userBalance) * 100) / 100,
           delegatedAmount:

@@ -6,7 +6,7 @@ import interestRateIcon from "./assets/interestRate-icon.png";
 import priceIcon from "./assets/price-icon.png";
 import stakedTokenIcon from "./assets/stakedToken-icon.png";
 import numeral from 'numeral'
-const Navigation = class Navigation extends Component {
+const MarketInfo = class MarketInfo extends Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -19,9 +19,11 @@ const Navigation = class Navigation extends Component {
   componentDidMount() {
     this.fetchDosPrice();
     this.loadRateAndStaked();
+    this.isLoaded = true
   }
   componentWillUnmount() {
     this.unMount = true;
+    this.isLoaded = false
   }
   loadRateAndStaked = async () => {
     const { web3Client, dosContract } = this.props.contract;
@@ -52,10 +54,12 @@ const Navigation = class Navigation extends Component {
       )
       .then(({ data }) => {
         if (data && data[address] && data[address][currency]) {
-          this.setState({
-            dosPrice: data[address][currency],
-            currency: currency
-          });
+          if (!this.unMount) {
+            this.setState({
+              dosPrice: data[address][currency],
+              currency: currency
+            });
+          }
         }
       });
   };
@@ -92,4 +96,4 @@ const Navigation = class Navigation extends Component {
   }
 };
 
-export default injectIntl(Navigation);
+export default injectIntl(MarketInfo);

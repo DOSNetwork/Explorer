@@ -14,8 +14,12 @@ import { AddressDetail } from './address'
 class Search extends React.Component {
 
     handleSearch = (text) => {
+        console.log('search')
         let { currentPageIndex, pageSize } = this.props.searchResult
         this.props.explorerSearch(text, pageSize, currentPageIndex, this.props.history)
+    }
+    shouldComponentUpdate(nextProps, nextState) {
+        return false
     }
     componentDidMount() {
         let searchText = ''
@@ -31,6 +35,7 @@ class Search extends React.Component {
         this.handleSearch(searchText)
     }
     render() {
+        console.log('search render')
         let { formatMessage } = this.props.intl;
         return (<>
             <MarketInfo></MarketInfo>

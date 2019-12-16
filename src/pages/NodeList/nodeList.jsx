@@ -114,13 +114,20 @@ class NodeList extends Component {
     this.unMount = true;
   }
   getSnapshotBeforeUpdate(prevProps) {
-    let userLogined =
-      prevProps.contract.userAddress === "" && this.props.contract.userAddress;
-    return { userLogined: userLogined };
+    let userLogined = !prevProps.contract.isWalletLogin && this.props.contract.isWalletLogin;
+    let isUserLogout = prevProps.contract.isWalletLogin && !this.props.contract.isWalletLogin
+    return { userLogined: userLogined, userLogout: isUserLogout };
   }
   componentDidUpdate(prevProps, preState, snapShot) {
     if (snapShot.userLogined) {
-      this.loadNodeList("", this.state.pagination, this.props.showRelatedNodes);
+      setTimeout(() => {
+        this.loadNodeList("", this.state.pagination, this.props.showRelatedNodes);
+      }, 0)
+    }
+    if (snapShot.userLogout) {
+      setTimeout(() => {
+        this.loadNodeList("", { current: 1, pageSize: 10 }, false);
+      }, 0)
     }
   }
   showModal = () => {

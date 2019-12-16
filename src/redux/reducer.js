@@ -64,6 +64,12 @@ globalActions[type.GLOBAL_CONFIG_CHANGE_OSLM] = (prevState, payload) => {
         config_onlyShowRelatedToMe: payload.config_onlyShowRelatedToMe
     }
 }
+globalActions[type.CONTRACT_METAMASK_LOGOUT] = (prevState, payload) => {
+    return {
+        ...globalState,
+        config_onlyShowRelatedToMe: false
+    }
+}
 globalActions[type.GLOBAL_CONFIG_SET_LANG] = (prevState, payload) => {
     let {
         lang
@@ -154,6 +160,7 @@ contractActions[type.CONTRACT_METAMASK_LOGOUT] = (prevState, payload) => {
         userAddress: ''
     }
 }
+
 
 contractActions[type.CONTRACT_WEB3_CLINET_INIT] = (prevState, payload) => {
     let {

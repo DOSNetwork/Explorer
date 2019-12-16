@@ -36,6 +36,7 @@ export function changeLang(lang) {
 }
 
 function explorerSearchReceiveResponse(data) {
+    console.log(data)
     return {
         type: type.EXPLORER_SEARCH_RESPONSE,
         response: data

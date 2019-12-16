@@ -36,13 +36,18 @@ class Activities extends Component {
     this.unMount = true;
   }
   getSnapshotBeforeUpdate(prevProps) {
-    let userLogined =
-      prevProps.contract.userAddress === "" && this.props.contract.userAddress;
-    return { userLogined: userLogined };
+    let userLogined = !prevProps.contract.isWalletLogin && this.props.contract.isWalletLogin;
+    let isUserLogout = prevProps.contract.isWalletLogin && !this.props.contract.isWalletLogin
+    return { userLogined: userLogined, userLogout: isUserLogout };
   }
   componentDidUpdate(prevProps, preState, snapShot) {
     if (snapShot.userLogined) {
       this.search();
+    }
+    if (snapShot.userLogout) {
+      this.setState({
+        dataListSource: []
+      })
     }
   }
   search = async () => {
