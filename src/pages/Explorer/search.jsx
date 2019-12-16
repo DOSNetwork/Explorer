@@ -35,7 +35,6 @@ class Search extends React.Component {
         this.handleSearch(searchText)
     }
     render() {
-        console.log('search render')
         let { formatMessage } = this.props.intl;
         return (<>
             <MarketInfo></MarketInfo>

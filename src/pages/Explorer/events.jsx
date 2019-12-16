@@ -6,7 +6,6 @@ export const EventsList = ({ pageSize, currentPageIndex, totalCount, events, loa
     function handlePaginationChange({ current, pageSize }) {
         explorerSearch(searchText, pageSize, current - 1, history);
     }
-    console.log(events)
     return (
         <div className="search-result--wrapper">
             <span className="search-result--title">{f({ id: 'Tooltip.Explorer.Pagnation' }, { pageSize: pageSize })}</span>
