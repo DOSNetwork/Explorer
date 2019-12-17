@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import { Button, message, Tabs, Modal } from "antd";
-import { injectIntl } from 'react-intl'
+import { injectIntl } from "react-intl";
 import DelegateNode from "./delegateNodeForm";
 import UnbondNode from "./unbondNodeForm";
 import UnbondOwnedNode from "./unbondOwnedNodeForm";
@@ -10,6 +10,7 @@ import { EllipsisString } from "../../util/util";
 import "./style.scss";
 import numeral from "numeral";
 import { EmitterHandlerWrapper } from "../../util/contract-helper";
+import { approveString } from "../../util/const";
 const { TabPane } = Tabs;
 const { confirm } = Modal;
 const TabbarRender = tabbarName => {
@@ -35,7 +36,7 @@ const NodeDetail = class NodeDetail extends Component {
   }
   componentDidMount() {
     const { dosContract } = this.props.contract;
-    this.dosContract = dosContract
+    this.dosContract = dosContract;
     this.unMountRemoveListenerCallbacks = [];
     this.getNodeDetail();
   }
@@ -71,111 +72,139 @@ const NodeDetail = class NodeDetail extends Component {
   //------- withDraw unregister
   handleOwnerWithdraw = () => {
     let { formatMessage: f } = this.props.intl;
-    let emitterName = 'Owner Withdraw'
+    let emitterName = "Owner Withdraw";
     const { userAddress } = this.props.contract;
 
     let { withDrawalTotal } = this.state;
     if (+withDrawalTotal === 0) {
       Modal.warning({
         title: emitterName,
-        content: f({ id: 'Form.Message.OwnerWithdraw' }),
+        content: f({ id: "Form.Message.OwnerWithdraw" })
       });
       return;
     }
     let emitter = this.dosContract.methods
       .nodeWithdraw(this.state.node)
       .send({ from: userAddress });
-    // 监听并且在unmount的时候处理事件解绑 
-    this.handleEmmiterEvents(emitter, emitterName,
-      (hash) => {
-        message.loading(f({ id: 'Events.Loading' }, { type: 'withdraw', hash: hash }));
+    // 监听并且在unmount的时候处理事件解绑
+    this.handleEmmiterEvents(
+      emitter,
+      emitterName,
+      hash => {
+        message.loading(
+          f({ id: "Events.Loading" }, { type: "withdraw", hash: hash })
+        );
       },
       (confirmationNumber, receipt) => {
         message.success(
-          f({ id: 'Events.Success' }, { type: 'withdraw', blockNumber: receipt.blockNumber })
+          f(
+            { id: "Events.Success" },
+            { type: "withdraw", blockNumber: receipt.blockNumber }
+          )
         );
       }
     );
   };
   handleOwnerClaimReward = () => {
     let { formatMessage: f } = this.props.intl;
-    let emitterName = 'Owner Claim Reward'
+    let emitterName = "Owner Claim Reward";
     const { userAddress } = this.props.contract;
 
     let { myRewardTotal } = this.state;
     if (+myRewardTotal === 0) {
       Modal.warning({
         title: emitterName,
-        content: f({ id: 'Form.Message.OwnerClaimReward' }),
+        content: f({ id: "Form.Message.OwnerClaimReward" })
       });
       return;
     }
     let emitter = this.dosContract.methods
       .nodeClaimReward(this.state.node)
       .send({ from: userAddress });
-    // 监听并且在unmount的时候处理事件解绑 
-    this.handleEmmiterEvents(emitter, emitterName,
-      (hash) => {
-        message.loading(f({ id: 'Events.Loading' }, { type: 'withdraw', hash: hash }));
+    // 监听并且在unmount的时候处理事件解绑
+    this.handleEmmiterEvents(
+      emitter,
+      emitterName,
+      hash => {
+        message.loading(
+          f({ id: "Events.Loading" }, { type: "withdraw", hash: hash })
+        );
       },
       (confirmationNumber, receipt) => {
         message.success(
-          f({ id: 'Events.Success' }, { type: 'withdraw', blockNumber: receipt.blockNumber })
+          f(
+            { id: "Events.Success" },
+            { type: "withdraw", blockNumber: receipt.blockNumber }
+          )
         );
       }
     );
   };
   handleDelegatorWithdraw = () => {
     let { formatMessage: f } = this.props.intl;
-    let emitterName = 'Delegator WithDraw'
+    let emitterName = "Delegator WithDraw";
     const { userAddress } = this.props.contract;
 
     let { withDrawalTotal } = this.state;
     if (+withDrawalTotal === 0) {
       Modal.warning({
         title: emitterName,
-        content: f({ id: 'Form.Message.DelegatorWithdraw' }),
+        content: f({ id: "Form.Message.DelegatorWithdraw" })
       });
       return;
     }
     let emitter = this.dosContract.methods
       .delegatorWithdraw(this.state.node)
       .send({ from: userAddress });
-    // 监听并且在unmount的时候处理事件解绑 
-    this.handleEmmiterEvents(emitter, emitterName,
-      (hash) => {
-        message.loading(f({ id: 'Events.Loading' }, { type: 'withdraw', hash: hash }));
+    // 监听并且在unmount的时候处理事件解绑
+    this.handleEmmiterEvents(
+      emitter,
+      emitterName,
+      hash => {
+        message.loading(
+          f({ id: "Events.Loading" }, { type: "withdraw", hash: hash })
+        );
       },
       (confirmationNumber, receipt) => {
         message.success(
-          f({ id: 'Events.Success' }, { type: 'withdraw', blockNumber: receipt.blockNumber })
+          f(
+            { id: "Events.Success" },
+            { type: "withdraw", blockNumber: receipt.blockNumber }
+          )
         );
       }
     );
   };
   handleDelegatorClaimReward = () => {
     let { formatMessage: f } = this.props.intl;
-    let emitterName = 'Delegator Claim Reward'
+    let emitterName = "Delegator Claim Reward";
     const { userAddress } = this.props.contract;
     let { withDrawalTotal } = this.state;
     if (+withDrawalTotal === 0) {
       Modal.warning({
         title: emitterName,
-        content: f({ id: 'Form.Message.DelegatorWithdraw' }),
+        content: f({ id: "Form.Message.DelegatorWithdraw" })
       });
       return;
     }
     let emitter = this.dosContract.methods
       .delegatorClaimReward(this.state.node)
       .send({ from: userAddress });
-    // 监听并且在unmount的时候处理事件解绑 
-    this.handleEmmiterEvents(emitter, emitterName,
-      (hash) => {
-        message.loading(f({ id: 'Events.Loading' }, { type: 'withdraw', hash: hash }));
+    // 监听并且在unmount的时候处理事件解绑
+    this.handleEmmiterEvents(
+      emitter,
+      emitterName,
+      hash => {
+        message.loading(
+          f({ id: "Events.Loading" }, { type: "withdraw", hash: hash })
+        );
       },
       (confirmationNumber, receipt) => {
         message.success(
-          f({ id: 'Events.Success' }, { type: 'withdraw', blockNumber: receipt.blockNumber })
+          f(
+            { id: "Events.Success" },
+            { type: "withdraw", blockNumber: receipt.blockNumber }
+          )
         );
       }
     );
@@ -193,49 +222,156 @@ const NodeDetail = class NodeDetail extends Component {
         let emitter = this.dosContract.methods
           .nodeUnregister(this.state.node)
           .send({ from: userAddress });
-        // 监听并且在unmount的时候处理事件解绑 
-        this.handleEmmiterEvents(emitter, 'User UnRegister',
-          (hash) => {
-            message.loading(f({ id: 'Events.Loading' }, { type: 'unregister', hash: hash }));
+        // 监听并且在unmount的时候处理事件解绑
+        this.handleEmmiterEvents(
+          emitter,
+          "User UnRegister",
+          hash => {
+            message.loading(
+              f({ id: "Events.Loading" }, { type: "unregister", hash: hash })
+            );
           },
           (confirmationNumber, receipt) => {
             message.success(
-              f({ id: 'Events.Success' }, { type: 'unregister', blockNumber: receipt.blockNumber })
+              f(
+                { id: "Events.Success" },
+                { type: "unregister", blockNumber: receipt.blockNumber }
+              )
             );
           }
         );
       },
-      onCancel() { }
+      onCancel() {}
     });
   };
   //------- delegate upgrate unbond
-  handleOwnerUpgrateSubmit = e => {
+  handleOwnerUpgrateSubmit = async e => {
+    const {
+      web3Client,
+      userAddress,
+      dosContract,
+      dosTokenContract,
+      dbTokenContract,
+      constant
+    } = this.props.contract;
     let { formatMessage: f } = this.props.intl;
     e.preventDefault();
     const { form } = this.updateFormformRef.props;
+    const approve = await dosTokenContract.methods
+      .allowance(userAddress, constant.DOS_CONTRACT_ADDRESS)
+      .call();
+    const dbApprove = await dbTokenContract.methods
+      .allowance(userAddress, constant.DOS_CONTRACT_ADDRESS)
+      .call();
+
     form.validateFields((err, values) => {
       if (err) {
         return;
       }
       const { web3Client, userAddress } = this.props.contract;
-      const tokenAmount = web3Client.utils.toWei(values.tokenAmount, "ether");
+      let tokenAmount = 0;
+      if (values.tokenAmount !== undefined) {
+        tokenAmount = web3Client.utils.toWei(values.tokenAmount, "ether");
+      }
       const dbAmount = values.dbAmount ? values.dbAmount : 0;
       const rewardCut = values.rewardCut;
-      let emitter = this.dosContract.methods
-        .updateNodeStaking(this.state.node, tokenAmount, dbAmount, rewardCut)
-        .send({ from: userAddress });
-      // 监听并且在unmount的时候处理事件解绑 
-      this.handleEmmiterEvents(emitter, 'Upgrate Node',
-        (hash) => {
-          message.loading(f({ id: 'Events.Loading' }, { type: 'upgrade', hash: hash }));
-        },
-        (confirmationNumber, receipt) => {
-          message.success(
-            f({ id: 'Events.Success' }, { type: 'upgrade', blockNumber: receipt.blockNumber })
+      const nodeAddr = this.state.node;
+      const ui = this;
+      const upgradeFunc = function(receipt) {
+        let emitter = ui.dosContract.methods
+          .updateNodeStaking(nodeAddr, tokenAmount, dbAmount, rewardCut)
+          .send({ from: userAddress });
+        // 监听并且在unmount的时候处理事件解绑
+        ui.handleEmmiterEvents(
+          emitter,
+          "Upgrate Node",
+          hash => {
+            message.loading(
+              f({ id: "Events.Loading" }, { type: "upgrade", hash: hash })
+            );
+          },
+          (confirmationNumber, receipt) => {
+            message.success(
+              f(
+                { id: "Events.Success" },
+                { type: "upgrade", blockNumber: receipt.blockNumber }
+              )
+            );
+            form.resetFields();
+          }
+        );
+      };
+      const dbApproveFunc = function(receipt) {
+        console.log("call dbApprove then newNodeFunc");
+        try {
+          let emitter = dbTokenContract.methods
+            .approve(constant.DOS_CONTRACT_ADDRESS)
+            .send({ from: userAddress });
+          ui.handleEmmiterEvents(
+            emitter,
+            "dbApprove",
+            hash => {
+              message.loading(
+                f({ id: "Events.Loading" }, { type: "approve", hash: hash })
+              );
+            },
+            (confirmationNumber, receipt) => {
+              message.success(
+                f(
+                  { id: "Events.Success" },
+                  { type: "approve", blockNumber: receipt.blockNumber }
+                )
+              );
+              upgradeFunc();
+            },
+            error => {
+              message.error(error.message.split("\n")[0]);
+            }
           );
-          form.resetFields();
+        } catch (e) {
+          message.error(e.reason);
         }
-      );
+      };
+      const approveFunc = function(receipt) {
+        console.log("call approveFunc then newNodeFunc");
+        try {
+          let emitter = dosTokenContract.methods
+            .approve(constant.DOS_CONTRACT_ADDRESS)
+            .send({ from: userAddress });
+          ui.handleEmmiterEvents(
+            emitter,
+            "Approve",
+            hash => {
+              message.loading(
+                f({ id: "Events.Loading" }, { type: "approve", hash: hash })
+              );
+            },
+            (confirmationNumber, receipt) => {
+              message.success(
+                f(
+                  { id: "Events.Success" },
+                  { type: "approve", blockNumber: receipt.blockNumber }
+                )
+              );
+              upgradeFunc();
+            },
+            error => {
+              message.error(error.message.split("\n")[0]);
+            }
+          );
+        } catch (e) {
+          message.error(e.reason);
+        }
+      };
+      if (dbAmount !== 0 && dbApprove.toString() !== approveString) {
+        dbApproveFunc();
+      } else {
+        if (tokenAmount !== 0 && approve.toString() !== approveString) {
+          approveFunc();
+        } else {
+          upgradeFunc();
+        }
+      }
       this.setState({ updateFormVisible: false });
     });
   };
@@ -254,14 +390,21 @@ const NodeDetail = class NodeDetail extends Component {
         .nodeUnbond(tokenAmount, dbAmount, this.state.node)
         .send({ from: userAddress });
 
-      // 监听并且在unmount的时候处理事件解绑 
-      this.handleEmmiterEvents(emitter, 'Owner UnBond',
-        (hash) => {
-          message.loading(f({ id: 'Events.Loading' }, { type: 'unbond', hash: hash }));
+      // 监听并且在unmount的时候处理事件解绑
+      this.handleEmmiterEvents(
+        emitter,
+        "Owner UnBond",
+        hash => {
+          message.loading(
+            f({ id: "Events.Loading" }, { type: "unbond", hash: hash })
+          );
         },
         (confirmationNumber, receipt) => {
           message.success(
-            f({ id: 'Events.Success' }, { type: 'unbond', blockNumber: receipt.blockNumber })
+            f(
+              { id: "Events.Success" },
+              { type: "unbond", blockNumber: receipt.blockNumber }
+            )
           );
           form.resetFields();
         }
@@ -288,14 +431,21 @@ const NodeDetail = class NodeDetail extends Component {
         .delegatorUnbond(tokenAmount, this.state.node)
         .send({ from: userAddress });
 
-      // 监听并且在unmount的时候处理事件解绑 
-      this.handleEmmiterEvents(emitter, 'User UnBond',
-        (hash) => {
-          message.loading(f({ id: 'Events.Loading' }, { type: 'unbond', hash: hash }));
+      // 监听并且在unmount的时候处理事件解绑
+      this.handleEmmiterEvents(
+        emitter,
+        "User UnBond",
+        hash => {
+          message.loading(
+            f({ id: "Events.Loading" }, { type: "unbond", hash: hash })
+          );
         },
         (confirmationNumber, receipt) => {
           message.success(
-            f({ id: 'Events.Success' }, { type: 'unbond', blockNumber: receipt.blockNumber })
+            f(
+              { id: "Events.Success" },
+              { type: "unbond", blockNumber: receipt.blockNumber }
+            )
           );
           form.resetFields();
         }
@@ -307,35 +457,96 @@ const NodeDetail = class NodeDetail extends Component {
       });
     });
   };
-  handleUserDelegateSubmit = e => {
+  handleUserDelegateSubmit = async e => {
+    const {
+      web3Client,
+      userAddress,
+      dosContract,
+      dosTokenContract,
+      constant
+    } = this.props.contract;
     let { formatMessage: f } = this.props.intl;
     e.preventDefault();
     const { form } = this.delegateFormRef.props;
+    const approve = await dosTokenContract.methods
+      .allowance(userAddress, constant.DOS_CONTRACT_ADDRESS)
+      .call();
+    this.setState({
+      delegateFormLoading: true
+    });
     form.validateFields((err, values) => {
       if (err) {
         return;
       }
-      this.setState({
-        delegateFormLoading: true
-      });
-      const { web3Client, userAddress, dosContract } = this.props.contract;
       const tokenAmount = web3Client.utils.toWei(values.tokenAmount, "ether");
+      const nodeAddr = this.state.node;
+      let ui = this;
 
-      let emitter = dosContract.methods
-        .delegate(tokenAmount, this.state.node)
-        .send({ from: userAddress });
-      // 监听并且在unmount的时候处理事件解绑 
-      this.handleEmmiterEvents(emitter, 'User Delegate',
-        (hash) => {
-          message.loading(f({ id: 'Events.Loading' }, { type: 'delegate', hash: hash }));
-        },
-        (confirmationNumber, receipt) => {
-          message.success(
-            f({ id: 'Events.Success' }, { type: 'delegate', blockNumber: receipt.blockNumber })
+      const delegateFunc = function(receipt) {
+        try {
+          let emitter = dosContract.methods
+            .delegate(tokenAmount, nodeAddr)
+            .send({ from: userAddress });
+          // 监听并且在unmount的时候处理事件解绑
+          ui.handleEmmiterEvents(
+            emitter,
+            "User Delegate",
+            hash => {
+              message.loading(
+                f({ id: "Events.Loading" }, { type: "delegate", hash: hash })
+              );
+            },
+            (confirmationNumber, receipt) => {
+              message.success(
+                f(
+                  { id: "Events.Success" },
+                  { type: "delegate", blockNumber: receipt.blockNumber }
+                )
+              );
+              form.resetFields();
+            },
+            error => {
+              message.error(error.message.split("\n")[0]);
+            }
           );
-          form.resetFields();
+        } catch (e) {
+          console.log("e3 err ", e);
+          message.error(e.reason);
         }
-      );
+      };
+      if (approve.toString() !== approveString) {
+        try {
+          let emitter = dosTokenContract.methods
+            .approve(constant.DOS_CONTRACT_ADDRESS)
+            .send({ from: userAddress });
+          ui.handleEmmiterEvents(
+            emitter,
+            "User Approve",
+            hash => {
+              message.loading(
+                f({ id: "Events.Loading" }, { type: "approve", hash: hash })
+              );
+            },
+            (confirmationNumber, receipt) => {
+              message.success(
+                f(
+                  { id: "Events.Success" },
+                  { type: "approve", blockNumber: receipt.blockNumber }
+                )
+              );
+              delegateFunc();
+            },
+            error => {
+              message.error(error.message.split("\n")[0]);
+            }
+          );
+        } catch (e) {
+          message.error(e.reason);
+        }
+      } else {
+        delegateFunc();
+      }
+
       this.setState({ delegateFormVisible: false, delegateFormLoading: false });
     });
   };
@@ -445,9 +656,7 @@ const NodeDetail = class NodeDetail extends Component {
         withDrawalTotal =
           Math.round(web3Client.utils.fromWei(tempBn.toString()) * 100) / 100;
         tempBn = new web3Client.utils.toBN(0);
-        tempBn = tempBn.add(
-          new web3Client.utils.toBN(pendingWithdrawToken)
-        );
+        tempBn = tempBn.add(new web3Client.utils.toBN(pendingWithdrawToken));
         tempBn = tempBn.sub(
           new web3Client.utils.toBN(nodeWithdrawAbleTotal[0])
         );
@@ -515,7 +724,15 @@ const NodeDetail = class NodeDetail extends Component {
                 <span className="node-address">
                   {EllipsisString(node, 6, 6)}{" "}
                 </span>
-                {status ? <div className='node-status__tag tag--active'>{f({ id: 'Node.active' })}</div> : <div className='node-status__tag tag--inactive'>{f({ id: 'Node.inactive' })}</div>}
+                {status ? (
+                  <div className="node-status__tag tag--active">
+                    {f({ id: "Node.active" })}
+                  </div>
+                ) : (
+                  <div className="node-status__tag tag--inactive">
+                    {f({ id: "Node.inactive" })}
+                  </div>
+                )}
               </div>
               {isWalletLogin && isUserOwnedThisNode ? (
                 <span
@@ -533,7 +750,9 @@ const NodeDetail = class NodeDetail extends Component {
               <div className="detail--user-info">
                 <div className="user-info--delegation">
                   <p className="user-info--title">
-                    {isUserDelegatedThisNode ? f({ id: 'Tooltip.NodeDetail.MyDelegation' }) : f({ id: 'Tooltip.NodeDetail.MyStakingToken' })}
+                    {isUserDelegatedThisNode
+                      ? f({ id: "Tooltip.NodeDetail.MyDelegation" })
+                      : f({ id: "Tooltip.NodeDetail.MyStakingToken" })}
                   </p>
                   <p className="user-info--value">
                     {numberFormatRender(this.state.myTokenTotal)}
@@ -541,7 +760,7 @@ const NodeDetail = class NodeDetail extends Component {
                   {+this.state.dropBurnToken >= "0" && isUserOwnedThisNode ? (
                     <>
                       <p className="user-info--title">
-                        {f({ id: 'Tooltip.NodeDetail.DropBurnToken' })}
+                        {f({ id: "Tooltip.NodeDetail.DropBurnToken" })}
                       </p>
                       <p className="user-info--value">
                         {numberFormatRender(this.state.dropBurnToken)}
@@ -550,89 +769,149 @@ const NodeDetail = class NodeDetail extends Component {
                   ) : null}
                 </div>
                 <div className="user-info--rewards">
-                  <p className="user-info--title">{f({ id: 'Tooltip.NodeDetail.WithdrawalFrozen' })}</p>
-                  <p className="user-info--value">{numberFormatRender(this.state.withDrawalTotal)}<span className='value--frozen'> / {numberFormatRender(this.state.withDrawalFrozen)}</span>
+                  <p className="user-info--title">
+                    {f({ id: "Tooltip.NodeDetail.WithdrawalFrozen" })}
+                  </p>
+                  <p className="user-info--value">
+                    {numberFormatRender(this.state.withDrawalTotal)}
+                    <span className="value--frozen">
+                      {" "}
+                      / {numberFormatRender(this.state.withDrawalFrozen)}
+                    </span>
                   </p>
                   {(+this.state.withDrawalDropBurn >= "0" ||
                     +this.state.withDrawalDropBurnFrozen >= "0") &&
-                    isUserOwnedThisNode ? (
-                      <>
-                        <p className="user-info--title">
-                          {f({ id: 'Tooltip.NodeDetail.WithdrawalDropBurnFrozen' })}
-                        </p>
-                        <p className="user-info--value">{numberFormatRender(this.state.withDrawalDropBurn)}<span className='value--frozen'> / {numberFormatRender(this.state.withDrawalDropBurnFrozen)}</span></p>
-                      </>) : null}
-                  {isUserDelegatedThisNode ? <Button
-                    className="widthdraw-button"
-                    shape="round"
-                    size='small'
-                    onClick={this.handleDelegatorWithdraw}
-                  >
-                    {f({ id: 'Tooltip.NodeDetail.Withdraw' })}
-                  </Button> : <Button
-                    className="widthdraw-button"
-                    shape="round"
-                    size='small'
-                    onClick={this.handleOwnerWithdraw}
-                  >
-                      {f({ id: 'Tooltip.NodeDetail.Withdraw' })}
+                  isUserOwnedThisNode ? (
+                    <>
+                      <p className="user-info--title">
+                        {f({
+                          id: "Tooltip.NodeDetail.WithdrawalDropBurnFrozen"
+                        })}
+                      </p>
+                      <p className="user-info--value">
+                        {numberFormatRender(this.state.withDrawalDropBurn)}
+                        <span className="value--frozen">
+                          {" "}
+                          /
+                          {numberFormatRender(
+                            this.state.withDrawalDropBurnFrozen
+                          )}
+                        </span>
+                      </p>
+                    </>
+                  ) : null}
+                  {isUserDelegatedThisNode ? (
+                    <Button
+                      className="widthdraw-button"
+                      shape="round"
+                      size="small"
+                      onClick={this.handleDelegatorWithdraw}
+                    >
+                      {f({ id: "Tooltip.NodeDetail.Withdraw" })}
                     </Button>
-                  }
+                  ) : (
+                    <Button
+                      className="widthdraw-button"
+                      shape="round"
+                      size="small"
+                      onClick={this.handleOwnerWithdraw}
+                    >
+                      {f({ id: "Tooltip.NodeDetail.Withdraw" })}
+                    </Button>
+                  )}
                 </div>
                 <div className="user-info--rewards">
-                  <p className="user-info--title"> {f({ id: 'Tooltip.NodeDetail.MyRewards' })}</p>
-                  <p className="user-info--value">{numberFormatRender(this.state.myRewardTotal)}</p>
-                  {isUserDelegatedThisNode ? <Button
-                    className="widthdraw-button"
-                    shape="round"
-                    size='small'
-                    onClick={this.handleDelegatorClaimReward}
-                  >
-                    {f({ id: 'Tooltip.NodeDetail.Withdraw' })}
-                  </Button> : <Button
-                    className="widthdraw-button"
-                    shape="round"
-                    size='small'
-                    onClick={this.handleOwnerClaimReward}
-                  >
-                      {f({ id: 'Tooltip.NodeDetail.Withdraw' })}
+                  <p className="user-info--title">
+                    {" "}
+                    {f({ id: "Tooltip.NodeDetail.MyRewards" })}
+                  </p>
+                  <p className="user-info--value">
+                    {numberFormatRender(this.state.myRewardTotal)}
+                  </p>
+                  {isUserDelegatedThisNode ? (
+                    <Button
+                      className="widthdraw-button"
+                      shape="round"
+                      size="small"
+                      onClick={this.handleDelegatorClaimReward}
+                    >
+                      {f({ id: "Tooltip.NodeDetail.Withdraw" })}
                     </Button>
-                  }
+                  ) : (
+                    <Button
+                      className="widthdraw-button"
+                      shape="round"
+                      size="small"
+                      onClick={this.handleOwnerClaimReward}
+                    >
+                      {f({ id: "Tooltip.NodeDetail.Withdraw" })}
+                    </Button>
+                  )}
                 </div>
               </div>
             ) : null}
             <div className="node-detail--item">
-              <div className="item--title">  {f({ id: 'Tooltip.NodeDetail.NodeAddress' })}</div>
+              <div className="item--title">
+                {" "}
+                {f({ id: "Tooltip.NodeDetail.NodeAddress" })}
+              </div>
               <div className="item--value">{nodeAddr}</div>
             </div>
             <div className="node-detail--item">
-              <div className="item--title">  {f({ id: 'Tooltip.NodeDetail.NodeDescription' })}</div>
+              <div className="item--title">
+                {" "}
+                {f({ id: "Tooltip.NodeDetail.NodeDescription" })}
+              </div>
               <div className="item--value">{description}</div>
             </div>
             <div className="node-detail--item">
-              <div className="item--title">  {f({ id: 'Tooltip.NodeDetail.NodeSelt-Staked' })}</div>
-              <div className="item--value">{numberFormatRender(selfStakedAmount)}</div>
+              <div className="item--title">
+                {" "}
+                {f({ id: "Tooltip.NodeDetail.NodeSelt-Staked" })}
+              </div>
+              <div className="item--value">
+                {numberFormatRender(selfStakedAmount)}
+              </div>
             </div>
             <div className="node-detail--item">
-              <div className="item--title">  {f({ id: 'Tooltip.NodeDetail.TotalDelegated' })}</div>
-              <div className="item--value">{numberFormatRender(totalOtherDelegatedAmount)}</div>
+              <div className="item--title">
+                {" "}
+                {f({ id: "Tooltip.NodeDetail.TotalDelegated" })}
+              </div>
+              <div className="item--value">
+                {numberFormatRender(totalOtherDelegatedAmount)}
+              </div>
             </div>
             <div className="node-detail--item">
-              <div className="item--title">  {f({ id: 'Tooltip.NodeDetail.RewardCut' })}</div>
+              <div className="item--title">
+                {" "}
+                {f({ id: "Tooltip.NodeDetail.RewardCut" })}
+              </div>
               <div className="item--value">{rewardCut}%</div>
             </div>
             <div className="node-detail--item">
-              <div className="item--title">  {f({ id: 'Tooltip.NodeDetail.Uptime' })}</div>
-              <div className="item--value">{nodeUptime} {f({ id: 'Tooltip.NodeDetail.Days' })}</div>
+              <div className="item--title">
+                {" "}
+                {f({ id: "Tooltip.NodeDetail.Uptime" })}
+              </div>
+              <div className="item--value">
+                {nodeUptime} {f({ id: "Tooltip.NodeDetail.Days" })}
+              </div>
             </div>
           </div>
         </div>
         {isWalletLogin ? (
           <div className="node-detail--operations node-detail--block">
-            <Tabs className="node-detail--operation-tab" defaultActiveKey="1" size="default" >
+            <Tabs
+              className="node-detail--operation-tab"
+              defaultActiveKey="1"
+              size="default"
+            >
               <TabPane
                 tab={TabbarRender(
-                  isUserDelegatedThisNode ? f({ id: 'Tooltip.NodeDetail.Delegate' }) : f({ id: 'Tooltip.NodeDetail.Upgrate' })
+                  isUserDelegatedThisNode
+                    ? f({ id: "Tooltip.NodeDetail.Delegate" })
+                    : f({ id: "Tooltip.NodeDetail.Upgrate" })
                 )}
                 key="1"
               >
@@ -644,16 +923,18 @@ const NodeDetail = class NodeDetail extends Component {
                       onSubmit={this.handleOwnerUpgrateSubmit}
                     />
                   ) : (
-                      // User --Delegate
-                      <DelegateNode
-                        wrappedComponentRef={this.saveDelegateFormRef}
-                        onSubmit={this.handleUserDelegateSubmit}
-                      />
-                    )
-                  }
+                    // User --Delegate
+                    <DelegateNode
+                      wrappedComponentRef={this.saveDelegateFormRef}
+                      onSubmit={this.handleUserDelegateSubmit}
+                    />
+                  )}
                 </div>
               </TabPane>
-              <TabPane tab={TabbarRender(f({ id: 'Tooltip.NodeDetail.UnBond' }))} key="2">
+              <TabPane
+                tab={TabbarRender(f({ id: "Tooltip.NodeDetail.UnBond" }))}
+                key="2"
+              >
                 <div className="tab-pannel--wrapper">
                   {isUserOwnedThisNode ? (
                     // Owner --unbond
@@ -662,21 +943,20 @@ const NodeDetail = class NodeDetail extends Component {
                       onSubmit={this.handleOwnerUnbondSubmit}
                     />
                   ) : (
-                      // User --unbond
-                      <UnbondNode
-                        wrappedComponentRef={this.saveUnbondFormRef}
-                        onSubmit={this.handleUserUnbondSubmit}
-                      />
-                    )}
+                    // User --unbond
+                    <UnbondNode
+                      wrappedComponentRef={this.saveUnbondFormRef}
+                      onSubmit={this.handleUserUnbondSubmit}
+                    />
+                  )}
                 </div>
               </TabPane>
             </Tabs>
-          </div>) : null
-        }
-      </div >
+          </div>
+        ) : null}
+      </div>
     );
   }
-}
+};
 
-
-export default injectIntl(NodeDetail)
+export default injectIntl(NodeDetail);

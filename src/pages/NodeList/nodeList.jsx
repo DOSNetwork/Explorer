@@ -8,6 +8,7 @@ import EllipsisWrapper from "../../components/EllispisWrapper";
 import identicon from "identicon.js";
 import { MESSAGE_TEXT } from "../../util/txt";
 import { EmitterHandlerWrapper } from "../../util/contract-helper";
+import { approveString } from "../../util/const";
 const { Column } = Table;
 const { Search } = Input;
 const nodeColumnRender = (text, record, index) => {
@@ -28,10 +29,10 @@ const statusColumnRender = (text, record, index) => {
           <FormattedMessage id="Node.active" />
         </div>
       ) : (
-          <div className="node-status__tag tag--inactive">
-            <FormattedMessage id="Node.inactive" />
-          </div>
-        )}
+        <div className="node-status__tag tag--inactive">
+          <FormattedMessage id="Node.inactive" />
+        </div>
+      )}
     </>
   );
 };
@@ -114,20 +115,26 @@ class NodeList extends Component {
     this.unMount = true;
   }
   getSnapshotBeforeUpdate(prevProps) {
-    let userLogined = !prevProps.contract.isWalletLogin && this.props.contract.isWalletLogin;
-    let isUserLogout = prevProps.contract.isWalletLogin && !this.props.contract.isWalletLogin
+    let userLogined =
+      !prevProps.contract.isWalletLogin && this.props.contract.isWalletLogin;
+    let isUserLogout =
+      prevProps.contract.isWalletLogin && !this.props.contract.isWalletLogin;
     return { userLogined: userLogined, userLogout: isUserLogout };
   }
   componentDidUpdate(prevProps, preState, snapShot) {
     if (snapShot.userLogined) {
       setTimeout(() => {
-        this.loadNodeList("", this.state.pagination, this.props.showRelatedNodes);
-      }, 0)
+        this.loadNodeList(
+          "",
+          this.state.pagination,
+          this.props.showRelatedNodes
+        );
+      }, 0);
     }
     if (snapShot.userLogout) {
       setTimeout(() => {
         this.loadNodeList("", { current: 1, pageSize: 10 }, false);
-      }, 0)
+      }, 0);
     }
   }
   showModal = () => {
@@ -139,61 +146,149 @@ class NodeList extends Component {
   saveFormRef = formRef => {
     this.formRef = formRef;
   };
-  handleCreateNode = () => {
+  handleCreateNode = async () => {
+    const {
+      web3Client,
+      userAddress,
+      dosContract,
+      dosTokenContract,
+      dbTokenContract,
+      constant
+    } = this.props.contract;
     const { form } = this.formRef.props;
+
+    const approve = await dosTokenContract.methods
+      .allowance(userAddress, constant.DOS_CONTRACT_ADDRESS)
+      .call();
+    const dbApprove = await dbTokenContract.methods
+      .allowance(userAddress, constant.DOS_CONTRACT_ADDRESS)
+      .call();
+    this.setState({
+      confirmLoading: true
+    });
     form.validateFields((err, values) => {
       if (err) {
         return;
       }
-      this.setState({
-        confirmLoading: true
-      });
-      const { web3Client, userAddress, dosContract } = this.props.contract;
       const tokenAmount = web3Client.utils.toWei(values.tokenAmount, "ether");
-      const dbAmount = values.dbAmount;
-      if (web3Client.utils.isAddress(values.nodeAddr)) {
+      const nodeAddr = values.nodeAddr;
+      const dbAmount = values.dbAmount || 0;
+      const curRate = values.cutRate;
+      const name = values.name || "";
+      let ui = this;
+      const newNodeFunc = function(receipt) {
+        if (web3Client.utils.isAddress(values.nodeAddr)) {
+          try {
+            let emitter = dosContract.methods
+              .newNode(
+                values.nodeAddr,
+                tokenAmount,
+                dbAmount || 0,
+                values.cutRate || 0,
+                values.name || ""
+              )
+              .send({ from: userAddress });
+            ui.unMountRemoveListenerCallbacks = EmitterHandlerWrapper(
+              emitter,
+              hash => {
+                message.loading(MESSAGE_TEXT.MESSAGE_TRANSCATION_LOADING);
+              },
+              (confirmationNumber, receipt) => {
+                message.success(MESSAGE_TEXT.MESSAGE_TRANSCATION_COMFIRM);
+                ui.loadNodeList(
+                  "",
+                  { current: 1, pageSize: 10 },
+                  ui.props.showRelatedNodes
+                );
+              },
+              error => {
+                message.error(error.message.split("\n")[0]);
+                ui.loadNodeList(
+                  "",
+                  { current: 1, pageSize: 10 },
+                  ui.props.showRelatedNodes
+                );
+              }
+            );
+          } catch (e) {
+            message.error(e.reason);
+          }
+        } else {
+          message.error("invalid address");
+        }
+      };
+      const dbApproveFunc = function(receipt) {
         try {
-          let emitter = dosContract.methods
-            .newNode(
-              values.nodeAddr,
-              tokenAmount,
-              dbAmount || 0,
-              values.cutRate || 0,
-              values.name || ""
-            )
+          let emitter = dbTokenContract.methods
+            .approve(constant.DOS_CONTRACT_ADDRESS)
             .send({ from: userAddress });
-          this.unMountRemoveListenerCallbacks = EmitterHandlerWrapper(
+          ui.unMountRemoveListenerCallbacks = EmitterHandlerWrapper(
             emitter,
             hash => {
               message.loading(MESSAGE_TEXT.MESSAGE_TRANSCATION_LOADING);
             },
             (confirmationNumber, receipt) => {
               message.success(MESSAGE_TEXT.MESSAGE_TRANSCATION_COMFIRM);
-              this.loadNodeList(
-                "",
-                { current: 1, pageSize: 10 },
-                this.props.showRelatedNodes
-              );
+              newNodeFunc();
             },
             error => {
               message.error(error.message.split("\n")[0]);
-              this.loadNodeList(
-                "",
-                { current: 1, pageSize: 10 },
-                this.props.showRelatedNodes
-              );
-            },
-            { emmiterName: "CreateNode" }
+            }
           );
         } catch (e) {
           message.error(e.reason);
-          this.setState({
-            confirmLoading: false,
-            visible: true
-          });
+        }
+      };
+      if (dbAmount !== 0 && dbApprove.toString() !== approveString) {
+        if (approve.toString() !== approveString) {
+          try {
+            let emitter = dosTokenContract.methods
+              .approve(constant.DOS_CONTRACT_ADDRESS)
+              .send({ from: userAddress });
+            ui.unMountRemoveListenerCallbacks = EmitterHandlerWrapper(
+              emitter,
+              hash => {
+                message.loading(MESSAGE_TEXT.MESSAGE_TRANSCATION_LOADING);
+              },
+              (confirmationNumber, receipt) => {
+                message.success(MESSAGE_TEXT.MESSAGE_TRANSCATION_COMFIRM);
+                dbApproveFunc();
+              },
+              error => {
+                message.error(error.message.split("\n")[0]);
+              }
+            );
+          } catch (e) {
+            message.error(e.reason);
+          }
+        } else {
+          dbApproveFunc();
         }
       } else {
-        message.error("invalid address");
+        if (approve.toString() !== approveString) {
+          try {
+            let emitter = dosTokenContract.methods
+              .approve(constant.DOS_CONTRACT_ADDRESS)
+              .send({ from: userAddress });
+            ui.unMountRemoveListenerCallbacks = EmitterHandlerWrapper(
+              emitter,
+              hash => {
+                message.loading(MESSAGE_TEXT.MESSAGE_TRANSCATION_LOADING);
+              },
+              (confirmationNumber, receipt) => {
+                message.success(MESSAGE_TEXT.MESSAGE_TRANSCATION_COMFIRM);
+                newNodeFunc();
+              },
+              error => {
+                message.error(error.message.split("\n")[0]);
+              }
+            );
+          } catch (e) {
+            message.error(e.reason);
+          }
+        } else {
+          newNodeFunc();
+        }
       }
       this.setState({
         confirmLoading: false,
@@ -230,7 +325,13 @@ class NodeList extends Component {
       }
       return web3Client.utils.fromWei(bn.toString("10"));
     }
-    const { web3Client, userAddress, isWalletLogin, dosContract, initialBlock } = this.props.contract;
+    const {
+      web3Client,
+      userAddress,
+      isWalletLogin,
+      dosContract,
+      initialBlock
+    } = this.props.contract;
     this.setState({
       loading: true
     });
@@ -251,9 +352,7 @@ class NodeList extends Component {
         toBlock: "latest"
       });
     };
-    nodesAddrs = Array.from(
-      await dosContract.methods.getNodeAddrs().call()
-    );
+    nodesAddrs = Array.from(await dosContract.methods.getNodeAddrs().call());
     // search related nodes
     if (isWalletLogin && showRelatedNodes) {
       // console.log(`only show related nodes infos`);
@@ -411,8 +510,8 @@ class NodeList extends Component {
               />
             </div>
           ) : (
-              <div className="node-list--header-left"></div>
-            )}
+            <div className="node-list--header-left"></div>
+          )}
           <div className="node-list--header-right">
             {isWalletLogin ? (
               <>
@@ -424,8 +523,8 @@ class NodeList extends Component {
                 &nbsp;&nbsp;&nbsp;&nbsp;
               </>
             ) : (
-                <></>
-              )}
+              <></>
+            )}
             <Search
               placeholder={f({ id: "Tooltip.searchnodeaddress" })}
               onSearch={this.onSearchAddress}

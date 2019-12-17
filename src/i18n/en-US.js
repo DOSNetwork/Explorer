@@ -13,8 +13,8 @@ const messages = {
     /*common */
     'Node.active': 'Active',
     'Node.inactive': 'Inactive',
-    'Events.Loading': '{type, select, withdraw {Withdraw} claimreward {ClaimReward} unregister {Unregister} upgrade {Upgrade} unbond{Unbond} delegate{Delegate}}:wait for confirmation:{hash}',
-    'Events.Success': '{type, select, withdraw {Withdraw} claimreward {ClaimReward} unregister {Unregister} upgrade {Upgrade} unbond{Unbond} delegate{Delegate}}:success (confirmed block {blockNumber})',
+    'Events.Loading': '{type, select, approve {Approve} withdraw {Withdraw} claimreward {ClaimReward} unregister {Unregister} upgrade {Upgrade} unbond{Unbond} delegate{Delegate}}:wait for confirmation:{hash}',
+    'Events.Success': '{type, select, approve {Approve} withdraw {Withdraw} claimreward {ClaimReward} unregister {Unregister} upgrade {Upgrade} unbond{Unbond} delegate{Delegate}}:success (confirmed block {blockNumber})',
     /* NodeList */
     'Table.Column.NodeList.Name': 'Name',
     'Table.Column.NodeList.Node': 'Node',
