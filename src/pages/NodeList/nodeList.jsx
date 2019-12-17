@@ -176,7 +176,7 @@ class NodeList extends Component {
       const curRate = values.cutRate;
       const name = values.name || "";
       let ui = this;
-      const newNodeFunc = function(receipt) {
+      const newNodeThenLoadList = function(receipt) {
         if (web3Client.utils.isAddress(values.nodeAddr)) {
           try {
             let emitter = dosContract.methods
@@ -229,7 +229,72 @@ class NodeList extends Component {
             },
             (confirmationNumber, receipt) => {
               message.success(MESSAGE_TEXT.MESSAGE_TRANSCATION_COMFIRM);
-              newNodeFunc();
+            },
+            error => {
+              message.error(error.message.split("\n")[0]);
+            }
+          );
+        } catch (e) {
+          message.error(e.reason);
+        }
+      };
+      const dbApproveThenNewNode = function(receipt) {
+        try {
+          let emitter = dbTokenContract.methods
+            .approve(constant.DOS_CONTRACT_ADDRESS)
+            .send({ from: userAddress });
+          ui.unMountRemoveListenerCallbacks = EmitterHandlerWrapper(
+            emitter,
+            hash => {
+              newNodeThenLoadList();
+              message.loading(MESSAGE_TEXT.MESSAGE_TRANSCATION_LOADING);
+            },
+            (confirmationNumber, receipt) => {
+              message.success(MESSAGE_TEXT.MESSAGE_TRANSCATION_COMFIRM);
+            },
+            error => {
+              message.error(error.message.split("\n")[0]);
+            }
+          );
+        } catch (e) {
+          message.error(e.reason);
+        }
+      };
+      const approveFunc = function(receipt) {
+        try {
+          let emitter = dosTokenContract.methods
+            .approve(constant.DOS_CONTRACT_ADDRESS)
+            .send({ from: userAddress });
+          ui.unMountRemoveListenerCallbacks = EmitterHandlerWrapper(
+            emitter,
+            hash => {
+              newNodeThenLoadList();
+              message.loading(MESSAGE_TEXT.MESSAGE_TRANSCATION_LOADING);
+            },
+            (confirmationNumber, receipt) => {
+              message.success(MESSAGE_TEXT.MESSAGE_TRANSCATION_COMFIRM);
+            },
+            error => {
+              message.error(error.message.split("\n")[0]);
+            }
+          );
+        } catch (e) {
+          message.error(e.reason);
+        }
+      };
+      const approveThenNewNode = function(receipt) {
+        try {
+          let emitter = dosTokenContract.methods
+            .approve(constant.DOS_CONTRACT_ADDRESS)
+            .send({ from: userAddress });
+          ui.unMountRemoveListenerCallbacks = EmitterHandlerWrapper(
+            emitter,
+            hash => {
+              newNodeThenLoadList();
+              message.loading(MESSAGE_TEXT.MESSAGE_TRANSCATION_LOADING);
+            },
+            (confirmationNumber, receipt) => {
+              message.success(MESSAGE_TEXT.MESSAGE_TRANSCATION_COMFIRM);
             },
             error => {
               message.error(error.message.split("\n")[0]);
@@ -240,54 +305,17 @@ class NodeList extends Component {
         }
       };
       if (dbAmount !== 0 && dbApprove.toString() !== approveString) {
-        if (approve.toString() !== approveString) {
-          try {
-            let emitter = dosTokenContract.methods
-              .approve(constant.DOS_CONTRACT_ADDRESS)
-              .send({ from: userAddress });
-            ui.unMountRemoveListenerCallbacks = EmitterHandlerWrapper(
-              emitter,
-              hash => {
-                message.loading(MESSAGE_TEXT.MESSAGE_TRANSCATION_LOADING);
-              },
-              (confirmationNumber, receipt) => {
-                message.success(MESSAGE_TEXT.MESSAGE_TRANSCATION_COMFIRM);
-                dbApproveFunc();
-              },
-              error => {
-                message.error(error.message.split("\n")[0]);
-              }
-            );
-          } catch (e) {
-            message.error(e.reason);
-          }
-        } else {
+        if (tokenAmount !== 0 && approve.toString() !== approveString) {
           dbApproveFunc();
+          approveThenNewNode();
+        } else {
+          dbApproveThenNewNode();
         }
       } else {
-        if (approve.toString() !== approveString) {
-          try {
-            let emitter = dosTokenContract.methods
-              .approve(constant.DOS_CONTRACT_ADDRESS)
-              .send({ from: userAddress });
-            ui.unMountRemoveListenerCallbacks = EmitterHandlerWrapper(
-              emitter,
-              hash => {
-                message.loading(MESSAGE_TEXT.MESSAGE_TRANSCATION_LOADING);
-              },
-              (confirmationNumber, receipt) => {
-                message.success(MESSAGE_TEXT.MESSAGE_TRANSCATION_COMFIRM);
-                newNodeFunc();
-              },
-              error => {
-                message.error(error.message.split("\n")[0]);
-              }
-            );
-          } catch (e) {
-            message.error(e.reason);
-          }
+        if (tokenAmount !== 0 && approve.toString() !== approveString) {
+          approveThenNewNode();
         } else {
-          newNodeFunc();
+          newNodeThenLoadList();
         }
       }
       this.setState({

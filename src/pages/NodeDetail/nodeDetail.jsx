@@ -301,6 +301,37 @@ const NodeDetail = class NodeDetail extends Component {
           }
         );
       };
+      const dbApproveThenUpgrade = function(receipt) {
+        console.log("call dbApprove then newNodeFunc");
+        try {
+          let emitter = dbTokenContract.methods
+            .approve(constant.DOS_CONTRACT_ADDRESS)
+            .send({ from: userAddress });
+          ui.handleEmmiterEvents(
+            emitter,
+            "dbApprove",
+            hash => {
+              upgradeFunc();
+              message.loading(
+                f({ id: "Events.Loading" }, { type: "approve", hash: hash })
+              );
+            },
+            (confirmationNumber, receipt) => {
+              message.success(
+                f(
+                  { id: "Events.Success" },
+                  { type: "approve", blockNumber: receipt.blockNumber }
+                )
+              );
+            },
+            error => {
+              message.error(error.message.split("\n")[0]);
+            }
+          );
+        } catch (e) {
+          message.error(e.reason);
+        }
+      };
       const dbApproveFunc = function(receipt) {
         console.log("call dbApprove then newNodeFunc");
         try {
@@ -322,7 +353,6 @@ const NodeDetail = class NodeDetail extends Component {
                   { type: "approve", blockNumber: receipt.blockNumber }
                 )
               );
-              upgradeFunc();
             },
             error => {
               message.error(error.message.split("\n")[0]);
@@ -353,7 +383,37 @@ const NodeDetail = class NodeDetail extends Component {
                   { type: "approve", blockNumber: receipt.blockNumber }
                 )
               );
+            },
+            error => {
+              message.error(error.message.split("\n")[0]);
+            }
+          );
+        } catch (e) {
+          message.error(e.reason);
+        }
+      };
+      const approveThenUpgrade = function(receipt) {
+        console.log("call approveFunc then newNodeFunc");
+        try {
+          let emitter = dosTokenContract.methods
+            .approve(constant.DOS_CONTRACT_ADDRESS)
+            .send({ from: userAddress });
+          ui.handleEmmiterEvents(
+            emitter,
+            "Approve",
+            hash => {
               upgradeFunc();
+              message.loading(
+                f({ id: "Events.Loading" }, { type: "approve", hash: hash })
+              );
+            },
+            (confirmationNumber, receipt) => {
+              message.success(
+                f(
+                  { id: "Events.Success" },
+                  { type: "approve", blockNumber: receipt.blockNumber }
+                )
+              );
             },
             error => {
               message.error(error.message.split("\n")[0]);
@@ -364,10 +424,15 @@ const NodeDetail = class NodeDetail extends Component {
         }
       };
       if (dbAmount !== 0 && dbApprove.toString() !== approveString) {
-        dbApproveFunc();
+        if (tokenAmount !== 0 && approve.toString() !== approveString) {
+          dbApproveFunc();
+          approveThenUpgrade();
+        } else {
+          dbApproveThenUpgrade();
+        }
       } else {
         if (tokenAmount !== 0 && approve.toString() !== approveString) {
-          approveFunc();
+          approveThenUpgrade();
         } else {
           upgradeFunc();
         }
@@ -523,6 +588,7 @@ const NodeDetail = class NodeDetail extends Component {
             emitter,
             "User Approve",
             hash => {
+              delegateFunc();
               message.loading(
                 f({ id: "Events.Loading" }, { type: "approve", hash: hash })
               );
@@ -534,7 +600,6 @@ const NodeDetail = class NodeDetail extends Component {
                   { type: "approve", blockNumber: receipt.blockNumber }
                 )
               );
-              delegateFunc();
             },
             error => {
               message.error(error.message.split("\n")[0]);
