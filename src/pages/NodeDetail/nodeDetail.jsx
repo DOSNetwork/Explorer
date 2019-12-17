@@ -446,7 +446,7 @@ const NodeDetail = class NodeDetail extends Component {
           Math.round(web3Client.utils.fromWei(tempBn.toString()) * 100) / 100;
         tempBn = new web3Client.utils.toBN(0);
         tempBn = tempBn.add(
-          new web3Client.utils.toBN(nodeInstance.pendingWithdrawToken)
+          new web3Client.utils.toBN(pendingWithdrawToken)
         );
         tempBn = tempBn.sub(
           new web3Client.utils.toBN(nodeWithdrawAbleTotal[0])
@@ -551,7 +551,7 @@ const NodeDetail = class NodeDetail extends Component {
                 </div>
                 <div className="user-info--rewards">
                   <p className="user-info--title">{f({ id: 'Tooltip.NodeDetail.WithdrawalFrozen' })}</p>
-                  <p className="user-info--value">{numberFormatRender(this.state.withDrawalTotal)}<span className='value--frozen'>({numberFormatRender(this.state.withDrawalFrozen)})</span>
+                  <p className="user-info--value">{numberFormatRender(this.state.withDrawalTotal)}<span className='value--frozen'> / {numberFormatRender(this.state.withDrawalFrozen)}</span>
                   </p>
                   {(+this.state.withDrawalDropBurn >= "0" ||
                     +this.state.withDrawalDropBurnFrozen >= "0") &&
@@ -560,7 +560,7 @@ const NodeDetail = class NodeDetail extends Component {
                         <p className="user-info--title">
                           {f({ id: 'Tooltip.NodeDetail.WithdrawalDropBurnFrozen' })}
                         </p>
-                        <p className="user-info--value">{numberFormatRender(this.state.withDrawalDropBurn)}<span className='value--frozen'>({numberFormatRender(this.state.withDrawalDropBurnFrozen)})</span></p>
+                        <p className="user-info--value">{numberFormatRender(this.state.withDrawalDropBurn)}<span className='value--frozen'> / {numberFormatRender(this.state.withDrawalDropBurnFrozen)}</span></p>
                       </>) : null}
                   {isUserDelegatedThisNode ? <Button
                     className="widthdraw-button"

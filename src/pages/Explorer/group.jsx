@@ -15,7 +15,7 @@ export const GroupDetail = ({ group, f }) => {
             <Descriptions.Item label={f({ id: 'Table.Column.Explorer.AcceptedBlockNumber' })} span={3}>
                 {groupDetail.acceptedBlknum}
             </Descriptions.Item>
-            <Descriptions.Item label={f({ id: 'Table.Column.Explorer.DisresolvedBlockNumber' })} span={3}>
+            <Descriptions.Item label={f({ id: 'Table.Column.Explorer.DissolvedBlockNumber' })} span={3}>
                 {groupDetail.dissolvedBlknum}
             </Descriptions.Item>
             <Descriptions.Item label={f({ id: 'Table.Column.Explorer.UrlRequests' })} span={3}>

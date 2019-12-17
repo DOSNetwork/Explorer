@@ -84,7 +84,7 @@ const newNode = Form.create({
                 ]
               })(<Input placeholder="0x" />)}
             </Form.Item>
-            <Form.Item label={f({ id: 'Form.Lable.StakeingAmount' })}>
+            <Form.Item label={f({ id: 'Form.Lable.StakingAmount' })}>
               {getFieldDecorator("tokenAmount", {
                 rules: [
                   {
@@ -105,7 +105,7 @@ const newNode = Form.create({
                     message: f({ id: 'Form.Message.InputdbAmount' })
                   }
                 ]
-              })(<Input placeholder="0.0" suffix='DOS' />)}
+              })(<Input placeholder="0" suffix='DropBurn' />)}
             </Form.Item>
             <Form.Item label={f({ id: 'Form.Lable.cutRate' })}>
               {getFieldDecorator("cutRate", {

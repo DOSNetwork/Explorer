@@ -22,7 +22,7 @@ const delegateNode = Form.create({ name: "form_in_modal" })(
                   message: f({ id: 'Form.Message.InputDelegateAmount' })
                 }
               ]
-            })(<Input placeholder="50000.0" suffix='DOS' />)}
+            })(<Input placeholder="100.0" suffix='DOS' />)}
           </Form.Item>
           <Button type="primary" htmlType="submit" className="login-form-button">
             {f({ id: 'Form.Button.Submit' })}

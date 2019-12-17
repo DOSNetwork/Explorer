@@ -207,7 +207,7 @@ class Account extends Component {
               <div className="account-number">{this.numberToggler(delegatedReward)}</div>
             </div>
             <div className="detail--container">
-              <DescLabel label={f({ id: 'Tooltip.MyAccount.Unbondedtokens' })} />
+              <DescLabel label={f({ id: 'Tooltip.MyAccount.Unbondingtokens' })} />
               <div className="account-number">{this.numberToggler(unbondDelegated)}</div>
             </div>
           </div>

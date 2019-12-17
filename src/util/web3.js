@@ -50,8 +50,8 @@ export function connectToEthereum() {
 
     if (!WALLET_NETWORK_SUPPORTED) {
         Modal.warning({
-            title: 'some title?',
-            content: `Your wallet Network [${USER_WALLET_NETWORK}] does not yet support,explorer switch to network [${CURRENT_NETWORK}]`,
+            title: 'Incorrect Network',
+            content: `We only support ${CURRENT_NETWORK}, but you're currently connected to ${USER_WALLET_NETWORK}.`,
         });
     }
     store.dispatch({

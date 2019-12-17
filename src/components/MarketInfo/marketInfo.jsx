@@ -86,7 +86,7 @@ const MarketInfo = class MarketInfo extends Component {
           <p className="block--title">
             <img width="20" src={priceIcon} alt="icon" />
             <span>
-              {f({ id: "Tooltip.MarketInfo.PriceOfDOS" })}(DOS /USDT)
+              {f({ id: "Tooltip.MarketInfo.PriceOfDOS" })} (DOS / USDT)
             </span>
           </p>
           <p className="block--value">{dosPrice.toFixed(6)}</p>

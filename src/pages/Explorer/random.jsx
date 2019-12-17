@@ -35,7 +35,7 @@ export const RandomDetail = ({ random, f }) => {
                     })
                 }
             </Descriptions.Item>
-            <Descriptions.Item label={f({ id: 'Table.Column.Explorer.PublickKey' })} span={3}>
+            <Descriptions.Item label={f({ id: 'Table.Column.Explorer.PublicKey' })} span={3}>
                 {
                     randomDetail.pubKey && randomDetail.pubKey.map(Id => {
                         return <EllipsisWrapper key={Id} text={Id} />
