@@ -10,8 +10,8 @@ const messages = {
     'Wallet.Tips.InstallWallet': '您需要下载钱包软件来参与质押',
     'Node.active': '在线',
     'Node.inactive': '离线',
-    'Events.Loading': '{type, select, withdraw {提取} claimreward {提取奖励} unregister {注销} upgrade {更新} unbond{赎回} delegate{委托质押}}:等待确认:{hash}',
-    'Events.Success': '{type, select, withdraw {提取} claimreward {提取奖励} unregister {注销} upgrade {更新} unbond{赎回} delegate{委托质押}}:成功 (确认区块 {blockNumber})',
+    'Events.Loading': '{type, select, approve {批准} withdraw {提取} claimreward {提取奖励} unregister {注销} upgrade {更新} unbond{赎回} delegate{委托质押}}:等待确认:{hash}',
+    'Events.Success': '{type, select, approve {批准} withdraw {提取} claimreward {提取奖励} unregister {注销} upgrade {更新} unbond{赎回} delegate{委托质押}}:成功 (确认区块 {blockNumber})',
 
     'Table.Column.NodeList.Name': '名称',
     'Table.Column.NodeList.Node': '地址',
