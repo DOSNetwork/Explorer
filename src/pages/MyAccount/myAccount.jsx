@@ -57,7 +57,7 @@ class Account extends Component {
       return web3Client.utils.fromWei(bn.toString("10"));
     }
     this.props.globalLoading(true);
-    const { isWalletLogin, web3Client, userAddress, dosTokenContract, dosContract } = this.props.contract;
+    const { isWalletLogin, web3Client, userAddress, dosTokenContract, stakingContract } = this.props.contract;
     if (isWalletLogin) {
       let userBalance = await dosTokenContract.methods
         .balanceOf(userAddress)
@@ -76,7 +76,7 @@ class Account extends Component {
           toBlock: "latest"
         };
 
-        const eventList = await dosContract.getPastEvents(
+        const eventList = await stakingContract.getPastEvents(
           "LogNewNode",
           options
         );
@@ -90,7 +90,7 @@ class Account extends Component {
         // // console.log("!!!", addrs.length);
         for (let i = 0; i < addrs.length; i++) {
           const nodeAddr = addrs[i];
-          const node = await dosContract.methods.nodes(nodeAddr).call();
+          const node = await stakingContract.methods.nodes(nodeAddr).call();
           delegatedAmount = delegatedAmount.add(
             new web3Client.utils.toBN(node.selfStakedAmount)
           );
@@ -113,7 +113,7 @@ class Account extends Component {
           fromBlock: 5414653,
           toBlock: "latest"
         };
-        const eventList = await dosContract.getPastEvents(
+        const eventList = await stakingContract.getPastEvents(
           "DelegateTo",
           options2
         );
@@ -126,7 +126,7 @@ class Account extends Component {
         });
         for (let i = 0; i < addrs.length; i++) {
           const nodeAddr = addrs[i];
-          const delegator = await dosContract.methods
+          const delegator = await stakingContract.methods
             .delegators(userAddress, nodeAddr)
             .call();
 

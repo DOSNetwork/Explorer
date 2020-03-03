@@ -56,7 +56,7 @@ export function GetConstantByNetWork(netWorkId) {
     let USER_WALLET_NETWORK = network;
     let result = ConstantVars[network]
     // 如果地址常量没配置,则切换到默认网络
-    if (!result || !result.DOS_CONTRACT_ADDRESS) {
+    if (!result || !result.STAKING_CONTRACT_ADDRESS) {
         network = GetNetwork(DEFAULT_NETWORK)
         result = ConstantVars[network]
         WALLET_NETWORK_SUPPORTED = false;

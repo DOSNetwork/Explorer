@@ -26,7 +26,7 @@ const MarketInfo = class MarketInfo extends Component {
     this.isLoaded = false
   }
   loadRateAndStaked = async () => {
-    const { web3Client, dosContract } = this.props.contract;
+    const { web3Client, stakingContract } = this.props.contract;
     function fromWei(bn) {
       if (!bn || bn === "-") {
         return "";
@@ -34,8 +34,8 @@ const MarketInfo = class MarketInfo extends Component {
       return web3Client.utils.fromWei(bn.toString("10"));
     }
 
-    const rate = await dosContract.methods.getCurrentAPR().call();
-    const totalStakedTokens = await dosContract.methods
+    const rate = await stakingContract.methods.getCurrentAPR().call();
+    const totalStakedTokens = await stakingContract.methods
       .totalStakedTokens()
       .call();
     if (!this.unMount) {

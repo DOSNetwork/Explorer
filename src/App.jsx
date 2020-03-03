@@ -9,7 +9,6 @@ import NotFound404 from "./pages/NotFound404";
 import Explorer from "./pages/Explorer";
 import Layout from "./Layout";
 
-// import { DOS_ABI, DOS_CONTRACT_ADDRESS } from "./util/const";
 import { message } from "antd";
 import store from './redux/store'
 message.config({
@@ -19,7 +18,7 @@ message.config({
 class App extends Component {
   componentWillMount() {
     // export的userAddress会一直是空的
-    let { dosContract: contractInstance, networkSupported } = store.getState().contract;
+    let { stakingContract: contractInstance, networkSupported } = store.getState().contract;
     if (networkSupported) {
       async function loadNodes() {
         // export的userAddress会一直是空的

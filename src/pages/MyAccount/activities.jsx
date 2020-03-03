@@ -51,7 +51,7 @@ class Activities extends Component {
     }
   }
   search = async () => {
-    const { isWalletLogin, userAddress, dosContract, initialBlock } = this.props.contract;
+    const { isWalletLogin, userAddress, stakingContract, initialBlock } = this.props.contract;
     if (isWalletLogin) {
       this.setState({
         loading: true
@@ -67,10 +67,10 @@ class Activities extends Component {
         fromBlock: initialBlock,
         toBlock: "latest"
       };
-      const eventList = await dosContract.getPastEvents("LogNewNode", options);
-      const eventList2 = await dosContract.getPastEvents("DelegateTo", options2);
-      const eventList3 = await dosContract.getPastEvents("RewardWithdraw", options2);
-      const eventList4 = await dosContract.getPastEvents("Unbond", options2);
+      const eventList = await stakingContract.getPastEvents("LogNewNode", options);
+      const eventList2 = await stakingContract.getPastEvents("DelegateTo", options2);
+      const eventList3 = await stakingContract.getPastEvents("RewardWithdraw", options2);
+      const eventList4 = await stakingContract.getPastEvents("Unbond", options2);
       let dataList = [...eventList, ...eventList2, ...eventList3, ...eventList4].sort((a, b) => b.blockNumber - a.blockNumber)
       this.setState({
         dataListSource: dataList

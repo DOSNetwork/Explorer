@@ -35,8 +35,8 @@ const NodeDetail = class NodeDetail extends Component {
     };
   }
   componentDidMount() {
-    const { dosContract } = this.props.contract;
-    this.dosContract = dosContract;
+    const { stakingContract } = this.props.contract;
+    this.stakingContract = stakingContract;
     this.unMountRemoveListenerCallbacks = [];
     this.getNodeDetail();
   }
@@ -83,7 +83,7 @@ const NodeDetail = class NodeDetail extends Component {
       });
       return;
     }
-    let emitter = this.dosContract.methods
+    let emitter = this.stakingContract.methods
       .nodeWithdraw(this.state.node)
       .send({ from: userAddress });
     // 监听并且在unmount的时候处理事件解绑
@@ -118,7 +118,7 @@ const NodeDetail = class NodeDetail extends Component {
       });
       return;
     }
-    let emitter = this.dosContract.methods
+    let emitter = this.stakingContract.methods
       .nodeClaimReward(this.state.node)
       .send({ from: userAddress });
     // 监听并且在unmount的时候处理事件解绑
@@ -153,7 +153,7 @@ const NodeDetail = class NodeDetail extends Component {
       });
       return;
     }
-    let emitter = this.dosContract.methods
+    let emitter = this.stakingContract.methods
       .delegatorWithdraw(this.state.node)
       .send({ from: userAddress });
     // 监听并且在unmount的时候处理事件解绑
@@ -187,7 +187,7 @@ const NodeDetail = class NodeDetail extends Component {
       });
       return;
     }
-    let emitter = this.dosContract.methods
+    let emitter = this.stakingContract.methods
       .delegatorClaimReward(this.state.node)
       .send({ from: userAddress });
     // 监听并且在unmount的时候处理事件解绑
@@ -219,7 +219,7 @@ const NodeDetail = class NodeDetail extends Component {
       okType: "danger",
       cancelText: "No",
       onOk: () => {
-        let emitter = this.dosContract.methods
+        let emitter = this.stakingContract.methods
           .nodeUnregister(this.state.node)
           .send({ from: userAddress });
         // 监听并且在unmount的时候处理事件解绑
@@ -249,7 +249,7 @@ const NodeDetail = class NodeDetail extends Component {
     const {
       web3Client,
       userAddress,
-      dosContract,
+      stakingContract,
       dosTokenContract,
       dbTokenContract,
       constant
@@ -258,10 +258,10 @@ const NodeDetail = class NodeDetail extends Component {
     e.preventDefault();
     const { form } = this.updateFormformRef.props;
     const approve = await dosTokenContract.methods
-      .allowance(userAddress, constant.DOS_CONTRACT_ADDRESS)
+      .allowance(userAddress, constant.STAKING_CONTRACT_ADDRESS)
       .call();
     const dbApprove = await dbTokenContract.methods
-      .allowance(userAddress, constant.DOS_CONTRACT_ADDRESS)
+      .allowance(userAddress, constant.STAKING_CONTRACT_ADDRESS)
       .call();
 
     form.validateFields((err, values) => {
@@ -278,7 +278,7 @@ const NodeDetail = class NodeDetail extends Component {
       const nodeAddr = this.state.node;
       const ui = this;
       const upgradeFunc = function(receipt) {
-        let emitter = ui.dosContract.methods
+        let emitter = ui.stakingContract.methods
           .updateNodeStaking(nodeAddr, tokenAmount, dbAmount, rewardCut)
           .send({ from: userAddress });
         // 监听并且在unmount的时候处理事件解绑
@@ -305,7 +305,7 @@ const NodeDetail = class NodeDetail extends Component {
         console.log("call dbApprove then newNodeFunc");
         try {
           let emitter = dbTokenContract.methods
-            .approve(constant.DOS_CONTRACT_ADDRESS)
+            .approve(constant.STAKING_CONTRACT_ADDRESS)
             .send({ from: userAddress });
           ui.handleEmmiterEvents(
             emitter,
@@ -336,7 +336,7 @@ const NodeDetail = class NodeDetail extends Component {
         console.log("call dbApprove then newNodeFunc");
         try {
           let emitter = dbTokenContract.methods
-            .approve(constant.DOS_CONTRACT_ADDRESS)
+            .approve(constant.STAKING_CONTRACT_ADDRESS)
             .send({ from: userAddress });
           ui.handleEmmiterEvents(
             emitter,
@@ -366,7 +366,7 @@ const NodeDetail = class NodeDetail extends Component {
         console.log("call approveFunc then newNodeFunc");
         try {
           let emitter = dosTokenContract.methods
-            .approve(constant.DOS_CONTRACT_ADDRESS)
+            .approve(constant.STAKING_CONTRACT_ADDRESS)
             .send({ from: userAddress });
           ui.handleEmmiterEvents(
             emitter,
@@ -396,7 +396,7 @@ const NodeDetail = class NodeDetail extends Component {
         console.log("call approveFunc then newNodeFunc");
         try {
           let emitter = dosTokenContract.methods
-            .approve(constant.DOS_CONTRACT_ADDRESS)
+            .approve(constant.STAKING_CONTRACT_ADDRESS)
             .send({ from: userAddress });
           ui.handleEmmiterEvents(
             emitter,
@@ -451,7 +451,7 @@ const NodeDetail = class NodeDetail extends Component {
       const { web3Client, userAddress } = this.props.contract;
       const tokenAmount = web3Client.utils.toWei(values.tokenAmount, "ether");
       const dbAmount = values.dbAmount;
-      let emitter = this.dosContract.methods
+      let emitter = this.stakingContract.methods
         .nodeUnbond(tokenAmount, dbAmount, this.state.node)
         .send({ from: userAddress });
 
@@ -492,7 +492,7 @@ const NodeDetail = class NodeDetail extends Component {
       const { web3Client, userAddress } = this.props.contract;
       const tokenAmount = web3Client.utils.toWei(values.tokenAmount, "ether");
 
-      let emitter = this.dosContract.methods
+      let emitter = this.stakingContract.methods
         .delegatorUnbond(tokenAmount, this.state.node)
         .send({ from: userAddress });
 
@@ -526,7 +526,7 @@ const NodeDetail = class NodeDetail extends Component {
     const {
       web3Client,
       userAddress,
-      dosContract,
+      stakingContract,
       dosTokenContract,
       constant
     } = this.props.contract;
@@ -534,7 +534,7 @@ const NodeDetail = class NodeDetail extends Component {
     e.preventDefault();
     const { form } = this.delegateFormRef.props;
     const approve = await dosTokenContract.methods
-      .allowance(userAddress, constant.DOS_CONTRACT_ADDRESS)
+      .allowance(userAddress, constant.STAKING_CONTRACT_ADDRESS)
       .call();
     this.setState({
       delegateFormLoading: true
@@ -549,7 +549,7 @@ const NodeDetail = class NodeDetail extends Component {
 
       const delegateFunc = function(receipt) {
         try {
-          let emitter = dosContract.methods
+          let emitter = stakingContract.methods
             .delegate(tokenAmount, nodeAddr)
             .send({ from: userAddress });
           // 监听并且在unmount的时候处理事件解绑
@@ -582,7 +582,7 @@ const NodeDetail = class NodeDetail extends Component {
       if (approve.toString() !== approveString) {
         try {
           let emitter = dosTokenContract.methods
-            .approve(constant.DOS_CONTRACT_ADDRESS)
+            .approve(constant.STAKING_CONTRACT_ADDRESS)
             .send({ from: userAddress });
           ui.handleEmmiterEvents(
             emitter,
@@ -651,12 +651,12 @@ const NodeDetail = class NodeDetail extends Component {
     this.setState({
       loading: true
     });
-    const { web3Client, userAddress, dosContract } = this.props.contract;
+    const { web3Client, userAddress, stakingContract } = this.props.contract;
 
     const nodeAddr = this.state.node;
-    const nodeInstance = await dosContract.methods.nodes(nodeAddr).call();
-    let uptime = await dosContract.methods.getNodeUptime(nodeAddr).call();
-    //let delegatorWithdrawAbletotal = await dosContract.methods
+    const nodeInstance = await stakingContract.methods.nodes(nodeAddr).call();
+    let uptime = await stakingContract.methods.getNodeUptime(nodeAddr).call();
+    //let delegatorWithdrawAbletotal = await stakingContract.methods
     //.delegatorWithdrawAble(nodeInstance.ownerAddr, nodeAddr)
     // .call();
     //// console.log(delegatorWithdrawAbletotal);
@@ -707,10 +707,10 @@ const NodeDetail = class NodeDetail extends Component {
         web3Client.utils.toChecksumAddress(userAddress) ===
         web3Client.utils.toChecksumAddress(nodeInstance.ownerAddr);
       if (isUserOwnedThisNode) {
-        const nodeWithdrawAbleTotal = await dosContract.methods
+        const nodeWithdrawAbleTotal = await stakingContract.methods
           .nodeWithdrawAble(nodeInstance.ownerAddr, nodeAddr)
           .call();
-        rewardotal = await dosContract.methods
+        rewardotal = await stakingContract.methods
           .getNodeRewardTokens(nodeAddr)
           .call();
         myTokenTotal = fromWei(selfStakedAmount);
@@ -732,10 +732,10 @@ const NodeDetail = class NodeDetail extends Component {
 
         myRewardTotal = fromWei(rewardotal);
       } else {
-        let delegator = await dosContract.methods
+        let delegator = await stakingContract.methods
           .delegators(userAddress, nodeAddr)
           .call();
-        userDelegatedRewardotal = await dosContract.methods
+        userDelegatedRewardotal = await stakingContract.methods
           .getDelegatorRewardTokens(userAddress, nodeAddr)
           .call();
 

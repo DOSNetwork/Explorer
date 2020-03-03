@@ -4,9 +4,9 @@ import type from "../redux/type";
 import React from "react";
 import { Button, notification, Icon, Modal } from "antd";
 import {
-  DB_ABI,
+  DBTOKEN_ABI,
   DOSTOKEN_ABI,
-  DOS_ABI,
+  STAKING_ABI,
   DEFAULT_NETWORK,
   approveString
 } from "../util/const";
@@ -21,9 +21,9 @@ export function connectToEthereum() {
       ? window.ethereum.networkVersion
       : DEFAULT_NETWORK;
   const {
-    DB_CONTRACT_ADDRESS,
+    DBTOKEN_CONTRACT_ADDRESS,
     DOSTOKEN_CONTRACT_ADDRESS,
-    DOS_CONTRACT_ADDRESS,
+    STAKING_CONTRACT_ADDRESS,
     CURRENT_NETWORK,
     WALLET_NETWORK_SUPPORTED,
     BLOCK_NUMBER,
@@ -40,8 +40,8 @@ export function connectToEthereum() {
     DOSTOKEN_ABI,
     DOSTOKEN_CONTRACT_ADDRESS
   );
-  let dbTokenContract = new web3.eth.Contract(DB_ABI, DB_CONTRACT_ADDRESS);
-  let dosContract = new web3.eth.Contract(DOS_ABI, DOS_CONTRACT_ADDRESS);
+  let dbTokenContract = new web3.eth.Contract(DBTOKEN_ABI, DBTOKEN_CONTRACT_ADDRESS);
+  let stakingContract = new web3.eth.Contract(STAKING_ABI, STAKING_CONTRACT_ADDRESS);
 
   if (!WALLET_NETWORK_SUPPORTED) {
     Modal.warning({
@@ -54,13 +54,13 @@ export function connectToEthereum() {
     web3Client: web3,
     dosTokenContract,
     dbTokenContract,
-    dosContract,
+    stakingContract,
     network: CURRENT_NETWORK,
     networkSupported: WALLET_NETWORK_SUPPORTED,
     constant: {
-      DB_CONTRACT_ADDRESS,
+      DBTOKEN_CONTRACT_ADDRESS,
       DOSTOKEN_CONTRACT_ADDRESS,
-      DOS_CONTRACT_ADDRESS
+      STAKING_CONTRACT_ADDRESS
     },
     initialBlock: BLOCK_NUMBER
   });
@@ -72,7 +72,7 @@ async function approve(accountAddress) {
     dbTokenContract,
     constant
   } = store.getState().contract;
-  let { DOS_CONTRACT_ADDRESS } = constant;
+  let { STAKING_CONTRACT_ADDRESS } = constant;
   let address = accountAddress[0];
   store.dispatch({
     type: type.CONTRACT_METAMASK_LOGIN,

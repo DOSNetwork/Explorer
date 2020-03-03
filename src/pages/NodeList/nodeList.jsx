@@ -150,7 +150,7 @@ class NodeList extends Component {
     const {
       web3Client,
       userAddress,
-      dosContract,
+      stakingContract,
       dosTokenContract,
       dbTokenContract,
       constant
@@ -158,10 +158,10 @@ class NodeList extends Component {
     const { form } = this.formRef.props;
 
     const approve = await dosTokenContract.methods
-      .allowance(userAddress, constant.DOS_CONTRACT_ADDRESS)
+      .allowance(userAddress, constant.STAKING_CONTRACT_ADDRESS)
       .call();
     const dbApprove = await dbTokenContract.methods
-      .allowance(userAddress, constant.DOS_CONTRACT_ADDRESS)
+      .allowance(userAddress, constant.STAKING_CONTRACT_ADDRESS)
       .call();
     this.setState({
       confirmLoading: true
@@ -179,7 +179,7 @@ class NodeList extends Component {
       const newNodeThenLoadList = function(receipt) {
         if (web3Client.utils.isAddress(values.nodeAddr)) {
           try {
-            let emitter = dosContract.methods
+            let emitter = stakingContract.methods
               .newNode(
                 values.nodeAddr,
                 tokenAmount,
@@ -220,7 +220,7 @@ class NodeList extends Component {
       const dbApproveFunc = function(receipt) {
         try {
           let emitter = dbTokenContract.methods
-            .approve(constant.DOS_CONTRACT_ADDRESS)
+            .approve(constant.STAKING_CONTRACT_ADDRESS)
             .send({ from: userAddress });
           ui.unMountRemoveListenerCallbacks = EmitterHandlerWrapper(
             emitter,
@@ -241,7 +241,7 @@ class NodeList extends Component {
       const dbApproveThenNewNode = function(receipt) {
         try {
           let emitter = dbTokenContract.methods
-            .approve(constant.DOS_CONTRACT_ADDRESS)
+            .approve(constant.STAKING_CONTRACT_ADDRESS)
             .send({ from: userAddress });
           ui.unMountRemoveListenerCallbacks = EmitterHandlerWrapper(
             emitter,
@@ -263,7 +263,7 @@ class NodeList extends Component {
       const approveFunc = function(receipt) {
         try {
           let emitter = dosTokenContract.methods
-            .approve(constant.DOS_CONTRACT_ADDRESS)
+            .approve(constant.STAKING_CONTRACT_ADDRESS)
             .send({ from: userAddress });
           ui.unMountRemoveListenerCallbacks = EmitterHandlerWrapper(
             emitter,
@@ -285,7 +285,7 @@ class NodeList extends Component {
       const approveThenNewNode = function(receipt) {
         try {
           let emitter = dosTokenContract.methods
-            .approve(constant.DOS_CONTRACT_ADDRESS)
+            .approve(constant.STAKING_CONTRACT_ADDRESS)
             .send({ from: userAddress });
           ui.unMountRemoveListenerCallbacks = EmitterHandlerWrapper(
             emitter,
@@ -357,7 +357,7 @@ class NodeList extends Component {
       web3Client,
       userAddress,
       isWalletLogin,
-      dosContract,
+      stakingContract,
       initialBlock
     } = this.props.contract;
     this.setState({
@@ -367,20 +367,20 @@ class NodeList extends Component {
     let nodeList = [];
 
     const getLogNewNodeEventList = async userAddress => {
-      return await dosContract.getPastEvents("LogNewNode", {
+      return await stakingContract.getPastEvents("LogNewNode", {
         filter: { owner: userAddress },
         fromBlock: initialBlock,
         toBlock: "latest"
       });
     };
     const getDelegateToEventList = async senderAddress => {
-      return await dosContract.getPastEvents("DelegateTo", {
+      return await stakingContract.getPastEvents("DelegateTo", {
         filter: { sender: senderAddress },
         fromBlock: initialBlock,
         toBlock: "latest"
       });
     };
-    nodesAddrs = Array.from(await dosContract.methods.getNodeAddrs().call());
+    nodesAddrs = Array.from(await stakingContract.methods.getNodeAddrs().call());
     // search related nodes
     if (isWalletLogin && showRelatedNodes) {
       // console.log(`only show related nodes infos`);
@@ -436,7 +436,7 @@ class NodeList extends Component {
       if (cachedHits) {
         node = JSON.parse(cachedHits);
       } else {
-        node = await dosContract.methods.nodes(nodeAddr).call();
+        node = await stakingContract.methods.nodes(nodeAddr).call();
       }
 
       let delegator = { myDelegator: "-", accumulatedReward: "-" };
@@ -445,16 +445,14 @@ class NodeList extends Component {
         if (cachedHits) {
           delegator = JSON.parse(cachedHits);
         } else {
-          delegator = await dosContract.methods
+          delegator = await stakingContract.methods
             .delegators(userAddress, nodeAddr)
             .call();
         }
       }
-      let uptime;
+      let uptime = 0;
       if (node.running) {
         uptime = block.timestamp - node.lastStartTime;
-      } else {
-        uptime = node.lastStopTime - node.lastStartTime;
       }
 
       const {
