@@ -1,19 +1,5 @@
 export const STAKING_ABI = [
   {
-    constant: true,
-    inputs: [],
-    name: 'inverseStakeRatio',
-    outputs: [
-      {
-        name: '',
-        type: 'uint256'
-      }
-    ],
-    payable: false,
-    stateMutability: 'view',
-    type: 'function'
-  },
-  {
     constant: false,
     inputs: [
       {
@@ -110,10 +96,6 @@ export const STAKING_ABI = [
         type: 'uint256'
       },
       {
-        name: 'lastStopTime',  // TODO: Remove this field once new staking contract get deployed.
-        type: 'uint256'
-      },
-      {
         name: 'running',
         type: 'bool'
       },
@@ -152,20 +134,6 @@ export const STAKING_ABI = [
     ],
     payable: false,
     stateMutability: 'view',
-    type: 'function'
-  },
-  {
-    constant: false,
-    inputs: [
-      {
-        name: '_nodeAddr',
-        type: 'address'
-      }
-    ],
-    name: 'nodeTryDelete',
-    outputs: [],
-    payable: false,
-    stateMutability: 'nonpayable',
     type: 'function'
   },
   {
@@ -437,25 +405,6 @@ export const STAKING_ABI = [
     ],
     name: 'newNode',
     outputs: [],
-    payable: false,
-    stateMutability: 'nonpayable',
-    type: 'function'
-  },
-  {
-    constant: false,
-    inputs: [
-      {
-        name: '_nodeAddr',
-        type: 'address'
-      }
-    ],
-    name: 'delegatorChekcReward',
-    outputs: [
-      {
-        name: '',
-        type: 'uint256'
-      }
-    ],
     payable: false,
     stateMutability: 'nonpayable',
     type: 'function'
@@ -1004,7 +953,7 @@ export const STAKING_ABI = [
         type: 'address'
       },
       {
-        indexed: false,
+        indexed: true,
         name: 'nodeAddress',
         type: 'address'
       },
@@ -1024,7 +973,7 @@ export const STAKING_ABI = [
         type: 'uint256'
       }
     ],
-    name: 'LogNewNode',
+    name: 'NewNode',
     type: 'event'
   },
   {
@@ -1032,21 +981,53 @@ export const STAKING_ABI = [
     inputs: [
       {
         indexed: true,
-        name: 'sender',
+        name: 'from',
+        type: 'address'
+      },
+      {
+        indexed: true,
+        name: 'to',
         type: 'address'
       },
       {
         indexed: false,
-        name: 'total',
+        name: 'amount',
+        type: 'uint256'
+      }
+    ],
+    name: 'Delegate',
+    type: 'event'
+  },
+  {
+    anonymous: false,
+    inputs: [
+      {
+        indexed: true,
+        name: 'from',
+        type: 'address'
+      },
+      {
+        indexed: true,
+        name: 'to',
+        type: 'address'
+      },
+      {
+        indexed: false,
+        name: 'nodeRunner',
+        type: 'bool'
+      },
+      {
+        indexed: false,
+        name: 'tokenAmount',
         type: 'uint256'
       },
       {
         indexed: false,
-        name: 'nodeAddr',
-        type: 'address'
+        name: 'dbAmount',
+        type: 'uint256'
       }
     ],
-    name: 'DelegateTo',
+    name: 'Withdraw',
     type: 'event'
   },
   {
@@ -1054,25 +1035,18 @@ export const STAKING_ABI = [
     inputs: [
       {
         indexed: true,
-        name: 'sender',
+        name: 'from',
+        type: 'address'
+      },
+      {
+        indexed: true,
+        name: 'to',
         type: 'address'
       },
       {
         indexed: false,
-        name: 'total',
-        type: 'uint256'
-      }
-    ],
-    name: 'RewardWithdraw',
-    type: 'event'
-  },
-  {
-    anonymous: false,
-    inputs: [
-      {
-        indexed: true,
-        name: 'sender',
-        type: 'address'
+        name: 'nodeRunner',
+        type: 'bool'
       },
       {
         indexed: false,
@@ -1083,14 +1057,31 @@ export const STAKING_ABI = [
         indexed: false,
         name: 'dropburnAmount',
         type: 'uint256'
-      },
-      {
-        indexed: false,
-        name: 'nodeAddr',
-        type: 'address'
       }
     ],
     name: 'Unbond',
+    type: 'event'
+  },
+  {
+    anonymous: false,
+    inputs: [
+      {
+        indexed: true,
+        name: 'to',
+        type: 'address'
+      },
+      {
+        indexed: false,
+        name: 'nodeRunner',
+        type: 'bool'
+      },
+      {
+        indexed: false,
+        name: 'amount',
+        type: 'uint256'
+      }
+    ],
+    name: 'ClaimReward',
     type: 'event'
   },
   {
