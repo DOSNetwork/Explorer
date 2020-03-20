@@ -13,8 +13,8 @@ const messages = {
     /*common */
     'Node.active': 'Active',
     'Node.inactive': 'Inactive',
-    'Events.Loading': '{type, select, approve {Approve} withdraw {Withdraw} claimreward {ClaimReward} unregister {Unregister} upgrade {Upgrade} unbond{Unbond} delegate{Delegate}}:wait for confirmation:{hash}',
-    'Events.Success': '{type, select, approve {Approve} withdraw {Withdraw} claimreward {ClaimReward} unregister {Unregister} upgrade {Upgrade} unbond{Unbond} delegate{Delegate}}:success (confirmed block {blockNumber})',
+    'Events.Loading': '{type, select, approve {Approve} withdraw {Withdraw} claimreward {Claim Reward} unregister {Unregister} update {Update} unbond {Unbond} delegate {Delegate}} txid {hash} waiting for confirmation',
+    'Events.Success': '{type, select, approve {Approve} withdraw {Withdraw} claimreward {Claim Reward} unregister {Unregister} update {Update} unbond {Unbond} delegate {Delegate}} success: (confirmed in block {blockNumber})',
     /* NodeList */
     'Table.Column.NodeList.Name': 'Name',
     'Table.Column.NodeList.Node': 'Node',
@@ -59,16 +59,17 @@ const messages = {
 
     /** NodeDetail**/
 
-    'Form.Message.OwnerWithdraw': 'Not enough DOS to withdraw',
-    'Form.Message.DelegatorWithdraw': 'Not enough DOS to withdraw',
-    'Form.Message.OwnerClaimReward': 'Not enough rewards to claim',
-    'Form.Message.DelegatorClaimReward': 'Not enough DOS to withdraw',
+    'Form.Message.OwnerWithdraw': 'No token available for withdraw',
+    'Form.Message.DelegatorWithdraw': 'No DOS token available for withdraw',
+    'Form.Message.OwnerClaimReward': 'No reward token to claim',
+    'Form.Message.DelegatorClaimReward': 'No reward token to claim',
     'Tooltip.NodeDetail.MyDelegation': 'My Delegation',
-    'Tooltip.NodeDetail.MyStakingToken': 'My Staking Token',
-    'Tooltip.NodeDetail.DropBurnToken': 'DropBurn Token',
+    'Tooltip.NodeDetail.MyStaking': 'My Staking',
+    'Tooltip.NodeDetail.DropBurnToken': 'DropBurn Amount',
     'Tooltip.NodeDetail.WithdrawalFrozen': 'Withdrawable / Unbonding',
     'Tooltip.NodeDetail.WithdrawalDropBurnFrozen': 'Withdrawable DropBurn / Unbonding',
     'Tooltip.NodeDetail.Withdraw': 'Withdraw',
+    'Tooltip.NodeDetail.Claim': 'Claim',
     'Tooltip.NodeDetail.MyRewards': 'My Rewards',
     'Tooltip.NodeDetail.NodeAddress': 'Node Address',
     'Tooltip.NodeDetail.NodeDescription': 'Node Description',
@@ -77,9 +78,9 @@ const messages = {
     'Tooltip.NodeDetail.RewardCut': 'Commission Rate',
     'Tooltip.NodeDetail.Uptime': 'Uptime',
     'Tooltip.NodeDetail.Days': 'days',
-    'Tooltip.NodeDetail.UnBond': 'UnBond',
+    'Tooltip.NodeDetail.Unbond': 'Unbond',
     'Tooltip.NodeDetail.Delegate': 'Delegate',
-    'Tooltip.NodeDetail.Upgrate': 'Upgrate',
+    'Tooltip.NodeDetail.Update': 'Update Node',
     'Form.Button.Submit': 'Submit',
 
     'Form.Lable.DelegateAmount': 'Delegate Amount',

@@ -77,7 +77,7 @@ class Footer extends PureComponent {
                     {renderSoicalLinks()}
                     {renderLinks()}
                     <div className="copy-right">
-                        © Copyright 2019 DOS Foundation Ltd. All Rights Reserved
+                        © Copyright 2020 DOS Foundation Ltd. All Rights Reserved
                     </div>
                 </div>
             </div>
