@@ -2,13 +2,12 @@ import Web3 from "web3";
 import store from "../redux/store";
 import type from "../redux/type";
 import React from "react";
-import { Button, notification, Icon, Modal } from "antd";
+import { notification, Icon, Modal } from "antd";
 import {
   DBTOKEN_ABI,
   DOSTOKEN_ABI,
   STAKING_ABI,
   DEFAULT_NETWORK,
-  approveString
 } from "../util/const";
 import { GetConstantByNetWork } from "../util/contract-helper";
 
@@ -67,12 +66,6 @@ export function connectToEthereum() {
 }
 
 async function approve(accountAddress) {
-  let {
-    dosTokenContract,
-    dbTokenContract,
-    constant
-  } = store.getState().contract;
-  let { STAKING_CONTRACT_ADDRESS } = constant;
   let address = accountAddress[0];
   store.dispatch({
     type: type.CONTRACT_METAMASK_LOGIN,

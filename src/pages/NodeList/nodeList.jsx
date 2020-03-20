@@ -173,19 +173,19 @@ class NodeList extends Component {
       const tokenAmount = web3Client.utils.toWei(values.tokenAmount, "ether");
       const nodeAddr = values.nodeAddr;
       const dbAmount = values.dbAmount || 0;
-      const curRate = values.cutRate;
+      const cutRate = values.cutRate || 0;
       const name = values.name || "";
       let ui = this;
       const newNodeThenLoadList = function(receipt) {
-        if (web3Client.utils.isAddress(values.nodeAddr)) {
+        if (web3Client.utils.isAddress(nodeAddr)) {
           try {
             let emitter = stakingContract.methods
               .newNode(
-                values.nodeAddr,
+                nodeAddr,
                 tokenAmount,
-                dbAmount || 0,
-                values.cutRate || 0,
-                values.name || ""
+                dbAmount,
+                cutRate,
+                name
               )
               .send({ from: userAddress });
             ui.unMountRemoveListenerCallbacks = EmitterHandlerWrapper(
@@ -241,28 +241,6 @@ class NodeList extends Component {
       const dbApproveThenNewNode = function(receipt) {
         try {
           let emitter = dbTokenContract.methods
-            .approve(constant.STAKING_CONTRACT_ADDRESS)
-            .send({ from: userAddress });
-          ui.unMountRemoveListenerCallbacks = EmitterHandlerWrapper(
-            emitter,
-            hash => {
-              newNodeThenLoadList();
-              message.loading(MESSAGE_TEXT.MESSAGE_TRANSCATION_LOADING);
-            },
-            (confirmationNumber, receipt) => {
-              message.success(MESSAGE_TEXT.MESSAGE_TRANSCATION_COMFIRM);
-            },
-            error => {
-              message.error(error.message.split("\n")[0]);
-            }
-          );
-        } catch (e) {
-          message.error(e.reason);
-        }
-      };
-      const approveFunc = function(receipt) {
-        try {
-          let emitter = dosTokenContract.methods
             .approve(constant.STAKING_CONTRACT_ADDRESS)
             .send({ from: userAddress });
           ui.unMountRemoveListenerCallbacks = EmitterHandlerWrapper(

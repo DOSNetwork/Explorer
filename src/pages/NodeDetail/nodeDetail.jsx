@@ -107,7 +107,7 @@ const NodeDetail = class NodeDetail extends Component {
   };
   handleOwnerClaimReward = () => {
     let { formatMessage: f } = this.props.intl;
-    let emitterName = "Owner Claim Reward";
+    let emitterName = "Owner ClaimReward";
     const { userAddress } = this.props.contract;
 
     let { myRewardTotal } = this.state;
@@ -127,14 +127,14 @@ const NodeDetail = class NodeDetail extends Component {
       emitterName,
       hash => {
         message.loading(
-          f({ id: "Events.Loading" }, { type: "withdraw", hash: hash })
+          f({ id: "Events.Loading" }, { type: "claimreward", hash: hash })
         );
       },
       (confirmationNumber, receipt) => {
         message.success(
           f(
             { id: "Events.Success" },
-            { type: "withdraw", blockNumber: receipt.blockNumber }
+            { type: "claimreward", blockNumber: receipt.blockNumber }
           )
         );
       }
@@ -142,7 +142,7 @@ const NodeDetail = class NodeDetail extends Component {
   };
   handleDelegatorWithdraw = () => {
     let { formatMessage: f } = this.props.intl;
-    let emitterName = "Delegator WithDraw";
+    let emitterName = "Delegator Withdraw";
     const { userAddress } = this.props.contract;
 
     let { withDrawalTotal } = this.state;
@@ -177,13 +177,13 @@ const NodeDetail = class NodeDetail extends Component {
   };
   handleDelegatorClaimReward = () => {
     let { formatMessage: f } = this.props.intl;
-    let emitterName = "Delegator Claim Reward";
+    let emitterName = "Delegator ClaimReward";
     const { userAddress } = this.props.contract;
-    let { withDrawalTotal } = this.state;
-    if (+withDrawalTotal === 0) {
+    let { myRewardTotal } = this.state;
+    if (+myRewardTotal === 0) {
       Modal.warning({
         title: emitterName,
-        content: f({ id: "Form.Message.DelegatorWithdraw" })
+        content: f({ id: "Form.Message.DelegatorClaimReward" })
       });
       return;
     }
@@ -196,14 +196,14 @@ const NodeDetail = class NodeDetail extends Component {
       emitterName,
       hash => {
         message.loading(
-          f({ id: "Events.Loading" }, { type: "withdraw", hash: hash })
+          f({ id: "Events.Loading" }, { type: "claimreward", hash: hash })
         );
       },
       (confirmationNumber, receipt) => {
         message.success(
           f(
             { id: "Events.Success" },
-            { type: "withdraw", blockNumber: receipt.blockNumber }
+            { type: "claimreward", blockNumber: receipt.blockNumber }
           )
         );
       }
@@ -244,12 +244,10 @@ const NodeDetail = class NodeDetail extends Component {
       onCancel() {}
     });
   };
-  //------- delegate upgrate unbond
+
   handleOwnerUpgrateSubmit = async e => {
     const {
-      web3Client,
       userAddress,
-      stakingContract,
       dosTokenContract,
       dbTokenContract,
       constant
@@ -277,31 +275,31 @@ const NodeDetail = class NodeDetail extends Component {
       const rewardCut = values.rewardCut;
       const nodeAddr = this.state.node;
       const ui = this;
-      const upgradeFunc = function(receipt) {
+      const updateFunc = function(receipt) {
         let emitter = ui.stakingContract.methods
           .updateNodeStaking(nodeAddr, tokenAmount, dbAmount, rewardCut)
           .send({ from: userAddress });
         // 监听并且在unmount的时候处理事件解绑
         ui.handleEmmiterEvents(
           emitter,
-          "Upgrate Node",
+          "Update Node",
           hash => {
             message.loading(
-              f({ id: "Events.Loading" }, { type: "upgrade", hash: hash })
+              f({ id: "Events.Loading" }, { type: "update", hash: hash })
             );
           },
           (confirmationNumber, receipt) => {
             message.success(
               f(
                 { id: "Events.Success" },
-                { type: "upgrade", blockNumber: receipt.blockNumber }
+                { type: "update", blockNumber: receipt.blockNumber }
               )
             );
             form.resetFields();
           }
         );
       };
-      const dbApproveThenUpgrade = function(receipt) {
+      const dbApproveThenUpdate = function(receipt) {
         console.log("call dbApprove then newNodeFunc");
         try {
           let emitter = dbTokenContract.methods
@@ -311,7 +309,7 @@ const NodeDetail = class NodeDetail extends Component {
             emitter,
             "dbApprove",
             hash => {
-              upgradeFunc();
+              updateFunc();
               message.loading(
                 f({ id: "Events.Loading" }, { type: "approve", hash: hash })
               );
@@ -362,7 +360,7 @@ const NodeDetail = class NodeDetail extends Component {
           message.error(e.reason);
         }
       };
-      const approveFunc = function(receipt) {
+      const approveThenUpdate = function(receipt) {
         console.log("call approveFunc then newNodeFunc");
         try {
           let emitter = dosTokenContract.methods
@@ -372,37 +370,7 @@ const NodeDetail = class NodeDetail extends Component {
             emitter,
             "Approve",
             hash => {
-              message.loading(
-                f({ id: "Events.Loading" }, { type: "approve", hash: hash })
-              );
-            },
-            (confirmationNumber, receipt) => {
-              message.success(
-                f(
-                  { id: "Events.Success" },
-                  { type: "approve", blockNumber: receipt.blockNumber }
-                )
-              );
-            },
-            error => {
-              message.error(error.message.split("\n")[0]);
-            }
-          );
-        } catch (e) {
-          message.error(e.reason);
-        }
-      };
-      const approveThenUpgrade = function(receipt) {
-        console.log("call approveFunc then newNodeFunc");
-        try {
-          let emitter = dosTokenContract.methods
-            .approve(constant.STAKING_CONTRACT_ADDRESS)
-            .send({ from: userAddress });
-          ui.handleEmmiterEvents(
-            emitter,
-            "Approve",
-            hash => {
-              upgradeFunc();
+              updateFunc();
               message.loading(
                 f({ id: "Events.Loading" }, { type: "approve", hash: hash })
               );
@@ -426,15 +394,15 @@ const NodeDetail = class NodeDetail extends Component {
       if (dbAmount !== 0 && dbApprove.toString() !== approveString) {
         if (tokenAmount !== 0 && approve.toString() !== approveString) {
           dbApproveFunc();
-          approveThenUpgrade();
+          approveThenUpdate();
         } else {
-          dbApproveThenUpgrade();
+          dbApproveThenUpdate();
         }
       } else {
         if (tokenAmount !== 0 && approve.toString() !== approveString) {
-          approveThenUpgrade();
+          approveThenUpdate();
         } else {
-          upgradeFunc();
+          updateFunc();
         }
       }
       this.setState({ updateFormVisible: false });
@@ -458,7 +426,7 @@ const NodeDetail = class NodeDetail extends Component {
       // 监听并且在unmount的时候处理事件解绑
       this.handleEmmiterEvents(
         emitter,
-        "Owner UnBond",
+        "Owner Unbond",
         hash => {
           message.loading(
             f({ id: "Events.Loading" }, { type: "unbond", hash: hash })
@@ -499,7 +467,7 @@ const NodeDetail = class NodeDetail extends Component {
       // 监听并且在unmount的时候处理事件解绑
       this.handleEmmiterEvents(
         emitter,
-        "User UnBond",
+        "Delegator Unbond",
         hash => {
           message.loading(
             f({ id: "Events.Loading" }, { type: "unbond", hash: hash })
@@ -656,11 +624,6 @@ const NodeDetail = class NodeDetail extends Component {
     const nodeAddr = this.state.node;
     const nodeInstance = await stakingContract.methods.nodes(nodeAddr).call();
     let uptime = await stakingContract.methods.getNodeUptime(nodeAddr).call();
-    //let delegatorWithdrawAbletotal = await stakingContract.methods
-    //.delegatorWithdrawAble(nodeInstance.ownerAddr, nodeAddr)
-    // .call();
-    //// console.log(delegatorWithdrawAbletotal);
-
     let avatar = `data:image/png;base64,${new identicon(
       nodeAddr,
       100
@@ -690,14 +653,14 @@ const NodeDetail = class NodeDetail extends Component {
         nodeDetail: nodeDetail
       });
     }
-    //TODO : updateGlobalRewardRate need to be called to get correct rewards
+    // TODO: Use new API `getNodeRewardTokensRT` / `getDelegatorRewardTokensRT` with newly deployed staking contract to get realtime rewards.
 
     let rewardotal = 0,
       myTokenTotal = 0,
       withDrawalTotal = 0,
       withDrawalFrozen = 0,
       myRewardTotal = 0,
-      userDelegatedRewardotal = 0,
+      userDelegatedRewardTotal = 0,
       withDrawalDropBurn = 0,
       withDrawalDropBurnFrozen = 0,
       isUserDelegatedThisNode = false,
@@ -714,38 +677,42 @@ const NodeDetail = class NodeDetail extends Component {
           .getNodeRewardTokens(nodeAddr)
           .call();
         myTokenTotal = fromWei(selfStakedAmount);
-        let tempBn = new web3Client.utils.toBN(0);
-        tempBn = tempBn.add(
-          new web3Client.utils.toBN(nodeWithdrawAbleTotal[0])
-        );
         withDrawalTotal =
-          Math.round(web3Client.utils.fromWei(tempBn.toString()) * 100) / 100;
-        tempBn = new web3Client.utils.toBN(0);
-        tempBn = tempBn.add(new web3Client.utils.toBN(pendingWithdrawToken));
+          Math.round(fromWei(nodeWithdrawAbleTotal[0]) * 100) / 100;
+        let tempBn = new web3Client.utils.toBN(pendingWithdrawToken);
         tempBn = tempBn.sub(
           new web3Client.utils.toBN(nodeWithdrawAbleTotal[0])
         );
-        withDrawalFrozen =
-          Math.round(web3Client.utils.fromWei(tempBn.toString()) * 100) / 100;
+        withDrawalFrozen = Math.round(fromWei(tempBn.toString()) * 100) / 100;
         withDrawalDropBurn = nodeWithdrawAbleTotal[1];
         withDrawalDropBurnFrozen = pendingWithdrawDB - withDrawalDropBurn;
 
         myRewardTotal = fromWei(rewardotal);
       } else {
+        const delegatorWithdrawableTotal = await stakingContract.methods
+          .delegatorWithdrawAble(userAddress, nodeAddr)
+          .call();
         let delegator = await stakingContract.methods
           .delegators(userAddress, nodeAddr)
           .call();
-        userDelegatedRewardotal = await stakingContract.methods
+        userDelegatedRewardTotal = await stakingContract.methods
           .getDelegatorRewardTokens(userAddress, nodeAddr)
           .call();
 
         let { delegatedAmount, pendingWithdraw } = delegator;
+        let tempBn = new web3Client.utils.toBN(pendingWithdraw);
+        tempBn = tempBn.sub(
+          new web3Client.utils.toBN(delegatorWithdrawableTotal)
+        );
+        withDrawalFrozen = Math.round(fromWei(tempBn.toString()) * 100) / 100;
+        withDrawalTotal =
+          Math.round(fromWei(delegatorWithdrawableTotal) * 100) / 100;
+        myTokenTotal = fromWei(delegatedAmount);
+        myRewardTotal = fromWei(userDelegatedRewardTotal);
         isUserDelegatedThisNode =
           fromWei(delegatedAmount) !== 0 ||
-          fromWei(userDelegatedRewardotal) !== 0;
-        myTokenTotal = fromWei(delegatedAmount);
-        withDrawalTotal = fromWei(pendingWithdraw);
-        myRewardTotal = fromWei(userDelegatedRewardotal);
+          fromWei(pendingWithdraw) !== 0 ||
+          fromWei(userDelegatedRewardTotal) !== 0;
       }
     }
     this.setState({
@@ -817,7 +784,7 @@ const NodeDetail = class NodeDetail extends Component {
                   <p className="user-info--title">
                     {isUserDelegatedThisNode
                       ? f({ id: "Tooltip.NodeDetail.MyDelegation" })
-                      : f({ id: "Tooltip.NodeDetail.MyStakingToken" })}
+                      : f({ id: "Tooltip.NodeDetail.MyStaking" })}
                   </p>
                   <p className="user-info--value">
                     {numberFormatRender(this.state.myTokenTotal)}
@@ -900,7 +867,7 @@ const NodeDetail = class NodeDetail extends Component {
                       size="small"
                       onClick={this.handleDelegatorClaimReward}
                     >
-                      {f({ id: "Tooltip.NodeDetail.Withdraw" })}
+                      {f({ id: "Tooltip.NodeDetail.Claim" })}
                     </Button>
                   ) : (
                     <Button
@@ -909,7 +876,7 @@ const NodeDetail = class NodeDetail extends Component {
                       size="small"
                       onClick={this.handleOwnerClaimReward}
                     >
-                      {f({ id: "Tooltip.NodeDetail.Withdraw" })}
+                      {f({ id: "Tooltip.NodeDetail.Claim" })}
                     </Button>
                   )}
                 </div>
@@ -976,7 +943,7 @@ const NodeDetail = class NodeDetail extends Component {
                 tab={TabbarRender(
                   isUserDelegatedThisNode
                     ? f({ id: "Tooltip.NodeDetail.Delegate" })
-                    : f({ id: "Tooltip.NodeDetail.Upgrate" })
+                    : f({ id: "Tooltip.NodeDetail.Update" })
                 )}
                 key="1"
               >
@@ -997,7 +964,7 @@ const NodeDetail = class NodeDetail extends Component {
                 </div>
               </TabPane>
               <TabPane
-                tab={TabbarRender(f({ id: "Tooltip.NodeDetail.UnBond" }))}
+                tab={TabbarRender(f({ id: "Tooltip.NodeDetail.Unbond" }))}
                 key="2"
               >
                 <div className="tab-pannel--wrapper">
