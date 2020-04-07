@@ -1,32 +1,5 @@
 export const STAKING_ABI = [
   {
-    inputs: [
-      {
-        internalType: 'address',
-        name: '_dostoken',
-        type: 'address'
-      },
-      {
-        internalType: 'address',
-        name: '_dbtoken',
-        type: 'address'
-      },
-      {
-        internalType: 'address',
-        name: '_vault',
-        type: 'address'
-      },
-      {
-        internalType: 'address',
-        name: '_bridgeAddr',
-        type: 'address'
-      }
-    ],
-    payable: false,
-    stateMutability: 'nonpayable',
-    type: 'constructor'
-  },
-  {
     anonymous: false,
     inputs: [
       {
@@ -683,6 +656,36 @@ export const STAKING_ABI = [
     ],
     payable: false,
     stateMutability: 'view',
+    type: 'function'
+  },
+  {
+    constant: false,
+    inputs: [
+      {
+        internalType: 'address',
+        name: '_dostoken',
+        type: 'address'
+      },
+      {
+        internalType: 'address',
+        name: '_dbtoken',
+        type: 'address'
+      },
+      {
+        internalType: 'address',
+        name: '_vault',
+        type: 'address'
+      },
+      {
+        internalType: 'address',
+        name: '_bridgeAddr',
+        type: 'address'
+      }
+    ],
+    name: 'initialize',
+    outputs: [],
+    payable: false,
+    stateMutability: 'nonpayable',
     type: 'function'
   },
   {

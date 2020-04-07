@@ -12,33 +12,6 @@ let web3js = new web3(web3Provider);
 // staking contract ABI
 var contractABI = [
   {
-    inputs: [
-      {
-        internalType: 'address',
-        name: '_dostoken',
-        type: 'address'
-      },
-      {
-        internalType: 'address',
-        name: '_dbtoken',
-        type: 'address'
-      },
-      {
-        internalType: 'address',
-        name: '_vault',
-        type: 'address'
-      },
-      {
-        internalType: 'address',
-        name: '_bridgeAddr',
-        type: 'address'
-      }
-    ],
-    payable: false,
-    stateMutability: 'nonpayable',
-    type: 'constructor'
-  },
-  {
     anonymous: false,
     inputs: [
       {
@@ -698,6 +671,36 @@ var contractABI = [
     type: 'function'
   },
   {
+    constant: false,
+    inputs: [
+      {
+        internalType: 'address',
+        name: '_dostoken',
+        type: 'address'
+      },
+      {
+        internalType: 'address',
+        name: '_dbtoken',
+        type: 'address'
+      },
+      {
+        internalType: 'address',
+        name: '_vault',
+        type: 'address'
+      },
+      {
+        internalType: 'address',
+        name: '_bridgeAddr',
+        type: 'address'
+      }
+    ],
+    name: 'initialize',
+    outputs: [],
+    payable: false,
+    stateMutability: 'nonpayable',
+    type: 'function'
+  },
+  {
     constant: true,
     inputs: [],
     name: 'isOwner',
@@ -1228,9 +1231,9 @@ var contractABI = [
   }
 ];
 
-// TODO: Deploy and upgrade to new staking contract
-var contractAddress = "0x2Ec2e90B3f4e7DA73393b62818f9a74DB6293b25";
-//creating contract object
+// Note: Rinkeby network address
+var contractAddress = "0x0a0864Ae35B9f07D5E49E7B45aBD84Bb618b4d75";
+// Creating contract object
 var contract = new web3js.eth.Contract(contractABI, contractAddress);
 
 app.get("/balance", async function(req, res) {
@@ -1528,15 +1531,16 @@ app.get("/balance", async function(req, res) {
 
 app.get("/activity", async function(req, res) {
   //account from metamask
-  let account = "0x2a3B59AC638F90d82BdAF5E2dA5D37C1a31B29f3";
+  let account = "0xE222f441cb42bCFE8E46Fdecad0e633C70246BD3";
+  let initialBlock = 6261292;
   const options1 = {
     filter: { owner: account },
-    fromBlock: 5414653, // TODO: depoloy and upgrade new staking contract
+    fromBlock: initialBlock,
     toBlock: "latest"
   };
   const options2 = {
     filter: { from: account },
-    fromBlock: 5414653, // TODO: depoloy and upgrade new staking contract
+    fromBlock: initialBlock,
     toBlock: "latest"
   };
   const options3 = {
@@ -1583,7 +1587,7 @@ app.get("/method", async function(req, res) {
     let rewardCut = node.rewardCut;
 
     //Get from metamask
-    let delegatorAddr = "0x3E268ECB08CF59B5c2aDBf98651ccD8041C60f67";
+    let delegatorAddr = "0x995337C3bb85690Ae659356a6684F221a7807a88";
     const delegator = await contract.methods
       .delegators(delegatorAddr, nodeAddr)
       .call();

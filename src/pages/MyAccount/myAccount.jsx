@@ -57,7 +57,7 @@ class Account extends Component {
       return web3Client.utils.fromWei(bn.toString("10"));
     }
     this.props.globalLoading(true);
-    const { isWalletLogin, web3Client, userAddress, dosTokenContract, stakingContract } = this.props.contract;
+    const { isWalletLogin, web3Client, userAddress, initialBlock, dosTokenContract, stakingContract } = this.props.contract;
     if (isWalletLogin) {
       let userBalance = await dosTokenContract.methods
         .balanceOf(userAddress)
@@ -72,12 +72,12 @@ class Account extends Component {
         let nodesAddrs = [];
         const options = {
           filter: { owner: userAddress },
-          fromBlock: 5414653,
+          fromBlock: initialBlock,
           toBlock: "latest"
         };
 
         const eventList = await stakingContract.getPastEvents(
-          "LogNewNode",
+          "NewNode",
           options
         );
 
@@ -109,12 +109,12 @@ class Account extends Component {
       if (userAddress !== "") {
         let nodesAddrs = [];
         const options2 = {
-          filter: { sender: userAddress },
-          fromBlock: 5414653,
+          filter: { from: userAddress },
+          fromBlock: initialBlock,
           toBlock: "latest"
         };
         const eventList = await stakingContract.getPastEvents(
-          "DelegateTo",
+          "Delegate",
           options2
         );
 

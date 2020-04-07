@@ -345,15 +345,15 @@ class NodeList extends Component {
     let nodeList = [];
 
     const getLogNewNodeEventList = async userAddress => {
-      return await stakingContract.getPastEvents("LogNewNode", {
+      return await stakingContract.getPastEvents("NewNode", {
         filter: { owner: userAddress },
         fromBlock: initialBlock,
         toBlock: "latest"
       });
     };
     const getDelegateToEventList = async senderAddress => {
-      return await stakingContract.getPastEvents("DelegateTo", {
-        filter: { sender: senderAddress },
+      return await stakingContract.getPastEvents("Delegate", {
+        filter: { from: senderAddress },
         fromBlock: initialBlock,
         toBlock: "latest"
       });
