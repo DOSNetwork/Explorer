@@ -12,6 +12,33 @@ let web3js = new web3(web3Provider);
 // staking contract ABI
 var contractABI = [
   {
+    inputs: [
+      {
+        internalType: 'address',
+        name: '_dostoken',
+        type: 'address'
+      },
+      {
+        internalType: 'address',
+        name: '_dbtoken',
+        type: 'address'
+      },
+      {
+        internalType: 'address',
+        name: '_vault',
+        type: 'address'
+      },
+      {
+        internalType: 'address',
+        name: '_bridgeAddr',
+        type: 'address'
+      }
+    ],
+    payable: false,
+    stateMutability: 'nonpayable',
+    type: 'constructor'
+  },
+  {
     anonymous: false,
     inputs: [
       {
@@ -96,38 +123,6 @@ var contractABI = [
       }
     ],
     name: 'NewNode',
-    type: 'event'
-  },
-  {
-    anonymous: false,
-    inputs: [
-      {
-        indexed: true,
-        internalType: 'address',
-        name: 'previousOwner',
-        type: 'address'
-      }
-    ],
-    name: 'OwnershipRenounced',
-    type: 'event'
-  },
-  {
-    anonymous: false,
-    inputs: [
-      {
-        indexed: true,
-        internalType: 'address',
-        name: 'previousOwner',
-        type: 'address'
-      },
-      {
-        indexed: true,
-        internalType: 'address',
-        name: 'newOwner',
-        type: 'address'
-      }
-    ],
-    name: 'OwnershipTransferred',
     type: 'event'
   },
   {
@@ -222,6 +217,25 @@ var contractABI = [
       }
     ],
     name: 'UpdateMinStakePerNode',
+    type: 'event'
+  },
+  {
+    anonymous: false,
+    inputs: [
+      {
+        indexed: false,
+        internalType: 'address',
+        name: 'oldAdmin',
+        type: 'address'
+      },
+      {
+        indexed: false,
+        internalType: 'address',
+        name: 'newAdmin',
+        type: 'address'
+      }
+    ],
+    name: 'UpdateStakingAdmin',
     type: 'event'
   },
   {
@@ -343,6 +357,21 @@ var contractABI = [
   {
     constant: true,
     inputs: [],
+    name: 'LISTHEAD',
+    outputs: [
+      {
+        internalType: 'uint256',
+        name: '',
+        type: 'uint256'
+      }
+    ],
+    payable: false,
+    stateMutability: 'view',
+    type: 'function'
+  },
+  {
+    constant: true,
+    inputs: [],
     name: 'ONEYEAR',
     outputs: [
       {
@@ -364,6 +393,21 @@ var contractABI = [
         internalType: 'uint256',
         name: '',
         type: 'uint256'
+      }
+    ],
+    payable: false,
+    stateMutability: 'view',
+    type: 'function'
+  },
+  {
+    constant: true,
+    inputs: [],
+    name: 'admin',
+    outputs: [
+      {
+        internalType: 'address',
+        name: '',
+        type: 'address'
       }
     ],
     payable: false,
@@ -698,21 +742,6 @@ var contractABI = [
     outputs: [],
     payable: false,
     stateMutability: 'nonpayable',
-    type: 'function'
-  },
-  {
-    constant: true,
-    inputs: [],
-    name: 'isOwner',
-    outputs: [
-      {
-        internalType: 'bool',
-        name: '',
-        type: 'bool'
-      }
-    ],
-    payable: false,
-    stateMutability: 'view',
     type: 'function'
   },
   {
@@ -1056,24 +1085,15 @@ var contractABI = [
     type: 'function'
   },
   {
-    constant: true,
-    inputs: [],
-    name: 'owner',
-    outputs: [
+    constant: false,
+    inputs: [
       {
         internalType: 'address',
-        name: '',
+        name: 'newAdmin',
         type: 'address'
       }
     ],
-    payable: false,
-    stateMutability: 'view',
-    type: 'function'
-  },
-  {
-    constant: false,
-    inputs: [],
-    name: 'renounceOwnership',
+    name: 'setAdmin',
     outputs: [],
     payable: false,
     stateMutability: 'nonpayable',
@@ -1170,21 +1190,6 @@ var contractABI = [
     type: 'function'
   },
   {
-    constant: false,
-    inputs: [
-      {
-        internalType: 'address',
-        name: 'newOwner',
-        type: 'address'
-      }
-    ],
-    name: 'transferOwnership',
-    outputs: [],
-    payable: false,
-    stateMutability: 'nonpayable',
-    type: 'function'
-  },
-  {
     constant: true,
     inputs: [],
     name: 'unbondDuration',
@@ -1232,7 +1237,7 @@ var contractABI = [
 ];
 
 // Note: Rinkeby network address
-var contractAddress = "0x0a0864Ae35B9f07D5E49E7B45aBD84Bb618b4d75";
+var contractAddress = "0x457eE61f40B943f0b85c83136Ac6EA57f2D5A9C3";
 // Creating contract object
 var contract = new web3js.eth.Contract(contractABI, contractAddress);
 
@@ -1532,7 +1537,7 @@ app.get("/balance", async function(req, res) {
 app.get("/activity", async function(req, res) {
   //account from metamask
   let account = "0xE222f441cb42bCFE8E46Fdecad0e633C70246BD3";
-  let initialBlock = 6261292;
+  let initialBlock = 6514472;
   const options1 = {
     filter: { owner: account },
     fromBlock: initialBlock,

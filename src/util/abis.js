@@ -1,5 +1,32 @@
 export const STAKING_ABI = [
   {
+    inputs: [
+      {
+        internalType: 'address',
+        name: '_dostoken',
+        type: 'address'
+      },
+      {
+        internalType: 'address',
+        name: '_dbtoken',
+        type: 'address'
+      },
+      {
+        internalType: 'address',
+        name: '_vault',
+        type: 'address'
+      },
+      {
+        internalType: 'address',
+        name: '_bridgeAddr',
+        type: 'address'
+      }
+    ],
+    payable: false,
+    stateMutability: 'nonpayable',
+    type: 'constructor'
+  },
+  {
     anonymous: false,
     inputs: [
       {
@@ -84,38 +111,6 @@ export const STAKING_ABI = [
       }
     ],
     name: 'NewNode',
-    type: 'event'
-  },
-  {
-    anonymous: false,
-    inputs: [
-      {
-        indexed: true,
-        internalType: 'address',
-        name: 'previousOwner',
-        type: 'address'
-      }
-    ],
-    name: 'OwnershipRenounced',
-    type: 'event'
-  },
-  {
-    anonymous: false,
-    inputs: [
-      {
-        indexed: true,
-        internalType: 'address',
-        name: 'previousOwner',
-        type: 'address'
-      },
-      {
-        indexed: true,
-        internalType: 'address',
-        name: 'newOwner',
-        type: 'address'
-      }
-    ],
-    name: 'OwnershipTransferred',
     type: 'event'
   },
   {
@@ -210,6 +205,25 @@ export const STAKING_ABI = [
       }
     ],
     name: 'UpdateMinStakePerNode',
+    type: 'event'
+  },
+  {
+    anonymous: false,
+    inputs: [
+      {
+        indexed: false,
+        internalType: 'address',
+        name: 'oldAdmin',
+        type: 'address'
+      },
+      {
+        indexed: false,
+        internalType: 'address',
+        name: 'newAdmin',
+        type: 'address'
+      }
+    ],
+    name: 'UpdateStakingAdmin',
     type: 'event'
   },
   {
@@ -331,6 +345,21 @@ export const STAKING_ABI = [
   {
     constant: true,
     inputs: [],
+    name: 'LISTHEAD',
+    outputs: [
+      {
+        internalType: 'uint256',
+        name: '',
+        type: 'uint256'
+      }
+    ],
+    payable: false,
+    stateMutability: 'view',
+    type: 'function'
+  },
+  {
+    constant: true,
+    inputs: [],
     name: 'ONEYEAR',
     outputs: [
       {
@@ -352,6 +381,21 @@ export const STAKING_ABI = [
         internalType: 'uint256',
         name: '',
         type: 'uint256'
+      }
+    ],
+    payable: false,
+    stateMutability: 'view',
+    type: 'function'
+  },
+  {
+    constant: true,
+    inputs: [],
+    name: 'admin',
+    outputs: [
+      {
+        internalType: 'address',
+        name: '',
+        type: 'address'
       }
     ],
     payable: false,
@@ -686,21 +730,6 @@ export const STAKING_ABI = [
     outputs: [],
     payable: false,
     stateMutability: 'nonpayable',
-    type: 'function'
-  },
-  {
-    constant: true,
-    inputs: [],
-    name: 'isOwner',
-    outputs: [
-      {
-        internalType: 'bool',
-        name: '',
-        type: 'bool'
-      }
-    ],
-    payable: false,
-    stateMutability: 'view',
     type: 'function'
   },
   {
@@ -1044,24 +1073,15 @@ export const STAKING_ABI = [
     type: 'function'
   },
   {
-    constant: true,
-    inputs: [],
-    name: 'owner',
-    outputs: [
+    constant: false,
+    inputs: [
       {
         internalType: 'address',
-        name: '',
+        name: 'newAdmin',
         type: 'address'
       }
     ],
-    payable: false,
-    stateMutability: 'view',
-    type: 'function'
-  },
-  {
-    constant: false,
-    inputs: [],
-    name: 'renounceOwnership',
+    name: 'setAdmin',
     outputs: [],
     payable: false,
     stateMutability: 'nonpayable',
@@ -1155,21 +1175,6 @@ export const STAKING_ABI = [
     ],
     payable: false,
     stateMutability: 'view',
-    type: 'function'
-  },
-  {
-    constant: false,
-    inputs: [
-      {
-        internalType: 'address',
-        name: 'newOwner',
-        type: 'address'
-      }
-    ],
-    name: 'transferOwnership',
-    outputs: [],
-    payable: false,
-    stateMutability: 'nonpayable',
     type: 'function'
   },
   {
