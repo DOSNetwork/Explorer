@@ -80,7 +80,7 @@ const messages = {
 
     'Form.Button.Submit': '提交',
     'Form.Lable.DelegateAmount': '委托质押数量',
-    'Form.Lable.UnbondAmount': '赎回数量',
+    'Form.Lable.UnbondAmount': '赎回7天后方可提取',
     'Form.Lable.DropBurnAmount': 'DropBurn数量',
     'Form.Lable.AddDelegateAmount': '增加委托质押数量',
     'Form.Lable.AddDropBurnAmount': '增加DropBurn数量',
@@ -132,7 +132,7 @@ const messages = {
     /**MyAccount */
 
     'Tooltip.MyAccount.AccountBalance': '账户余额',
-    'Tooltip.MyAccount.TotalDelegated': '总委托质押数',
+    'Tooltip.MyAccount.TotalDelegated': '我的总质押',
     'Tooltip.MyAccount.MyRewards': '可提取奖励',
     'Tooltip.MyAccount.Unbondingtokens': '赎回中',
     'Table.Column.Activites.AccountActivity': '账户活动',
