@@ -345,15 +345,15 @@ class NodeList extends Component {
     let nodeList = [];
 
     const getLogNewNodeEventList = async userAddress => {
-      return await stakingContract.getPastEvents("LogNewNode", {
+      return await stakingContract.getPastEvents("NewNode", {
         filter: { owner: userAddress },
         fromBlock: initialBlock,
         toBlock: "latest"
       });
     };
     const getDelegateToEventList = async senderAddress => {
-      return await stakingContract.getPastEvents("DelegateTo", {
-        filter: { sender: senderAddress },
+      return await stakingContract.getPastEvents("Delegate", {
+        filter: { from: senderAddress },
         fromBlock: initialBlock,
         toBlock: "latest"
       });
@@ -365,7 +365,7 @@ class NodeList extends Component {
       const eventList = await getLogNewNodeEventList(userAddress);
       let eventAddrs = eventList.map(event => event.returnValues.nodeAddress);
       const eventList2 = await getDelegateToEventList(userAddress);
-      eventAddrs.push(...eventList2.map(event => event.returnValues.nodeAddr));
+      eventAddrs.push(...eventList2.map(event => event.returnValues.to));
       const result = eventAddrs.filter(addr => nodesAddrs.includes(addr));
       nodesAddrs = result;
     } else {
@@ -379,7 +379,7 @@ class NodeList extends Component {
           .map(event => event.returnValues.nodeAddress);
         const eventList2 = await getDelegateToEventList(userAddress);
         eventAddrs.push(
-          ...eventList2.reverse().map(event => event.returnValues.nodeAddr)
+          ...eventList2.reverse().map(event => event.returnValues.to)
         );
         const result = eventAddrs.filter(addr => nodesAddrs.includes(addr));
         nodesAddrs.unshift(...result);

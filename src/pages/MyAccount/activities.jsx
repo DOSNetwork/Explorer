@@ -57,21 +57,28 @@ class Activities extends Component {
         loading: true
       });
 
-      const options = {
+      const options1 = {
         filter: { owner: userAddress },
         fromBlock: initialBlock,
         toBlock: "latest"
       };
       const options2 = {
-        filter: { sender: userAddress },
+        filter: { from: userAddress },
         fromBlock: initialBlock,
         toBlock: "latest"
       };
-      const eventList = await stakingContract.getPastEvents("LogNewNode", options);
-      const eventList2 = await stakingContract.getPastEvents("DelegateTo", options2);
-      const eventList3 = await stakingContract.getPastEvents("RewardWithdraw", options2);
+      const options3 = {
+        filter: { to: userAddress },
+        fromBlock: initialBlock,
+        toBlock: "latest"
+      };
+
+      const eventList1 = await stakingContract.getPastEvents("NewNode", options1);
+      const eventList2 = await stakingContract.getPastEvents("Delegate", options2);
       const eventList4 = await stakingContract.getPastEvents("Unbond", options2);
-      let dataList = [...eventList, ...eventList2, ...eventList3, ...eventList4].sort((a, b) => b.blockNumber - a.blockNumber)
+      const eventList3 = await stakingContract.getPastEvents("Withdraw", options3);
+      const eventList5 = await stakingContract.getPastEvents("ClaimReward", options3);
+      let dataList = [...eventList1, ...eventList2, ...eventList3, ...eventList4, ...eventList5].sort((a, b) => b.blockNumber - a.blockNumber)
       this.setState({
         dataListSource: dataList
       })

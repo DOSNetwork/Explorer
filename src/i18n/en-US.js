@@ -84,7 +84,7 @@ const messages = {
     'Form.Button.Submit': 'Submit',
 
     'Form.Lable.DelegateAmount': 'Delegate Amount',
-    'Form.Lable.UnbondAmount': 'Unbond Amount',
+    'Form.Lable.UnbondAmount': 'Unbond takes 7 days before withdrawable',
     'Form.Lable.DropBurnAmount': 'DropBurn Amount',
     'Form.Lable.AddDelegateAmount': 'Add Delegate Amount',
     'Form.Lable.AddDropBurnAmount': 'Add DropBurn Amount',
@@ -133,7 +133,7 @@ const messages = {
 
 
     'Tooltip.MyAccount.AccountBalance': 'Account Balance',
-    'Tooltip.MyAccount.TotalDelegated': 'Total Delegated',
+    'Tooltip.MyAccount.TotalDelegated': 'Total Staked',
     'Tooltip.MyAccount.MyRewards': 'Available Rewards',
     'Tooltip.MyAccount.Unbondingtokens': 'Unbonding Amount',
     'Table.Column.Activites.AccountActivity': 'Account Activity',

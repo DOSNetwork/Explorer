@@ -13,9 +13,9 @@ class Account extends Component {
       userContract: null,
       netWork: "",
       userBalance: -1,
-      delegatedAmount: -1,
-      delegatedReward: -1,
-      unbondDelegated: -1
+      delegatedTotal: -1,
+      accumulatedRewardsTotal: -1,
+      unbondingTotal: -1
     };
   }
   ToggleNumber = () => {
@@ -57,129 +57,124 @@ class Account extends Component {
       return web3Client.utils.fromWei(bn.toString("10"));
     }
     this.props.globalLoading(true);
-    const { isWalletLogin, web3Client, userAddress, dosTokenContract, stakingContract } = this.props.contract;
+    const { isWalletLogin, web3Client, userAddress, initialBlock, dosTokenContract, stakingContract } = this.props.contract;
     if (isWalletLogin) {
       let userBalance = await dosTokenContract.methods
         .balanceOf(userAddress)
         .call();
 
-      let delegatedAmount = new web3Client.utils.toBN(0);
-      let delegatedReward = new web3Client.utils.toBN(0);
-      let unbondDelegated = new web3Client.utils.toBN(0);
-      //Get staking node and delegate node addresses
+      let delegatedTotal = new web3Client.utils.toBN(0);
+      let accumulatedRewardsTotal = new web3Client.utils.toBN(0);
+      let unbondingTotal = new web3Client.utils.toBN(0);
+      // Get node metadata
       if (userAddress !== "") {
         //Let owne and delegate nodes show first
-        let nodesAddrs = [];
+        let nodeAddrs = [];
         const options = {
           filter: { owner: userAddress },
-          fromBlock: 5414653,
+          fromBlock: initialBlock,
           toBlock: "latest"
         };
-
         const eventList = await stakingContract.getPastEvents(
-          "LogNewNode",
+          "NewNode",
           options
         );
 
         for (let i = 0; i < eventList.length; i++) {
-          nodesAddrs.unshift(eventList[i].returnValues.nodeAddress);
+          nodeAddrs.unshift(eventList[i].returnValues.nodeAddress);
         }
-        const addrs = nodesAddrs.filter((item, index) => {
-          return nodesAddrs.indexOf(item) === index;
+        const addrs = nodeAddrs.filter((item, index) => {
+          return nodeAddrs.indexOf(item) === index;
         });
-        // // console.log("!!!", addrs.length);
         for (let i = 0; i < addrs.length; i++) {
           const nodeAddr = addrs[i];
-          const node = await stakingContract.methods.nodes(nodeAddr).call();
-          delegatedAmount = delegatedAmount.add(
+          const node = await stakingContract.methods
+            .nodes(nodeAddr)
+            .call();
+          const accumulatedRewardsRT = await stakingContract.methods
+            .getNodeRewardTokensRT(nodeAddr)
+            .call();
+
+          delegatedTotal = delegatedTotal.add(
             new web3Client.utils.toBN(node.selfStakedAmount)
           );
-          delegatedReward = delegatedReward.add(
-            new web3Client.utils.toBN(node.accumulatedReward)
+          accumulatedRewardsTotal = accumulatedRewardsTotal.add(
+            new web3Client.utils.toBN(accumulatedRewardsRT)
           );
-          unbondDelegated = unbondDelegated.add(
+          unbondingTotal = unbondingTotal.add(
             new web3Client.utils.toBN(node.pendingWithdrawToken)
           );
-          unbondDelegated = unbondDelegated.add(
-            new web3Client.utils.toBN(node.pendingWithdrawDB)
-          );
+//          unbondingTotal = unbondingTotal.add(
+//            new web3Client.utils.toBN(node.pendingWithdrawDB)
+//          );
         }
       }
-      //Get delegate node addresses
+      // Get delegated metadata
       if (userAddress !== "") {
-        let nodesAddrs = [];
+        let nodeAddrs = [];
         const options2 = {
-          filter: { sender: userAddress },
-          fromBlock: 5414653,
+          filter: { from: userAddress },
+          fromBlock: initialBlock,
           toBlock: "latest"
         };
         const eventList = await stakingContract.getPastEvents(
-          "DelegateTo",
+          "Delegate",
           options2
         );
 
         for (let i = 0; i < eventList.length; i++) {
-          nodesAddrs.unshift(eventList[i].returnValues.nodeAddr);
+          nodeAddrs.unshift(eventList[i].returnValues.to);
         }
-        const addrs = nodesAddrs.filter((item, index) => {
-          return nodesAddrs.indexOf(item) === index;
+        const addrs = nodeAddrs.filter((item, index) => {
+          return nodeAddrs.indexOf(item) === index;
         });
         for (let i = 0; i < addrs.length; i++) {
           const nodeAddr = addrs[i];
           const delegator = await stakingContract.methods
             .delegators(userAddress, nodeAddr)
             .call();
+          const accumulatedRewardsRT = await stakingContract.methods
+            .getDelegatorRewardTokensRT(userAddress, nodeAddr)
+            .call();
 
-          if (delegator.delegatedAmount) {
-            delegatedAmount = delegatedAmount.add(
-              new web3Client.utils.toBN(delegator.delegatedAmount)
-            );
-          }
-          if (delegator.delegatedReward) {
-            delegatedReward = delegatedReward.add(
-              new web3Client.utils.toBN(delegator.delegatedReward)
-            );
-          }
-          if (delegator.unbondDelegated) {
-            unbondDelegated = unbondDelegated.add(
-              new web3Client.utils.toBN(delegator.unbondDelegated)
-            );
-          }
+          delegatedTotal = delegatedTotal.add(
+            new web3Client.utils.toBN(delegator.delegatedAmount)
+          );
+          accumulatedRewardsTotal = accumulatedRewardsTotal.add(
+            new web3Client.utils.toBN(accumulatedRewardsRT)
+          );
+          unbondingTotal = unbondingTotal.add(
+            new web3Client.utils.toBN(delegator.pendingWithdraw)
+          );
         }
         if (this.unMount) {
           return;
         }
         this.setState({
           userBalance: Math.round(fromWei(userBalance) * 100) / 100,
-          delegatedAmount:
+          delegatedTotal:
             Math.round(
-              web3Client.utils.fromWei(delegatedAmount.toString()) * 100
+              web3Client.utils.fromWei(delegatedTotal.toString()) * 100
             ) / 100,
-          delegatedReward:
+          accumulatedRewardsTotal:
             Math.round(
-              web3Client.utils.fromWei(delegatedReward.toString()) * 100
+              web3Client.utils.fromWei(accumulatedRewardsTotal.toString()) * 100
             ) / 100,
-          unbondDelegated:
+          unbondingTotal:
             Math.round(
-              web3Client.utils.fromWei(unbondDelegated.toString()) * 100
+              web3Client.utils.fromWei(unbondingTotal.toString()) * 100
             ) / 100
         });
       }
-
-      //Total Delegated
-      //My Rewards
-      //Unbonded tokens
-
-      //TODO: Total Delegated ,My Rewards,Unbonded tokens
     }
   };
   render() {
     const {
       showNumber,
       userBalance,
-      delegatedAmount,
-      delegatedReward,
-      unbondDelegated
+      delegatedTotal,
+      accumulatedRewardsTotal,
+      unbondingTotal
     } = this.state;
     let { formatMessage: f } = this.props.intl;
     return (
@@ -200,15 +195,15 @@ class Account extends Component {
           <div className="myaccount-detail--wrapper">
             <div className="detail--container">
               <DescLabel label={f({ id: 'Tooltip.MyAccount.TotalDelegated' })} />
-              <div className="account-number">{this.numberToggler(delegatedAmount)}</div>
+              <div className="account-number">{this.numberToggler(delegatedTotal)}</div>
             </div>
             <div className="detail--container">
               <DescLabel label={f({ id: 'Tooltip.MyAccount.MyRewards' })} />
-              <div className="account-number">{this.numberToggler(delegatedReward)}</div>
+              <div className="account-number">{this.numberToggler(accumulatedRewardsTotal)}</div>
             </div>
             <div className="detail--container">
               <DescLabel label={f({ id: 'Tooltip.MyAccount.Unbondingtokens' })} />
-              <div className="account-number">{this.numberToggler(unbondDelegated)}</div>
+              <div className="account-number">{this.numberToggler(unbondingTotal)}</div>
             </div>
           </div>
         </div>

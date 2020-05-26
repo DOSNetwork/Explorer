@@ -1,520 +1,286 @@
 export const STAKING_ABI = [
   {
-    constant: true,
-    inputs: [],
-    name: 'inverseStakeRatio',
-    outputs: [
-      {
-        name: '',
-        type: 'uint256'
-      }
-    ],
-    payable: false,
-    stateMutability: 'view',
-    type: 'function'
-  },
-  {
-    constant: false,
     inputs: [
       {
-        name: '_tokenAmount',
-        type: 'uint256'
+        internalType: 'address',
+        name: '_dostoken',
+        type: 'address'
       },
       {
-        name: '_nodeAddr',
+        internalType: 'address',
+        name: '_dbtoken',
+        type: 'address'
+      },
+      {
+        internalType: 'address',
+        name: '_vault',
+        type: 'address'
+      },
+      {
+        internalType: 'address',
+        name: '_bridgeAddr',
         type: 'address'
       }
     ],
-    name: 'delegate',
-    outputs: [],
     payable: false,
     stateMutability: 'nonpayable',
-    type: 'function'
+    type: 'constructor'
   },
   {
-    constant: true,
-    inputs: [],
-    name: 'DOSTOKEN',
-    outputs: [
-      {
-        name: '',
-        type: 'address'
-      }
-    ],
-    payable: false,
-    stateMutability: 'view',
-    type: 'function'
-  },
-  {
-    constant: true,
-    inputs: [],
-    name: 'getNodeAddrs',
-    outputs: [
-      {
-        name: '',
-        type: 'address[]'
-      }
-    ],
-    payable: false,
-    stateMutability: 'view',
-    type: 'function'
-  },
-  {
-    constant: true,
+    anonymous: false,
     inputs: [
       {
-        name: '',
+        indexed: true,
+        internalType: 'address',
+        name: 'to',
         type: 'address'
+      },
+      {
+        indexed: false,
+        internalType: 'bool',
+        name: 'nodeRunner',
+        type: 'bool'
+      },
+      {
+        indexed: false,
+        internalType: 'uint256',
+        name: 'amount',
+        type: 'uint256'
       }
     ],
-    name: 'nodes',
-    outputs: [
+    name: 'ClaimReward',
+    type: 'event'
+  },
+  {
+    anonymous: false,
+    inputs: [
       {
-        name: 'ownerAddr',
+        indexed: true,
+        internalType: 'address',
+        name: 'from',
         type: 'address'
       },
       {
-        name: 'rewardCut',
-        type: 'uint256'
+        indexed: true,
+        internalType: 'address',
+        name: 'to',
+        type: 'address'
       },
       {
-        name: 'stakedDB',
+        indexed: false,
+        internalType: 'uint256',
+        name: 'amount',
         type: 'uint256'
+      }
+    ],
+    name: 'Delegate',
+    type: 'event'
+  },
+  {
+    anonymous: false,
+    inputs: [
+      {
+        indexed: true,
+        internalType: 'address',
+        name: 'owner',
+        type: 'address'
       },
       {
+        indexed: true,
+        internalType: 'address',
+        name: 'nodeAddress',
+        type: 'address'
+      },
+      {
+        indexed: false,
+        internalType: 'uint256',
         name: 'selfStakedAmount',
         type: 'uint256'
       },
       {
-        name: 'totalOtherDelegatedAmount',
+        indexed: false,
+        internalType: 'uint256',
+        name: 'stakedDB',
         type: 'uint256'
       },
       {
-        name: 'accumulatedReward',
+        indexed: false,
+        internalType: 'uint256',
+        name: 'rewardCut',
         type: 'uint256'
+      }
+    ],
+    name: 'NewNode',
+    type: 'event'
+  },
+  {
+    anonymous: false,
+    inputs: [
+      {
+        indexed: true,
+        internalType: 'address',
+        name: 'from',
+        type: 'address'
       },
       {
-        name: 'accumulatedRewardRate',
-        type: 'uint256'
+        indexed: true,
+        internalType: 'address',
+        name: 'to',
+        type: 'address'
       },
       {
-        name: 'pendingWithdrawToken',
-        type: 'uint256'
-      },
-      {
-        name: 'pendingWithdrawDB',
-        type: 'uint256'
-      },
-      {
-        name: 'lastStartTime',
-        type: 'uint256'
-      },
-      {
-        name: 'lastStopTime',  // TODO: Remove this field once new staking contract get deployed.
-        type: 'uint256'
-      },
-      {
-        name: 'running',
+        indexed: false,
+        internalType: 'bool',
+        name: 'nodeRunner',
         type: 'bool'
       },
       {
-        name: 'description',
-        type: 'string'
-      }
-    ],
-    payable: false,
-    stateMutability: 'view',
-    type: 'function'
-  },
-  {
-    constant: true,
-    inputs: [],
-    name: 'accumulatedRewardRate',
-    outputs: [
-      {
-        name: '',
-        type: 'uint256'
-      }
-    ],
-    payable: false,
-    stateMutability: 'view',
-    type: 'function'
-  },
-  {
-    constant: true,
-    inputs: [],
-    name: 'ONEYEAR',
-    outputs: [
-      {
-        name: '',
-        type: 'uint256'
-      }
-    ],
-    payable: false,
-    stateMutability: 'view',
-    type: 'function'
-  },
-  {
-    constant: false,
-    inputs: [
-      {
-        name: '_nodeAddr',
-        type: 'address'
-      }
-    ],
-    name: 'nodeTryDelete',
-    outputs: [],
-    payable: false,
-    stateMutability: 'nonpayable',
-    type: 'function'
-  },
-  {
-    constant: false,
-    inputs: [
-      {
-        name: '_nodeAddr',
-        type: 'address'
-      }
-    ],
-    name: 'delegatorClaimReward',
-    outputs: [],
-    payable: false,
-    stateMutability: 'nonpayable',
-    type: 'function'
-  },
-  {
-    constant: false,
-    inputs: [
-      {
-        name: '_nodeAddr',
-        type: 'address'
-      },
-      {
-        name: '_newTokenAmount',
+        indexed: false,
+        internalType: 'uint256',
+        name: 'tokenAmount',
         type: 'uint256'
       },
       {
-        name: '_newDropburnAmount',
+        indexed: false,
+        internalType: 'uint256',
+        name: 'dropburnAmount',
+        type: 'uint256'
+      }
+    ],
+    name: 'Unbond',
+    type: 'event'
+  },
+  {
+    anonymous: false,
+    inputs: [
+      {
+        indexed: false,
+        internalType: 'uint256',
+        name: 'oldCirculatingSupply',
         type: 'uint256'
       },
       {
-        name: '_newCut',
+        indexed: false,
+        internalType: 'uint256',
+        name: 'newCirculatingSupply',
         type: 'uint256'
       }
     ],
-    name: 'updateNodeStaking',
-    outputs: [],
-    payable: false,
-    stateMutability: 'nonpayable',
-    type: 'function'
+    name: 'UpdateCirculatingSupply',
+    type: 'event'
   },
   {
-    constant: true,
-    inputs: [],
-    name: 'getCurrentAPR',
-    outputs: [
-      {
-        name: '',
-        type: 'uint256'
-      }
-    ],
-    payable: false,
-    stateMutability: 'view',
-    type: 'function'
-  },
-  {
-    constant: true,
-    inputs: [],
-    name: 'totalStakedTokens',
-    outputs: [
-      {
-        name: '',
-        type: 'uint256'
-      }
-    ],
-    payable: false,
-    stateMutability: 'view',
-    type: 'function'
-  },
-  {
-    constant: false,
+    anonymous: false,
     inputs: [
       {
-        name: '_quota',
-        type: 'uint256'
-      }
-    ],
-    name: 'setDropBurnMaxQuota',
-    outputs: [],
-    payable: false,
-    stateMutability: 'nonpayable',
-    type: 'function'
-  },
-  {
-    constant: false,
-    inputs: [
-      {
-        name: '_nodeAddr',
-        type: 'address'
-      }
-    ],
-    name: 'nodeStart',
-    outputs: [],
-    payable: false,
-    stateMutability: 'nonpayable',
-    type: 'function'
-  },
-  {
-    constant: false,
-    inputs: [
-      {
-        name: '_nodeAddr',
-        type: 'address'
-      }
-    ],
-    name: 'nodeWithdraw',
-    outputs: [],
-    payable: false,
-    stateMutability: 'nonpayable',
-    type: 'function'
-  },
-  {
-    constant: false,
-    inputs: [
-      {
-        name: '_tokenAmount',
+        indexed: false,
+        internalType: 'uint256',
+        name: 'oldQuota',
         type: 'uint256'
       },
       {
-        name: '_dropburnAmount',
+        indexed: false,
+        internalType: 'uint256',
+        name: 'newQuota',
         type: 'uint256'
-      },
-      {
-        name: '_nodeAddr',
-        type: 'address'
       }
     ],
-    name: 'nodeUnbond',
-    outputs: [],
-    payable: false,
-    stateMutability: 'nonpayable',
-    type: 'function'
+    name: 'UpdateDropBurnMaxQuota',
+    type: 'event'
   },
   {
-    constant: true,
+    anonymous: false,
     inputs: [
       {
-        name: 'nodeAddr',
-        type: 'address'
-      }
-    ],
-    name: 'getNodeRewardTokens',
-    outputs: [
+        indexed: false,
+        internalType: 'uint256',
+        name: 'oldMinStakePerNode',
+        type: 'uint256'
+      },
       {
-        name: '',
+        indexed: false,
+        internalType: 'uint256',
+        name: 'newMinStakePerNode',
         type: 'uint256'
       }
     ],
-    payable: false,
-    stateMutability: 'view',
-    type: 'function'
+    name: 'UpdateMinStakePerNode',
+    type: 'event'
   },
   {
-    constant: true,
+    anonymous: false,
     inputs: [
       {
-        name: '_owner',
+        indexed: false,
+        internalType: 'address',
+        name: 'oldAdmin',
         type: 'address'
       },
       {
-        name: '_nodeAddr',
+        indexed: false,
+        internalType: 'address',
+        name: 'newAdmin',
         type: 'address'
       }
     ],
-    name: 'delegatorWithdrawAble',
-    outputs: [
-      {
-        name: '',
-        type: 'uint256'
-      }
-    ],
-    payable: false,
-    stateMutability: 'view',
-    type: 'function'
+    name: 'UpdateStakingAdmin',
+    type: 'event'
   },
   {
-    constant: false,
-    inputs: [],
-    name: 'renounceOwnership',
-    outputs: [],
-    payable: false,
-    stateMutability: 'nonpayable',
-    type: 'function'
-  },
-  {
-    constant: true,
-    inputs: [],
-    name: 'rewardRateDelta',
-    outputs: [
-      {
-        name: '',
-        type: 'uint256'
-      }
-    ],
-    payable: false,
-    stateMutability: 'view',
-    type: 'function'
-  },
-  {
-    constant: true,
+    anonymous: false,
     inputs: [
       {
-        name: 'nodeAddr',
-        type: 'address'
-      }
-    ],
-    name: 'getNodeUptime',
-    outputs: [
+        indexed: false,
+        internalType: 'uint256',
+        name: 'oldDuration',
+        type: 'uint256'
+      },
       {
-        name: '',
+        indexed: false,
+        internalType: 'uint256',
+        name: 'newDuration',
         type: 'uint256'
       }
     ],
-    payable: false,
-    stateMutability: 'view',
-    type: 'function'
+    name: 'UpdateUnbondDuration',
+    type: 'event'
   },
   {
-    constant: true,
+    anonymous: false,
     inputs: [
       {
-        name: '_owner',
+        indexed: true,
+        internalType: 'address',
+        name: 'from',
         type: 'address'
       },
       {
-        name: '_nodeAddr',
-        type: 'address'
-      }
-    ],
-    name: 'nodeWithdrawAble',
-    outputs: [
-      {
-        name: '',
-        type: 'uint256'
-      },
-      {
-        name: '',
-        type: 'uint256'
-      }
-    ],
-    payable: false,
-    stateMutability: 'view',
-    type: 'function'
-  },
-  {
-    constant: false,
-    inputs: [
-      {
-        name: '_nodeAddr',
+        indexed: true,
+        internalType: 'address',
+        name: 'to',
         type: 'address'
       },
       {
-        name: '_tokenAmount',
-        type: 'uint256'
-      },
-      {
-        name: '_dropburnAmount',
-        type: 'uint256'
-      },
-      {
-        name: '_rewardCut',
-        type: 'uint256'
-      },
-      {
-        name: '_desc',
-        type: 'string'
-      }
-    ],
-    name: 'newNode',
-    outputs: [],
-    payable: false,
-    stateMutability: 'nonpayable',
-    type: 'function'
-  },
-  {
-    constant: false,
-    inputs: [
-      {
-        name: '_nodeAddr',
-        type: 'address'
-      }
-    ],
-    name: 'delegatorChekcReward',
-    outputs: [
-      {
-        name: '',
-        type: 'uint256'
-      }
-    ],
-    payable: false,
-    stateMutability: 'nonpayable',
-    type: 'function'
-  },
-  {
-    constant: false,
-    inputs: [
-      {
-        name: '_minStake',
-        type: 'uint256'
-      }
-    ],
-    name: 'setMinStakePerNode',
-    outputs: [],
-    payable: false,
-    stateMutability: 'nonpayable',
-    type: 'function'
-  },
-  {
-    constant: true,
-    inputs: [],
-    name: 'owner',
-    outputs: [
-      {
-        name: '',
-        type: 'address'
-      }
-    ],
-    payable: false,
-    stateMutability: 'view',
-    type: 'function'
-  },
-  {
-    constant: true,
-    inputs: [],
-    name: 'isOwner',
-    outputs: [
-      {
-        name: '',
+        indexed: false,
+        internalType: 'bool',
+        name: 'nodeRunner',
         type: 'bool'
-      }
-    ],
-    payable: false,
-    stateMutability: 'view',
-    type: 'function'
-  },
-  {
-    constant: true,
-    inputs: [],
-    name: 'bridgeAddr',
-    outputs: [
+      },
       {
-        name: '',
-        type: 'address'
+        indexed: false,
+        internalType: 'uint256',
+        name: 'tokenAmount',
+        type: 'uint256'
+      },
+      {
+        indexed: false,
+        internalType: 'uint256',
+        name: 'dbAmount',
+        type: 'uint256'
       }
     ],
-    payable: false,
-    stateMutability: 'view',
-    type: 'function'
+    name: 'Withdraw',
+    type: 'event'
   },
   {
     constant: true,
@@ -522,324 +288,7 @@ export const STAKING_ABI = [
     name: 'DBDECIMAL',
     outputs: [
       {
-        name: '',
-        type: 'uint256'
-      }
-    ],
-    payable: false,
-    stateMutability: 'view',
-    type: 'function'
-  },
-  {
-    constant: true,
-    inputs: [],
-    name: 'circulatingSupply',
-    outputs: [
-      {
-        name: '',
-        type: 'uint256'
-      }
-    ],
-    payable: false,
-    stateMutability: 'view',
-    type: 'function'
-  },
-  {
-    constant: true,
-    inputs: [],
-    name: 'initBlkN',
-    outputs: [
-      {
-        name: '',
-        type: 'uint256'
-      }
-    ],
-    payable: false,
-    stateMutability: 'view',
-    type: 'function'
-  },
-  {
-    constant: false,
-    inputs: [
-      {
-        name: '_tokenAmount',
-        type: 'uint256'
-      },
-      {
-        name: '_nodeAddr',
-        type: 'address'
-      }
-    ],
-    name: 'delegatorUnbond',
-    outputs: [],
-    payable: false,
-    stateMutability: 'nonpayable',
-    type: 'function'
-  },
-  {
-    constant: true,
-    inputs: [
-      {
-        name: '',
-        type: 'address'
-      },
-      {
-        name: '',
-        type: 'address'
-      }
-    ],
-    name: 'delegators',
-    outputs: [
-      {
-        name: 'delegatedNode',
-        type: 'address'
-      },
-      {
-        name: 'delegatedAmount',
-        type: 'uint256'
-      },
-      {
-        name: 'accumulatedReward',
-        type: 'uint256'
-      },
-      {
-        name: 'accumulatedRewardRate',
-        type: 'uint256'
-      },
-      {
-        name: 'pendingWithdraw',
-        type: 'uint256'
-      }
-    ],
-    payable: false,
-    stateMutability: 'view',
-    type: 'function'
-  },
-  {
-    constant: false,
-    inputs: [
-      {
-        name: '_nodeAddr',
-        type: 'address'
-      }
-    ],
-    name: 'nodeUnregister',
-    outputs: [],
-    payable: false,
-    stateMutability: 'nonpayable',
-    type: 'function'
-  },
-  {
-    constant: false,
-    inputs: [],
-    name: 'updateGlobalRewardRate',
-    outputs: [],
-    payable: false,
-    stateMutability: 'nonpayable',
-    type: 'function'
-  },
-  {
-    constant: true,
-    inputs: [
-      {
-        name: 'nodeAddr',
-        type: 'address'
-      }
-    ],
-    name: 'isValidStakingNode',
-    outputs: [
-      {
-        name: '',
-        type: 'bool'
-      }
-    ],
-    payable: false,
-    stateMutability: 'view',
-    type: 'function'
-  },
-  {
-    constant: false,
-    inputs: [
-      {
-        name: '_duration',
-        type: 'uint256'
-      }
-    ],
-    name: 'setUnbondDuration',
-    outputs: [],
-    payable: false,
-    stateMutability: 'nonpayable',
-    type: 'function'
-  },
-  {
-    constant: false,
-    inputs: [
-      {
-        name: '_newSupply',
-        type: 'uint256'
-      }
-    ],
-    name: 'setCirculatingSupply',
-    outputs: [],
-    payable: false,
-    stateMutability: 'nonpayable',
-    type: 'function'
-  },
-  {
-    constant: false,
-    inputs: [
-      {
-        name: '_nodeAddr',
-        type: 'address'
-      }
-    ],
-    name: 'nodeClaimReward',
-    outputs: [],
-    payable: false,
-    stateMutability: 'nonpayable',
-    type: 'function'
-  },
-  {
-    constant: true,
-    inputs: [
-      {
-        name: '',
-        type: 'uint256'
-      }
-    ],
-    name: 'nodeAddrs',
-    outputs: [
-      {
-        name: '',
-        type: 'address'
-      }
-    ],
-    payable: false,
-    stateMutability: 'view',
-    type: 'function'
-  },
-  {
-    constant: true,
-    inputs: [
-      {
-        name: '',
-        type: 'address'
-      },
-      {
-        name: '',
-        type: 'address'
-      }
-    ],
-    name: 'nodeRunners',
-    outputs: [
-      {
-        name: '',
-        type: 'bool'
-      }
-    ],
-    payable: false,
-    stateMutability: 'view',
-    type: 'function'
-  },
-  {
-    constant: true,
-    inputs: [],
-    name: 'lastRateUpdatedTime',
-    outputs: [
-      {
-        name: '',
-        type: 'uint256'
-      }
-    ],
-    payable: false,
-    stateMutability: 'view',
-    type: 'function'
-  },
-  {
-    constant: false,
-    inputs: [
-      {
-        name: '_nodeAddr',
-        type: 'address'
-      }
-    ],
-    name: 'delegatorWithdraw',
-    outputs: [],
-    payable: false,
-    stateMutability: 'nonpayable',
-    type: 'function'
-  },
-  {
-    constant: true,
-    inputs: [],
-    name: 'unbondDuration',
-    outputs: [
-      {
-        name: '',
-        type: 'uint256'
-      }
-    ],
-    payable: false,
-    stateMutability: 'view',
-    type: 'function'
-  },
-  {
-    constant: true,
-    inputs: [],
-    name: 'DOSDECIMAL',
-    outputs: [
-      {
-        name: '',
-        type: 'uint256'
-      }
-    ],
-    payable: false,
-    stateMutability: 'view',
-    type: 'function'
-  },
-  {
-    constant: false,
-    inputs: [
-      {
-        name: '_nodeAddr',
-        type: 'address'
-      }
-    ],
-    name: 'nodeStop',
-    outputs: [],
-    payable: false,
-    stateMutability: 'nonpayable',
-    type: 'function'
-  },
-  {
-    constant: true,
-    inputs: [],
-    name: 'stakingRewardsVault',
-    outputs: [
-      {
-        name: '',
-        type: 'address'
-      }
-    ],
-    payable: false,
-    stateMutability: 'view',
-    type: 'function'
-  },
-  {
-    constant: true,
-    inputs: [
-      {
-        name: '_delegator',
-        type: 'address'
-      },
-      {
-        name: '_nodeAddr',
-        type: 'address'
-      }
-    ],
-    name: 'getDelegatorRewardTokens',
-    outputs: [
-      {
+        internalType: 'uint256',
         name: '',
         type: 'uint256'
       }
@@ -854,6 +303,7 @@ export const STAKING_ABI = [
     name: 'DBTOKEN',
     outputs: [
       {
+        internalType: 'address',
         name: '',
         type: 'address'
       }
@@ -865,10 +315,258 @@ export const STAKING_ABI = [
   {
     constant: true,
     inputs: [],
-    name: 'minStakePerNode',
+    name: 'DOSDECIMAL',
     outputs: [
       {
+        internalType: 'uint256',
         name: '',
+        type: 'uint256'
+      }
+    ],
+    payable: false,
+    stateMutability: 'view',
+    type: 'function'
+  },
+  {
+    constant: true,
+    inputs: [],
+    name: 'DOSTOKEN',
+    outputs: [
+      {
+        internalType: 'address',
+        name: '',
+        type: 'address'
+      }
+    ],
+    payable: false,
+    stateMutability: 'view',
+    type: 'function'
+  },
+  {
+    constant: true,
+    inputs: [],
+    name: 'LISTHEAD',
+    outputs: [
+      {
+        internalType: 'uint256',
+        name: '',
+        type: 'uint256'
+      }
+    ],
+    payable: false,
+    stateMutability: 'view',
+    type: 'function'
+  },
+  {
+    constant: true,
+    inputs: [],
+    name: 'ONEYEAR',
+    outputs: [
+      {
+        internalType: 'uint256',
+        name: '',
+        type: 'uint256'
+      }
+    ],
+    payable: false,
+    stateMutability: 'view',
+    type: 'function'
+  },
+  {
+    constant: true,
+    inputs: [],
+    name: 'accumulatedRewardIndex',
+    outputs: [
+      {
+        internalType: 'uint256',
+        name: '',
+        type: 'uint256'
+      }
+    ],
+    payable: false,
+    stateMutability: 'view',
+    type: 'function'
+  },
+  {
+    constant: true,
+    inputs: [],
+    name: 'admin',
+    outputs: [
+      {
+        internalType: 'address',
+        name: '',
+        type: 'address'
+      }
+    ],
+    payable: false,
+    stateMutability: 'view',
+    type: 'function'
+  },
+  {
+    constant: true,
+    inputs: [],
+    name: 'bridgeAddr',
+    outputs: [
+      {
+        internalType: 'address',
+        name: '',
+        type: 'address'
+      }
+    ],
+    payable: false,
+    stateMutability: 'view',
+    type: 'function'
+  },
+  {
+    constant: true,
+    inputs: [],
+    name: 'circulatingSupply',
+    outputs: [
+      {
+        internalType: 'uint256',
+        name: '',
+        type: 'uint256'
+      }
+    ],
+    payable: false,
+    stateMutability: 'view',
+    type: 'function'
+  },
+  {
+    constant: false,
+    inputs: [
+      {
+        internalType: 'uint256',
+        name: '_tokenAmount',
+        type: 'uint256'
+      },
+      {
+        internalType: 'address',
+        name: '_nodeAddr',
+        type: 'address'
+      }
+    ],
+    name: 'delegate',
+    outputs: [],
+    payable: false,
+    stateMutability: 'nonpayable',
+    type: 'function'
+  },
+  {
+    constant: false,
+    inputs: [
+      {
+        internalType: 'address',
+        name: '_nodeAddr',
+        type: 'address'
+      }
+    ],
+    name: 'delegatorClaimReward',
+    outputs: [],
+    payable: false,
+    stateMutability: 'nonpayable',
+    type: 'function'
+  },
+  {
+    constant: false,
+    inputs: [
+      {
+        internalType: 'uint256',
+        name: '_tokenAmount',
+        type: 'uint256'
+      },
+      {
+        internalType: 'address',
+        name: '_nodeAddr',
+        type: 'address'
+      }
+    ],
+    name: 'delegatorUnbond',
+    outputs: [],
+    payable: false,
+    stateMutability: 'nonpayable',
+    type: 'function'
+  },
+  {
+    constant: false,
+    inputs: [
+      {
+        internalType: 'address',
+        name: '_nodeAddr',
+        type: 'address'
+      }
+    ],
+    name: 'delegatorWithdraw',
+    outputs: [],
+    payable: false,
+    stateMutability: 'nonpayable',
+    type: 'function'
+  },
+  {
+    constant: true,
+    inputs: [
+      {
+        internalType: 'address',
+        name: '_owner',
+        type: 'address'
+      },
+      {
+        internalType: 'address',
+        name: '_nodeAddr',
+        type: 'address'
+      }
+    ],
+    name: 'delegatorWithdrawable',
+    outputs: [
+      {
+        internalType: 'uint256',
+        name: '',
+        type: 'uint256'
+      }
+    ],
+    payable: false,
+    stateMutability: 'view',
+    type: 'function'
+  },
+  {
+    constant: true,
+    inputs: [
+      {
+        internalType: 'address',
+        name: '',
+        type: 'address'
+      },
+      {
+        internalType: 'address',
+        name: '',
+        type: 'address'
+      }
+    ],
+    name: 'delegators',
+    outputs: [
+      {
+        internalType: 'address',
+        name: 'delegatedNode',
+        type: 'address'
+      },
+      {
+        internalType: 'uint256',
+        name: 'delegatedAmount',
+        type: 'uint256'
+      },
+      {
+        internalType: 'uint256',
+        name: 'accumulatedRewards',
+        type: 'uint256'
+      },
+      {
+        internalType: 'uint256',
+        name: 'accumulatedRewardIndex',
+        type: 'uint256'
+      },
+      {
+        internalType: 'uint256',
+        name: 'pendingWithdraw',
         type: 'uint256'
       }
     ],
@@ -882,6 +580,120 @@ export const STAKING_ABI = [
     name: 'dropburnMaxQuota',
     outputs: [
       {
+        internalType: 'uint256',
+        name: '',
+        type: 'uint256'
+      }
+    ],
+    payable: false,
+    stateMutability: 'view',
+    type: 'function'
+  },
+  {
+    constant: true,
+    inputs: [],
+    name: 'getCurrentAPR',
+    outputs: [
+      {
+        internalType: 'uint256',
+        name: '',
+        type: 'uint256'
+      }
+    ],
+    payable: false,
+    stateMutability: 'view',
+    type: 'function'
+  },
+  {
+    constant: true,
+    inputs: [
+      {
+        internalType: 'address',
+        name: '_delegator',
+        type: 'address'
+      },
+      {
+        internalType: 'address',
+        name: '_nodeAddr',
+        type: 'address'
+      }
+    ],
+    name: 'getDelegatorRewardTokensRT',
+    outputs: [
+      {
+        internalType: 'uint256',
+        name: '',
+        type: 'uint256'
+      }
+    ],
+    payable: false,
+    stateMutability: 'view',
+    type: 'function'
+  },
+  {
+    constant: true,
+    inputs: [],
+    name: 'getNodeAddrs',
+    outputs: [
+      {
+        internalType: 'address[]',
+        name: '',
+        type: 'address[]'
+      }
+    ],
+    payable: false,
+    stateMutability: 'view',
+    type: 'function'
+  },
+  {
+    constant: true,
+    inputs: [
+      {
+        internalType: 'address',
+        name: '_nodeAddr',
+        type: 'address'
+      }
+    ],
+    name: 'getNodeRewardTokensRT',
+    outputs: [
+      {
+        internalType: 'uint256',
+        name: '',
+        type: 'uint256'
+      }
+    ],
+    payable: false,
+    stateMutability: 'view',
+    type: 'function'
+  },
+  {
+    constant: true,
+    inputs: [
+      {
+        internalType: 'address',
+        name: 'nodeAddr',
+        type: 'address'
+      }
+    ],
+    name: 'getNodeUptime',
+    outputs: [
+      {
+        internalType: 'uint256',
+        name: '',
+        type: 'uint256'
+      }
+    ],
+    payable: false,
+    stateMutability: 'view',
+    type: 'function'
+  },
+  {
+    constant: true,
+    inputs: [],
+    name: 'initBlkN',
+    outputs: [
+      {
+        internalType: 'uint256',
         name: '',
         type: 'uint256'
       }
@@ -894,233 +706,521 @@ export const STAKING_ABI = [
     constant: false,
     inputs: [
       {
-        name: 'newOwner',
+        internalType: 'address',
+        name: '_dostoken',
+        type: 'address'
+      },
+      {
+        internalType: 'address',
+        name: '_dbtoken',
+        type: 'address'
+      },
+      {
+        internalType: 'address',
+        name: '_vault',
+        type: 'address'
+      },
+      {
+        internalType: 'address',
+        name: '_bridgeAddr',
         type: 'address'
       }
     ],
-    name: 'transferOwnership',
+    name: 'initialize',
     outputs: [],
     payable: false,
     stateMutability: 'nonpayable',
     type: 'function'
   },
   {
+    constant: true,
     inputs: [
       {
-        name: '_dostoken',
+        internalType: 'address',
+        name: 'nodeAddr',
+        type: 'address'
+      }
+    ],
+    name: 'isValidStakingNode',
+    outputs: [
+      {
+        internalType: 'bool',
+        name: '',
+        type: 'bool'
+      }
+    ],
+    payable: false,
+    stateMutability: 'view',
+    type: 'function'
+  },
+  {
+    constant: true,
+    inputs: [],
+    name: 'lastRateUpdatedTime',
+    outputs: [
+      {
+        internalType: 'uint256',
+        name: '',
+        type: 'uint256'
+      }
+    ],
+    payable: false,
+    stateMutability: 'view',
+    type: 'function'
+  },
+  {
+    constant: true,
+    inputs: [],
+    name: 'minStakePerNode',
+    outputs: [
+      {
+        internalType: 'uint256',
+        name: '',
+        type: 'uint256'
+      }
+    ],
+    payable: false,
+    stateMutability: 'view',
+    type: 'function'
+  },
+  {
+    constant: false,
+    inputs: [
+      {
+        internalType: 'address',
+        name: '_nodeAddr',
         type: 'address'
       },
       {
-        name: '_dbtoken',
-        type: 'address'
+        internalType: 'uint256',
+        name: '_tokenAmount',
+        type: 'uint256'
       },
       {
-        name: '_vault',
-        type: 'address'
+        internalType: 'uint256',
+        name: '_dropburnAmount',
+        type: 'uint256'
       },
       {
-        name: '_bridgeAddr',
+        internalType: 'uint256',
+        name: '_rewardCut',
+        type: 'uint256'
+      },
+      {
+        internalType: 'string',
+        name: '_desc',
+        type: 'string'
+      }
+    ],
+    name: 'newNode',
+    outputs: [],
+    payable: false,
+    stateMutability: 'nonpayable',
+    type: 'function'
+  },
+  {
+    constant: true,
+    inputs: [
+      {
+        internalType: 'uint256',
+        name: '',
+        type: 'uint256'
+      }
+    ],
+    name: 'nodeAddrs',
+    outputs: [
+      {
+        internalType: 'address',
+        name: '',
         type: 'address'
       }
     ],
     payable: false,
+    stateMutability: 'view',
+    type: 'function'
+  },
+  {
+    constant: false,
+    inputs: [
+      {
+        internalType: 'address',
+        name: '_nodeAddr',
+        type: 'address'
+      }
+    ],
+    name: 'nodeClaimReward',
+    outputs: [],
+    payable: false,
     stateMutability: 'nonpayable',
-    type: 'constructor'
+    type: 'function'
   },
   {
-    anonymous: false,
+    constant: true,
     inputs: [
       {
-        indexed: false,
-        name: 'oldQuota',
-        type: 'uint256'
-      },
-      {
-        indexed: false,
-        name: 'newQuota',
-        type: 'uint256'
-      }
-    ],
-    name: 'UpdateDropBurnMaxQuota',
-    type: 'event'
-  },
-  {
-    anonymous: false,
-    inputs: [
-      {
-        indexed: false,
-        name: 'oldDuration',
-        type: 'uint256'
-      },
-      {
-        indexed: false,
-        name: 'newDuration',
-        type: 'uint256'
-      }
-    ],
-    name: 'UpdateUnbondDuration',
-    type: 'event'
-  },
-  {
-    anonymous: false,
-    inputs: [
-      {
-        indexed: false,
-        name: 'oldCirculatingSupply',
-        type: 'uint256'
-      },
-      {
-        indexed: false,
-        name: 'newCirculatingSupply',
-        type: 'uint256'
-      }
-    ],
-    name: 'UpdateCirculatingSupply',
-    type: 'event'
-  },
-  {
-    anonymous: false,
-    inputs: [
-      {
-        indexed: false,
-        name: 'oldMinStakePerNode',
-        type: 'uint256'
-      },
-      {
-        indexed: false,
-        name: 'newMinStakePerNode',
-        type: 'uint256'
-      }
-    ],
-    name: 'UpdateMinStakePerNode',
-    type: 'event'
-  },
-  {
-    anonymous: false,
-    inputs: [
-      {
-        indexed: true,
-        name: 'owner',
+        internalType: 'address',
+        name: '',
         type: 'address'
       },
       {
-        indexed: false,
-        name: 'nodeAddress',
+        internalType: 'address',
+        name: '',
         type: 'address'
-      },
+      }
+    ],
+    name: 'nodeRunners',
+    outputs: [
       {
-        indexed: false,
-        name: 'selfStakedAmount',
+        internalType: 'bool',
+        name: '',
+        type: 'bool'
+      }
+    ],
+    payable: false,
+    stateMutability: 'view',
+    type: 'function'
+  },
+  {
+    constant: false,
+    inputs: [
+      {
+        internalType: 'address',
+        name: '_nodeAddr',
+        type: 'address'
+      }
+    ],
+    name: 'nodeStart',
+    outputs: [],
+    payable: false,
+    stateMutability: 'nonpayable',
+    type: 'function'
+  },
+  {
+    constant: false,
+    inputs: [
+      {
+        internalType: 'address',
+        name: '_nodeAddr',
+        type: 'address'
+      }
+    ],
+    name: 'nodeStop',
+    outputs: [],
+    payable: false,
+    stateMutability: 'nonpayable',
+    type: 'function'
+  },
+  {
+    constant: false,
+    inputs: [
+      {
+        internalType: 'uint256',
+        name: '_tokenAmount',
         type: 'uint256'
       },
       {
-        indexed: false,
+        internalType: 'uint256',
+        name: '_dropburnAmount',
+        type: 'uint256'
+      },
+      {
+        internalType: 'address',
+        name: '_nodeAddr',
+        type: 'address'
+      }
+    ],
+    name: 'nodeUnbond',
+    outputs: [],
+    payable: false,
+    stateMutability: 'nonpayable',
+    type: 'function'
+  },
+  {
+    constant: false,
+    inputs: [
+      {
+        internalType: 'address',
+        name: '_nodeAddr',
+        type: 'address'
+      }
+    ],
+    name: 'nodeUnregister',
+    outputs: [],
+    payable: false,
+    stateMutability: 'nonpayable',
+    type: 'function'
+  },
+  {
+    constant: false,
+    inputs: [
+      {
+        internalType: 'address',
+        name: '_nodeAddr',
+        type: 'address'
+      }
+    ],
+    name: 'nodeWithdraw',
+    outputs: [],
+    payable: false,
+    stateMutability: 'nonpayable',
+    type: 'function'
+  },
+  {
+    constant: true,
+    inputs: [
+      {
+        internalType: 'address',
+        name: '_owner',
+        type: 'address'
+      },
+      {
+        internalType: 'address',
+        name: '_nodeAddr',
+        type: 'address'
+      }
+    ],
+    name: 'nodeWithdrawable',
+    outputs: [
+      {
+        internalType: 'uint256',
+        name: '',
+        type: 'uint256'
+      },
+      {
+        internalType: 'uint256',
+        name: '',
+        type: 'uint256'
+      }
+    ],
+    payable: false,
+    stateMutability: 'view',
+    type: 'function'
+  },
+  {
+    constant: true,
+    inputs: [
+      {
+        internalType: 'address',
+        name: '',
+        type: 'address'
+      }
+    ],
+    name: 'nodes',
+    outputs: [
+      {
+        internalType: 'address',
+        name: 'ownerAddr',
+        type: 'address'
+      },
+      {
+        internalType: 'uint256',
+        name: 'rewardCut',
+        type: 'uint256'
+      },
+      {
+        internalType: 'uint256',
         name: 'stakedDB',
         type: 'uint256'
       },
       {
-        indexed: false,
-        name: 'rewardCut',
-        type: 'uint256'
-      }
-    ],
-    name: 'LogNewNode',
-    type: 'event'
-  },
-  {
-    anonymous: false,
-    inputs: [
-      {
-        indexed: true,
-        name: 'sender',
-        type: 'address'
-      },
-      {
-        indexed: false,
-        name: 'total',
+        internalType: 'uint256',
+        name: 'selfStakedAmount',
         type: 'uint256'
       },
       {
-        indexed: false,
-        name: 'nodeAddr',
-        type: 'address'
-      }
-    ],
-    name: 'DelegateTo',
-    type: 'event'
-  },
-  {
-    anonymous: false,
-    inputs: [
-      {
-        indexed: true,
-        name: 'sender',
-        type: 'address'
-      },
-      {
-        indexed: false,
-        name: 'total',
-        type: 'uint256'
-      }
-    ],
-    name: 'RewardWithdraw',
-    type: 'event'
-  },
-  {
-    anonymous: false,
-    inputs: [
-      {
-        indexed: true,
-        name: 'sender',
-        type: 'address'
-      },
-      {
-        indexed: false,
-        name: 'tokenAmount',
+        internalType: 'uint256',
+        name: 'totalOtherDelegatedAmount',
         type: 'uint256'
       },
       {
-        indexed: false,
-        name: 'dropburnAmount',
+        internalType: 'uint256',
+        name: 'accumulatedRewards',
         type: 'uint256'
       },
       {
-        indexed: false,
-        name: 'nodeAddr',
+        internalType: 'uint256',
+        name: 'accumulatedRewardIndex',
+        type: 'uint256'
+      },
+      {
+        internalType: 'uint256',
+        name: 'pendingWithdrawToken',
+        type: 'uint256'
+      },
+      {
+        internalType: 'uint256',
+        name: 'pendingWithdrawDB',
+        type: 'uint256'
+      },
+      {
+        internalType: 'uint256',
+        name: 'lastStartTime',
+        type: 'uint256'
+      },
+      {
+        internalType: 'bool',
+        name: 'running',
+        type: 'bool'
+      },
+      {
+        internalType: 'string',
+        name: 'description',
+        type: 'string'
+      }
+    ],
+    payable: false,
+    stateMutability: 'view',
+    type: 'function'
+  },
+  {
+    constant: false,
+    inputs: [
+      {
+        internalType: 'address',
+        name: 'newAdmin',
         type: 'address'
       }
     ],
-    name: 'Unbond',
-    type: 'event'
+    name: 'setAdmin',
+    outputs: [],
+    payable: false,
+    stateMutability: 'nonpayable',
+    type: 'function'
   },
   {
-    anonymous: false,
+    constant: false,
     inputs: [
       {
-        indexed: true,
-        name: 'previousOwner',
+        internalType: 'uint256',
+        name: '_newSupply',
+        type: 'uint256'
+      }
+    ],
+    name: 'setCirculatingSupply',
+    outputs: [],
+    payable: false,
+    stateMutability: 'nonpayable',
+    type: 'function'
+  },
+  {
+    constant: false,
+    inputs: [
+      {
+        internalType: 'uint256',
+        name: '_quota',
+        type: 'uint256'
+      }
+    ],
+    name: 'setDropBurnMaxQuota',
+    outputs: [],
+    payable: false,
+    stateMutability: 'nonpayable',
+    type: 'function'
+  },
+  {
+    constant: false,
+    inputs: [
+      {
+        internalType: 'uint256',
+        name: '_minStake',
+        type: 'uint256'
+      }
+    ],
+    name: 'setMinStakePerNode',
+    outputs: [],
+    payable: false,
+    stateMutability: 'nonpayable',
+    type: 'function'
+  },
+  {
+    constant: false,
+    inputs: [
+      {
+        internalType: 'uint256',
+        name: '_duration',
+        type: 'uint256'
+      }
+    ],
+    name: 'setUnbondDuration',
+    outputs: [],
+    payable: false,
+    stateMutability: 'nonpayable',
+    type: 'function'
+  },
+  {
+    constant: true,
+    inputs: [],
+    name: 'stakingRewardsVault',
+    outputs: [
+      {
+        internalType: 'address',
+        name: '',
         type: 'address'
       }
     ],
-    name: 'OwnershipRenounced',
-    type: 'event'
+    payable: false,
+    stateMutability: 'view',
+    type: 'function'
   },
   {
-    anonymous: false,
+    constant: true,
+    inputs: [],
+    name: 'totalStakedTokens',
+    outputs: [
+      {
+        internalType: 'uint256',
+        name: '',
+        type: 'uint256'
+      }
+    ],
+    payable: false,
+    stateMutability: 'view',
+    type: 'function'
+  },
+  {
+    constant: true,
+    inputs: [],
+    name: 'unbondDuration',
+    outputs: [
+      {
+        internalType: 'uint256',
+        name: '',
+        type: 'uint256'
+      }
+    ],
+    payable: false,
+    stateMutability: 'view',
+    type: 'function'
+  },
+  {
+    constant: false,
     inputs: [
       {
-        indexed: true,
-        name: 'previousOwner',
+        internalType: 'address',
+        name: '_nodeAddr',
         type: 'address'
       },
       {
-        indexed: true,
-        name: 'newOwner',
-        type: 'address'
+        internalType: 'uint256',
+        name: '_newTokenAmount',
+        type: 'uint256'
+      },
+      {
+        internalType: 'uint256',
+        name: '_newDropburnAmount',
+        type: 'uint256'
+      },
+      {
+        internalType: 'uint256',
+        name: '_newCut',
+        type: 'uint256'
       }
     ],
-    name: 'OwnershipTransferred',
-    type: 'event'
+    name: 'updateNodeStaking',
+    outputs: [],
+    payable: false,
+    stateMutability: 'nonpayable',
+    type: 'function'
   }
 ];
 

@@ -653,7 +653,6 @@ const NodeDetail = class NodeDetail extends Component {
         nodeDetail: nodeDetail
       });
     }
-    // TODO: Use new API `getNodeRewardTokensRT` / `getDelegatorRewardTokensRT` with newly deployed staking contract to get realtime rewards.
 
     let rewardotal = 0,
       myTokenTotal = 0,
@@ -670,33 +669,33 @@ const NodeDetail = class NodeDetail extends Component {
         web3Client.utils.toChecksumAddress(userAddress) ===
         web3Client.utils.toChecksumAddress(nodeInstance.ownerAddr);
       if (isUserOwnedThisNode) {
-        const nodeWithdrawAbleTotal = await stakingContract.methods
-          .nodeWithdrawAble(nodeInstance.ownerAddr, nodeAddr)
+        const nodeWithdrawableTotal = await stakingContract.methods
+          .nodeWithdrawable(nodeInstance.ownerAddr, nodeAddr)
           .call();
         rewardotal = await stakingContract.methods
-          .getNodeRewardTokens(nodeAddr)
+          .getNodeRewardTokensRT(nodeAddr)
           .call();
         myTokenTotal = fromWei(selfStakedAmount);
         withDrawalTotal =
-          Math.round(fromWei(nodeWithdrawAbleTotal[0]) * 100) / 100;
+          Math.round(fromWei(nodeWithdrawableTotal[0]) * 100) / 100;
         let tempBn = new web3Client.utils.toBN(pendingWithdrawToken);
         tempBn = tempBn.sub(
-          new web3Client.utils.toBN(nodeWithdrawAbleTotal[0])
+          new web3Client.utils.toBN(nodeWithdrawableTotal[0])
         );
         withDrawalFrozen = Math.round(fromWei(tempBn.toString()) * 100) / 100;
-        withDrawalDropBurn = nodeWithdrawAbleTotal[1];
+        withDrawalDropBurn = nodeWithdrawableTotal[1];
         withDrawalDropBurnFrozen = pendingWithdrawDB - withDrawalDropBurn;
 
         myRewardTotal = fromWei(rewardotal);
       } else {
         const delegatorWithdrawableTotal = await stakingContract.methods
-          .delegatorWithdrawAble(userAddress, nodeAddr)
+          .delegatorWithdrawable(userAddress, nodeAddr)
           .call();
         let delegator = await stakingContract.methods
           .delegators(userAddress, nodeAddr)
           .call();
         userDelegatedRewardTotal = await stakingContract.methods
-          .getDelegatorRewardTokens(userAddress, nodeAddr)
+          .getDelegatorRewardTokensRT(userAddress, nodeAddr)
           .call();
 
         let { delegatedAmount, pendingWithdraw } = delegator;
