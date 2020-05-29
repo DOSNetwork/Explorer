@@ -134,7 +134,7 @@ const messages = {
     'Tooltip.MyAccount.AccountBalance': '账户余额',
     'Tooltip.MyAccount.TotalDelegated': '我的总质押',
     'Tooltip.MyAccount.MyRewards': '可提取奖励',
-    'Tooltip.MyAccount.Unbondingtokens': '赎回中',
+    'Tooltip.MyAccount.Unbondingtokens': '可提取 / 赎回中',
     'Table.Column.Activites.AccountActivity': '账户活动',
     'Table.Column.Activites.Time': '时间',
     'Table.Column.Activites.Action': '动作',

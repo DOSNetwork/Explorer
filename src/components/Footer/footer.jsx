@@ -1,6 +1,5 @@
 import React, { PureComponent } from 'react'
 import { injectIntl } from 'react-intl'
-import reddit from './soical-icons/reddit.png'
 import wechat from './soical-icons/wechat.png'
 import twitter from './soical-icons/twitter.png'
 import medium from './soical-icons/medium.png'
@@ -22,9 +21,6 @@ const socialLinks = [
     }, {
         icon: twitter,
         url: 'https://twitter.com/DosNetwork'
-    }, {
-        icon: reddit,
-        url: 'https://www.reddit.com/r/DOSNetwork'
     }
 ]
 const links = [

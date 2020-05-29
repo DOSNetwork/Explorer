@@ -15,7 +15,8 @@ class Account extends Component {
       userBalance: -1,
       delegatedTotal: -1,
       accumulatedRewardsTotal: -1,
-      unbondingTotal: -1
+      withdrawableTotal: -1,
+      frozenTotal: -1
     };
   }
   ToggleNumber = () => {
@@ -65,10 +66,10 @@ class Account extends Component {
 
       let delegatedTotal = new web3Client.utils.toBN(0);
       let accumulatedRewardsTotal = new web3Client.utils.toBN(0);
-      let unbondingTotal = new web3Client.utils.toBN(0);
-      // Get node metadata
+      let frozenTotal = new web3Client.utils.toBN(0);
+      let withdrawableTotal = new web3Client.utils.toBN(0);
+      // Get owned node metadata
       if (userAddress !== "") {
-        //Let owne and delegate nodes show first
         let nodeAddrs = [];
         const options = {
           filter: { owner: userAddress },
@@ -94,6 +95,11 @@ class Account extends Component {
           const accumulatedRewardsRT = await stakingContract.methods
             .getNodeRewardTokensRT(nodeAddr)
             .call();
+          const nodeWithdrawable = await stakingContract.methods
+            .nodeWithdrawable(userAddress, nodeAddr)
+            .call();
+          const nodeFrozen = new web3Client.utils.toBN(node.pendingWithdrawToken)
+            .sub(new web3Client.utils.toBN(nodeWithdrawable[0]));
 
           delegatedTotal = delegatedTotal.add(
             new web3Client.utils.toBN(node.selfStakedAmount)
@@ -101,15 +107,15 @@ class Account extends Component {
           accumulatedRewardsTotal = accumulatedRewardsTotal.add(
             new web3Client.utils.toBN(accumulatedRewardsRT)
           );
-          unbondingTotal = unbondingTotal.add(
-            new web3Client.utils.toBN(node.pendingWithdrawToken)
+          withdrawableTotal = withdrawableTotal.add(
+            new web3Client.utils.toBN(nodeWithdrawable[0])
           );
-//          unbondingTotal = unbondingTotal.add(
-//            new web3Client.utils.toBN(node.pendingWithdrawDB)
-//          );
+          frozenTotal = frozenTotal.add(
+            new web3Client.utils.toBN(nodeFrozen)
+          );
         }
       }
-      // Get delegated metadata
+      // Get delegation metadata
       if (userAddress !== "") {
         let nodeAddrs = [];
         const options2 = {
@@ -136,6 +142,11 @@ class Account extends Component {
           const accumulatedRewardsRT = await stakingContract.methods
             .getDelegatorRewardTokensRT(userAddress, nodeAddr)
             .call();
+          const withdrawable = await stakingContract.methods
+            .delegatorWithdrawable(userAddress, nodeAddr)
+            .call();
+          const frozen = new web3Client.utils.toBN(delegator.pendingWithdraw)
+            .sub(new web3Client.utils.toBN(withdrawable));
 
           delegatedTotal = delegatedTotal.add(
             new web3Client.utils.toBN(delegator.delegatedAmount)
@@ -143,8 +154,11 @@ class Account extends Component {
           accumulatedRewardsTotal = accumulatedRewardsTotal.add(
             new web3Client.utils.toBN(accumulatedRewardsRT)
           );
-          unbondingTotal = unbondingTotal.add(
-            new web3Client.utils.toBN(delegator.pendingWithdraw)
+          withdrawableTotal = withdrawableTotal.add(
+            new web3Client.utils.toBN(withdrawable)
+          );
+          frozenTotal = frozenTotal.add(
+            new web3Client.utils.toBN(frozen)
           );
         }
         if (this.unMount) {
@@ -160,9 +174,13 @@ class Account extends Component {
             Math.round(
               web3Client.utils.fromWei(accumulatedRewardsTotal.toString()) * 100
             ) / 100,
-          unbondingTotal:
+          withdrawableTotal:
             Math.round(
-              web3Client.utils.fromWei(unbondingTotal.toString()) * 100
+              web3Client.utils.fromWei(withdrawableTotal.toString()) * 100
+            ) / 100,
+          frozenTotal:
+            Math.round(
+              web3Client.utils.fromWei(frozenTotal.toString()) * 100
             ) / 100
         });
       }
@@ -174,7 +192,8 @@ class Account extends Component {
       userBalance,
       delegatedTotal,
       accumulatedRewardsTotal,
-      unbondingTotal
+      withdrawableTotal,
+      frozenTotal
     } = this.state;
     let { formatMessage: f } = this.props.intl;
     return (
@@ -203,7 +222,9 @@ class Account extends Component {
             </div>
             <div className="detail--container">
               <DescLabel label={f({ id: 'Tooltip.MyAccount.Unbondingtokens' })} />
-              <div className="account-number">{this.numberToggler(unbondingTotal)}</div>
+              <div className="account-number">
+                {this.numberToggler(withdrawableTotal)} / {this.numberToggler(frozenTotal)}
+              </div>
             </div>
           </div>
         </div>
@@ -219,7 +240,7 @@ const DescLabel = ({ label, market = "DOS" }) => {
   return (
     <span className="desc-label">
       {label}
-      <span className="desc-market">/{market}</span>
+      <span className="desc-market">({market})</span>
     </span>
   );
 };

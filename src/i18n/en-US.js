@@ -135,7 +135,7 @@ const messages = {
     'Tooltip.MyAccount.AccountBalance': 'Account Balance',
     'Tooltip.MyAccount.TotalDelegated': 'Total Staked',
     'Tooltip.MyAccount.MyRewards': 'Available Rewards',
-    'Tooltip.MyAccount.Unbondingtokens': 'Unbonding Amount',
+    'Tooltip.MyAccount.Unbondingtokens': 'Withdrawable / Unbonding',
     'Table.Column.Activites.AccountActivity': 'Account Activity',
     'Table.Column.Activites.Time': 'Time',
     'Table.Column.Activites.Action': 'Action',
