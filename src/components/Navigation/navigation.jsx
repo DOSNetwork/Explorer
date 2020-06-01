@@ -48,7 +48,7 @@ const Navigation = class Navigation extends Component {
                     <div className="navi__wrapper">
                         <div className="navi__container">
                             <NavLink className="navi-item" to={`/explorer`} activeClassName="active"><ExplorerIcon />&nbsp;{f({ id: 'Title.explorer' })}</NavLink>
-                            <NavLink className="navi-item" to={`/nodelist`} activeClassName="active"><NodeListIcon />&nbsp;{f({ id: 'Title.nodelist' })}</NavLink>
+                            <NavLink className="navi-item" to={`/staking`} activeClassName="active"><NodeListIcon />&nbsp;{f({ id: 'Title.staking' })}</NavLink>
                             <NavLink className="navi-item" to={`/myaccount`} activeClassName="active"><MyAccountIcon />&nbsp;{f({ id: 'Title.myaccount' })}</NavLink>
                         </div>
                     </div>

@@ -59,7 +59,7 @@ class App extends Component {
             <Route exact path="/" render={() => (
               < Redirect to="/explorer" />
             )} />
-            <Route path="/nodelist" component={NodeList} />
+            <Route path="/staking" component={NodeList} />
             <Route path="/explorer" component={Explorer} />
             <Route path="/nodedetail/:nodeId" component={NodeDetail} />
             <Route path="/myaccount" component={MyAccount} />

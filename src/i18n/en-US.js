@@ -1,6 +1,7 @@
 const messages = {
     'ChangeLang': '中文',
     /**navgation */
+    'Title.staking': 'Staking',
     'Title.nodelist': 'Node List',
     'Title.explorer': 'Explorer',
     'Title.nodedetail': 'Node Detail',
