@@ -13,7 +13,7 @@ import {
 const Navigation = class Navigation extends Component {
     onMetaMaskLogin = () => {
         let { formatMessage: f } = this.props.intl
-        let { isWalletLogin } = this.props.contract
+        let { isWalletLogin, network, connectedNetwork } = this.props.contract
         if (!isWalletLogin) {
             walletLogin().then((isWalletInstalled) => {
                 if (!isWalletInstalled) {
@@ -21,6 +21,11 @@ const Navigation = class Navigation extends Component {
                         title: f({ id: 'Wallet.Title.NoWalletInstalled' }),
                         content: f({ id: 'Wallet.Tips.InstallWallet' }),
                     })
+                } else if (network !== connectedNetwork) {
+                    Modal.warning({
+                        title: `Switch to ${network}`,
+                        content: `We only support ${network}, but you're currently connected to ${connectedNetwork}.`
+                    });
                 }
             })
         }

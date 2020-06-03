@@ -18,22 +18,22 @@ message.config({
 class App extends Component {
   componentWillMount() {
     // export的userAddress会一直是空的
-    let { stakingContract: contractInstance, networkSupported } = store.getState().contract;
+    let { stakingContract, networkSupported } = store.getState().contract;
     if (networkSupported) {
       async function loadNodes() {
         // export的userAddress会一直是空的
         let { userAddress, } = store.getState().contract;
         let nodesAddrs = Array.from(
-          await contractInstance.methods.getNodeAddrs().call()
+          await stakingContract.methods.getNodeAddrs().call()
         );
         for (let i = 0; i < nodesAddrs.length; i++) {
           // 已经保存过的不重复保存
           let nodeAddr = nodesAddrs[i]
-          let node = await contractInstance.methods.nodes(nodeAddr).call();
+          let node = await stakingContract.methods.nodes(nodeAddr).call();
           localStorage.setItem(nodeAddr, JSON.stringify(node));
           let delegatorKey = nodeAddr + userAddress
           if (userAddress !== "") {
-            let delegator = await contractInstance.methods
+            let delegator = await stakingContract.methods
               .delegators(userAddress, nodeAddr)
               .call();
             localStorage.setItem(

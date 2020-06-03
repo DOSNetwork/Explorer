@@ -42,6 +42,9 @@ function GetNetwork(networkId) {
         case '4':
             result = "rinkeby";
             break
+        case '5':
+            result = "goerli";
+            break
         case '42':
             result = 'kovan';
             break;

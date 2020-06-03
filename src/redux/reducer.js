@@ -44,6 +44,7 @@ const contractState = {
     isWalletLogin: false,
     userAddress: '',
     network: '',
+    connectedNetwork: '',
     constant: {},
     networkSupported: false,
     initialBlock: 0
@@ -169,6 +170,7 @@ contractActions[type.CONTRACT_WEB3_CLINET_INIT] = (prevState, payload) => {
         dbTokenContract,
         stakingContract,
         network,
+        connectedNetwork,
         constant,
         networkSupported,
         initialBlock
@@ -180,6 +182,7 @@ contractActions[type.CONTRACT_WEB3_CLINET_INIT] = (prevState, payload) => {
         dbTokenContract,
         stakingContract,
         network,
+        connectedNetwork,
         constant,
         networkSupported,
         initialBlock

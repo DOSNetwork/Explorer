@@ -2,7 +2,7 @@ import Web3 from "web3";
 import store from "../redux/store";
 import type from "../redux/type";
 import React from "react";
-import { notification, Icon, Modal } from "antd";
+import { notification, Icon } from "antd";
 import {
   DBTOKEN_ABI,
   DOSTOKEN_ABI,
@@ -42,12 +42,6 @@ export function connectToEthereum() {
   let dbTokenContract = new web3.eth.Contract(DBTOKEN_ABI, DBTOKEN_CONTRACT_ADDRESS);
   let stakingContract = new web3.eth.Contract(STAKING_ABI, STAKING_CONTRACT_ADDRESS);
 
-  if (!WALLET_NETWORK_SUPPORTED) {
-    Modal.warning({
-      title: "Incorrect Network",
-      content: `We only support ${CURRENT_NETWORK}, but you're currently connected to ${USER_WALLET_NETWORK}.`
-    });
-  }
   store.dispatch({
     type: type.CONTRACT_WEB3_CLINET_INIT,
     web3Client: web3,
@@ -55,6 +49,7 @@ export function connectToEthereum() {
     dbTokenContract,
     stakingContract,
     network: CURRENT_NETWORK,
+    connectedNetwork: USER_WALLET_NETWORK,
     networkSupported: WALLET_NETWORK_SUPPORTED,
     constant: {
       DBTOKEN_CONTRACT_ADDRESS,
