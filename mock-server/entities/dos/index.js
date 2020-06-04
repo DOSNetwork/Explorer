@@ -22,7 +22,6 @@ exports.events = {
         "userSeed": "@hex()",
         "pendingNodePool": "@integer(0,200)",
         "groupSize": "@integer(0,200)",
-        "groupingThreshold": "@integer(0,200)",
         "blockNumber": "@integer(1000000,5000000)",
         "guardian": HexIdMock,
         "groupId": HexIdMock,

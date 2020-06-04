@@ -31,8 +31,7 @@
                 "eventLog": "LogGroupingInitiated",
                 "txHash": "a21ee3a3de80a9d3387bfc9f1f9ef46556312c9e03ac1c9ef161e9d3ad03c913",
                 "pendingNodePool": 101,
-                "groupSize": 21,
-                "groupingThreshold": 150
+                "groupSize": 21
             },
             {
                 "method": "signalGroupFormation",

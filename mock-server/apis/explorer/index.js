@@ -22,7 +22,6 @@ router.get('/search', async (ctx, next) => {
         userSeed,
         pendingNodePool,
         groupSize,
-        groupingThreshold,
         blockNumber,
         guardian,
         groupId,
@@ -63,8 +62,7 @@ router.get('/search', async (ctx, next) => {
             return {
                 ...standart,
                 pendingNodePool,
-                groupSize,
-                groupingThreshold
+                groupSize
             }
         }
         if (eventLog === 'GuardianReward') {

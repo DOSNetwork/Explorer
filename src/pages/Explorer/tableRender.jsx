@@ -169,11 +169,6 @@ const LogGroupingInitiatedRender = record => {
             <span className="column-title">Group Size</span>
             <span className="column-text  text-number">{record.groupSize}</span>
         </div>
-        <div className="custom-column">
-            <span className="column-title">Grouping Threshold</span>
-            <span className="column-text  text-number">{record.groupingThreshold}</span>
-        </div>
-
     </div>
 }
 const GuardianRewardRender = record => {
