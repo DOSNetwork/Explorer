@@ -21,7 +21,7 @@ const newNode = Form.create({
         if (Number.isNaN(result)) {
           callback(this.props.intl.formatMessage({ id: 'Form.Error.tokenAmount' }))
         }
-        else if (result < 100000) {
+        else if (result < 800000) {
           callback(this.props.intl.formatMessage({ id: 'Form.Error.tokenAmount2' }))
         }
       }
