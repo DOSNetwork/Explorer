@@ -41,7 +41,7 @@ const messages = {
     'Form.Ok.Create': 'Create',
     'Form.Cancel.Create': 'Cancel',
     'Form.Error.tokenAmount': 'Please enter a valid number',
-    'Form.Error.tokenAmount2': 'Please enter a value larger or equal to 100,000',
+    'Form.Error.tokenAmount2': 'Please enter a value larger or equal to 800,000',
     'Form.Error.cutRate': 'Please enter a valid number',
     'Form.Error.cutRate2': 'Please enter a valid percentage',
 
@@ -51,7 +51,7 @@ const messages = {
     'Form.Message.InputNodeAddress': "Please enter your node address",
     'Form.Lable.StakingAmount': 'Staking Amount',
     'Form.Message.InputStakeingAmount': "Please enter your staking amount",
-    'Form.Placeholder.InputStakeingAmount': "minimum 100,000",
+    'Form.Placeholder.InputStakeingAmount': "minimum 800,000",
     'Form.Lable.dbAmount': 'DropBurn Amount (Optional, if you own Dropburn token)',
     'Form.Message.InputdbAmount': "Please enter your DropBurn token amount",
     'Form.Lable.cutRate': 'Commission Rate',

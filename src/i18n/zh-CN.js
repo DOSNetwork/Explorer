@@ -37,7 +37,7 @@ const messages = {
     'Form.Ok.Create': '创建',
     'Form.Cancel.Create': '取消',
     'Form.Error.tokenAmount': '请输入有效数字',
-    'Form.Error.tokenAmount2': '请输入大等于100,000的数量',
+    'Form.Error.tokenAmount2': '请输入大等于800,000的数量',
     'Form.Error.cutRate': '请输入有效数字',
     'Form.Error.cutRate2': '请输入有效百分比数字',
 
@@ -48,7 +48,7 @@ const messages = {
     'Form.Message.InputNodeAddress': "请输入您的节点地址",
     'Form.Lable.StakingAmount': '质押数量',
     'Form.Message.InputStakeingAmount': "请输入您的质押数量",
-    'Form.Placeholder.InputStakeingAmount': "最小100,000",
+    'Form.Placeholder.InputStakeingAmount': "最小800,000",
     'Form.Lable.dbAmount': 'DropBurn数量 (选填，如果您有DropBurn代币的话)',
     'Form.Message.InputdbAmount': "请输入您的DropBurn代币数量",
     'Form.Lable.cutRate': '佣金比例',
