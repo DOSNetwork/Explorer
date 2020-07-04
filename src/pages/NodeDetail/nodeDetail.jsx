@@ -17,7 +17,7 @@ const TabbarRender = tabbarName => {
   return <div className="node-detail--tab-bar">{tabbarName}</div>;
 };
 const numberFormatRender = (text, record, index) => {
-  return numeral(text).format("0,0");
+  return numeral(text).format("0,0.00");
 };
 const NodeDetail = class NodeDetail extends Component {
   constructor(props) {
