@@ -272,7 +272,13 @@ const NodeDetail = class NodeDetail extends Component {
         tokenAmount = web3Client.utils.toWei(values.tokenAmount, "ether");
       }
       const dbAmount = values.dbAmount ? values.dbAmount : 0;
-      const rewardCut = values.rewardCut;
+      let rewardCut = web3Client.utils.toBN(2)
+        .pow(web3Client.utils.toBN(256))
+        .sub(web3Client.utils.toBN(1))
+        .toString();
+      if (values.rewardCut !== undefined) {
+        rewardCut = values.rewardCut;
+      }
       const nodeAddr = this.state.node;
       const ui = this;
       const updateFunc = function(receipt) {
