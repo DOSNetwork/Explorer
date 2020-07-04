@@ -3,7 +3,7 @@ import { injectIntl } from 'react-intl'
 import { Icon, Spin } from "antd";
 import numeral from 'numeral'
 const numberFormatRender = (value) => {
-  return numeral(value).format("0,0.000");
+  return numeral(value).format("0,0.00");
 };
 class Account extends Component {
   constructor(props) {

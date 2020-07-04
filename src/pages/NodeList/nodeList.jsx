@@ -50,7 +50,7 @@ const nameColumnRender = (text, record) => {
   );
 };
 const numberFormatRender = (text, record, index) => {
-  return numeral(text).format("0,0.00");
+  return numeral(text).format("0,0");
 };
 const myDelegationFormatRender = (text, record, index) => {
   if (text === 0) {
