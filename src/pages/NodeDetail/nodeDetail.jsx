@@ -1,5 +1,6 @@
 import React, { Component } from "react";
 import { Button, message, Tabs, Modal } from "antd";
+// import { PoweroffOutlined } from '@ant-design/icons';
 import { injectIntl } from "react-intl";
 import DelegateNode from "./delegateNodeForm";
 import UnbondNode from "./unbondNodeForm";
@@ -213,8 +214,8 @@ const NodeDetail = class NodeDetail extends Component {
     let { formatMessage: f } = this.props.intl;
     const { userAddress } = this.props.contract;
     confirm({
-      title: "Are you sure unregister this node?",
-      content: "Some descriptions here to .....",
+      title: f({ id: 'Modal.NodeUnregister.Title'}),
+      content: f({ id: 'Modal.NodeUnregister.Content'}),
       okText: "Sure",
       okType: "danger",
       cancelText: "No",
@@ -772,13 +773,15 @@ const NodeDetail = class NodeDetail extends Component {
                 )}
               </div>
               {isWalletLogin && isUserOwnedThisNode ? (
-                <span
+                <Button
                   className="unregister-button"
+//                  icon={<PoweroffOutlined />}
+                  shape="round"
+                  size="small"
                   onClick={this.handleUnregister}
                 >
-                  {" "}
-                  Unregister
-                </span>
+                  { f({ id: 'Node.Unregister'}) }
+                </Button>
               ) : null}
             </div>
           </div>
@@ -829,10 +832,7 @@ const NodeDetail = class NodeDetail extends Component {
                         {numberFormatRender(this.state.withDrawalDropBurn)}
                         <span className="value--frozen">
                           {" "}
-                          /
-                          {numberFormatRender(
-                            this.state.withDrawalDropBurnFrozen
-                          )}
+                          / {numberFormatRender(this.state.withDrawalDropBurnFrozen)}
                         </span>
                       </p>
                     </>

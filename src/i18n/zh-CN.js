@@ -11,6 +11,7 @@ const messages = {
     'Wallet.Tips.InstallWallet': '您需要下载钱包软件来参与质押',
     'Node.active': '在线',
     'Node.inactive': '离线',
+    'Node.Unregister': '注销',
     'Events.Loading': '{type, select, approve {批准} withdraw {提取} claimreward {提取奖励} unregister {注销} update {更新} unbond {赎回} delegate {委托质押}} 交易哈希 {hash} 等待确认',
     'Events.Success': '{type, select, approve {批准} withdraw {提取} claimreward {提取奖励} unregister {注销} update {更新} unbond {赎回} delegate {委托质押}} 成功(确认区块 {blockNumber})',
 
@@ -78,7 +79,8 @@ const messages = {
     'Tooltip.NodeDetail.Unbond': '赎回',
     'Tooltip.NodeDetail.Delegate': '质押',
     'Tooltip.NodeDetail.Update': '更新节点',
-
+    'Modal.NodeUnregister.Title': '您确定要注销该节点吗?',
+    'Modal.NodeUnregister.Content': '七天后您可以提取所质押的所有代币, 请注意在七天的解质押期间, 您不会收到任何质押奖励。',
     'Form.Button.Submit': '提交',
     'Form.Lable.DelegateAmount': '委托质押数量',
     'Form.Lable.Tips': '如果是第一次参与质押那么需要发送两条交易: 1. 第一条交易批准 (approve) 质押合约转移代币; 2. 第二条交易参与质押',

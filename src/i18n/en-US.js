@@ -14,6 +14,7 @@ const messages = {
     /*common */
     'Node.active': 'Active',
     'Node.inactive': 'Inactive',
+    'Node.Unregister': 'Unregister',
     'Events.Loading': '{type, select, approve {Approve} withdraw {Withdraw} claimreward {Claim Reward} unregister {Unregister} update {Update} unbond {Unbond} delegate {Delegate}} txid {hash} waiting for confirmation',
     'Events.Success': '{type, select, approve {Approve} withdraw {Withdraw} claimreward {Claim Reward} unregister {Unregister} update {Update} unbond {Unbond} delegate {Delegate}} success: (confirmed in block {blockNumber})',
     /* NodeList */
@@ -82,6 +83,8 @@ const messages = {
     'Tooltip.NodeDetail.Unbond': 'Unbond',
     'Tooltip.NodeDetail.Delegate': 'Stake',
     'Tooltip.NodeDetail.Update': 'Update Node',
+    'Modal.NodeUnregister.Title': 'Are you sure to unregister this node?',
+    'Modal.NodeUnregister.Content': 'You can withdraw all your unbonded tokens after 7 days, during the unbonding period you are not eligible for receiving staking rewards.',
     'Form.Button.Submit': 'Submit',
 
     'Form.Lable.DelegateAmount': 'Delegate Amount',
