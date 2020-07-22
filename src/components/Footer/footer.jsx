@@ -33,9 +33,6 @@ const links = [
     }, {
         text: 'Documentations',
         url: 'https://dosnetwork.github.io/docs/#/contents/blockchains/ethereum'
-    }, {
-        text: 'Token Swap Bridge',
-        url: 'https://swap.dos.network'
     }
 ]
 
