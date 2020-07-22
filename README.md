@@ -1,25 +1,15 @@
-## install & start
+### Install
+- `$ npm install`
 
-install 
-```bash
-cd <RootDir>
-npm install
-```
+### Start dev environment
+- `$ npm run start`
+- View `http://localhost:3000/` in browser
 
-start dev & mock-server
-```bash
-npm run start
-```
+#### change API Proxy
+Defaut http request proxy is `http://localhost:3000`, change the property `proxy` in `package.json` and rebuild.
 
-view `http://localhost:3000/` in browser
 
-### change API Proxy
-
-defaut http request proxy is `http://localhost:3000`,
-change the property `proxy` in `package.json` and rebuild
-
-## file directory
-
+#### file directory
 ```
 project tree
 ├── App.js
@@ -28,13 +18,13 @@ project tree
 ├── Layout      
 │   ├── index.jsx
 │   └── page.jsx
-├── components   //common components
+├── components    //common components
 │   ├── Navigation
 │   └── SearchInput
 ├── index.scss
 ├── index.tsx
 ├── module.scss
-├── pages       //page corresponding to ONE path
+├── pages         //page corresponding to ONE path
 │   ├── AjaxDemo
 │   ├── EchartDemo
 │   ├── Explorer
@@ -44,19 +34,19 @@ project tree
 │   ├── ReduxDemo
 │   └── RouterDemo
 ├── react-app-env.d.ts
-├── redux       //redux
+├── redux         //redux
 │   ├── action.js
 │   ├── reducer.js
 │   └── store.js
 ├── serviceWorker.js
-├── styles      //公共样式
+├── styles        // Public styles
 │   ├── layout.scss
 │   ├── main.scss
 │   ├── media.scss
 │   ├── reset.scss
 │   └── vars.scss
-├── util      //工具库,web3 等
-│   └── const.js // abi const here
+├── util          // tools, web3 etc.
+│   └── const.js  // abi const here
 └── test.module.css
 ```
 
@@ -64,7 +54,7 @@ project tree
 mock-server directory
 .
 ├── apis
-│   ├── api-v1.js //api-version
+│   ├── api-v1.js   //api-version
 │   ├── demo
 │   ├── explorer    // api folder
 │   ├── index.js
@@ -79,20 +69,3 @@ mock-server directory
 └── middleware
     └── api-wrapper.js  //response scheme wrapper
 ```
-
-## TODO
-- [x] Redux
-- [x] Router
-- [x] Mock-Server
-- [x] EChart
-- [] Responsive
-- [x] Api mock
-- [] footer
-- [x] metaMask
-- [] allAPis
-- pages
-    - [x] Home
-    - [x] Node List
-    - [x] Node Detail
-    - [x] explorer
-    - [x] account

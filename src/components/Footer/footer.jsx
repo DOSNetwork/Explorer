@@ -32,7 +32,7 @@ const links = [
         url: 'https://github.com/DOSNetwork'
     }, {
         text: 'Documentations',
-        url: 'https://dosnetwork.github.io/docs/#/contents/blockchains/ethereum'
+        url: 'https://dosnetwork.github.io/docs'
     }
 ]
 
