@@ -11,6 +11,8 @@ import { EmitterHandlerWrapper } from "../../util/contract-helper";
 import { approveString } from "../../util/const";
 const { Column } = Table;
 const { Search } = Input;
+const ps = 20; // pageSize
+
 const nodeColumnRender = (text, record, index) => {
   let link = `/nodedetail/${record.node}`;
   return (
@@ -79,7 +81,7 @@ class NodeList extends Component {
       visible: false,
       pagination: {
         current: 1,
-        pageSize: 10
+        pageSize: ps
       },
       searchAddress: "",
       cachedNodes: [],
@@ -133,7 +135,7 @@ class NodeList extends Component {
     }
     if (snapShot.userLogout) {
       setTimeout(() => {
-        this.loadNodeList("", { current: 1, pageSize: 10 }, false);
+        this.loadNodeList("", { current: 1, pageSize: ps }, false);
       }, 0);
     }
   }
@@ -197,7 +199,7 @@ class NodeList extends Component {
                 message.success(MESSAGE_TEXT.MESSAGE_TRANSCATION_COMFIRM);
                 ui.loadNodeList(
                   "",
-                  { current: 1, pageSize: 10 },
+                  { current: 1, pageSize: ps },
                   ui.props.showRelatedNodes
                 );
               },
@@ -205,7 +207,7 @@ class NodeList extends Component {
                 message.error(error.message.split("\n")[0]);
                 ui.loadNodeList(
                   "",
-                  { current: 1, pageSize: 10 },
+                  { current: 1, pageSize: ps },
                   ui.props.showRelatedNodes
                 );
               }
@@ -321,7 +323,7 @@ class NodeList extends Component {
   };
   loadNodeList = async (
     searchAddress = "",
-    { current = 1, pageSize = 10 },
+    { current = 1, pageSize = ps },
     showRelatedNodes
   ) => {
     // console.log(window.ethereum.networkVersion)
