@@ -1214,6 +1214,11 @@ export const STAKING_ABI = [
         internalType: 'uint256',
         name: '_newCut',
         type: 'uint256'
+      },
+      {
+        internalType: 'string',
+        name: '_newDesc',
+        type: 'string'
       }
     ],
     name: 'updateNodeStaking',
