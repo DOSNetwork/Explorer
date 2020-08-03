@@ -46,8 +46,8 @@ const MarketInfo = class MarketInfo extends Component {
     }
   };
   fetchDosPrice = () => {
-    let address = "0x70861e862e1ac0c96f853c8231826e469ead37b1",
-      currency = "usd";
+    let address = "0x0a913bead80f321e7ac35285ee10d9d922659cb7";
+    let currency = "usd";
     axios
       .get(
         `https://api.coingecko.com/api/v3/simple/token_price/ethereum?contract_addresses=${address}&vs_currencies=${currency}`
