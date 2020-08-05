@@ -6,7 +6,6 @@ import numeral from "numeral";
 import NewNode from "./newNodeForm";
 import EllipsisWrapper from "../../components/EllispisWrapper";
 import identicon from "identicon.js";
-import { MESSAGE_TEXT } from "../../util/txt";
 import { EmitterHandlerWrapper } from "../../util/contract-helper";
 import { MAX_ALLOWANCE } from "../../util/const";
 const { Column } = Table;
@@ -158,6 +157,7 @@ class NodeList extends Component {
       constant
     } = this.props.contract;
     const { form } = this.formRef.props;
+    let { formatMessage: f } = this.props.intl;
 
     const allowance = await dosTokenContract.methods
       .allowance(userAddress, constant.STAKING_CONTRACT_ADDRESS)
@@ -193,10 +193,19 @@ class NodeList extends Component {
             ui.unMountRemoveListenerCallbacks = EmitterHandlerWrapper(
               emitter,
               hash => {
-                message.loading(MESSAGE_TEXT.MESSAGE_TRANSCATION_LOADING);
+                message.loading(
+                  f({ id: "Events.Loading" }, { type: "newNode", hash: hash}),
+                  0
+                );
               },
               (confirmationNumber, receipt) => {
-                message.success(MESSAGE_TEXT.MESSAGE_TRANSCATION_COMFIRM);
+                message.destroy();
+                message.success(
+                  f(
+                    { id: "Events.Success" },
+                    { type: "newNode", blockNumber: receipt.blockNumber }
+                  )
+                );
                 ui.loadNodeList(
                   "",
                   { current: 1, pageSize: ps },
@@ -227,10 +236,19 @@ class NodeList extends Component {
           ui.unMountRemoveListenerCallbacks = EmitterHandlerWrapper(
             emitter,
             hash => {
-              message.loading(MESSAGE_TEXT.MESSAGE_TRANSCATION_LOADING);
+              message.loading(
+                f({ id: "Events.Loading" }, { type: "approve", hash: hash }),
+                0
+              );
             },
             (confirmationNumber, receipt) => {
-              message.success(MESSAGE_TEXT.MESSAGE_TRANSCATION_COMFIRM);
+              message.destroy();
+              message.success(
+                f(
+                  { id: "Events.Success" },
+                  { type: "approve", blockNumber: receipt.blockNumber }
+                )
+              );
             },
             error => {
               message.error(error.message.split("\n")[0]);
@@ -248,11 +266,20 @@ class NodeList extends Component {
           ui.unMountRemoveListenerCallbacks = EmitterHandlerWrapper(
             emitter,
             hash => {
-              newNodeThenLoadList();
-              message.loading(MESSAGE_TEXT.MESSAGE_TRANSCATION_LOADING);
+              message.loading(
+                f({ id: "Events.Loading" }, { type: "approve", hash: hash }),
+                0
+              );
             },
             (confirmationNumber, receipt) => {
-              message.success(MESSAGE_TEXT.MESSAGE_TRANSCATION_COMFIRM);
+              message.destroy();
+              message.success(
+                f(
+                  { id: "Events.Success" },
+                  { type: "approve", blockNumber: receipt.blockNumber }
+                )
+              );
+              newNodeThenLoadList();
             },
             error => {
               message.error(error.message.split("\n")[0]);
@@ -270,11 +297,20 @@ class NodeList extends Component {
           ui.unMountRemoveListenerCallbacks = EmitterHandlerWrapper(
             emitter,
             hash => {
-              newNodeThenLoadList();
-              message.loading(MESSAGE_TEXT.MESSAGE_TRANSCATION_LOADING);
+              message.loading(
+                f({ id: "Events.Loading" }, { type: "approve", hash: hash }),
+                0
+              );
             },
             (confirmationNumber, receipt) => {
-              message.success(MESSAGE_TEXT.MESSAGE_TRANSCATION_COMFIRM);
+              message.destroy();
+              message.success(
+                f(
+                  { id: "Events.Success" },
+                  { type: "approve", blockNumber: receipt.blockNumber }
+                )
+              );
+              newNodeThenLoadList();
             },
             error => {
               message.error(error.message.split("\n")[0]);
@@ -326,7 +362,6 @@ class NodeList extends Component {
     { current = 1, pageSize = ps },
     showRelatedNodes
   ) => {
-    // console.log(window.ethereum.networkVersion)
     function fromWei(bn) {
       if (!bn || bn === "-") {
         return "";
@@ -363,7 +398,7 @@ class NodeList extends Component {
     nodesAddrs = Array.from(await stakingContract.methods.getNodeAddrs().call());
     // search related nodes
     if (isWalletLogin && showRelatedNodes) {
-      // console.log(`only show related nodes infos`);
+      // console.log(`only show related nodes info`);
       const eventList = await getLogNewNodeEventList(userAddress);
       let eventAddrs = eventList.map(event => event.returnValues.nodeAddress);
       const eventList2 = await getDelegateToEventList(userAddress);
@@ -372,7 +407,7 @@ class NodeList extends Component {
       nodesAddrs = result;
     } else {
       // search nodes
-      // console.log(`show all nodes infos`);
+      // console.log(`show all nodes info`);
       if (userAddress) {
         //Let owne and delegate nodes show first
         const eventList = await getLogNewNodeEventList(userAddress);
@@ -404,11 +439,9 @@ class NodeList extends Component {
     let total = filtedNodes.length;
     let startIndex = (current - 1) * pageSize;
     let endIndex = total > current * pageSize ? current * pageSize : total;
-    // console.log( `total:${total},startIndex:${startIndex}, endIndex:${endIndex}`);
     let now = await web3Client.eth.getBlockNumber();
     let block = await web3Client.eth.getBlock(now);
 
-    // console.log("now", block.timestamp);
     for (let i = startIndex; i < endIndex; i++) {
       const nodeAddr = filtedNodes[i];
       let node;

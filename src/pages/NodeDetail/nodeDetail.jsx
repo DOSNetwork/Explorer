@@ -87,16 +87,18 @@ const NodeDetail = class NodeDetail extends Component {
     let emitter = this.stakingContract.methods
       .nodeWithdraw(this.state.node)
       .send({ from: userAddress });
-    // 监听并且在unmount的时候处理事件解绑
+
     this.handleEmmiterEvents(
       emitter,
       emitterName,
       hash => {
         message.loading(
-          f({ id: "Events.Loading" }, { type: "withdraw", hash: hash })
+          f({ id: "Events.Loading" }, { type: "withdraw", hash: hash }),
+          0
         );
       },
       (confirmationNumber, receipt) => {
+        message.destroy();
         message.success(
           f(
             { id: "Events.Success" },
@@ -122,16 +124,18 @@ const NodeDetail = class NodeDetail extends Component {
     let emitter = this.stakingContract.methods
       .nodeClaimReward(this.state.node)
       .send({ from: userAddress });
-    // 监听并且在unmount的时候处理事件解绑
+
     this.handleEmmiterEvents(
       emitter,
       emitterName,
       hash => {
         message.loading(
-          f({ id: "Events.Loading" }, { type: "claimreward", hash: hash })
+          f({ id: "Events.Loading" }, { type: "claimreward", hash: hash }),
+          0
         );
       },
       (confirmationNumber, receipt) => {
+        message.destroy();
         message.success(
           f(
             { id: "Events.Success" },
@@ -157,16 +161,18 @@ const NodeDetail = class NodeDetail extends Component {
     let emitter = this.stakingContract.methods
       .delegatorWithdraw(this.state.node)
       .send({ from: userAddress });
-    // 监听并且在unmount的时候处理事件解绑
+
     this.handleEmmiterEvents(
       emitter,
       emitterName,
       hash => {
         message.loading(
-          f({ id: "Events.Loading" }, { type: "withdraw", hash: hash })
+          f({ id: "Events.Loading" }, { type: "withdraw", hash: hash }),
+          0
         );
       },
       (confirmationNumber, receipt) => {
+        message.destroy();
         message.success(
           f(
             { id: "Events.Success" },
@@ -191,16 +197,18 @@ const NodeDetail = class NodeDetail extends Component {
     let emitter = this.stakingContract.methods
       .delegatorClaimReward(this.state.node)
       .send({ from: userAddress });
-    // 监听并且在unmount的时候处理事件解绑
+
     this.handleEmmiterEvents(
       emitter,
       emitterName,
       hash => {
         message.loading(
-          f({ id: "Events.Loading" }, { type: "claimreward", hash: hash })
+          f({ id: "Events.Loading" }, { type: "claimreward", hash: hash }),
+          0
         );
       },
       (confirmationNumber, receipt) => {
+        message.destroy();
         message.success(
           f(
             { id: "Events.Success" },
@@ -223,16 +231,18 @@ const NodeDetail = class NodeDetail extends Component {
         let emitter = this.stakingContract.methods
           .nodeUnregister(this.state.node)
           .send({ from: userAddress });
-        // 监听并且在unmount的时候处理事件解绑
+
         this.handleEmmiterEvents(
           emitter,
           "User UnRegister",
           hash => {
             message.loading(
-              f({ id: "Events.Loading" }, { type: "unregister", hash: hash })
+              f({ id: "Events.Loading" }, { type: "unregister", hash: hash }),
+              0
             );
           },
           (confirmationNumber, receipt) => {
+            message.destroy();
             message.success(
               f(
                 { id: "Events.Success" },
@@ -246,7 +256,7 @@ const NodeDetail = class NodeDetail extends Component {
     });
   };
 
-  handleOwnerUpgrateSubmit = async e => {
+  handleOwnerUpdateNodeSubmit = async e => {
     const {
       userAddress,
       dosTokenContract,
@@ -286,20 +296,22 @@ const NodeDetail = class NodeDetail extends Component {
         let emitter = ui.stakingContract.methods
           .updateNodeStaking(nodeAddr, tokenAmount, dbAmount, rewardCut)
           .send({ from: userAddress });
-        // 监听并且在unmount的时候处理事件解绑
+
         ui.handleEmmiterEvents(
           emitter,
           "Update Node",
           hash => {
             message.loading(
-              f({ id: "Events.Loading" }, { type: "update", hash: hash })
+              f({ id: "Events.Loading" }, { type: "updateNode", hash: hash }),
+              0
             );
           },
           (confirmationNumber, receipt) => {
+            message.destroy();
             message.success(
               f(
                 { id: "Events.Success" },
-                { type: "update", blockNumber: receipt.blockNumber }
+                { type: "updateNode", blockNumber: receipt.blockNumber }
               )
             );
             form.resetFields();
@@ -318,10 +330,12 @@ const NodeDetail = class NodeDetail extends Component {
             hash => {
               updateFunc();
               message.loading(
-                f({ id: "Events.Loading" }, { type: "approve", hash: hash })
+                f({ id: "Events.Loading" }, { type: "approve", hash: hash }),
+                0
               );
             },
             (confirmationNumber, receipt) => {
+              message.destroy();
               message.success(
                 f(
                   { id: "Events.Success" },
@@ -348,10 +362,12 @@ const NodeDetail = class NodeDetail extends Component {
             "dbApprove",
             hash => {
               message.loading(
-                f({ id: "Events.Loading" }, { type: "approve", hash: hash })
+                f({ id: "Events.Loading" }, { type: "approve", hash: hash }),
+                0
               );
             },
             (confirmationNumber, receipt) => {
+              message.destroy();
               message.success(
                 f(
                   { id: "Events.Success" },
@@ -379,10 +395,12 @@ const NodeDetail = class NodeDetail extends Component {
             hash => {
               updateFunc();
               message.loading(
-                f({ id: "Events.Loading" }, { type: "approve", hash: hash })
+                f({ id: "Events.Loading" }, { type: "approve", hash: hash }),
+                0
               );
             },
             (confirmationNumber, receipt) => {
+              message.destroy();
               message.success(
                 f(
                   { id: "Events.Success" },
@@ -430,16 +448,17 @@ const NodeDetail = class NodeDetail extends Component {
         .nodeUnbond(tokenAmount, dbAmount, this.state.node)
         .send({ from: userAddress });
 
-      // 监听并且在unmount的时候处理事件解绑
       this.handleEmmiterEvents(
         emitter,
         "Owner Unbond",
         hash => {
           message.loading(
-            f({ id: "Events.Loading" }, { type: "unbond", hash: hash })
+            f({ id: "Events.Loading" }, { type: "unbond", hash: hash }),
+            0
           );
         },
         (confirmationNumber, receipt) => {
+          message.destroy();
           message.success(
             f(
               { id: "Events.Success" },
@@ -471,16 +490,17 @@ const NodeDetail = class NodeDetail extends Component {
         .delegatorUnbond(tokenAmount, this.state.node)
         .send({ from: userAddress });
 
-      // 监听并且在unmount的时候处理事件解绑
       this.handleEmmiterEvents(
         emitter,
         "Delegator Unbond",
         hash => {
           message.loading(
-            f({ id: "Events.Loading" }, { type: "unbond", hash: hash })
+            f({ id: "Events.Loading" }, { type: "unbond", hash: hash }),
+            0
           );
         },
         (confirmationNumber, receipt) => {
+          message.destroy();
           message.success(
             f(
               { id: "Events.Success" },
@@ -527,16 +547,18 @@ const NodeDetail = class NodeDetail extends Component {
           let emitter = stakingContract.methods
             .delegate(tokenAmount, nodeAddr)
             .send({ from: userAddress });
-          // 监听并且在unmount的时候处理事件解绑
+
           ui.handleEmmiterEvents(
             emitter,
             "User Delegate",
             hash => {
               message.loading(
-                f({ id: "Events.Loading" }, { type: "delegate", hash: hash })
+                f({ id: "Events.Loading" }, { type: "delegate", hash: hash }),
+                0
               );
             },
             (confirmationNumber, receipt) => {
+              message.destroy();
               message.success(
                 f(
                   { id: "Events.Success" },
@@ -563,18 +585,20 @@ const NodeDetail = class NodeDetail extends Component {
             emitter,
             "User Approve",
             hash => {
-              delegateFunc();
               message.loading(
-                f({ id: "Events.Loading" }, { type: "approve", hash: hash })
+                f({ id: "Events.Loading" }, { type: "approve", hash: hash }),
+                0
               );
             },
             (confirmationNumber, receipt) => {
+              message.destroy();
               message.success(
                 f(
                   { id: "Events.Success" },
                   { type: "approve", blockNumber: receipt.blockNumber }
                 )
               );
+              delegateFunc();
             },
             error => {
               message.error(error.message.split("\n")[0]);
@@ -948,7 +972,7 @@ const NodeDetail = class NodeDetail extends Component {
                 tab={TabbarRender(
                   isUserDelegatedThisNode
                     ? f({ id: "Tooltip.NodeDetail.Delegate" })
-                    : f({ id: "Tooltip.NodeDetail.Update" })
+                    : f({ id: "Tooltip.NodeDetail.UpdateNode" })
                 )}
                 key="1"
               >
@@ -957,7 +981,7 @@ const NodeDetail = class NodeDetail extends Component {
                     // Owner --Staking
                     <UpdateStakingNode
                       wrappedComponentRef={this.saveUpdateFormRef}
-                      onSubmit={this.handleOwnerUpgrateSubmit}
+                      onSubmit={this.handleOwnerUpdateNodeSubmit}
                     />
                   ) : (
                     // User --Delegate
