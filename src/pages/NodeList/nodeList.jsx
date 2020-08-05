@@ -8,7 +8,7 @@ import EllipsisWrapper from "../../components/EllispisWrapper";
 import identicon from "identicon.js";
 import { MESSAGE_TEXT } from "../../util/txt";
 import { EmitterHandlerWrapper } from "../../util/contract-helper";
-import { approveString } from "../../util/const";
+import { MAX_ALLOWANCE } from "../../util/const";
 const { Column } = Table;
 const { Search } = Input;
 const ps = 20; // pageSize
@@ -159,10 +159,10 @@ class NodeList extends Component {
     } = this.props.contract;
     const { form } = this.formRef.props;
 
-    const approve = await dosTokenContract.methods
+    const allowance = await dosTokenContract.methods
       .allowance(userAddress, constant.STAKING_CONTRACT_ADDRESS)
       .call();
-    const dbApprove = await dbTokenContract.methods
+    const dbAllowance = await dbTokenContract.methods
       .allowance(userAddress, constant.STAKING_CONTRACT_ADDRESS)
       .call();
     this.setState({
@@ -284,15 +284,15 @@ class NodeList extends Component {
           message.error(e.reason);
         }
       };
-      if (dbAmount !== 0 && dbApprove.toString() !== approveString) {
-        if (tokenAmount !== 0 && approve.toString() !== approveString) {
+      if (dbAmount !== 0 && dbAllowance.toString() !== MAX_ALLOWANCE) {
+        if (tokenAmount !== 0 && allowance.toString() !== MAX_ALLOWANCE) {
           dbApproveFunc();
           approveThenNewNode();
         } else {
           dbApproveThenNewNode();
         }
       } else {
-        if (tokenAmount !== 0 && approve.toString() !== approveString) {
+        if (tokenAmount !== 0 && allowance.toString() !== MAX_ALLOWANCE) {
           approveThenNewNode();
         } else {
           newNodeThenLoadList();

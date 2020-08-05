@@ -11,7 +11,7 @@ import { EllipsisString } from "../../util/util";
 import "./style.scss";
 import numeral from "numeral";
 import { EmitterHandlerWrapper } from "../../util/contract-helper";
-import { approveString } from "../../util/const";
+import { MAX_ALLOWANCE } from "../../util/const";
 const { TabPane } = Tabs;
 const { confirm } = Modal;
 const TabbarRender = tabbarName => {
@@ -256,10 +256,10 @@ const NodeDetail = class NodeDetail extends Component {
     let { formatMessage: f } = this.props.intl;
     e.preventDefault();
     const { form } = this.updateFormformRef.props;
-    const approve = await dosTokenContract.methods
+    const allowance = await dosTokenContract.methods
       .allowance(userAddress, constant.STAKING_CONTRACT_ADDRESS)
       .call();
-    const dbApprove = await dbTokenContract.methods
+    const dbAllowance = await dbTokenContract.methods
       .allowance(userAddress, constant.STAKING_CONTRACT_ADDRESS)
       .call();
 
@@ -398,15 +398,15 @@ const NodeDetail = class NodeDetail extends Component {
           message.error(e.reason);
         }
       };
-      if (dbAmount !== 0 && dbApprove.toString() !== approveString) {
-        if (tokenAmount !== 0 && approve.toString() !== approveString) {
+      if (dbAmount !== 0 && dbAllowance.toString() !== MAX_ALLOWANCE) {
+        if (tokenAmount !== 0 && allowance.toString() !== MAX_ALLOWANCE) {
           dbApproveFunc();
           approveThenUpdate();
         } else {
           dbApproveThenUpdate();
         }
       } else {
-        if (tokenAmount !== 0 && approve.toString() !== approveString) {
+        if (tokenAmount !== 0 && allowance.toString() !== MAX_ALLOWANCE) {
           approveThenUpdate();
         } else {
           updateFunc();
@@ -508,7 +508,7 @@ const NodeDetail = class NodeDetail extends Component {
     let { formatMessage: f } = this.props.intl;
     e.preventDefault();
     const { form } = this.delegateFormRef.props;
-    const approve = await dosTokenContract.methods
+    const allowance = await dosTokenContract.methods
       .allowance(userAddress, constant.STAKING_CONTRACT_ADDRESS)
       .call();
     this.setState({
@@ -554,7 +554,7 @@ const NodeDetail = class NodeDetail extends Component {
           message.error(e.reason);
         }
       };
-      if (approve.toString() !== approveString) {
+      if (allowance.toString() !== MAX_ALLOWANCE) {
         try {
           let emitter = dosTokenContract.methods
             .approve(constant.STAKING_CONTRACT_ADDRESS)
