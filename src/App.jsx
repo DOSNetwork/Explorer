@@ -8,20 +8,19 @@ import NodeDetail from "./pages/NodeDetail";
 import NotFound404 from "./pages/NotFound404";
 import Explorer from "./pages/Explorer";
 import Layout from "./Layout";
-
 import { message } from "antd";
 import store from './redux/store'
+// import { connectToClient } from "./util/web3.js";
+
 message.config({
   top: 100,
   maxCount: 3
 });
 class App extends Component {
-  componentWillMount() {
-    // export的userAddress会一直是空的
+  componentDidMount() {
     let { stakingContract, networkSupported } = store.getState().contract;
     if (networkSupported) {
       async function loadNodes() {
-        // export的userAddress会一直是空的
         let { userAddress, } = store.getState().contract;
         let nodesAddrs = Array.from(
           await stakingContract.methods.getNodeAddrs().call()

@@ -43,6 +43,7 @@ const contractState = {
     stakingContract: null,
     isWalletLogin: false,
     userAddress: '',
+    web3Context: null,
     network: '',
     connectedNetwork: '',
     constant: {},
@@ -65,12 +66,12 @@ globalActions[type.GLOBAL_CONFIG_CHANGE_OSLM] = (prevState, payload) => {
         config_onlyShowRelatedToMe: payload.config_onlyShowRelatedToMe
     }
 }
-globalActions[type.CONTRACT_METAMASK_LOGOUT] = (prevState, payload) => {
-    return {
-        ...globalState,
-        config_onlyShowRelatedToMe: false
-    }
-}
+// globalActions[type.WALLET_DEACTIVATE] = (prevState, payload) => {
+//     return {
+//         ...globalState,
+//         config_onlyShowRelatedToMe: false
+//     }
+// }
 globalActions[type.GLOBAL_CONFIG_SET_LANG] = (prevState, payload) => {
     let {
         lang
@@ -137,8 +138,8 @@ const explorerReducer = handleActions(explorerActions, explorerState)
 const contractActions = {}
 // contract types here --->
 // CONTRACT_WEB3_CLINET_INIT
-// CONTRACT_METAMASK_LOGIN
-// CONTRACT_METAMASK_LOGOUT
+// WALLET_ACTIVATE
+// WALLET_DEACTIVATE
 // CONTRACT_USERADDRESS_CHANGE
 // ===== contractReducer
 contractActions[type.CONTRACT_USERADDRESS_CHANGE] = (prevState, payload) => {
@@ -147,18 +148,20 @@ contractActions[type.CONTRACT_USERADDRESS_CHANGE] = (prevState, payload) => {
         userAddress: payload.address
     }
 }
-contractActions[type.CONTRACT_METAMASK_LOGIN] = (prevState, payload) => {
+contractActions[type.WALLET_ACTIVATE] = (prevState, payload) => {
     return {
         ...prevState,
         isWalletLogin: true,
-        userAddress: payload.address
+        userAddress: payload.address,
+        web3Context: payload.web3Context
     }
 }
-contractActions[type.CONTRACT_METAMASK_LOGOUT] = (prevState, payload) => {
+contractActions[type.WALLET_DEACTIVATE] = (prevState, payload) => {
     return {
         ...prevState,
         isWalletLogin: false,
-        userAddress: ''
+        userAddress: '',
+        web3Context: null
     }
 }
 
