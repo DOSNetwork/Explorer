@@ -18,7 +18,7 @@ const MarketInfo = class MarketInfo extends Component {
   }
   componentDidMount() {
     this.fetchDosPrice();
-    // this.loadRateAndStaked();
+    this.loadRateAndStaked();
     this.isLoaded = true
   }
   componentWillUnmount() {
