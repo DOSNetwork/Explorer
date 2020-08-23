@@ -1,11 +1,17 @@
+@import '../../styles/media.scss';
+
 .market-info--wrapper {
     display: flex;
     align-items: center;
     justify-content: space-between;
+
+    @include respond-to ('mobile') {
+        flex-direction: column;
+    }
 }
 
 .market-info--block {
-    flex: 0 0 395px;
+    flex: 0 0 33%;
     width: 0;
     height: 120px;
     border-radius: 5px;
@@ -25,6 +31,16 @@
         background-image: url('./assets/price.png');
         background-size: 100% 100%;
     }
+
+    @include respond-to ('max960') {
+        padding: 10px 15px;
+    }
+
+    @include respond-to ('mobile') {
+        padding: 10px 15px;
+        width: 100%;
+        margin-bottom: 10px;
+    }
 }
 
 .block--title {
@@ -32,6 +48,10 @@
     color: #666;
     display: flex;
     align-items: center;
+
+    @include respond-to ('max960') {
+        font-size: 14px;
+    }
 
     &>img {
         width: 20px;
@@ -44,4 +64,8 @@
     font-size: 36px;
     margin-top: 18px;
     color: #6458A5;
+
+    @include respond-to ('max960') {
+        font-size: 28px;
+    }
 }

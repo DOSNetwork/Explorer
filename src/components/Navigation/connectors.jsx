@@ -86,7 +86,7 @@ function Connectors(props) {
                     </div>
                 )
             })}
-            <div className='connector-item' onClick={() => { onConnectDeactivate(deactivate, currentConnectedConnector, setCurrentConnectingConnector) }}>Deactivate</div>
+            <div className='connector-item item-deactivate' onClick={() => { onConnectDeactivate(deactivate, currentConnectedConnector, setCurrentConnectingConnector) }}>Deactivate</div>
         </div>
     )
 }

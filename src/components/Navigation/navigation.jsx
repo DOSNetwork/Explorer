@@ -18,14 +18,15 @@ function Navigation(props) {
             <div className="header__container layout__container">
                 <div className="logo__wrapper">
                     <NavLink to={'/'}>
-                        <img src="/logo.png" className="logo--img" alt="logo" />
+                        <span className='logo--img'></span>
+                        {/* <img src="/logo.png" className="logo--img" alt="logo" /> */}
                     </NavLink>
                 </div>
                 <div className="navi__wrapper">
                     <div className="navi__container">
-                        <NavLink className="navi-item" to={`/explorer`} activeClassName="active"><ExplorerIcon />&nbsp;{f({ id: 'Title.explorer' })}</NavLink>
-                        <NavLink className="navi-item" to={`/staking`} activeClassName="active"><NodeListIcon />&nbsp;{f({ id: 'Title.staking' })}</NavLink>
-                        <NavLink className="navi-item" to={`/myaccount`} activeClassName="active"><MyAccountIcon />&nbsp;{f({ id: 'Title.myaccount' })}</NavLink>
+                        <NavLink className="navi-item" to={`/explorer`} activeClassName="active"><ExplorerIcon />&nbsp;<span className='navi-item--title'>{f({ id: 'Title.explorer' })}</span></NavLink>
+                        <NavLink className="navi-item" to={`/staking`} activeClassName="active"><NodeListIcon />&nbsp;<span className='navi-item--title'>{f({ id: 'Title.staking' })}</span></NavLink>
+                        <NavLink className="navi-item" to={`/myaccount`} activeClassName="active"><MyAccountIcon />&nbsp;<span className='navi-item--title'>{f({ id: 'Title.myaccount' })}</span></NavLink>
                     </div>
                 </div>
                 <div className="change-lang-button" onClick={() => { props.changeLang(lang === 'zh-CN' ? 'en-US' : 'zh-CN') }}>{f({ id: 'ChangeLang' })}</div>

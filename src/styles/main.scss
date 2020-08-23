@@ -2,6 +2,17 @@
 @import './vars.scss';
 @import './layout.scss';
 
+:root {
+    --nav-height: 75px;
+
+    @include respond-to ('max960') {
+        --nav-height: 55px;
+    }
+
+    --nav-container-height: calc(var(--nav-height) - 2px);
+    --body-padding:calc(var(--nav-height) + 15px) 10px 0 10px;
+}
+
 #main {
     background-color: #f8f8f8;
     min-height: 100vh;
@@ -10,12 +21,15 @@
 }
 
 .main-body {
-    width: 1240px;
+    width: auto;
     margin: 0 auto;
-    padding: 90px 0 0 0;
+    padding: var(--body-padding);
+
     min-height: 800px;
     flex: 1; // padding-bottom: 100px;
-    // @include layout-min-960();
+    @include layout-max-960;
+    @include layout-min-960-max-1200;
+    @include layout-min-1200;
 }
 
 .page-title {
@@ -50,6 +64,9 @@
     .footer__container {
         width: 1240px;
         margin: 0 auto;
+        @include layout-max-960;
+        @include layout-min-960-max-1200;
+        @include layout-min-1200;
     }
 
     .links__wrapper {

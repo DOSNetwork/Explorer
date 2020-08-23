@@ -1,14 +1,19 @@
 @import './media.scss';
 
-@mixin layout-min-960 {
-    @include respond-to ('960') {
-        min-width: 960px;
+@mixin layout-max-960 {
+    @include respond-to ('max960') {
+        width: 100%;
     }
 }
 
+@mixin layout-min-960-max-1200 {
+    @include respond-to ('min960max1200') {
+        width: 960px;
+    }
+}
 
 @mixin layout-min-1200 {
-    @include respond-to ('1200') {
-        min-width: 1240px;
+    @include respond-to ('min1200') {
+        width: 1200px;
     }
 }

@@ -1,7 +1,14 @@
-$breakpoints: ('960': '(max-width: 990px)',
-'1200':'(min-width: 1260px)',
-'1600':'(min-width: 1660px)',
-'1920': '(min-width: 1980px)') !default;
+$breakpoints: ('mobile': '(max-width: 600px)',
+    'max960': '(max-width: 990px)',
+    'max1200':'(max-width: 1200px)',
+    'max1600':'(max-width: 1660px)',
+    'max1920': '(max-width: 1980px)',
+    'min960': '(min-width: 960px)',
+    'min1200':'(min-width: 1200px)',
+    'min1600':'(min-width: 1660px)',
+    'min1920': '(min-width: 1980px)',
+    'min960max1200': '(min-width: 960px) and (max-width: 1200px)'
+) !default;
 
 @mixin respond-to($breakpoint) {
     $query: map-get($breakpoints, $breakpoint);
