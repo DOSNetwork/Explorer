@@ -1,6 +1,6 @@
 import React from "react";
 import { injectIntl } from 'react-intl'
-import { Modal, Form, Input } from "antd";
+import { Modal, Form, Input, Checkbox } from "antd";
 const ETHAddressRegex = /^(0x)?[0-9a-fA-F]{40}$/
 const newNode = Form.create({
   name: "form_in_modal"
@@ -39,6 +39,9 @@ const newNode = Form.create({
       }
       callback()
     };
+    validateAgreementChecked = (rule, value, callback) => {
+      value ? callback() : callback(this.props.intl.formatMessage({ id: 'Form.Error.CreateNodeAgreement' }))
+    }
     render() {
       const {
         visible,
@@ -118,6 +121,20 @@ const newNode = Form.create({
                   }
                 ]
               })(<Input placeholder="10" suffix='%' />)}
+            </Form.Item>
+            <Form.Item >
+              {getFieldDecorator("agreement", {
+                valuePropName: 'checked',
+                rules: [
+                  {
+                    required: false
+                  }, {
+                    validator: this.validateAgreementChecked
+                  }
+                ]
+              })(<Checkbox>
+                {f({ id: 'NodeCreate.Agreement.pre' })}<a className='form-link' href={f({ id: 'NodeCreate.Agreement.url' })} target='_blank' rel="noopener noreferrer">[{f({ id: 'NodeCreate.Agreement.tutorials' })}]</a> {f({ id: 'NodeCreate.Agreement.end' })}
+              </Checkbox>)}
             </Form.Item>
           </Form>
           <p>{modalText}</p>

@@ -28,7 +28,6 @@ const stakingNode = Form.create({ name: "form_in_modal" })(
               rules: [
                 {
                   required: false,
-                  value: "60",
                   message: f({ id: "Form.Message.InputDropBurnAmount" })
                 }
               ]
@@ -43,6 +42,16 @@ const stakingNode = Form.create({ name: "form_in_modal" })(
                 }
               ]
             })(<Input placeholder="10" suffix='%' />)}
+          </Form.Item>
+          <Form.Item label={f({ id: 'Form.Lable.UpdateNodeDescription' })}>
+            {getFieldDecorator("nodeDesc", {
+              rules: [
+                {
+                  required: false,
+                  message: f({ id: 'Form.Message.InputNodeDescription' })
+                }
+              ]
+            })(<Input maxLength={32} placeholder={f({ id: 'Form.Message.InputNodeDescription' })} />)}
           </Form.Item>
           <Button type="primary" htmlType="submit" className="login-form-button">
             {f({ id: 'Form.Button.Submit' })}

@@ -41,8 +41,7 @@ const messages = {
     'Form.Error.tokenAmount2': '请输入大等于800,000的数量',
     'Form.Error.cutRate': '请输入有效数字',
     'Form.Error.cutRate2': '请输入有效百分比数字',
-
-
+    'Form.Error.CreateNodeAgreement': '请勾选确认',
     'Form.Lable.Name': '名字',
     'Form.Message.InputName': '请命名您的节点',
     'Form.Lable.Node': '节点地址',
@@ -145,6 +144,11 @@ const messages = {
     'Table.Column.Activites.Action': '动作',
     'Table.Column.Activites.TxHash': '交易哈希',
 
-    'Tooltip.Explorer.Pagnation': '最近 {pageSize} 个事件'
+    'Tooltip.Explorer.Pagnation': '最近 {pageSize} 个事件',
+    'NodeCreate.Agreement.pre': '创建节点需要链上装置和链下装置,请在创建节点之前仔细阅读',
+    'NodeCreate.Agreement.url': 'www.baidu.com',
+    'NodeCreate.Agreement.tutorials': '节点运行者教程',
+    'NodeCreate.Agreement.end': '.'
+
 }
 export default messages

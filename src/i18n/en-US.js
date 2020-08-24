@@ -45,7 +45,7 @@ const messages = {
     'Form.Error.tokenAmount2': 'Please enter a value larger or equal to 800,000',
     'Form.Error.cutRate': 'Please enter a valid number',
     'Form.Error.cutRate2': 'Please enter a valid percentage',
-
+    'Form.Error.CreateNodeAgreement': 'Please check to confirm',
     'Form.Lable.Name': 'Name',
     'Form.Message.InputName': 'Please name your node',
     'Form.Lable.Node': 'Node Address',
@@ -147,6 +147,10 @@ const messages = {
     'Table.Column.Activites.Time': 'Time',
     'Table.Column.Activites.Action': 'Action',
     'Table.Column.Activites.TxHash': 'Tx Hash',
-    'Tooltip.Explorer.Pagnation': 'Latest {pageSize} events'
+    'Tooltip.Explorer.Pagnation': 'Latest {pageSize} events',
+    'NodeCreate.Agreement.pre': 'Node creation requires both off-chain setup and on-chain setup, please read node runner ',
+    'NodeCreate.Agreement.url': 'www.google.com',
+    'NodeCreate.Agreement.tutorials': 'tutorials',
+    'NodeCreate.Agreement.end': 'before creating a node.'
 }
 export default messages

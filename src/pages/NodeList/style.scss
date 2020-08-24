@@ -13,7 +13,7 @@
 .node-list--header-wrapper {
     display: flex;
     justify-content: space-between;
-    padding-bottom:10px;
+    padding-bottom: 10px;
 }
 
 
@@ -29,7 +29,12 @@
     align-items: center;
 }
 
-.nodelist-name{
-    display:flex;
-    align-items:center;
+.nodelist-name {
+    display: flex;
+    align-items: center;
+}
+
+
+.form-link {
+    color: #1890ff;
 }
