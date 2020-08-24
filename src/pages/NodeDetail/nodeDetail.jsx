@@ -666,7 +666,6 @@ const NodeDetail = class NodeDetail extends Component {
       }
     }, 1060)
     return () => {
-      console.log('清除倒计时')
       clearInterval(counting);
     }
   };
@@ -682,17 +681,17 @@ const NodeDetail = class NodeDetail extends Component {
     let myRewardTotal = 0;
     if (userAddress) {
       if (isUserOwnedThisNode) {
-        let rewardotal = await stakingContract.methods
+        let rewardTotal = await stakingContract.methods
           .getNodeRewardTokensRT(node)
           .call();
-        myRewardTotal = fromWei(rewardotal);
+        myRewardTotal = fromWei(rewardTotal);
       } else {
         let userDelegatedRewardTotal = await stakingContract.methods
           .getDelegatorRewardTokensRT(userAddress, node)
           .call();
         myRewardTotal = fromWei(userDelegatedRewardTotal);
       }
-      console.log(`更新完毕`)
+      console.log(`Rewards updated`)
       this.setState({
         myRewardTotal,
         secondsCounting: 14,
@@ -851,6 +850,7 @@ const NodeDetail = class NodeDetail extends Component {
             <div className="info-summary--wrapper">
               <div className="info-node">
                 <span className="node-address">
+                  {EllipsisString(node, 6, 6)}{" "}
                 </span>
                 {status ? (
                   <div className="node-status__tag tag--active">

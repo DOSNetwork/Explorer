@@ -150,7 +150,7 @@ const messages = {
     'Table.Column.Activites.TxHash': 'Tx Hash',
     'Tooltip.Explorer.Pagnation': 'Latest {pageSize} events',
     'NodeCreate.Agreement.pre': 'Node creation requires both off-chain setup and on-chain setup, please read node runner ',
-    'NodeCreate.Agreement.url': 'www.google.com',
+    'NodeCreate.Agreement.url': '/',
     'NodeCreate.Agreement.tutorials': 'tutorials',
     'NodeCreate.Agreement.end': 'before creating a node.'
 }

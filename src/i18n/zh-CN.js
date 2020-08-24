@@ -147,7 +147,7 @@ const messages = {
 
     'Tooltip.Explorer.Pagnation': '最近 {pageSize} 个事件',
     'NodeCreate.Agreement.pre': '创建节点需要链上装置和链下装置,请在创建节点之前仔细阅读',
-    'NodeCreate.Agreement.url': 'www.baidu.com',
+    'NodeCreate.Agreement.url': '/',
     'NodeCreate.Agreement.tutorials': '节点运行者教程',
     'NodeCreate.Agreement.end': '.'
 
