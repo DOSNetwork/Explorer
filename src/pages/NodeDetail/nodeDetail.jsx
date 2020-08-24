@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import { Button, message, Tabs, Modal } from "antd";
-// import { PoweroffOutlined } from '@ant-design/icons';
+import { ReloadOutlined } from '@ant-design/icons';
 import { injectIntl } from "react-intl";
 import DelegateNode from "./delegateNodeForm";
 import UnbondNode from "./unbondNodeForm";
@@ -32,7 +32,9 @@ const NodeDetail = class NodeDetail extends Component {
       myRewardTotal: 0,
       withDrawalTotal: 0,
       loading: false,
-      formText: ""
+      formText: "",
+      realTimeRewardsPulling: false,
+      secondsCounting: 14
     };
   }
   componentDidMount() {
@@ -641,6 +643,62 @@ const NodeDetail = class NodeDetail extends Component {
       )
     );
   };
+  startCounting = async () => {
+    this.setState({
+      secondsCounting: 14,
+      realTimeRewardsPulling: false
+    })
+    const counting = setInterval(async () => {
+      let { secondsCounting } = this.state
+      if (secondsCounting > 0) {
+        this.setState(({ secondsCounting, realTimeRewardsPulling }) => {
+          if (secondsCounting === 1) {
+            realTimeRewardsPulling = true
+          }
+          return {
+            secondsCounting: secondsCounting - 1 >= 0 ? secondsCounting - 1 : 0,
+            realTimeRewardsPulling
+          }
+        })
+      } else {
+        await this.getRewards()
+      }
+    }, 1060)
+    return () => {
+      console.log('清除倒计时')
+      clearInterval(counting);
+    }
+  };
+  getRewards = async () => {
+    function fromWei(bn) {
+      if (!bn || bn === "-") {
+        return "";
+      }
+      return web3Client.utils.fromWei(bn.toString("10"));
+    }
+    const { isUserOwnedThisNode, node } = this.state
+    const { web3Client, userAddress, stakingContract } = this.props.contract;
+    let myRewardTotal = 0;
+    if (userAddress) {
+      if (isUserOwnedThisNode) {
+        let rewardotal = await stakingContract.methods
+          .getNodeRewardTokensRT(node)
+          .call();
+        myRewardTotal = fromWei(rewardotal);
+      } else {
+        let userDelegatedRewardTotal = await stakingContract.methods
+          .getDelegatorRewardTokensRT(userAddress, node)
+          .call();
+        myRewardTotal = fromWei(userDelegatedRewardTotal);
+      }
+      console.log(`更新完毕`)
+      this.setState({
+        myRewardTotal,
+        secondsCounting: 14,
+        realTimeRewardsPulling: false
+      })
+    }
+  };
   getNodeDetail = async () => {
     function fromWei(bn) {
       if (!bn || bn === "-") {
@@ -667,7 +725,8 @@ const NodeDetail = class NodeDetail extends Component {
       pendingWithdrawDB,
       rewardCut,
       description,
-      stakedDB
+      stakedDB,
+      ownerAddr
     } = nodeInstance;
     const nodeDetail = {
       node: nodeAddr,
@@ -699,11 +758,12 @@ const NodeDetail = class NodeDetail extends Component {
     if (userAddress) {
       isUserOwnedThisNode =
         web3Client.utils.toChecksumAddress(userAddress) ===
-        web3Client.utils.toChecksumAddress(nodeInstance.ownerAddr);
+        web3Client.utils.toChecksumAddress(ownerAddr);
       if (isUserOwnedThisNode) {
         const nodeWithdrawableTotal = await stakingContract.methods
-          .nodeWithdrawable(nodeInstance.ownerAddr, nodeAddr)
+          .nodeWithdrawable(ownerAddr, nodeAddr)
           .call();
+        // realtime rewards
         rewardotal = await stakingContract.methods
           .getNodeRewardTokensRT(nodeAddr)
           .call();
@@ -726,6 +786,8 @@ const NodeDetail = class NodeDetail extends Component {
         let delegator = await stakingContract.methods
           .delegators(userAddress, nodeAddr)
           .call();
+
+        // realtime rewards
         userDelegatedRewardTotal = await stakingContract.methods
           .getDelegatorRewardTokensRT(userAddress, nodeAddr)
           .call();
@@ -756,8 +818,10 @@ const NodeDetail = class NodeDetail extends Component {
       dropBurnToken: stakedDB,
       withDrawalDropBurn: withDrawalDropBurn,
       withDrawalDropBurnFrozen: withDrawalDropBurnFrozen,
-      nodeDetail: nodeDetail
+      nodeDetail: nodeDetail,
+      ownerAddr: ownerAddr
     });
+    this.unMountRemoveListenerCallbacks.push(this.startCounting())
   };
   render() {
     const {
@@ -785,7 +849,6 @@ const NodeDetail = class NodeDetail extends Component {
             <div className="info-summary--wrapper">
               <div className="info-node">
                 <span className="node-address">
-                  {EllipsisString(node, 6, 6)}{" "}
                 </span>
                 {status ? (
                   <div className="node-status__tag tag--active">
@@ -840,7 +903,6 @@ const NodeDetail = class NodeDetail extends Component {
                   <p className="user-info--value">
                     {numberFormatRender(this.state.withDrawalTotal)}
                     <span className="value--frozen">
-                      {" "}
                       / {numberFormatRender(this.state.withDrawalFrozen)}
                     </span>
                   </p>
@@ -856,8 +918,7 @@ const NodeDetail = class NodeDetail extends Component {
                         <p className="user-info--value">
                           {numberFormatRender(this.state.withDrawalDropBurn)}
                           <span className="value--frozen">
-                            {" "}
-                          / {numberFormatRender(this.state.withDrawalDropBurnFrozen)}
+                            / {numberFormatRender(this.state.withDrawalDropBurnFrozen)}
                           </span>
                         </p>
                       </>
@@ -884,11 +945,14 @@ const NodeDetail = class NodeDetail extends Component {
                 </div>
                 <div className="user-info--rewards">
                   <p className="user-info--title">
-                    {" "}
                     {f({ id: "Tooltip.NodeDetail.MyRewards" })}
                   </p>
                   <p className="user-info--value">
                     {numberFormatRender(this.state.myRewardTotal)}
+                    <span className="secord-counting">
+                      {this.state.secondsCounting}s
+                  </span>
+                    <ReloadOutlined spin={this.state.realTimeRewardsPulling} style={{ fontSize: '14px' }} />
                   </p>
                   {isUserDelegatedThisNode ? (
                     <Button
@@ -914,21 +978,18 @@ const NodeDetail = class NodeDetail extends Component {
             ) : null}
             <div className="node-detail--item">
               <div className="item--title">
-                {" "}
                 {f({ id: "Tooltip.NodeDetail.NodeAddress" })}
               </div>
               <div className="item--value">{nodeAddr}</div>
             </div>
             <div className="node-detail--item">
               <div className="item--title">
-                {" "}
                 {f({ id: "Tooltip.NodeDetail.NodeDescription" })}
               </div>
               <div className="item--value">{description}</div>
             </div>
             <div className="node-detail--item">
               <div className="item--title">
-                {" "}
                 {f({ id: "Tooltip.NodeDetail.NodeSelt-Staked" })}
               </div>
               <div className="item--value">
@@ -937,7 +998,6 @@ const NodeDetail = class NodeDetail extends Component {
             </div>
             <div className="node-detail--item">
               <div className="item--title">
-                {" "}
                 {f({ id: "Tooltip.NodeDetail.TotalDelegated" })}
               </div>
               <div className="item--value">
@@ -946,14 +1006,12 @@ const NodeDetail = class NodeDetail extends Component {
             </div>
             <div className="node-detail--item">
               <div className="item--title">
-                {" "}
                 {f({ id: "Tooltip.NodeDetail.RewardCut" })}
               </div>
               <div className="item--value">{rewardCut}%</div>
             </div>
             <div className="node-detail--item">
               <div className="item--title">
-                {" "}
                 {f({ id: "Tooltip.NodeDetail.Uptime" })}
               </div>
               <div className="item--value">
