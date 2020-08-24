@@ -94,10 +94,12 @@ const messages = {
     'Form.Lable.AddDelegateAmount': 'Add Delegate Amount',
     'Form.Lable.AddDropBurnAmount': 'Add DropBurn Amount',
     'Form.Lable.UpdateRewardCut': 'Update Commission Rate',
+    'Form.Lable.UpdateNodeDescription': 'Update Node Description',
     'Form.Message.InputUnbondAmount': "Please input the unbond token amount",
     'Form.Message.InputDropBurnAmount': "Please input DropBurn token amount",
     'Form.Message.InputDelegateAmount': "Please input the delegate token amount!",
     'Form.Message.InputRewardCut': "Please input the new commission rate",
+    'Form.Message.InputNodeDescription': 'Please input the node description',
 
     'Tooltip.MarketInfo.InterestRate': 'Current APR',
     'Tooltip.MarketInfo.NumberOfStakedToken': 'Number of Staked Tokens',

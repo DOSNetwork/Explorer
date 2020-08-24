@@ -222,8 +222,8 @@ const NodeDetail = class NodeDetail extends Component {
     let { formatMessage: f } = this.props.intl;
     const { userAddress } = this.props.contract;
     confirm({
-      title: f({ id: 'Modal.NodeUnregister.Title'}),
-      content: f({ id: 'Modal.NodeUnregister.Content'}),
+      title: f({ id: 'Modal.NodeUnregister.Title' }),
+      content: f({ id: 'Modal.NodeUnregister.Content' }),
       okText: "Sure",
       okType: "danger",
       cancelText: "No",
@@ -252,7 +252,7 @@ const NodeDetail = class NodeDetail extends Component {
           }
         );
       },
-      onCancel() {}
+      onCancel() { }
     });
   };
 
@@ -290,11 +290,12 @@ const NodeDetail = class NodeDetail extends Component {
       if (values.rewardCut !== undefined) {
         rewardCut = values.rewardCut;
       }
+      const nodeDesc = values.desc || ''
       const nodeAddr = this.state.node;
       const ui = this;
-      const updateFunc = function(receipt) {
+      const updateFunc = function (receipt) {
         let emitter = ui.stakingContract.methods
-          .updateNodeStaking(nodeAddr, tokenAmount, dbAmount, rewardCut)
+          .updateNodeStaking(nodeAddr, tokenAmount, dbAmount, rewardCut, nodeDesc)
           .send({ from: userAddress });
 
         ui.handleEmmiterEvents(
@@ -318,7 +319,7 @@ const NodeDetail = class NodeDetail extends Component {
           }
         );
       };
-      const dbApproveThenUpdate = function(receipt) {
+      const dbApproveThenUpdate = function (receipt) {
         console.log("call dbApprove then newNodeFunc");
         try {
           let emitter = dbTokenContract.methods
@@ -351,7 +352,7 @@ const NodeDetail = class NodeDetail extends Component {
           message.error(e.reason);
         }
       };
-      const dbApproveFunc = function(receipt) {
+      const dbApproveFunc = function (receipt) {
         console.log("call dbApprove then newNodeFunc");
         try {
           let emitter = dbTokenContract.methods
@@ -383,7 +384,7 @@ const NodeDetail = class NodeDetail extends Component {
           message.error(e.reason);
         }
       };
-      const approveThenUpdate = function(receipt) {
+      const approveThenUpdate = function (receipt) {
         console.log("call approveFunc then newNodeFunc");
         try {
           let emitter = dosTokenContract.methods
@@ -542,7 +543,7 @@ const NodeDetail = class NodeDetail extends Component {
       const nodeAddr = this.state.node;
       let ui = this;
 
-      const delegateFunc = function(receipt) {
+      const delegateFunc = function (receipt) {
         try {
           let emitter = stakingContract.methods
             .delegate(tokenAmount, nodeAddr)
@@ -791,20 +792,20 @@ const NodeDetail = class NodeDetail extends Component {
                     {f({ id: "Node.active" })}
                   </div>
                 ) : (
-                  <div className="node-status__tag tag--inactive">
-                    {f({ id: "Node.inactive" })}
-                  </div>
-                )}
+                    <div className="node-status__tag tag--inactive">
+                      {f({ id: "Node.inactive" })}
+                    </div>
+                  )}
               </div>
               {isWalletLogin && isUserOwnedThisNode ? (
                 <Button
                   className="unregister-button"
-//                  icon={<PoweroffOutlined />}
+                  //                  icon={<PoweroffOutlined />}
                   shape="round"
                   size="small"
                   onClick={this.handleUnregister}
                 >
-                  { f({ id: 'Node.Unregister'}) }
+                  {f({ id: 'Node.Unregister' })}
                 </Button>
               ) : null}
             </div>
@@ -845,22 +846,22 @@ const NodeDetail = class NodeDetail extends Component {
                   </p>
                   {(+this.state.withDrawalDropBurn >= "0" ||
                     +this.state.withDrawalDropBurnFrozen >= "0") &&
-                  isUserOwnedThisNode ? (
-                    <>
-                      <p className="user-info--title">
-                        {f({
-                          id: "Tooltip.NodeDetail.WithdrawalDropBurnFrozen"
-                        })}
-                      </p>
-                      <p className="user-info--value">
-                        {numberFormatRender(this.state.withDrawalDropBurn)}
-                        <span className="value--frozen">
-                          {" "}
+                    isUserOwnedThisNode ? (
+                      <>
+                        <p className="user-info--title">
+                          {f({
+                            id: "Tooltip.NodeDetail.WithdrawalDropBurnFrozen"
+                          })}
+                        </p>
+                        <p className="user-info--value">
+                          {numberFormatRender(this.state.withDrawalDropBurn)}
+                          <span className="value--frozen">
+                            {" "}
                           / {numberFormatRender(this.state.withDrawalDropBurnFrozen)}
-                        </span>
-                      </p>
-                    </>
-                  ) : null}
+                          </span>
+                        </p>
+                      </>
+                    ) : null}
                   {isUserDelegatedThisNode ? (
                     <Button
                       className="widthdraw-button"
@@ -871,15 +872,15 @@ const NodeDetail = class NodeDetail extends Component {
                       {f({ id: "Tooltip.NodeDetail.Withdraw" })}
                     </Button>
                   ) : (
-                    <Button
-                      className="widthdraw-button"
-                      shape="round"
-                      size="small"
-                      onClick={this.handleOwnerWithdraw}
-                    >
-                      {f({ id: "Tooltip.NodeDetail.Withdraw" })}
-                    </Button>
-                  )}
+                      <Button
+                        className="widthdraw-button"
+                        shape="round"
+                        size="small"
+                        onClick={this.handleOwnerWithdraw}
+                      >
+                        {f({ id: "Tooltip.NodeDetail.Withdraw" })}
+                      </Button>
+                    )}
                 </div>
                 <div className="user-info--rewards">
                   <p className="user-info--title">
@@ -899,15 +900,15 @@ const NodeDetail = class NodeDetail extends Component {
                       {f({ id: "Tooltip.NodeDetail.Claim" })}
                     </Button>
                   ) : (
-                    <Button
-                      className="widthdraw-button"
-                      shape="round"
-                      size="small"
-                      onClick={this.handleOwnerClaimReward}
-                    >
-                      {f({ id: "Tooltip.NodeDetail.Claim" })}
-                    </Button>
-                  )}
+                      <Button
+                        className="widthdraw-button"
+                        shape="round"
+                        size="small"
+                        onClick={this.handleOwnerClaimReward}
+                      >
+                        {f({ id: "Tooltip.NodeDetail.Claim" })}
+                      </Button>
+                    )}
                 </div>
               </div>
             ) : null}
@@ -984,12 +985,12 @@ const NodeDetail = class NodeDetail extends Component {
                       onSubmit={this.handleOwnerUpdateNodeSubmit}
                     />
                   ) : (
-                    // User --Delegate
-                    <DelegateNode
-                      wrappedComponentRef={this.saveDelegateFormRef}
-                      onSubmit={this.handleUserDelegateSubmit}
-                    />
-                  )}
+                      // User --Delegate
+                      <DelegateNode
+                        wrappedComponentRef={this.saveDelegateFormRef}
+                        onSubmit={this.handleUserDelegateSubmit}
+                      />
+                    )}
                 </div>
               </TabPane>
               <TabPane
@@ -1004,12 +1005,12 @@ const NodeDetail = class NodeDetail extends Component {
                       onSubmit={this.handleOwnerUnbondSubmit}
                     />
                   ) : (
-                    // User --unbond
-                    <UnbondNode
-                      wrappedComponentRef={this.saveUnbondFormRef}
-                      onSubmit={this.handleUserUnbondSubmit}
-                    />
-                  )}
+                      // User --unbond
+                      <UnbondNode
+                        wrappedComponentRef={this.saveUnbondFormRef}
+                        onSubmit={this.handleUserUnbondSubmit}
+                      />
+                    )}
                 </div>
               </TabPane>
             </Tabs>

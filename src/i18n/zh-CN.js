@@ -89,11 +89,12 @@ const messages = {
     'Form.Lable.AddDelegateAmount': '增加委托质押数量',
     'Form.Lable.AddDropBurnAmount': '增加DropBurn数量',
     'Form.Lable.UpdateRewardCut': '更新佣金比例',
+    'Form.Lable.UpdateNodeDescription': '更新节点描述',
     'Form.Message.InputUnbondAmount': "请输入赎回数量",
     'Form.Message.InputDropBurnAmount': "请输入DropBurn代币数量",
     'Form.Message.InputDelegateAmount': "请输入委托质押数量",
     'Form.Message.InputRewardCut': "请输入新的佣金比例",
-
+    'Form.Message.InputNodeDescription': '请输入新的节点描述',
 
     /** Explorer**/
 
