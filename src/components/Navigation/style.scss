@@ -192,22 +192,42 @@
 
 
 .change-lang-button {
-    display: flex;
     border: 1px solid #fff;
-    width: 66px;
-    flex: 0 0 66px;
-    height: 28px;
-    text-align: center;
-    border-radius: 20px;
-    align-items: center;
-    justify-content: center;
+    width: 50px;
+    flex: 0 0 50px;
+    height: 24px;
+    text-align: right;
+    border-radius: 24px;
     cursor: pointer;
     margin: 0 20px;
     font-size: 14px;
+    position: relative;
+    font-size: 12px;
+    line-height: 23px;
+    padding-right: 5px;
+    background-color: #aba7c387;
+    overflow: hidden;
+    color: #cbc2ff;
 
     &:hover {
         background-color: rgba(255, 255, 255, 0.1)
     }
+
+    .change-lang--switch {
+        height: 20px;
+        background-color: #fff;
+        border-radius: 20px;
+        width: 26px;
+        position: absolute;
+        left: 1px;
+        top: 1px;
+        color: #5A4BC6;
+        text-align: center;
+        line-height: 20px;
+        font-size: 10px;
+        box-shadow: 3px 0px 11px 0px rgba(82, 88, 99, 0.87)
+    }
+
 
     @include respond-to('mobile') {
         display: none;

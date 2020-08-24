@@ -3,6 +3,7 @@ import { NavLink } from 'react-router-dom'
 import { injectIntl } from 'react-intl'
 import './style.scss'
 import Wallet from './wallet'
+import LangSwitch from './langSwitch'
 import {
     NodeListIcon,
     MyAccountIcon,
@@ -12,7 +13,6 @@ import {
 function Navigation(props) {
     console.log('NavigationComponent render')
     let { formatMessage: f } = props.intl;
-    let { lang } = props.global
     return (
         <div className="header__wrapper">
             <div className="header__container layout__container">
@@ -29,7 +29,7 @@ function Navigation(props) {
                         <NavLink className="navi-item" to={`/myaccount`} activeClassName="active"><MyAccountIcon />&nbsp;<span className='navi-item--title'>{f({ id: 'Title.myaccount' })}</span></NavLink>
                     </div>
                 </div>
-                <div className="change-lang-button" onClick={() => { props.changeLang(lang === 'zh-CN' ? 'en-US' : 'zh-CN') }}>{f({ id: 'ChangeLang' })}</div>
+                <LangSwitch {...props} />
                 <Wallet />
             </div>
         </div>

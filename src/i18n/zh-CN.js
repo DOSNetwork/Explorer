@@ -1,5 +1,6 @@
 const messages = {
-    'ChangeLang': 'English',
+    'ChangeLang': 'En',
+    'ChangeLang-Current': '中',
     'Title.staking': '质押',
     'Title.nodelist': '节点列表',
     'Title.explorer': '浏览器',
