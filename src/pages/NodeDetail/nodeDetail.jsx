@@ -55,6 +55,7 @@ const NodeDetail = class NodeDetail extends Component {
   }
   componentWillUnmount() {
     let { unMountRemoveListenerCallbacks } = this;
+    console.log(unMountRemoveListenerCallbacks)
     unMountRemoveListenerCallbacks.forEach(fn => {
       typeof fn === "function" && fn.call(null);
     });
@@ -821,7 +822,8 @@ const NodeDetail = class NodeDetail extends Component {
       nodeDetail: nodeDetail,
       ownerAddr: ownerAddr
     });
-    this.unMountRemoveListenerCallbacks.push(this.startCounting())
+    // console.log(this.startCounting())
+    this.unMountRemoveListenerCallbacks.push(await this.startCounting())
   };
   render() {
     const {
