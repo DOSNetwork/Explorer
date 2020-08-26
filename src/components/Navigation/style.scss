@@ -132,14 +132,15 @@
 
 .wallet__status__panel {
     height: 100%;
-    flex: 0 0 220px;
+    flex: 0 0 180px;
     width: 220px;
     display: flex;
     align-items: center;
     color: #fff;
     justify-content: space-between;
     margin-right: -27px;
-    padding: 0 27px;
+    padding: 0 15px;
+    cursor: pointer;
 
     &:hover {
         background-color: rgba(255, 255, 255, 0.1)
@@ -167,6 +168,21 @@
     cursor: pointer;
     flex: 1;
     padding-left: 20px;
+}
+
+.wallet__login-logged {
+    position: relative;
+
+    &:after {
+        position: absolute;
+        content: '';
+        height: 8px;
+        width: 8px;
+        border-radius: 100%;
+        background-color: #adff2f;
+        right: -4px;
+        top: -4px;
+    }
 }
 
 .dos-data--wrapper {

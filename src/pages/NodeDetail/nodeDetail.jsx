@@ -821,8 +821,9 @@ const NodeDetail = class NodeDetail extends Component {
       nodeDetail: nodeDetail,
       ownerAddr: ownerAddr
     });
-    // console.log(this.startCounting())
-    this.unMountRemoveListenerCallbacks.push(await this.startCounting())
+    if (myTokenTotal > 0) {
+      this.unMountRemoveListenerCallbacks.push(await this.startCounting())
+    }
   };
   render() {
     const {
@@ -951,10 +952,7 @@ const NodeDetail = class NodeDetail extends Component {
                   </p>
                   <p className="user-info--value">
                     {numberFormatRender(this.state.myRewardTotal)}
-                    <span className="secord-counting">
-                      {this.state.secondsCounting}s
-                  </span>
-                    <ReloadOutlined spin={this.state.realTimeRewardsPulling} style={{ fontSize: '14px' }} />
+                    {(this.state.myTokenTotal > 0) ? (<><span className="secord-counting">{this.state.secondsCounting}s</span><ReloadOutlined spin={this.state.realTimeRewardsPulling} style={{ fontSize: '14px' }} /></>) : <></>}
                   </p>
                   {isUserDelegatedThisNode ? (
                     <Button

@@ -11,7 +11,6 @@ function Connectors(props) {
     const { web3Context } = props
     const currentConnectedConnector = (web3Context && web3Context.connector) || null
     console.log('Connectors render')
-    console.log(web3Context)
     const context = useWeb3React()
     const {
         connector,

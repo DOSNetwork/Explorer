@@ -30,10 +30,10 @@ const statusColumnRender = (text, record, index) => {
           <FormattedMessage id="Node.active" />
         </div>
       ) : (
-        <div className="node-status__tag tag--inactive">
-          <FormattedMessage id="Node.inactive" />
-        </div>
-      )}
+          <div className="node-status__tag tag--inactive">
+            <FormattedMessage id="Node.inactive" />
+          </div>
+        )}
     </>
   );
 };
@@ -170,6 +170,9 @@ class NodeList extends Component {
     });
     form.validateFields((err, values) => {
       if (err) {
+        this.setState({
+          confirmLoading: false
+        });
         return;
       }
       const tokenAmount = web3Client.utils.toWei(values.tokenAmount, "ether");
@@ -178,7 +181,7 @@ class NodeList extends Component {
       const cutRate = values.cutRate || 0;
       const name = values.name || "";
       let ui = this;
-      const newNodeThenLoadList = function(receipt) {
+      const newNodeThenLoadList = function (receipt) {
         if (web3Client.utils.isAddress(nodeAddr)) {
           try {
             let emitter = stakingContract.methods
@@ -194,7 +197,7 @@ class NodeList extends Component {
               emitter,
               hash => {
                 message.loading(
-                  f({ id: "Events.Loading" }, { type: "newNode", hash: hash}),
+                  f({ id: "Events.Loading" }, { type: "newNode", hash: hash }),
                   0
                 );
               },
@@ -228,7 +231,7 @@ class NodeList extends Component {
           message.error("invalid address");
         }
       };
-      const dbApproveFunc = function(receipt) {
+      const dbApproveFunc = function (receipt) {
         try {
           let emitter = dbTokenContract.methods
             .approve(constant.STAKING_CONTRACT_ADDRESS)
@@ -258,7 +261,7 @@ class NodeList extends Component {
           message.error(e.reason);
         }
       };
-      const dbApproveThenNewNode = function(receipt) {
+      const dbApproveThenNewNode = function (receipt) {
         try {
           let emitter = dbTokenContract.methods
             .approve(constant.STAKING_CONTRACT_ADDRESS)
@@ -289,7 +292,7 @@ class NodeList extends Component {
           message.error(e.reason);
         }
       };
-      const approveThenNewNode = function(receipt) {
+      const approveThenNewNode = function (receipt) {
         try {
           let emitter = dosTokenContract.methods
             .approve(constant.STAKING_CONTRACT_ADDRESS)
@@ -549,8 +552,8 @@ class NodeList extends Component {
               />
             </div>
           ) : (
-            <div className="node-list--header-left"></div>
-          )}
+              <div className="node-list--header-left"></div>
+            )}
           <div className="node-list--header-right">
             {isWalletLogin ? (
               <>
@@ -562,8 +565,8 @@ class NodeList extends Component {
                 &nbsp;&nbsp;&nbsp;&nbsp;
               </>
             ) : (
-              <></>
-            )}
+                <></>
+              )}
             <Search
               placeholder={f({ id: "Tooltip.searchnodeaddress" })}
               onSearch={this.onSearchAddress}

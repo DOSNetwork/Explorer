@@ -20,7 +20,7 @@ function WalletConnector(props) {
         <>
             {
                 isWalletLogin ?
-                    <div>
+                    <div className='wallet__login-logged'>
                         <p onClick={() => { setIsConnectorShow(true) }}>{`${userAddress.slice(0, 6)}...${userAddress.slice(-6)}`}</p>
                     </div>
                     :
