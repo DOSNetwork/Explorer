@@ -72,7 +72,7 @@ const newNode = Form.create({
                     message: f({ id: 'Form.Message.InputName' })
                   }
                 ]
-              })(<Input type="textarea" />)}
+              })(<Input maxLength={32} type="textarea" />)}
             </Form.Item>
             <Form.Item label={f({ id: 'Form.Lable.Node' })}>
               {getFieldDecorator("nodeAddr", {

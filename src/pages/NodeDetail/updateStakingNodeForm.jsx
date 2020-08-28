@@ -4,6 +4,30 @@ import { injectIntl } from 'react-intl'
 const stakingNode = Form.create({ name: "form_in_modal" })(
   // eslint-disable-next-line
   class extends React.Component {
+    validatCutRate = (rule, value, callback) => {
+      if (value) {
+        let result = Number(value)
+        if (Number.isNaN(result)) {
+          callback(this.props.intl.formatMessage({ id: 'Form.Error.cutRate' }))
+        }
+        else if (result > 100 || result < 0) {
+          callback(this.props.intl.formatMessage({ id: 'Form.Error.cutRate2' }))
+        }
+      }
+      callback()
+    };
+    validateTokenAmount = (rule, value, callback) => {
+      if (value) {
+        let result = Number(value)
+        if (Number.isNaN(result)) {
+          callback(this.props.intl.formatMessage({ id: 'Form.Error.tokenAmount' }))
+        }
+        else if (result < 800000) {
+          callback(this.props.intl.formatMessage({ id: 'Form.Error.tokenAmount2' }))
+        }
+      }
+      callback()
+    };
     render() {
       const {
         onSubmit,
@@ -19,6 +43,9 @@ const stakingNode = Form.create({ name: "form_in_modal" })(
                 {
                   required: false,
                   message: f({ id: 'Form.Message.InputDelegateAmount' })
+                },
+                {
+                  validator: this.validateTokenAmount,
                 }
               ]
             })(<Input placeholder="5,000" suffix='DOS' />)}
@@ -39,6 +66,8 @@ const stakingNode = Form.create({ name: "form_in_modal" })(
                 {
                   required: false,
                   message: f({ id: 'Form.Message.InputRewardCut' })
+                }, {
+                  validator: this.validatCutRate
                 }
               ]
             })(<Input placeholder="10" suffix='%' />)}

@@ -21,25 +21,30 @@ class App extends Component {
     let { stakingContract, networkSupported } = store.getState().contract;
     if (networkSupported) {
       async function loadNodes() {
-        let { userAddress, } = store.getState().contract;
-        let nodesAddrs = Array.from(
-          await stakingContract.methods.getNodeAddrs().call()
-        );
-        for (let i = 0; i < nodesAddrs.length; i++) {
-          // 已经保存过的不重复保存
-          let nodeAddr = nodesAddrs[i]
-          let node = await stakingContract.methods.nodes(nodeAddr).call();
-          localStorage.setItem(nodeAddr, JSON.stringify(node));
-          let delegatorKey = nodeAddr + userAddress
-          if (userAddress !== "") {
-            let delegator = await stakingContract.methods
-              .delegators(userAddress, nodeAddr)
-              .call();
-            localStorage.setItem(
-              delegatorKey,
-              JSON.stringify(delegator)
-            );
+        try {
+          let { userAddress, } = store.getState().contract;
+          let nodesAddrs = Array.from(
+            await stakingContract.methods.getNodeAddrs().call()
+          );
+          for (let i = 0; i < nodesAddrs.length; i++) {
+            // 已经保存过的不重复保存
+            let nodeAddr = nodesAddrs[i]
+            let node = await stakingContract.methods.nodes(nodeAddr).call();
+            localStorage.setItem(nodeAddr, JSON.stringify(node));
+            let delegatorKey = nodeAddr + userAddress
+            if (userAddress !== "") {
+              let delegator = await stakingContract.methods
+                .delegators(userAddress, nodeAddr)
+                .call();
+              localStorage.setItem(
+                delegatorKey,
+                JSON.stringify(delegator)
+              );
+            }
           }
+        } catch (e) {
+          console.log('error' + e)
+          // message.error(e);
         }
       }
       loadNodes();

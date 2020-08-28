@@ -280,6 +280,9 @@ const NodeDetail = class NodeDetail extends Component {
       if (err) {
         return;
       }
+      if (!values.tokenAmount && !values.dbAmount && !values.rewardCut && !values.desc) {
+        return;
+      }
       const { web3Client, userAddress } = this.props.contract;
       let tokenAmount = 0;
       if (values.tokenAmount !== undefined) {
@@ -679,25 +682,29 @@ const NodeDetail = class NodeDetail extends Component {
     const { isUserOwnedThisNode, node } = this.state
     const { web3Client, userAddress, stakingContract } = this.props.contract;
     let myRewardTotal = 0;
-    if (userAddress) {
-      if (isUserOwnedThisNode) {
-        let rewardTotal = await stakingContract.methods
-          .getNodeRewardTokensRT(node)
-          .call();
-        myRewardTotal = fromWei(rewardTotal);
-      } else {
-        let userDelegatedRewardTotal = await stakingContract.methods
-          .getDelegatorRewardTokensRT(userAddress, node)
-          .call();
-        myRewardTotal = fromWei(userDelegatedRewardTotal);
+    try {
+      if (userAddress) {
+        if (isUserOwnedThisNode) {
+          let rewardTotal = await stakingContract.methods
+            .getNodeRewardTokensRT(node)
+            .call();
+          myRewardTotal = fromWei(rewardTotal);
+        } else {
+          let userDelegatedRewardTotal = await stakingContract.methods
+            .getDelegatorRewardTokensRT(userAddress, node)
+            .call();
+          myRewardTotal = fromWei(userDelegatedRewardTotal);
+        }
+        console.log(`Rewards updated`)
       }
-      console.log(`Rewards updated`)
-      this.setState({
-        myRewardTotal,
-        secondsCounting: 14,
-        realTimeRewardsPulling: false
-      })
+    } catch (e) {
+      message.error('get rewards error')
     }
+    this.setState({
+      myRewardTotal,
+      secondsCounting: 14,
+      realTimeRewardsPulling: false
+    })
   };
   getNodeDetail = async () => {
     function fromWei(bn) {
