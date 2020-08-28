@@ -47,8 +47,8 @@ const messages = {
     'Form.Error.cutRate': 'Please enter a valid number',
     'Form.Error.cutRate2': 'Please enter a valid percentage',
     'Form.Error.CreateNodeAgreement': 'Please check to confirm',
-    'Form.Lable.Name': 'Name',
-    'Form.Message.InputName': 'Please name your node',
+    'Form.Lable.Name': 'Node Name',
+    'Form.Message.InputName': 'Please name your node (<= 32 characters)',
     'Form.Lable.Node': 'Node Address',
     'Form.Message.InputNodeAddress': "Please enter your node address",
     'Form.Lable.StakingAmount': 'Staking Amount',
@@ -150,8 +150,8 @@ const messages = {
     'Table.Column.Activites.TxHash': 'Tx Hash',
     'Tooltip.Explorer.Pagnation': 'Latest {pageSize} events',
     'NodeCreate.Agreement.pre': 'Node creation requires both off-chain setup and on-chain setup, please read node runner ',
-    'NodeCreate.Agreement.url': '/',
-    'NodeCreate.Agreement.tutorials': 'tutorials',
+    'NodeCreate.Agreement.url': 'https://medium.com/dos-network/instructions-of-launching-a-node-in-dos-network-932e73a91a75',
+    'NodeCreate.Agreement.tutorials': 'tutorial',
     'NodeCreate.Agreement.end': 'before creating a node.'
 }
 export default messages
