@@ -43,8 +43,8 @@ const messages = {
     'Form.Error.cutRate': '请输入有效数字',
     'Form.Error.cutRate2': '请输入有效百分比数字',
     'Form.Error.CreateNodeAgreement': '请勾选确认',
-    'Form.Lable.Name': '名字',
-    'Form.Message.InputName': '请命名您的节点',
+    'Form.Lable.Name': '节点名字',
+    'Form.Message.InputName': '请命名您的节点(<= 32个字符)',
     'Form.Lable.Node': '节点地址',
     'Form.Message.InputNodeAddress': "请输入您的节点地址",
     'Form.Lable.StakingAmount': '质押数量',
@@ -146,9 +146,9 @@ const messages = {
     'Table.Column.Activites.TxHash': '交易哈希',
 
     'Tooltip.Explorer.Pagnation': '最近 {pageSize} 个事件',
-    'NodeCreate.Agreement.pre': '创建节点需要链上装置和链下装置,请在创建节点之前仔细阅读',
-    'NodeCreate.Agreement.url': '/',
-    'NodeCreate.Agreement.tutorials': '节点运行者教程',
+    'NodeCreate.Agreement.pre': '创建节点需要同时进行链上设置和链下设置，请在创建节点之前仔细阅读',
+    'NodeCreate.Agreement.url': 'https://medium.com/dos-network/instructions-of-launching-a-node-in-dos-network-932e73a91a75',
+    'NodeCreate.Agreement.tutorials': '节点运行教程',
     'NodeCreate.Agreement.end': '.'
 
 }
