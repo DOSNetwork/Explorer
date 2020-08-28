@@ -285,7 +285,7 @@ const NodeDetail = class NodeDetail extends Component {
       }
       const { web3Client, userAddress } = this.props.contract;
       let tokenAmount = values.tokenAmount || 0;
-      tokenAmount = web3Client.utils.toWei(tokenAmount, "ether");
+      tokenAmount = web3Client.utils.toWei(tokenAmount.toString(), "ether");
       const dbAmount = values.dbAmount ? values.dbAmount : 0;
       let rewardCut = web3Client.utils.toBN(2)
         .pow(web3Client.utils.toBN(256))
@@ -448,7 +448,7 @@ const NodeDetail = class NodeDetail extends Component {
       }
       const { web3Client, userAddress } = this.props.contract;
       let tokenAmount = values.tokenAmount || 0;
-      tokenAmount = web3Client.utils.toWei(tokenAmount, "ether");
+      tokenAmount = web3Client.utils.toWei(tokenAmount.toString(), "ether");
       const dbAmount = values.dbAmount;
       let emitter = this.stakingContract.methods
         .nodeUnbond(tokenAmount, dbAmount, this.state.node)
@@ -491,7 +491,7 @@ const NodeDetail = class NodeDetail extends Component {
       }
       const { web3Client, userAddress } = this.props.contract;
       let tokenAmount = values.tokenAmount || 0;
-      tokenAmount = web3Client.utils.toWei(tokenAmount, "ether");
+      tokenAmount = web3Client.utils.toWei(tokenAmount.toString(), "ether");
 
       let emitter = this.stakingContract.methods
         .delegatorUnbond(tokenAmount, this.state.node)
@@ -546,7 +546,7 @@ const NodeDetail = class NodeDetail extends Component {
         return;
       }
       let tokenAmount = values.tokenAmount || 0;
-      tokenAmount = web3Client.utils.toWei(tokenAmount, "ether");
+      tokenAmount = web3Client.utils.toWei(tokenAmount.toString(), "ether");
       const nodeAddr = this.state.node;
       let ui = this;
 
