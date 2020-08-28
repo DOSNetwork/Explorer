@@ -22,9 +22,6 @@ const stakingNode = Form.create({ name: "form_in_modal" })(
         if (Number.isNaN(result)) {
           callback(this.props.intl.formatMessage({ id: 'Form.Error.tokenAmount' }))
         }
-        else if (result < 800000) {
-          callback(this.props.intl.formatMessage({ id: 'Form.Error.tokenAmount2' }))
-        }
       }
       callback()
     };
