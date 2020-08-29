@@ -29,7 +29,7 @@ const messages = {
     'Tooltip.selfStaked': '节点自己质押的DOS代币数量',
     'Tooltip.delegate': '此节点受其他用户委托质押的总代币数量',
     'Tooltip.rewartcut': '节点从用户委托质押的代币所产生的奖励中抽取的百分比',
-    'Tooltip.uptime': '节点总在线时间',
+    'Tooltip.uptime': '自节点上次启动以来的运行时间',
     'Tooltip.myDelegation': '您质押给此节点的DOS代币数量',
     'Tooltip.myRewards': '您从此节点处得到的奖励总数',
     'Tooltip.OnlyShowTheNodesRelatedToMe': '只显示与我相关的节点',

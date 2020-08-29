@@ -32,7 +32,7 @@ const messages = {
     'Tooltip.selfStaked': 'Amount of DOS tokens this node stakes by itself.',
     'Tooltip.delegate': 'Total amount of DOS tokens delegated to this node.',
     'Tooltip.rewartcut': "Percentage of rewards this node takes from rewards generated from other users' delegation",
-    'Tooltip.uptime': 'Total active time of this node.',
+    'Tooltip.uptime': 'Run time since node\'s last startup',
     'Tooltip.myDelegation': "Amount of DOS tokens you've delegated to this node.",
     'Tooltip.myRewards': "Amount of DOS tokens you get from this node as staking rewards that's available for withdrawal.",
     'Tooltip.OnlyShowTheNodesRelatedToMe': 'Only Show Nodes Related To Me',
