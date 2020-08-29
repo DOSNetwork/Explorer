@@ -78,6 +78,7 @@ class NodeList extends Component {
       loading: false,
       confirmLoading: false,
       visible: false,
+      hideInactive: true,
       pagination: {
         current: 1,
         pageSize: ps
@@ -353,6 +354,17 @@ class NodeList extends Component {
     this.props.setShowRelatedNodes(checked);
     this.loadNodeList("", {}, checked);
   };
+  onHideInactiveChange = (checked) => {
+    this.setState({
+      hideInactive: checked
+    }, () => {
+      this.loadNodeList(
+        this.state.searchAddress,
+        {},
+        this.props.showRelatedNodes
+      );
+    })
+  }
   handleTableChange = pagination => {
     this.loadNodeList(
       this.state.searchAddress,
@@ -378,6 +390,8 @@ class NodeList extends Component {
       stakingContract,
       initialBlock
     } = this.props.contract;
+
+    const { hideInactive } = this.state
     this.setState({
       loading: true
     });
@@ -507,17 +521,31 @@ class NodeList extends Component {
         myDelegation: delegatedAmountShow,
         myRewards: accumulatedRewardShow
       };
-      nodeList.push(nodeObject);
+      if (!(hideInactive && !running)) {
+        nodeList.push(nodeObject);
+      }
+
+      // if (hideInactive) {
+      //   if (!running) {
+      //     // 开启隐藏,未运行的节点不算入分页
+      //     i--;
+      //   } else {
+      //     nodeList.push(nodeObject);
+      //   }
+      // } else {
+      //   nodeList.push(nodeObject);
+      // }
     }
     if (this.unMount) {
       console.warn("Page[NodeList] Already Unmounted");
       return;
     }
+    //TODO hideInactive的时候在active节点多的时候 分页有问题
     this.setState({
       dataList: nodeList,
       loading: false,
       pagination: {
-        total,
+        total: hideInactive ? nodeList.length : total,
         current,
         pageSize
       }
@@ -533,6 +561,7 @@ class NodeList extends Component {
     let { isWalletLogin } = this.props.contract;
     let showRelatedNodes = this.props.showRelatedNodes;
     let { formatMessage: f } = this.props.intl;
+    let { hideInactive } = this.state
     return (
       <>
         <div className="node-list--header-wrapper">
@@ -557,6 +586,12 @@ class NodeList extends Component {
           <div className="node-list--header-right">
             {isWalletLogin ? (
               <>
+                <Switch
+                  defaultChecked={hideInactive}
+                  onChange={this.onHideInactiveChange}
+                />
+                &nbsp;{f({ id: "Tooltip.HideInactive" })}
+                &nbsp;&nbsp;&nbsp;&nbsp;
                 <Switch
                   defaultChecked={showRelatedNodes}
                   onChange={this.onChange}
@@ -611,6 +646,9 @@ class NodeList extends Component {
             dataIndex="selfStaked"
             key="selfStaked"
             sortDirections={["ascend", "descend"]}
+            sorter={(a, b) =>
+              a.selfStaked - b.selfStaked
+            }
           />
           <Column
             title={tableTitleWithTipsRender(
@@ -621,6 +659,9 @@ class NodeList extends Component {
             dataIndex="totalDelegated"
             key="totalDelegated"
             sortDirections={["ascend", "descend"]}
+            sorter={(a, b) =>
+              a.totalDelegated - b.totalDelegated
+            }
           />
           <Column
             title={tableTitleWithTipsRender(
@@ -631,6 +672,9 @@ class NodeList extends Component {
             dataIndex="rewardCut"
             key="rewardCut"
             sortDirections={["ascend", "descend"]}
+            sorter={(a, b) =>
+              a.rewardCut - b.rewardCut
+            }
           />
           <Column
             title={tableTitleWithTipsRender(
@@ -641,6 +685,9 @@ class NodeList extends Component {
             dataIndex="uptime"
             key="uptime"
             sortDirections={["ascend", "descend"]}
+            sorter={(a, b) =>
+              a.uptime - b.uptime
+            }
           />
           {isWalletLogin ? (
             <Column

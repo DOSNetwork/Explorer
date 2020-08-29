@@ -36,6 +36,7 @@ const messages = {
     'Tooltip.myDelegation': "Amount of DOS tokens you've delegated to this node.",
     'Tooltip.myRewards': "Amount of DOS tokens you get from this node as staking rewards that's available for withdrawal.",
     'Tooltip.OnlyShowTheNodesRelatedToMe': 'Only Show Nodes Related To Me',
+    'Tooltip.HideInactive': 'Hide Inactive',
     'Tooltip.searchnodeaddress': 'search node address',
     'Tooltip.CreateANode': 'Create a Node',
 

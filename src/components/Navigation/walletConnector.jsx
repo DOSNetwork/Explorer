@@ -34,7 +34,7 @@ function WalletConnector(props) {
                 footer={null}
                 width={600}
             >
-                <Connectors web3Context={web3Context} />
+                <Connectors web3Context={web3Context} closeModal={closeModal} />
             </Modal>
         </>
     )

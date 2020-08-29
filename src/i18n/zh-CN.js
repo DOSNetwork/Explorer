@@ -33,6 +33,7 @@ const messages = {
     'Tooltip.myDelegation': '您质押给此节点的DOS代币数量',
     'Tooltip.myRewards': '您从此节点处得到的奖励总数',
     'Tooltip.OnlyShowTheNodesRelatedToMe': '只显示与我相关的节点',
+    'Tooltip.HideInactive': '隐藏离线节点',
     'Tooltip.searchnodeaddress': '按节点地址搜索',
     'Tooltip.CreateANode': '创建新节点',
     'Form.Title.CreateNode': '创建新节点',
