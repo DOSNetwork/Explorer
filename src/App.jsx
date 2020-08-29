@@ -22,7 +22,7 @@ class App extends Component {
     if (networkSupported) {
       async function loadNodes() {
         try {
-          let { userAddress, } = store.getState().contract;
+          let { userAddress } = store.getState().contract;
           let nodesAddrs = Array.from(
             await stakingContract.methods.getNodeAddrs().call()
           );

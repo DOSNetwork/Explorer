@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useCallback } from "react";
 import {
     useWeb3React
 } from "@web3-react/core";
@@ -8,7 +8,7 @@ import { LoadingOutlined } from '@ant-design/icons';
 import { connectorsMapping } from '../../util/connector'
 import { dispatchWalletActivated, dispatchWalletDeactivated } from '../../util/web3'
 function Connectors(props) {
-    const { web3Context } = props
+    const { web3Context, closeModal } = props
     const currentConnectedConnector = (web3Context && web3Context.connector) || null
     console.log('Connectors render')
     const context = useWeb3React()
@@ -21,7 +21,13 @@ function Connectors(props) {
         active,
     } = context;
     const [currentConnectingConnector, setCurrentConnectingConnector] = useState()
-
+    const deactivateCallback = useCallback(
+        () => {
+            deactivate()
+            closeModal()
+        },
+        [deactivate, closeModal],
+    )
     useEffect(() => {
         if (currentConnectingConnector && currentConnectingConnector === connector) {
             console.log(`useEffect:setCurrentConnectingConnector`)
@@ -85,7 +91,7 @@ function Connectors(props) {
                     </div>
                 )
             })}
-            <div className='connector-item item-deactivate' onClick={() => { onConnectDeactivate(deactivate, currentConnectedConnector, setCurrentConnectingConnector) }}>Deactivate</div>
+            <div className='connector-item item-deactivate' onClick={() => { onConnectDeactivate(deactivateCallback, currentConnectedConnector, setCurrentConnectingConnector) }}>Deactivate</div>
         </div>
     )
 }
@@ -106,6 +112,7 @@ function onConnectDeactivate(deactivate, connector, setCurrentConnectingConnecto
     }
     setCurrentConnectingConnector(null)
     dispatchWalletDeactivated()
+
 }
 
 export default injectIntl(Connectors)
