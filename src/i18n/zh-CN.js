@@ -133,7 +133,9 @@ const messages = {
     'Table.Column.Explorer.LastSystemRandomness': '最新系统随机数',
     'Table.Column.Explorer.UserSeed': '用户提供的随机种子(可选)',
     'Table.Column.Explorer.Pass': '通过',
-
+    'Table.filter.filterConfirm': '确认',
+    'Table.filter.filterReset': '重置',
+    'Table.filter.emptyText': '暂无数据',
 
     /**MyAccount */
 

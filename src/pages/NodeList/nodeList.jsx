@@ -396,7 +396,7 @@ class NodeList extends Component {
       loading: true
     });
     let nodesAddrs = [];
-    let nodeList = [];
+
 
     const getLogNewNodeEventList = async userAddress => {
       return await stakingContract.getPastEvents("NewNode", {
@@ -458,7 +458,14 @@ class NodeList extends Component {
     let endIndex = total > current * pageSize ? current * pageSize : total;
     let now = await web3Client.eth.getBlockNumber();
     let block = await web3Client.eth.getBlock(now);
-
+    let nodeList = [];
+    if (!hideInactive) {
+      startIndex = (current - 1) * pageSize;
+      endIndex = total > current * pageSize ? current * pageSize : total;
+    } else {
+      startIndex = 0;
+      endIndex = total
+    }
     for (let i = startIndex; i < endIndex; i++) {
       const nodeAddr = filtedNodes[i];
       let node;
@@ -468,7 +475,19 @@ class NodeList extends Component {
       } else {
         node = await stakingContract.methods.nodes(nodeAddr).call();
       }
-
+      const {
+        selfStakedAmount,
+        totalOtherDelegatedAmount,
+        rewardCut,
+        description,
+        running
+      } = node;
+      let uptime = 0;
+      if (node.running) {
+        uptime = block.timestamp - node.lastStartTime;
+      } else if (hideInactive) {
+        continue;
+      }
       let delegator = { myDelegator: "-", accumulatedReward: "-" };
       if (userAddress) {
         const cachedHits = localStorage.getItem(nodeAddr + userAddress);
@@ -480,18 +499,6 @@ class NodeList extends Component {
             .call();
         }
       }
-      let uptime = 0;
-      if (node.running) {
-        uptime = block.timestamp - node.lastStartTime;
-      }
-
-      const {
-        selfStakedAmount,
-        totalOtherDelegatedAmount,
-        rewardCut,
-        description,
-        running
-      } = node;
       const { delegatedAmount, accumulatedReward } = delegator;
       let totalOtherDelegatedAmountShow = fromWei(totalOtherDelegatedAmount);
       let selfStakedAmountShow = fromWei(selfStakedAmount);
@@ -521,21 +528,10 @@ class NodeList extends Component {
         myDelegation: delegatedAmountShow,
         myRewards: accumulatedRewardShow
       };
-      if (!(hideInactive && !running)) {
-        nodeList.push(nodeObject);
-      }
-
-      // if (hideInactive) {
-      //   if (!running) {
-      //     // 开启隐藏,未运行的节点不算入分页
-      //     i--;
-      //   } else {
-      //     nodeList.push(nodeObject);
-      //   }
-      // } else {
-      //   nodeList.push(nodeObject);
-      // }
+      nodeList.push(nodeObject);
     }
+
+
     if (this.unMount) {
       console.warn("Page[NodeList] Already Unmounted");
       return;
@@ -620,6 +616,11 @@ class NodeList extends Component {
           }}
           bordered={false}
           onChange={this.handleTableChange}
+          locale={{
+            filterConfirm: f({ id: "Table.filter.filterConfirm" }),
+            filterReset: f({ id: "Table.filter.filterReset" }),
+            emptyText: f({ id: "Table.filter.emptyText" })
+          }}
         >
           <Column
             title={f({ id: "Table.Column.NodeList.Name" })}
@@ -636,6 +637,11 @@ class NodeList extends Component {
             title={f({ id: "Table.Column.NodeList.Status" })}
             render={statusColumnRender}
             dataIndex="status"
+            filters={[{
+              text: f({ id: "Tooltip.HideInactive" }),
+              value: true
+            }]}
+            onFilter={(value, record) => record.status === value}
           />
           <Column
             title={tableTitleWithTipsRender(

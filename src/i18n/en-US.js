@@ -137,7 +137,9 @@ const messages = {
     'Table.Column.Explorer.LastSystemRandomness': 'Last System Randomness',
     'Table.Column.Explorer.UserSeed': 'User Provided Random Seed (Optional)',
     'Table.Column.Explorer.Pass': 'Pass',
-
+    'Table.filter.filterConfirm': 'OK',
+    'Table.filter.filterReset': 'Reset',
+    'Table.filter.emptyText': 'No Data',
     /**MyAccount */
 
 
