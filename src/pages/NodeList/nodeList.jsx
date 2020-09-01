@@ -616,11 +616,11 @@ class NodeList extends Component {
           }}
           bordered={false}
           onChange={this.handleTableChange}
-          locale={{
-            filterConfirm: f({ id: "Table.filter.filterConfirm" }),
-            filterReset: f({ id: "Table.filter.filterReset" }),
-            emptyText: f({ id: "Table.filter.emptyText" })
-          }}
+        // locale={{
+        //   filterConfirm: f({ id: "Table.filter.filterConfirm" }),
+        //   filterReset: f({ id: "Table.filter.filterReset" }),
+        //   emptyText: f({ id: "Table.filter.emptyText" })
+        // }}
         >
           <Column
             title={f({ id: "Table.Column.NodeList.Name" })}
@@ -637,11 +637,11 @@ class NodeList extends Component {
             title={f({ id: "Table.Column.NodeList.Status" })}
             render={statusColumnRender}
             dataIndex="status"
-            filters={[{
-              text: f({ id: "Tooltip.HideInactive" }),
-              value: true
-            }]}
-            onFilter={(value, record) => record.status === value}
+          // filters={[{
+          //   text: f({ id: "Tooltip.HideInactive" }),
+          //   value: true
+          // }]}
+          // onFilter={(value, record) => record.status === value}
           />
           <Column
             title={tableTitleWithTipsRender(

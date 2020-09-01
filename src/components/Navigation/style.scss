@@ -271,6 +271,11 @@
     min-width: 250px;
     position: relative;
     margin-bottom: 15px;
+    cursor: pointer;
+
+    &:hover {
+        background-color: #e9f4ff;
+    }
 
     &.item-deactivate {
         display: block;
