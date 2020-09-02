@@ -280,7 +280,7 @@ const NodeDetail = class NodeDetail extends Component {
       if (err) {
         return;
       }
-      if (!values.tokenAmount && !values.dbAmount && !values.rewardCut && !values.desc) {
+      if (!values.tokenAmount && !values.dbAmount && !values.rewardCut && !values.nodeDesc) {
         return;
       }
       const { web3Client, userAddress } = this.props.contract;
@@ -294,7 +294,7 @@ const NodeDetail = class NodeDetail extends Component {
       if (values.rewardCut !== undefined) {
         rewardCut = values.rewardCut;
       }
-      const nodeDesc = values.desc || ''
+      const nodeDesc = values.nodeDesc || ''
       const nodeAddr = this.state.node;
       const ui = this;
       const updateFunc = function (receipt) {
