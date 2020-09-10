@@ -34,7 +34,8 @@ const NodeDetail = class NodeDetail extends Component {
       loading: false,
       formText: "",
       realTimeRewardsPulling: false,
-      secondsCounting: 14
+      secondsCounting: 14,
+      userBalance: 0
     };
   }
   componentDidMount() {
@@ -622,6 +623,14 @@ const NodeDetail = class NodeDetail extends Component {
       this.setState({ delegateFormVisible: false, delegateFormLoading: false });
     });
   };
+
+  setDelegateNodeMax = () => {
+    setTimeout(() => {
+      this.delegateFormRef.props.form.setFieldsValue({
+        tokenAmount: this.state.userBalance
+      });
+    }, 0)
+  }
   handleEmmiterEvents = (
     emitter,
     emitterName,
@@ -717,7 +726,7 @@ const NodeDetail = class NodeDetail extends Component {
     this.setState({
       loading: true
     });
-    const { web3Client, userAddress, stakingContract } = this.props.contract;
+    const { web3Client, userAddress, stakingContract, dosTokenContract } = this.props.contract;
 
     const nodeAddr = this.state.node;
     const nodeInstance = await stakingContract.methods.nodes(nodeAddr).call();
@@ -726,6 +735,8 @@ const NodeDetail = class NodeDetail extends Component {
       nodeAddr,
       100
     ).toString()}`;
+
+
     const {
       selfStakedAmount,
       totalOtherDelegatedAmount,
@@ -762,7 +773,8 @@ const NodeDetail = class NodeDetail extends Component {
       withDrawalDropBurn = 0,
       withDrawalDropBurnFrozen = 0,
       isUserDelegatedThisNode = false,
-      isUserOwnedThisNode = false;
+      isUserOwnedThisNode = false,
+      userBalance = 0;
     if (userAddress) {
       isUserOwnedThisNode =
         web3Client.utils.toChecksumAddress(userAddress) ===
@@ -815,6 +827,12 @@ const NodeDetail = class NodeDetail extends Component {
           fromWei(pendingWithdraw) !== 0 ||
           fromWei(userDelegatedRewardTotal) !== 0;
       }
+
+      userBalance = await dosTokenContract.methods
+        .balanceOf(userAddress)
+        .call();
+      userBalance = Math.round(fromWei(userBalance) * 100) / 100
+      console.log(`userBalance:${userBalance}`)
     }
     this.setState({
       isUserDelegatedThisNode: isUserDelegatedThisNode,
@@ -827,7 +845,8 @@ const NodeDetail = class NodeDetail extends Component {
       withDrawalDropBurn: withDrawalDropBurn,
       withDrawalDropBurnFrozen: withDrawalDropBurnFrozen,
       nodeDetail: nodeDetail,
-      ownerAddr: ownerAddr
+      ownerAddr: ownerAddr,
+      userBalance: userBalance
     });
     if (myTokenTotal > 0) {
       this.unMountRemoveListenerCallbacks.push(await this.startCounting())
@@ -845,6 +864,10 @@ const NodeDetail = class NodeDetail extends Component {
       nodeUptime,
       status
     } = this.state.nodeDetail;
+    const {
+      userBalance,
+      myTokenTotal
+    } = this.state
     let { formatMessage: f } = this.props.intl;
     let { isWalletLogin } = this.props.contract;
     let isUserDelegatedThisNode = this.state.isUserDelegatedThisNode;
@@ -1049,12 +1072,14 @@ const NodeDetail = class NodeDetail extends Component {
                     <UpdateStakingNode
                       wrappedComponentRef={this.saveUpdateFormRef}
                       onSubmit={this.handleOwnerUpdateNodeSubmit}
+                      maxBalance={userBalance}
                     />
                   ) : (
                       // User --Delegate
                       <DelegateNode
                         wrappedComponentRef={this.saveDelegateFormRef}
                         onSubmit={this.handleUserDelegateSubmit}
+                        maxBalance={userBalance}
                       />
                     )}
                 </div>
@@ -1069,12 +1094,14 @@ const NodeDetail = class NodeDetail extends Component {
                     <UnbondOwnedNode
                       wrappedComponentRef={this.saveUnbondOwnedNodeRef}
                       onSubmit={this.handleOwnerUnbondSubmit}
+                      maxBalance={myTokenTotal}
                     />
                   ) : (
                       // User --unbond
                       <UnbondNode
                         wrappedComponentRef={this.saveUnbondFormRef}
                         onSubmit={this.handleUserUnbondSubmit}
+                        maxBalance={myTokenTotal}
                       />
                     )}
                 </div>

@@ -1,7 +1,7 @@
 import React from "react";
 import { injectIntl } from 'react-intl'
 import { Form, Input, Button, Tooltip, Icon } from "antd";
-
+const { Search } = Input
 const labelWithTooltip = (title, tips) => {
   return (
     <div>
@@ -16,10 +16,18 @@ const labelWithTooltip = (title, tips) => {
 const delegateNode = Form.create({ name: "form_in_modal" })(
   // eslint-disable-next-line
   class extends React.Component {
+    setMaxBalance = () => {
+      let { maxBalance } = this.props
+      setTimeout(() => {
+        this.props.form.setFieldsValue({
+          tokenAmount: maxBalance
+        });
+      }, 0)
+    }
     render() {
       const {
         onSubmit,
-        form,
+        form
       } = this.props;
       let { formatMessage: f } = this.props.intl;
       const { getFieldDecorator } = form;
@@ -36,7 +44,7 @@ const delegateNode = Form.create({ name: "form_in_modal" })(
                   message: f({ id: 'Form.Message.InputDelegateAmount' })
                 }
               ]
-            })(<Input placeholder="100.0" suffix='DOS' />)}
+            })(<Search placeholder="100.0" suffix='DOS' enterButton='MAX' onSearch={this.setMaxBalance} />)}
           </Form.Item>
           <Button type="primary" htmlType="submit" className="login-form-button">
             {f({ id: 'Form.Button.Submit' })}

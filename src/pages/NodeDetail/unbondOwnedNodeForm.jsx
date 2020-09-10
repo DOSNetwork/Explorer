@@ -1,6 +1,7 @@
 import React from "react";
 import { Form, Input, Button } from "antd";
-import { injectIntl } from 'react-intl'
+import { injectIntl } from 'react-intl';
+const { Search } = Input
 const unbondOwnedNode = Form.create({ name: "form_in_modal" })(
   // eslint-disable-next-line
   class extends React.Component {
@@ -14,6 +15,14 @@ const unbondOwnedNode = Form.create({ name: "form_in_modal" })(
       }
       callback()
     };
+    setMaxBalance = () => {
+      let { maxBalance } = this.props
+      setTimeout(() => {
+        this.props.form.setFieldsValue({
+          tokenAmount: maxBalance
+        });
+      }, 0)
+    }
     render() {
       const {
         form,
@@ -34,7 +43,7 @@ const unbondOwnedNode = Form.create({ name: "form_in_modal" })(
                   validator: this.validateTokenAmount,
                 }
               ]
-            })(<Input placeholder="10,0000.0" suffix="DOS" />)}
+            })((<Search placeholder="10,000.0" suffix='DOS' enterButton='MAX' onSearch={this.setMaxBalance} />))}
           </Form.Item>
           <Form.Item label={f({ id: 'Form.Lable.DropBurnAmount' })}>
             {getFieldDecorator("dbAmount", {

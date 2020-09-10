@@ -1,7 +1,7 @@
 import React from "react";
 import { Form, Input, Button } from "antd";
 import { injectIntl } from 'react-intl'
-
+const { Search } = Input
 const unbondNode = Form.create({ name: "form_in_modal" })(
   // eslint-disable-next-line
   class extends React.Component {
@@ -15,6 +15,16 @@ const unbondNode = Form.create({ name: "form_in_modal" })(
       }
       callback()
     };
+    setMaxBalance = () => {
+      let { maxBalance } = this.props
+      console.log(maxBalance)
+      setTimeout(() => {
+        this.props.form.setFieldsValue({
+          tokenAmount: maxBalance
+        });
+      }, 0)
+
+    }
     render() {
       const {
         form,
@@ -35,7 +45,7 @@ const unbondNode = Form.create({ name: "form_in_modal" })(
                   validator: this.validateTokenAmount,
                 }
               ]
-            })(<Input placeholder="100.0" suffix="DOS" />)}
+            })(<Search placeholder="100.0" suffix='DOS' enterButton='MAX' onSearch={this.setMaxBalance} />)}
           </Form.Item>
           <Button type="primary" htmlType="submit" className="login-form-button">
             {f({ id: 'Form.Button.Submit' })}
