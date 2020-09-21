@@ -1,5 +1,5 @@
 import { connect } from 'react-redux'
-import nodeDetail from './nodeDetail'
+import nodeDetail from './nodeDetail2'
 import { globalLoading } from '../../redux/action'
 
 const mapStateToProps = (state) => ({
