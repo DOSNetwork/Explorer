@@ -822,6 +822,11 @@ var contractABI = [
         internalType: 'string',
         name: '_desc',
         type: 'string'
+      },
+      {
+        internalType: 'string',
+        name: '_logoUrl',
+        type: 'string'
       }
     ],
     name: 'newNode',
@@ -1078,6 +1083,11 @@ var contractABI = [
         internalType: 'string',
         name: 'description',
         type: 'string'
+      },
+      {
+        internalType: 'string',
+        name: 'logoUrl',
+        type: 'string'
       }
     ],
     payable: false,
@@ -1230,6 +1240,11 @@ var contractABI = [
       {
         internalType: 'string',
         name: '_newDesc',
+        type: 'string'
+      },
+      {
+        internalType: 'string',
+        name: '_newLogoUrl',
         type: 'string'
       }
     ],
