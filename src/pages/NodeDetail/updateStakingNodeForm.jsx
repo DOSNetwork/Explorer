@@ -34,6 +34,25 @@ const stakingNode = Form.create({ name: "form_in_modal" })(
       }
       callback()
     };
+    validatLogoUrl = (rule, value, callback) => {
+      if (value) {
+        new Promise(function (resolve, reject) {
+          var ImgObj = new Image(); //判断图片是否存在
+          ImgObj.src = value;
+          ImgObj.onload = function (res) {
+            resolve(res);
+          }
+          ImgObj.onerror = function (err) {
+            reject(err)
+          }
+        }).then(callback())
+          .catch((e) => {
+            callback(this.props.intl.formatMessage({ id: 'Form.Error.LogoUrl' }))
+          });
+      } else {
+        callback()
+      }
+    };
     render() {
       const {
         onSubmit,
@@ -87,6 +106,17 @@ const stakingNode = Form.create({ name: "form_in_modal" })(
                 }
               ]
             })(<Input maxLength={32} placeholder={f({ id: 'Form.Message.InputNodeDescription' })} />)}
+          </Form.Item>
+          <Form.Item label={f({ id: 'Form.Lable.UpdateLogoUrl' })}>
+            {getFieldDecorator("logoUrl", {
+              rules: [
+                {
+                  required: false,
+                }, {
+                  validator: this.validatLogoUrl
+                }
+              ]
+            })(<Input placeholder={f({ id: 'Form.Placeholder.InputLogoUrl' })} />)}
           </Form.Item>
           <Button type="primary" htmlType="submit" className="login-form-button">
             {f({ id: 'Form.Button.Submit' })}

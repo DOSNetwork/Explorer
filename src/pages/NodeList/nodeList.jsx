@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { Button, Table, message, Switch, Input, Tooltip, Icon } from "antd";
+import { Button, Table, message, Switch, Input, Tooltip, Icon, Avatar } from "antd";
 import { injectIntl, FormattedMessage } from "react-intl";
 import "./style.scss";
 import numeral from "numeral";
@@ -39,13 +39,20 @@ const statusColumnRender = (text, record, index) => {
 };
 
 const nameColumnRender = (text, record) => {
-  let avatar = `data:image/png;base64,${new identicon(
+  let localAvatar = `data:image/png;base64,${new identicon(
     record.node,
     100
   ).toString()}`;
+  let remoteAvatar = record.logoUrl && record.logoUrl.startsWith('http') ? record.logoUrl : ''
+
+  // if (record.node === '0xD3965D59DEAA6f77116237bea61C3d7F269a6293') {
+  //   remoteAvatar = 'https://zos.alipayobjects.com/rmsportal/ODTLcjxAfvqbxHnVXCYX.png'
+  // }
+  let avatar = remoteAvatar || localAvatar
   return (
     <div className="nodelist-name">
-      <img className="nodelist-avatar" src={avatar} alt="" />
+      <Avatar className="nodelist-avatar" src={avatar} />
+      {/* <img src={avatar} alt="" /> */}
       {record.description}
     </div>
   );
@@ -181,6 +188,7 @@ class NodeList extends Component {
       const dbAmount = values.dbAmount || 0;
       const cutRate = values.cutRate || 0;
       const name = values.name || "";
+      const logoUrl = values.logoUrl || "";
       let ui = this;
       const newNodeThenLoadList = function (receipt) {
         if (web3Client.utils.isAddress(nodeAddr)) {
@@ -191,7 +199,8 @@ class NodeList extends Component {
                 tokenAmount,
                 dbAmount,
                 cutRate,
-                name
+                name,
+                logoUrl
               )
               .send({ from: userAddress });
             ui.unMountRemoveListenerCallbacks = EmitterHandlerWrapper(
@@ -218,6 +227,7 @@ class NodeList extends Component {
               },
               error => {
                 message.error(error.message.split("\n")[0]);
+                console.log(error)
                 ui.loadNodeList(
                   "",
                   { current: 1, pageSize: ps },
@@ -226,6 +236,7 @@ class NodeList extends Component {
               }
             );
           } catch (e) {
+            console.log(e)
             message.error(e.reason);
           }
         } else {
@@ -480,7 +491,8 @@ class NodeList extends Component {
         totalOtherDelegatedAmount,
         rewardCut,
         description,
-        running
+        running,
+        logoUrl
       } = node;
       let uptime = 0;
       if (node.running) {
@@ -526,7 +538,8 @@ class NodeList extends Component {
         rewardCut: rewardCut,
         uptime: Math.round(+uptime / (60 * 60 * 24)),
         myDelegation: delegatedAmountShow,
-        myRewards: accumulatedRewardShow
+        myRewards: accumulatedRewardShow,
+        logoUrl: logoUrl
       };
       nodeList.push(nodeObject);
     }

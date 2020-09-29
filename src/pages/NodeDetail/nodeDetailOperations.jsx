@@ -73,9 +73,10 @@ function NodeDetailOperations(props) {
                 rewardCut = values.rewardCut;
             }
             const nodeDesc = values.nodeDesc || ''
+            const newLogoUrl = values.logoUrl || "";
             const updateFunc = function (receipt) {
                 let emitter = stakingContract.methods
-                    .updateNodeStaking(nodeAddr, tokenAmount, dbAmount, rewardCut, nodeDesc)
+                    .updateNodeStaking(nodeAddr, tokenAmount, dbAmount, rewardCut, nodeDesc, newLogoUrl)
                     .send({ from: userAddress });
 
                 handleEmmiterEvents(

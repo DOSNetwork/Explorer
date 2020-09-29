@@ -153,10 +153,11 @@ function NodeDetail(props) {
       description,
       stakedDB,
       running,
-      ownerAddr
+      ownerAddr,
+      logoUrl
     } = nodeDetailObj;
     let uptime = await stakingContract.methods.getNodeUptime(nodeAddr).call();
-    let avatar = `data:image/png;base64,${new identicon(
+    let avatar = logoUrl || `data:image/png;base64,${new identicon(
       nodeAddr,
       100
     ).toString()}`;

@@ -45,9 +45,11 @@ const messages = {
     'Form.Cancel.Create': 'Cancel',
     'Form.Error.tokenAmount': 'Please enter a valid number',
     'Form.Error.tokenAmount2': 'Please enter a value larger or equal to 800,000',
+    'Form.Error.address': 'Please enter a valid node address',
     'Form.Error.cutRate': 'Please enter a valid number',
     'Form.Error.cutRate2': 'Please enter a valid percentage',
     'Form.Error.CreateNodeAgreement': 'Please check to confirm',
+    'Form.Error.LogoUrl': 'Please check to the logo url',
     'Form.Lable.Name': 'Node Name',
     'Form.Message.InputName': 'Please name your node (<= 32 characters)',
     'Form.Lable.Node': 'Node Address',
@@ -59,8 +61,9 @@ const messages = {
     'Form.Message.InputdbAmount': "Please enter your DropBurn token amount",
     'Form.Lable.cutRate': 'Commission Rate',
     'Form.Message.InputcutRate': "Please enter your node's commission rate",
-
-
+    'Form.Placeholder.InputLogoUrl': "Please enter your node's logo image url",
+    'Form.Lable.logoUrl': "Logo Url",
+    'Form.Lable.UpdateLogoUrl': "Update Logo Url",
     /** NodeDetail**/
 
     'Form.Message.OwnerWithdraw': 'No token available for withdraw',

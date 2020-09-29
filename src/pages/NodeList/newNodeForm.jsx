@@ -39,6 +39,25 @@ const newNode = Form.create({
       }
       callback()
     };
+    validatLogoUrl = (rule, value, callback) => {
+      if (value) {
+        new Promise(function (resolve, reject) {
+          var ImgObj = new Image(); //判断图片是否存在
+          ImgObj.src = value;
+          ImgObj.onload = function (res) {
+            resolve(res);
+          }
+          ImgObj.onerror = function (err) {
+            reject(err)
+          }
+        }).then(callback())
+          .catch((e) => {
+            callback(this.props.intl.formatMessage({ id: 'Form.Error.LogoUrl' }))
+          });
+      } else {
+        callback()
+      }
+    };
     validateAgreementChecked = (rule, value, callback) => {
       value ? callback() : callback(this.props.intl.formatMessage({ id: 'Form.Error.CreateNodeAgreement' }))
     }
@@ -51,7 +70,7 @@ const newNode = Form.create({
         form,
         modalText
       } = this.props;
-      const { getFieldDecorator } = form;
+      const { getFieldDecorator, props } = form;
       let { formatMessage: f } = this.props.intl;
       return (
         <Modal
@@ -121,6 +140,17 @@ const newNode = Form.create({
                   }
                 ]
               })(<Input placeholder="10" suffix='%' />)}
+            </Form.Item>
+            <Form.Item label={f({ id: 'Form.Lable.logoUrl' })}>
+              {getFieldDecorator("logoUrl", {
+                rules: [
+                  {
+                    required: false,
+                  }, {
+                    validator: this.validatLogoUrl
+                  }
+                ]
+              })(<Input placeholder={f({ id: 'Form.Placeholder.InputLogoUrl' })} />)}
             </Form.Item>
             <Form.Item >
               {getFieldDecorator("agreement", {
