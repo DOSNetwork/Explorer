@@ -34,7 +34,7 @@ const stakingNode = Form.create({ name: "form_in_modal" })(
       }
       callback()
     };
-    validatLogoUrl = (rule, value, callback) => {
+    validateLogoUrl = (rule, value, callback) => {
       if (value) {
         new Promise(function (resolve, reject) {
           var ImgObj = new Image(); //判断图片是否存在
@@ -113,7 +113,7 @@ const stakingNode = Form.create({ name: "form_in_modal" })(
                 {
                   required: false,
                 }, {
-                  validator: this.validatLogoUrl
+                  validator: this.validateLogoUrl
                 }
               ]
             })(<Input placeholder={f({ id: 'Form.Placeholder.InputLogoUrl' })} />)}
