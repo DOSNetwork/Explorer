@@ -59,7 +59,7 @@ function NodeDetailOperations(props) {
             if (err) {
                 return;
             }
-            if (!values.tokenAmount && !values.dbAmount && !values.rewardCut && !values.nodeDesc) {
+            if (!values.tokenAmount && !values.dbAmount && !values.rewardCut && !values.nodeDesc && !values.logoUrl) {
                 return;
             }
             let tokenAmount = values.tokenAmount || 0;
