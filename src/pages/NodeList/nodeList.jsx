@@ -44,10 +44,6 @@ const nameColumnRender = (text, record) => {
     100
   ).toString()}`;
   let remoteAvatar = record.logoUrl && record.logoUrl.startsWith('http') ? record.logoUrl : ''
-
-  // if (record.node === '0xD3965D59DEAA6f77116237bea61C3d7F269a6293') {
-  //   remoteAvatar = 'https://zos.alipayobjects.com/rmsportal/ODTLcjxAfvqbxHnVXCYX.png'
-  // }
   let avatar = remoteAvatar || localAvatar
   return (
     <div className="nodelist-name">
