@@ -242,7 +242,7 @@ class NodeList extends Component {
       const dbApproveFunc = function (receipt) {
         try {
           let emitter = dbTokenContract.methods
-            .approve(constant.STAKING_CONTRACT_ADDRESS)
+            .approve(constant.STAKING_CONTRACT_ADDRESS, MAX_ALLOWANCE)
             .send({ from: userAddress });
           ui.unMountRemoveListenerCallbacks = EmitterHandlerWrapper(
             emitter,
@@ -272,7 +272,7 @@ class NodeList extends Component {
       const dbApproveThenNewNode = function (receipt) {
         try {
           let emitter = dbTokenContract.methods
-            .approve(constant.STAKING_CONTRACT_ADDRESS)
+            .approve(constant.STAKING_CONTRACT_ADDRESS, MAX_ALLOWANCE)
             .send({ from: userAddress });
           ui.unMountRemoveListenerCallbacks = EmitterHandlerWrapper(
             emitter,
@@ -303,7 +303,7 @@ class NodeList extends Component {
       const approveThenNewNode = function (receipt) {
         try {
           let emitter = dosTokenContract.methods
-            .approve(constant.STAKING_CONTRACT_ADDRESS)
+            .approve(constant.STAKING_CONTRACT_ADDRESS, MAX_ALLOWANCE)
             .send({ from: userAddress });
           ui.unMountRemoveListenerCallbacks = EmitterHandlerWrapper(
             emitter,
@@ -331,15 +331,15 @@ class NodeList extends Component {
           message.error(e.reason);
         }
       };
-      if (dbAmount !== 0 && dbAllowance.toString() !== MAX_ALLOWANCE) {
-        if (tokenAmount !== 0 && allowance.toString() !== MAX_ALLOWANCE) {
+      if (dbAmount !== 0 && Number(dbAllowance) < Number(dbAmount)) {
+        if (tokenAmount !== 0 && Number(allowance) < Number(tokenAmount)) {
           dbApproveFunc();
           approveThenNewNode();
         } else {
           dbApproveThenNewNode();
         }
       } else {
-        if (tokenAmount !== 0 && allowance.toString() !== MAX_ALLOWANCE) {
+        if (tokenAmount !== 0 && Number(allowance) < Number(tokenAmount)) {
           approveThenNewNode();
         } else {
           newNodeThenLoadList();
