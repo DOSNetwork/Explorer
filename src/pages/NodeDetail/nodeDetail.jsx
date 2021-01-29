@@ -328,7 +328,7 @@ const NodeDetail = class NodeDetail extends Component {
         console.log("call dbApprove then newNodeFunc");
         try {
           let emitter = dbTokenContract.methods
-            .approve(constant.STAKING_CONTRACT_ADDRESS)
+            .approve(constant.STAKING_CONTRACT_ADDRESS, MAX_ALLOWANCE)
             .send({ from: userAddress });
           ui.handleEmmiterEvents(
             emitter,
@@ -361,7 +361,7 @@ const NodeDetail = class NodeDetail extends Component {
         console.log("call dbApprove then newNodeFunc");
         try {
           let emitter = dbTokenContract.methods
-            .approve(constant.STAKING_CONTRACT_ADDRESS)
+            .approve(constant.STAKING_CONTRACT_ADDRESS, MAX_ALLOWANCE)
             .send({ from: userAddress });
           ui.handleEmmiterEvents(
             emitter,
@@ -393,7 +393,7 @@ const NodeDetail = class NodeDetail extends Component {
         console.log("call approveFunc then newNodeFunc");
         try {
           let emitter = dosTokenContract.methods
-            .approve(constant.STAKING_CONTRACT_ADDRESS)
+            .approve(constant.STAKING_CONTRACT_ADDRESS, MAX_ALLOWANCE)
             .send({ from: userAddress });
           ui.handleEmmiterEvents(
             emitter,
@@ -422,15 +422,15 @@ const NodeDetail = class NodeDetail extends Component {
           message.error(e.reason);
         }
       };
-      if (dbAmount !== 0 && dbAllowance.toString() !== MAX_ALLOWANCE) {
-        if (tokenAmount !== 0 && allowance.toString() !== MAX_ALLOWANCE) {
+      if (dbAmount !== 0 && Number(dbAllowance) < Number(dbAmount)) {
+        if (tokenAmount !== 0 && Number(allowance) < Number(tokenAmount)) {
           dbApproveFunc();
           approveThenUpdate();
         } else {
           dbApproveThenUpdate();
         }
       } else {
-        if (tokenAmount !== 0 && allowance.toString() !== MAX_ALLOWANCE) {
+        if (tokenAmount !== 0 && Number(allowance) < Number(tokenAmount)) {
           approveThenUpdate();
         } else {
           updateFunc();
@@ -588,7 +588,7 @@ const NodeDetail = class NodeDetail extends Component {
       if (allowance.toString() !== MAX_ALLOWANCE) {
         try {
           let emitter = dosTokenContract.methods
-            .approve(constant.STAKING_CONTRACT_ADDRESS)
+            .approve(constant.STAKING_CONTRACT_ADDRESS, MAX_ALLOWANCE)
             .send({ from: userAddress });
           ui.handleEmmiterEvents(
             emitter,
@@ -831,7 +831,7 @@ const NodeDetail = class NodeDetail extends Component {
       userBalance = await dosTokenContract.methods
         .balanceOf(userAddress)
         .call();
-      userBalance = Math.round(fromWei(userBalance) * 100) / 100
+      userBalance = fromWei(userBalance)
       console.log(`userBalance:${userBalance}`)
     }
     this.setState({

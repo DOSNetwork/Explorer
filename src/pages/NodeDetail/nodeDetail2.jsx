@@ -241,7 +241,9 @@ function NodeDetail(props) {
     userBalance = await dosTokenContract.methods
       .balanceOf(userAddress)
       .call();
-    userBalance = Math.round(fromWei(userBalance) * 100) / 100
+    userBalance = fromWei(userBalance)
+    console.log(`bal ${userBalance}`);
+
     setPageInfos({
       isUserOwnedThisNode: isUserOwnedThisNode,
       isUserDelegatedThisNode: isUserDelegatedThisNode,

@@ -104,7 +104,7 @@ function NodeDetailOperations(props) {
                 console.log("call dbApprove then newNodeFunc");
                 try {
                     let emitter = dbTokenContract.methods
-                        .approve(constant.STAKING_CONTRACT_ADDRESS)
+                        .approve(constant.STAKING_CONTRACT_ADDRESS, MAX_ALLOWANCE)
                         .send({ from: userAddress });
                     handleEmmiterEvents(
                         emitter,
@@ -137,7 +137,7 @@ function NodeDetailOperations(props) {
                 console.log("call dbApprove then newNodeFunc");
                 try {
                     let emitter = dbTokenContract.methods
-                        .approve(constant.STAKING_CONTRACT_ADDRESS)
+                        .approve(constant.STAKING_CONTRACT_ADDRESS, MAX_ALLOWANCE)
                         .send({ from: userAddress });
                     handleEmmiterEvents(
                         emitter,
@@ -169,7 +169,7 @@ function NodeDetailOperations(props) {
                 console.log("call approveFunc then newNodeFunc");
                 try {
                     let emitter = dosTokenContract.methods
-                        .approve(constant.STAKING_CONTRACT_ADDRESS)
+                        .approve(constant.STAKING_CONTRACT_ADDRESS, MAX_ALLOWANCE)
                         .send({ from: userAddress });
                     handleEmmiterEvents(
                         emitter,
@@ -198,15 +198,15 @@ function NodeDetailOperations(props) {
                     message.error(e.reason);
                 }
             };
-            if (dbAmount !== 0 && dbAllowance.toString() !== MAX_ALLOWANCE) {
-                if (tokenAmount !== 0 && allowance.toString() !== MAX_ALLOWANCE) {
+            if (dbAmount !== 0 && Number(dbAllowance) < Number(dbAmount)) {
+                if (tokenAmount !== 0 && Number(allowance) < Number(tokenAmount)) {
                     dbApproveFunc();
                     approveThenUpdate();
                 } else {
                     dbApproveThenUpdate();
                 }
             } else {
-                if (tokenAmount !== 0 && allowance.toString() !== MAX_ALLOWANCE) {
+                if (tokenAmount !== 0 && Number(allowance) < Number(tokenAmount)) {
                     approveThenUpdate();
                 } else {
                     updateFunc();
@@ -266,7 +266,7 @@ function NodeDetailOperations(props) {
             if (allowance.toString() !== MAX_ALLOWANCE) {
                 try {
                     let emitter = dosTokenContract.methods
-                        .approve(constant.STAKING_CONTRACT_ADDRESS)
+                        .approve(constant.STAKING_CONTRACT_ADDRESS, MAX_ALLOWANCE)
                         .send({ from: userAddress });
                     handleEmmiterEvents(
                         emitter,
