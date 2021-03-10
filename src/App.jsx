@@ -27,19 +27,19 @@ class App extends Component {
             await stakingContract.methods.getNodeAddrs().call()
           );
           for (let i = 0; i < nodesAddrs.length; i++) {
-            // 已经保存过的不重复保存
             let nodeAddr = nodesAddrs[i]
             let node = await stakingContract.methods.nodes(nodeAddr).call();
             localStorage.setItem(nodeAddr, JSON.stringify(node));
-            let delegatorKey = nodeAddr + userAddress
             if (userAddress !== "") {
               let delegator = await stakingContract.methods
                 .delegators(userAddress, nodeAddr)
                 .call();
-              localStorage.setItem(
-                delegatorKey,
-                JSON.stringify(delegator)
-              );
+              if (delegator.delegatedNode !== '0x0000000000000000000000000000000000000000') {
+                localStorage.setItem(
+                  nodeAddr + userAddress,
+                  JSON.stringify(delegator)
+                );
+              }
             }
           }
         } catch (e) {

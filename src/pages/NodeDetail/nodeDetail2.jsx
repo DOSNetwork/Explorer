@@ -237,13 +237,13 @@ function NodeDetail(props) {
           fromWei(pendingWithdraw) !== 0 ||
           fromWei(userDelegatedRewardTotal) !== 0;
       }
-    }
-    userBalance = await dosTokenContract.methods
-      .balanceOf(userAddress)
-      .call();
-    userBalance = fromWei(userBalance)
-    console.log(`bal ${userBalance}`);
 
+      userBalance = await dosTokenContract.methods
+        .balanceOf(userAddress)
+        .call();
+      userBalance = fromWei(userBalance)
+      console.log(`bal ${userBalance}`);
+    }
     setPageInfos({
       isUserOwnedThisNode: isUserOwnedThisNode,
       isUserDelegatedThisNode: isUserDelegatedThisNode,

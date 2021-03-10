@@ -404,6 +404,7 @@ class NodeList extends Component {
     });
     let nodesAddrs = [];
 
+    // TODO: showRelatedNodes without searching events.
 
     const getLogNewNodeEventList = async userAddress => {
       return await stakingContract.getPastEvents("NewNode", {
