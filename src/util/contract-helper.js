@@ -48,6 +48,9 @@ function GetNetwork(networkId) {
         case '42':
             result = 'kovan';
             break;
+        case '65':
+            result = 'okchain-testnet';
+            break;
         case '128':
             result = 'heco';
             break;
