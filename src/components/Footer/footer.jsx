@@ -27,7 +27,12 @@ const links = [
     {
         text: 'Main Website',
         url: 'https://dos.network'
-    }, {
+    },
+    {
+        text: 'Data Streams',
+        url: 'https://stream.dos.network'
+    },
+    {
         text: 'Github',
         url: 'https://github.com/DOSNetwork'
     }, {
@@ -70,7 +75,7 @@ class Footer extends PureComponent {
                     {renderSoicalLinks()}
                     {renderLinks()}
                     <div className="copy-right">
-                        © Copyright 2020 DOS Foundation Ltd. All Rights Reserved
+                        © Copyright 2021 DOS Foundation Ltd. All Rights Reserved
                     </div>
                 </div>
             </div>
