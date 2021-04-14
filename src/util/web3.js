@@ -11,55 +11,7 @@ import {
 } from "../util/const";
 import { GetConstantByNetWork } from "../util/contract-helper";
 import { connectorsMapping } from '../util/connector'
-// TODO: replaced by function connectToClient
-export function connectToEthereum() {
-  let web3 = null;
-  let isWalletInstalled = !!window.ethereum;
-  // 如果没有安装钱包.使用默认
-  let networkVersion =
-    isWalletInstalled && window.ethereum.networkVersion
-      ? window.ethereum.networkVersion
-      : DEFAULT_NETWORK;
-  const {
-    DBTOKEN_CONTRACT_ADDRESS,
-    DOSTOKEN_CONTRACT_ADDRESS,
-    STAKING_CONTRACT_ADDRESS,
-    CURRENT_NETWORK,
-    WALLET_NETWORK_SUPPORTED,
-    BLOCK_NUMBER,
-    PROVIDER,
-    USER_WALLET_NETWORK
-  } = GetConstantByNetWork(networkVersion);
-  if (isWalletInstalled && WALLET_NETWORK_SUPPORTED) {
-    web3 = new Web3(window.ethereum);
-  } else {
-    web3 = new Web3(new Web3.providers.WebsocketProvider(PROVIDER));
-  }
 
-  let dosTokenContract = new web3.eth.Contract(
-    DOSTOKEN_ABI,
-    DOSTOKEN_CONTRACT_ADDRESS
-  );
-  let dbTokenContract = new web3.eth.Contract(DBTOKEN_ABI, DBTOKEN_CONTRACT_ADDRESS);
-  let stakingContract = new web3.eth.Contract(STAKING_ABI, STAKING_CONTRACT_ADDRESS);
-
-  store.dispatch({
-    type: type.CONTRACT_WEB3_CLINET_INIT,
-    web3Client: web3,
-    dosTokenContract,
-    dbTokenContract,
-    stakingContract,
-    network: CURRENT_NETWORK,
-    connectedNetwork: USER_WALLET_NETWORK,
-    networkSupported: WALLET_NETWORK_SUPPORTED,
-    constant: {
-      DBTOKEN_CONTRACT_ADDRESS,
-      DOSTOKEN_CONTRACT_ADDRESS,
-      STAKING_CONTRACT_ADDRESS
-    },
-    initialBlock: BLOCK_NUMBER
-  });
-}
 export async function connectToClient() {
   console.log('connectToClient')
   let web3Instance = null;
@@ -94,7 +46,14 @@ export async function connectToClient() {
   if (isWalletInstalled && WALLET_NETWORK_SUPPORTED) {
     web3Instance = new Web3(window.ethereum);
   } else {
-    web3Instance = new Web3(new Web3.providers.WebsocketProvider(provider));
+    if (provider.startsWith('ws')) {
+      web3Instance = new Web3(new Web3.providers.WebsocketProvider(provider));
+    } else if (provider.startsWith('http')) {
+      web3Instance = new Web3(new Web3.providers.HttpProvider(provider));
+    } else {
+      console.log('@@@@@ No web3 provider detected');
+      process.exit(1);
+    }
   }
   let dosTokenContract = new web3Instance.eth.Contract(DOSTOKEN_ABI, DOSTOKEN_CONTRACT_ADDRESS);
   let dbTokenContract = new web3Instance.eth.Contract(DBTOKEN_ABI, DBTOKEN_CONTRACT_ADDRESS);
