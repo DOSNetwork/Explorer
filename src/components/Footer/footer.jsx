@@ -20,7 +20,7 @@ const socialLinks = [
         url: 'https://github.com/DOSNetwork'
     }, {
         icon: twitter,
-        url: 'https://twitter.com/DosNetwork'
+        url: 'https://twitter.com/NetworkDOS'
     }
 ]
 const links = [
