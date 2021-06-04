@@ -59,20 +59,10 @@ function Connectors(props) {
                     url = require('./assets/wallet-icons/walletconnect.svg')
                 } else if (connectorName === 'TrustWallet') {
                     url = require('./assets/wallet-icons/trustwallet.png')
-                } else if (connectorName === 'Portis') {
-                    url = require('./assets/wallet-icons/portis.png')
-                } else if (connectorName === 'Fortmatic') {
-                    url = require('./assets/wallet-icons/fortmatic.png')
                 } else if (connectorName === 'Ledger') {
                     url = require('./assets/wallet-icons/ledger.svg')
-                } else if (connectorName === 'Squarelink') {
-                    url = require('./assets/wallet-icons/squarelink.png')
                 } else if (connectorName === 'Trezor') {
                     url = require('./assets/wallet-icons/trezor.png')
-                } else if (connectorName === 'Torus') {
-                    url = require('./assets/wallet-icons/torus.jpg')
-                } else if (connectorName === 'Authereum') {
-                    url = require('./assets/wallet-icons/aethereum.svg')
                 } else if (connectorName === 'WalletLink') {
                     displayName = 'Coinbase Wallet'
                     url = require('./assets/wallet-icons/coinbase.svg')

@@ -14,24 +14,6 @@ import {
 import {
     TrezorConnector
 } from "@web3-react/trezor-connector";
-import {
-    FrameConnector
-} from "@web3-react/frame-connector";
-import {
-    FortmaticConnector
-} from "@web3-react/fortmatic-connector";
-import {
-    PortisConnector
-} from "@web3-react/portis-connector";
-import {
-    SquarelinkConnector
-} from "@web3-react/squarelink-connector";
-import {
-    TorusConnector
-} from "@web3-react/torus-connector";
-import {
-    AuthereumConnector
-} from "@web3-react/authereum-connector";
 
 const POLLING_INTERVAL = 12000;
 const RPC_URLS = {
@@ -77,33 +59,6 @@ export const trezor = new TrezorConnector({
     manifestAppUrl: "https://8rg3h.csb.app/"
 });
 
-export const frame = new FrameConnector({
-    supportedChainIds: [1]
-});
-
-export const fortmatic = new FortmaticConnector({
-    apiKey: "pk_live_F95FEECB1BE324B5",
-    chainId: 1
-});
-
-export const portis = new PortisConnector({
-    dAppId: "211b48db-e8cc-4b68-82ad-bf781727ea9e",
-    networks: [1, 100]
-});
-
-export const squarelink = new SquarelinkConnector({
-    clientId: "5f2a2233db82b06b24f9",
-    networks: [1, 100]
-});
-
-export const torus = new TorusConnector({
-    chainId: 1
-});
-
-export const authereum = new AuthereumConnector({
-    chainId: 1
-});
-
 export const connectorsMapping = {
     Default: injected,
     MetaMask: injected,
@@ -112,10 +67,4 @@ export const connectorsMapping = {
     WalletLink: walletlink,
     Ledger: ledger,
     Trezor: trezor,
-    Frame: frame,
-    Fortmatic: fortmatic,
-    Portis: portis,
-    Squarelink: squarelink,
-    Torus: torus,
-    Authereum: authereum
 }
