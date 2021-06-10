@@ -28,6 +28,7 @@ export async function connectToClient() {
     WALLET_NETWORK_SUPPORTED,
     BLOCK_NUMBER,
     PROVIDER,
+    API,
     USER_WALLET_NETWORK
   } = GetConstantByNetWork(networkVersion);
   let provider = null
@@ -72,7 +73,8 @@ export async function connectToClient() {
       DOSTOKEN_CONTRACT_ADDRESS,
       STAKING_CONTRACT_ADDRESS
     },
-    initialBlock: BLOCK_NUMBER
+    initialBlock: BLOCK_NUMBER,
+    api: API,
   });
   return true
 }

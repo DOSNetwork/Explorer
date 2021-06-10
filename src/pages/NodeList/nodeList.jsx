@@ -6,7 +6,7 @@ import numeral from "numeral";
 import NewNode from "./newNodeForm";
 import EllipsisWrapper from "../../components/EllispisWrapper";
 import identicon from "identicon.js";
-import { EmitterHandlerWrapper } from "../../util/contract-helper";
+import { EmitterHandlerWrapper, getPastEventsWithFallback } from "../../util/contract-helper";
 import { MAX_ALLOWANCE } from "../../util/const";
 const { Column } = Table;
 const { Search } = Input;
@@ -395,38 +395,35 @@ class NodeList extends Component {
       userAddress,
       isWalletLogin,
       stakingContract,
-      initialBlock
+      initialBlock,
+      api
     } = this.props.contract;
 
     const { hideInactive } = this.state
     this.setState({
       loading: true
     });
-    let nodesAddrs = [];
-
-    // TODO: showRelatedNodes without searching events.
-
-    const getLogNewNodeEventList = async userAddress => {
-      return await stakingContract.getPastEvents("NewNode", {
-        filter: { owner: userAddress },
-        fromBlock: initialBlock,
-        toBlock: "latest"
-      });
-    };
-    const getDelegateToEventList = async senderAddress => {
-      return await stakingContract.getPastEvents("Delegate", {
-        filter: { from: senderAddress },
-        fromBlock: initialBlock,
-        toBlock: "latest"
-      });
-    };
-    nodesAddrs = Array.from(await stakingContract.methods.getNodeAddrs().call());
+    let nodesAddrs = Array.from(await stakingContract.methods.getNodeAddrs().call());
     // search related nodes
     if (isWalletLogin && showRelatedNodes) {
       // console.log(`only show related nodes info`);
-      const eventList = await getLogNewNodeEventList(userAddress);
+      const eventList = await getPastEventsWithFallback(
+        stakingContract,
+        'NewNode',
+        initialBlock,
+        [userAddress],
+        api,
+        web3Client
+      );
       let eventAddrs = eventList.map(event => event.returnValues.nodeAddress);
-      const eventList2 = await getDelegateToEventList(userAddress);
+      const eventList2 = await getPastEventsWithFallback(
+        stakingContract,
+        'Delegate',
+        initialBlock,
+        [userAddress],
+        api,
+        web3Client
+      );
       eventAddrs.push(...eventList2.map(event => event.returnValues.to));
       const result = eventAddrs.filter(addr => nodesAddrs.includes(addr));
       nodesAddrs = result;
@@ -434,12 +431,26 @@ class NodeList extends Component {
       // search nodes
       // console.log(`show all nodes info`);
       if (userAddress) {
-        //Let owne and delegate nodes show first
-        const eventList = await getLogNewNodeEventList(userAddress);
+        // owned and delegated nodes show first
+        const eventList = await getPastEventsWithFallback(
+          stakingContract,
+          'NewNode',
+          initialBlock,
+          [userAddress],
+          api,
+          web3Client
+        );
         let eventAddrs = eventList
           .reverse()
           .map(event => event.returnValues.nodeAddress);
-        const eventList2 = await getDelegateToEventList(userAddress);
+        const eventList2 = await getPastEventsWithFallback(
+          stakingContract,
+          'Delegate',
+          initialBlock,
+          [userAddress],
+          api,
+          web3Client
+        );
         eventAddrs.push(
           ...eventList2.reverse().map(event => event.returnValues.to)
         );

@@ -13,7 +13,8 @@ export default {
         DOSTOKEN_CONTRACT_ADDRESS: process.env.REACT_APP_DOSTOKEN_CONTRACT_ADDRESS_MAINNET,
         BLOCK_NUMBER: process.env.REACT_APP_BLOCK_NUMBER_MAINNET,
         NETWORK: process.env.REACT_APP_NETWORK_MAINNET,
-        PROVIDER: process.env.REACT_APP_PROVIDER_MAINNET
+        PROVIDER: process.env.REACT_APP_PROVIDER_MAINNET,
+        API: process.env.REACT_APP_ETHERSCAN_API
     },
     'heco-testnet': {
         STAKING_CONTRACT_ADDRESS: process.env.REACT_APP_STAKING_CONTRACT_ADDRESS_HECOTESTNET,
@@ -29,7 +30,8 @@ export default {
         DOSTOKEN_CONTRACT_ADDRESS: process.env.REACT_APP_DOSTOKEN_CONTRACT_ADDRESS_HECO,
         BLOCK_NUMBER: process.env.REACT_APP_BLOCK_NUMBER_HECO,
         NETWORK: process.env.REACT_APP_NETWORK_HECO,
-        PROVIDER: process.env.REACT_APP_PROVIDER_HECO
+        PROVIDER: process.env.REACT_APP_PROVIDER_HECO,
+        API: process.env.REACT_APP_HECOINFO_API,
     },
     'okchain-testnet': {
         STAKING_CONTRACT_ADDRESS: process.env.REACT_APP_STAKING_CONTRACT_ADDRESS_OKCHAINTESTNET,
@@ -53,7 +55,8 @@ export default {
         DOSTOKEN_CONTRACT_ADDRESS: process.env.REACT_APP_DOSTOKEN_CONTRACT_ADDRESS_BSC,
         BLOCK_NUMBER: process.env.REACT_APP_BLOCK_NUMBER_BSC,
         NETWORK: process.env.REACT_APP_NETWORK_BSC,
-        PROVIDER: process.env.REACT_APP_PROVIDER_BSC
+        PROVIDER: process.env.REACT_APP_PROVIDER_BSC,
+        API: process.env.REACT_APP_BSCSCAN_API,
     },
 
 }

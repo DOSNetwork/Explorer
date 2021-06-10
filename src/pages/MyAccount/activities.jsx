@@ -4,6 +4,7 @@ import { SubTitle } from "../../Layout/page";
 import { Table } from "antd";
 import dateformat from "dateformat";
 import EllipsisWrapper from '../../components/EllispisWrapper'
+import { getPastEventsWithFallback } from "../../util/contract-helper";
 
 const { Column } = Table;
 const dateFormatRender = (text, record, index) => {
@@ -51,33 +52,51 @@ class Activities extends Component {
     }
   }
   search = async () => {
-    const { isWalletLogin, userAddress, stakingContract, initialBlock } = this.props.contract;
+    const { isWalletLogin, web3Client, userAddress, stakingContract, initialBlock, api } = this.props.contract;
     if (isWalletLogin) {
       this.setState({
         loading: true
       });
-
-      const options1 = {
-        filter: { owner: userAddress },
-        fromBlock: initialBlock,
-        toBlock: "latest"
-      };
-      const options2 = {
-        filter: { from: userAddress },
-        fromBlock: initialBlock,
-        toBlock: "latest"
-      };
-      const options3 = {
-        filter: { to: userAddress },
-        fromBlock: initialBlock,
-        toBlock: "latest"
-      };
-
-      const eventList1 = await stakingContract.getPastEvents("NewNode", options1);
-      const eventList2 = await stakingContract.getPastEvents("Delegate", options2);
-      const eventList4 = await stakingContract.getPastEvents("Unbond", options2);
-      const eventList3 = await stakingContract.getPastEvents("Withdraw", options3);
-      const eventList5 = await stakingContract.getPastEvents("ClaimReward", options3);
+      const eventList1 = await getPastEventsWithFallback(
+        stakingContract,
+        'NewNode',
+        initialBlock,
+        [userAddress],
+        api,
+        web3Client
+      );
+      const eventList2 = await getPastEventsWithFallback(
+        stakingContract,
+        'Delegate',
+        initialBlock,
+        [userAddress],
+        api,
+        web3Client
+      );
+      const eventList3 = await getPastEventsWithFallback(
+        stakingContract,
+        'Withdraw',
+        initialBlock,
+        [null, userAddress],  // filter by 2nd index argument
+        api,
+        web3Client
+      );
+      const eventList4 = await getPastEventsWithFallback(
+        stakingContract,
+        'Unbond',
+        initialBlock,
+        [userAddress],
+        api,
+        web3Client
+      );
+      const eventList5 = await getPastEventsWithFallback(
+        stakingContract,
+        'ClaimReward',
+        initialBlock,
+        [userAddress],
+        api,
+        web3Client
+      );
       let dataList = [...eventList1, ...eventList2, ...eventList3, ...eventList4, ...eventList5].sort((a, b) => b.blockNumber - a.blockNumber)
       this.setState({
         dataListSource: dataList
@@ -108,6 +127,7 @@ class Activities extends Component {
         currentDataList.push(source[y])
       }
     }
+
     if (!this.unMount) {
       this.setState({
         dataList: currentDataList,
@@ -143,12 +163,6 @@ class Activities extends Component {
             dataIndex="timestamp"
             key="timestamp"
           />
-          {/* <Column
-            title="Time"
-            sorter={(a, b) => a.blockNumber - b.blockNumber}
-            sortDirections={["ascend", "descend"]}
-            dataIndex="blockNumber"
-          /> */}
           <Column
             title={f({ id: 'Table.Column.Activites.Action' })}
             dataIndex="event"

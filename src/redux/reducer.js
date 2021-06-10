@@ -48,7 +48,8 @@ const contractState = {
     connectedNetwork: '',
     constant: {},
     networkSupported: false,
-    initialBlock: 0
+    initialBlock: 0,
+    api: null,
 }
 export const initialState = {
     global: globalState,
@@ -176,7 +177,8 @@ contractActions[type.CONTRACT_WEB3_CLINET_INIT] = (prevState, payload) => {
         connectedNetwork,
         constant,
         networkSupported,
-        initialBlock
+        initialBlock,
+        api
     } = payload
     return {
         ...prevState,
@@ -188,7 +190,8 @@ contractActions[type.CONTRACT_WEB3_CLINET_INIT] = (prevState, payload) => {
         connectedNetwork,
         constant,
         networkSupported,
-        initialBlock
+        initialBlock,
+        api
     }
 }
 

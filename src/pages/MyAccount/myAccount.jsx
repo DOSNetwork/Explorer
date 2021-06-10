@@ -2,6 +2,7 @@ import React, { Component } from "react";
 import { injectIntl } from 'react-intl'
 import { Icon, Spin } from "antd";
 import numeral from 'numeral'
+import { getPastEventsWithFallback } from "../../util/contract-helper";
 const numberFormatRender = (value) => {
   return numeral(value).format("0,0.00");
 };
@@ -58,7 +59,15 @@ class Account extends Component {
       return web3Client.utils.fromWei(bn.toString("10"));
     }
     this.props.globalLoading(true);
-    const { isWalletLogin, web3Client, userAddress, initialBlock, dosTokenContract, stakingContract } = this.props.contract;
+    const {
+      isWalletLogin,
+      web3Client,
+      userAddress,
+      initialBlock,
+      api,
+      dosTokenContract,
+      stakingContract
+    } = this.props.contract;
     if (isWalletLogin) {
       let userBalance = await dosTokenContract.methods
         .balanceOf(userAddress)
@@ -71,16 +80,14 @@ class Account extends Component {
       // Get owned node metadata
       if (userAddress !== "") {
         let nodeAddrs = [];
-        const options = {
-          filter: { owner: userAddress },
-          fromBlock: initialBlock,
-          toBlock: "latest"
-        };
-        const eventList = await stakingContract.getPastEvents(
-          "NewNode",
-          options
+        const eventList = await getPastEventsWithFallback(
+          stakingContract,
+          'NewNode',
+          initialBlock,
+          [userAddress],
+          api,
+          web3Client
         );
-
         for (let i = 0; i < eventList.length; i++) {
           nodeAddrs.unshift(eventList[i].returnValues.nodeAddress);
         }
@@ -118,16 +125,14 @@ class Account extends Component {
       // Get delegation metadata
       if (userAddress !== "") {
         let nodeAddrs = [];
-        const options2 = {
-          filter: { from: userAddress },
-          fromBlock: initialBlock,
-          toBlock: "latest"
-        };
-        const eventList = await stakingContract.getPastEvents(
-          "Delegate",
-          options2
+        const eventList = await getPastEventsWithFallback(
+          stakingContract,
+          'Delegate',
+          initialBlock,
+          [userAddress],
+          api,
+          web3Client
         );
-
         for (let i = 0; i < eventList.length; i++) {
           nodeAddrs.unshift(eventList[i].returnValues.to);
         }
