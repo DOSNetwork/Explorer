@@ -14,7 +14,6 @@ function WalletConnector(props) {
     console.log(isConnectorShow)
     const closeModal = useCallback(
         () => {
-            console.log('close')
             setIsConnectorShow(false)
         },
         [],

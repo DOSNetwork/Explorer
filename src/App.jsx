@@ -10,7 +10,6 @@ import Explorer from "./pages/Explorer";
 import Layout from "./Layout";
 import { message } from "antd";
 import store from './redux/store'
-// import { connectToClient } from "./util/web3.js";
 
 message.config({
   top: 100,

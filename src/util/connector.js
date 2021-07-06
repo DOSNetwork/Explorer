@@ -63,8 +63,6 @@ export const connectorsMapping = {
     Default: injected,
     MetaMask: injected,
     TrustWallet: injected,
-    WalletConnect: walletconnect,
-    WalletLink: walletlink,
     Ledger: ledger,
     Trezor: trezor,
 }

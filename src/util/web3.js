@@ -10,7 +10,6 @@ import {
   DEFAULT_NETWORK,
 } from "../util/const";
 import { GetConstantByNetWork } from "../util/contract-helper";
-import { connectorsMapping } from '../util/connector'
 
 export async function connectToClient() {
   console.log('connectToClient')
@@ -31,19 +30,7 @@ export async function connectToClient() {
     API,
     USER_WALLET_NETWORK
   } = GetConstantByNetWork(networkVersion);
-  let provider = null
-  let defaultConnector = connectorsMapping.Default
-  let isAuthorized = await defaultConnector.isAuthorized()
-  if (isAuthorized) {
-    console.log('wallet authorized')
-    let context = await defaultConnector.activate()
-    console.log('wallet activated')
-    provider = context.provider
-    context.account && dispatchWalletActivated(context.account, { library: { provider: provider } })
-  } else {
-    console.log('wallet not authorized')
-    provider = PROVIDER
-  }
+  let provider = PROVIDER
   if (isWalletInstalled && WALLET_NETWORK_SUPPORTED) {
     web3Instance = new Web3(window.ethereum);
   } else {
@@ -86,47 +73,6 @@ export function dispatchWalletActivated(accountAddress, web3Context) {
     web3Context: web3Context
   });
 }
-
-// TODO: delete
-export function walletLogin() {
-  return new Promise((resolve, reject) => {
-    try {
-      if (window.ethereum) {
-        // window.ethereum.enable().then(approve);
-        window.ethereum.on("accountsChanged", function (accounts) {
-          let lastAccount = accounts[0];
-          if (lastAccount) {
-            store.dispatch({
-              type: type.CONTRACT_USERADDRESS_CHANGE,
-              address: accounts[0]
-            });
-          } else {
-            store.dispatch({ type: type.WALLET_DEACTIVATE });
-          }
-        });
-        window.ethereum.on("networkChanged", function (network) {
-          let lastAccount = network;
-          notification.open({
-            message: "MetaMask Account Change",
-            description: (
-              <>
-                <h3>Account change to</h3>
-                <p>{lastAccount}</p>
-              </>
-            ),
-            icon: <Icon type="smile" style={{ color: "#108ee9" }} />
-          });
-        });
-        resolve(true);
-      } else {
-        resolve(false);
-      }
-    } catch (e) {
-      reject(e);
-    }
-  });
-}
-
 
 export function dispatchWalletDeactivated() {
   store.dispatch({

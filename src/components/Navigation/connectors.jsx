@@ -28,6 +28,13 @@ function Connectors(props) {
         },
         [deactivate, closeModal],
     )
+    const activateCallback = useCallback(
+        (connector) => {
+            activate(connector)
+            closeModal()
+        },
+        [activate, closeModal],
+    )
     useEffect(() => {
         if (currentConnectingConnector && currentConnectingConnector === connector) {
             console.log(`useEffect:setCurrentConnectingConnector`)
@@ -55,23 +62,21 @@ function Connectors(props) {
                 let displayName = connectorName;
                 if (connectorName === 'MetaMask') {
                     url = require('./assets/wallet-icons/metamask.svg')
-                } else if (connectorName === 'WalletConnect') {
-                    url = require('./assets/wallet-icons/walletconnect.svg')
                 } else if (connectorName === 'TrustWallet') {
                     url = require('./assets/wallet-icons/trustwallet.png')
                 } else if (connectorName === 'Ledger') {
                     url = require('./assets/wallet-icons/ledger.svg')
                 } else if (connectorName === 'Trezor') {
                     url = require('./assets/wallet-icons/trezor.png')
-                } else if (connectorName === 'WalletLink') {
-                    displayName = 'Coinbase Wallet'
-                    url = require('./assets/wallet-icons/coinbase.svg')
-                } else if (connectorName === 'Frame' || connectorName === 'Default') {
+                } else if (connectorName === 'Default') {
                     return ''
+                }
+                if (typeof url === "object" && url.default !== null) {
+                  url = url.default
                 }
                 return (
                     <div className='connector-item' key={connectorName} onClick={() => {
-                        onConnectorActivate(activate, currentConnector, setCurrentConnectingConnector)
+                        onConnectorActivate(activateCallback, currentConnector, setCurrentConnectingConnector)
                     }}>
                         <span className='connector-item--name'>{displayName}</span>
                         {showLoading && <Spin indicator={(<LoadingOutlined style={{ fontSize: 24 }} spin />)} />
@@ -102,7 +107,6 @@ function onConnectDeactivate(deactivate, connector, setCurrentConnectingConnecto
     }
     setCurrentConnectingConnector(null)
     dispatchWalletDeactivated()
-
 }
 
 export default injectIntl(Connectors)
