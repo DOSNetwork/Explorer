@@ -2,13 +2,13 @@ import Web3 from "web3";
 import store from "../redux/store";
 import type from "../redux/type";
 import React from "react";
-import { notification, Icon } from "antd";
 import {
   DBTOKEN_ABI,
   DOSTOKEN_ABI,
   STAKING_ABI,
   DEFAULT_NETWORK,
 } from "../util/const";
+import { connectorsMapping } from '../util/connector'
 import { GetConstantByNetWork } from "../util/contract-helper";
 
 export async function connectToClient() {
@@ -30,6 +30,14 @@ export async function connectToClient() {
     API,
     USER_WALLET_NETWORK
   } = GetConstantByNetWork(networkVersion);
+  let defaultConnector = connectorsMapping.Default
+  let isAuthorized = await defaultConnector.isAuthorized()
+  if (isAuthorized) {
+    console.log('wallet authorized')
+    let context = await defaultConnector.activate()
+    console.log('wallet activated')
+    context.account && dispatchWalletActivated(context.account, context)
+  }
   let provider = PROVIDER
   if (isWalletInstalled && WALLET_NETWORK_SUPPORTED) {
     web3Instance = new Web3(window.ethereum);

@@ -7,8 +7,11 @@ const messages = {
     'Title.explorer': 'Explorer',
     'Title.nodedetail': 'Node Detail',
     'Title.myaccount': 'My Account',
+    'Title.switchNetwork': '⚙  Switch Network',
+    'Networks.Ethereum': 'Ethereum',
+    'Networks.BSC': 'BSC',
     /*metamask*/
-    'Wallet.connected': 'Disconnect Wallet',
+    'Wallet.disconnect': 'Disconnect',
     'Wallet.connectwallet': 'Connect Wallet',
     'Wallet.Title.NoWalletInstalled': 'No Wallet Installed',
     'Wallet.Tips.InstallWallet': 'You need to install a wallet to get involved in staking.',

@@ -1,13 +1,12 @@
 import React, { useEffect, useState, useCallback } from "react";
-import {
-    useWeb3React
-} from "@web3-react/core";
+import { useWeb3React, UnsupportedChainIdError } from "@web3-react/core";
 import { injectIntl } from 'react-intl'
 import { Spin } from 'antd';
 import { LoadingOutlined } from '@ant-design/icons';
 import { connectorsMapping } from '../../util/connector'
 import { dispatchWalletActivated, dispatchWalletDeactivated } from '../../util/web3'
 function Connectors(props) {
+    const { formatMessage: f } = props.intl;
     const { web3Context, closeModal } = props
     const currentConnectedConnector = (web3Context && web3Context.connector) || null
     console.log('Connectors render')
@@ -19,6 +18,7 @@ function Connectors(props) {
         activate,
         deactivate,
         active,
+        error,
     } = context;
     const [currentConnectingConnector, setCurrentConnectingConnector] = useState()
     const deactivateCallback = useCallback(
@@ -43,6 +43,10 @@ function Connectors(props) {
     }, [currentConnectingConnector, connector]);
 
     useEffect(() => {
+        if (!active && error instanceof UnsupportedChainIdError) {
+            console.log('Connectors UnsupportedChainIdError');
+            return;
+        }
         if (account && active && library) {
             console.log('dispatchWalletActivated: ', context);
             dispatchWalletActivated(account, context)
@@ -64,10 +68,10 @@ function Connectors(props) {
                     url = require('./assets/wallet-icons/metamask.svg')
                 } else if (connectorName === 'TrustWallet') {
                     url = require('./assets/wallet-icons/trustwallet.png')
-                } else if (connectorName === 'Ledger') {
-                    url = require('./assets/wallet-icons/ledger.svg')
                 } else if (connectorName === 'Trezor') {
                     url = require('./assets/wallet-icons/trezor.png')
+                } else if (connectorName === 'Ledger') {
+                    url = require('./assets/wallet-icons/ledger.svg')
                 } else if (connectorName === 'Default') {
                     return ''
                 }
@@ -86,7 +90,9 @@ function Connectors(props) {
                     </div>
                 )
             })}
-            <div className='connector-item item-deactivate' onClick={() => { onConnectDeactivate(deactivateCallback, currentConnectedConnector, setCurrentConnectingConnector) }}>Deactivate</div>
+            <div className='connector-item item-deactivate' onClick={() => { onConnectDeactivate(deactivateCallback, currentConnectedConnector, setCurrentConnectingConnector) }}>
+              {f({ id: 'Wallet.disconnect' })}
+            </div>
         </div>
     )
 }

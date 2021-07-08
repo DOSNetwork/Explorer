@@ -8,21 +8,20 @@ import {
 } from '../SvgIcon/icons.jsx'
 function WalletConnector(props) {
     console.log('WalletConnector render')
-    let { formatMessage: f } = props.intl;
-
+    const { formatMessage: f } = props.intl;
     const [isConnectorShow, setIsConnectorShow] = useState(false)
-    console.log(isConnectorShow)
     const closeModal = useCallback(
         () => {
             setIsConnectorShow(false)
         },
         [],
     )
-    let { userAddress = '', isWalletLogin, web3Context } = props.contract;
+    let { userAddress = '', isWalletLogin, networkSupported, web3Context } = props.contract;
     return (
         <>
             {
-                isWalletLogin ?
+              networkSupported &&
+                (isWalletLogin ?
                     <div className="wallet__status__panel" onClick={() => { setIsConnectorShow(true) }}>
                         < WalletIcon />
                         <div className='wallet__login-logged'>
@@ -34,11 +33,11 @@ function WalletConnector(props) {
                         < WalletIcon />
                         <p className="wallet__login-button" >{f({ id: 'Wallet.connectwallet' })}</p>
                     </div >
+                )
             }
             <Modal
-                closable={false}
                 visible={isConnectorShow}
-                title={'Connect Wallet'}
+                title={f({ id: 'Wallet.connectwallet' })}
                 onCancel={closeModal}
                 footer={null}
                 width={600}

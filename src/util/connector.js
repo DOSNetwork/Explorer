@@ -22,7 +22,7 @@ const RPC_URLS = {
 };
 
 export const injected = new InjectedConnector({
-    supportedChainIds: [1, 3, 4, 5, 42]
+    supportedChainIds: [1, 4, 56, 97, 128, 256]
 });
 
 // export const network = new NetworkConnector({
@@ -63,6 +63,6 @@ export const connectorsMapping = {
     Default: injected,
     MetaMask: injected,
     TrustWallet: injected,
-    Ledger: ledger,
     Trezor: trezor,
+    Ledger: ledger,
 }

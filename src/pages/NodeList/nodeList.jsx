@@ -394,6 +394,7 @@ class NodeList extends Component {
       web3Client,
       userAddress,
       isWalletLogin,
+      connectedNetwork,
       stakingContract,
       initialBlock,
       api
@@ -488,7 +489,7 @@ class NodeList extends Component {
     for (let i = startIndex; i < endIndex; i++) {
       const nodeAddr = filtedNodes[i];
       let node;
-      const cachedHits = localStorage.getItem(nodeAddr);
+      const cachedHits = localStorage.getItem(connectedNetwork + nodeAddr);
       if (cachedHits) {
         node = JSON.parse(cachedHits);
       } else {
@@ -510,7 +511,7 @@ class NodeList extends Component {
       }
       let delegator = { myDelegator: "-", accumulatedReward: "-" };
       if (userAddress) {
-        const cachedHits = localStorage.getItem(nodeAddr + userAddress);
+        const cachedHits = localStorage.getItem(connectedNetwork + nodeAddr + userAddress);
         if (cachedHits) {
           delegator = JSON.parse(cachedHits);
         } else {

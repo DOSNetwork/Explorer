@@ -17,7 +17,7 @@ message.config({
 });
 class App extends Component {
   componentDidMount() {
-    let { stakingContract, networkSupported } = store.getState().contract;
+    let { stakingContract, connectedNetwork, networkSupported } = store.getState().contract;
     if (networkSupported) {
       async function loadNodes() {
         try {
@@ -28,14 +28,14 @@ class App extends Component {
           for (let i = 0; i < nodesAddrs.length; i++) {
             let nodeAddr = nodesAddrs[i]
             let node = await stakingContract.methods.nodes(nodeAddr).call();
-            localStorage.setItem(nodeAddr, JSON.stringify(node));
+            localStorage.setItem(connectedNetwork + nodeAddr, JSON.stringify(node));
             if (userAddress !== "") {
               let delegator = await stakingContract.methods
                 .delegators(userAddress, nodeAddr)
                 .call();
               if (delegator.delegatedNode !== '0x0000000000000000000000000000000000000000') {
                 localStorage.setItem(
-                  nodeAddr + userAddress,
+                  connectedNetwork + nodeAddr + userAddress,
                   JSON.stringify(delegator)
                 );
               }
